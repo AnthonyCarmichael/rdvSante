@@ -57,7 +57,8 @@
                     <main class="mt-6">
 
                         <div>
-                            <p>Anthony Carmichael</p>   
+                            <p>Anthony Carmichael</p>
+                            <p>Maxime Malette</p>
                         </div>
                         <div class="grid gap-6 lg:grid-cols-2 lg:gap-8">
                             <a
