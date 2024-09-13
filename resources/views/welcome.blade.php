@@ -59,6 +59,7 @@
                         <div>
                             <p>Anthony Carmichael</p>
                             <p>Maxime Malette</p>
+                            <p>Richard Dongmo</p>
                         </div>
                         <div class="grid gap-6 lg:grid-cols-2 lg:gap-8">
                             <a
