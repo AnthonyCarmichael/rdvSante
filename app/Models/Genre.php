@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Genre extends Model
 {
     use HasFactory;
+
+    protected $table = 'genres';
+    protected $primaryKey = 'idGenre';
+    public $timestamps = false;
 }
