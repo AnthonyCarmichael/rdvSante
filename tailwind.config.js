@@ -14,6 +14,13 @@ export default {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
+            colors: {
+                'dark-green': '#618264',
+                'darker-green':'#304031',
+                'mid-green': '#B0D9B1',
+                'selected-green':'#79AC78',
+                'pale-green':'#DDF0E6',
+              },
         },
     },
 
