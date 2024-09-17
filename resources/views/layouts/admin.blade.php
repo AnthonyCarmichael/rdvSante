@@ -26,15 +26,16 @@
             </nav>
         </header>
 
-        <div class="relative min-h-screen md:flex">
+        <div class="relative min-h-screen md:flex" x-data="{ open: true}">
 
             <!-- Sidebar -->
             <!-- Ajouter -translate-x-full en JS pour fermer le Sidebar -->
-            <aside class="bg-mid-green z-10 text-darker-green px-4 py-4 absolute inset-y-0 left-0 md:relative transform md:translate-x-0 
+            <aside :class="{ '-translate-x-full': !open }" class="bg-mid-green z-10 text-darker-green px-4 py-4 absolute inset-y-0 left-0 md:relative transform md:translate-x-0 
                 overflow-y-auto transition ease-in-out duration-200 shadow-lg">
 
                 <div class="flex justify-end">
-                    <button type="button" class="md:hidden inline-flex justify-center items-center rounded-md absolute">
+                    <button type="button" @click="open = !open" class="md:hidden inline-flex justify-center items-center rounded-md absolute bg-pale-green hover:bg-white 
+                        focus:outline-none">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="block size-6">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
                         </svg>
@@ -44,24 +45,36 @@
                 <!-- nav links -->
                 <nav>
                     <ul>
-                        <li><a href="">Profil</a></li>
-                        <li><a href="">Client</a></li>
-                        <li><a href="">dossier</a></li>
-                        <li><a href="">Agenda</a></li>
-                        <li><a href="">Factures</a></li>
-                        <li><a href="">Clinique</a></li>
-                        <li><a href="">Collaborer</a></li>
+                        <li><a class="hover:text-white" href="">Profil</a></li>
+                        <li><a class="hover:text-white" href="">Client</a></li>
+                        <li><a class="hover:text-white" href="">dossier</a></li>
+                        <li><a class="hover:text-white" href="">Agenda</a></li>
+                        <li><a class="hover:text-white" href="">Factures</a></li>
+                        <li><a class="hover:text-white" href="">Clinique</a></li>
+                        <li><a class="hover:text-white" href="">Collaborer</a></li>
                     </ul>
                 </nav>
             </aside>
 
-            <!-- Main content -->
-            <main class="">
-                <nav>
-                    <div>
-                        {{ $slot}}
+            <nav class ="">
+                    <div class="">
+                        <div class="relative flex items-center justify-between">
+                            <div :class="{ 'hidden': open, 'ml-0': !open }" class="absolute inset-y-0 left-0 flex item-center md:hiden transition-all duration-300">
+                                <button type="button" @click="open = !open" @click.away="open = false" class="inline-flex rounded-md md:hidden bg-mid-green m-4 p-1 absolute text-darker-green hover:text-white focus:outline-none">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="block size-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                                    </svg>
+
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </nav>
+            <!-- Main content -->
+            <main :class="{ 'ml-40 md:ml-0': open, 'ml-10': !open }" class="transition-all duration-300">
+                <div>
+                    {{ $slot}}
+                </div>
             </main>
 
         </div>
