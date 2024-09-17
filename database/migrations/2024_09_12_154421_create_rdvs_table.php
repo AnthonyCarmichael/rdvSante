@@ -16,10 +16,9 @@ return new class extends Migration
             $table->bigIncrements('idRdv'); // Clé primaire automatiquement créée avec "bigIncrements()".
             // "usigned()" nécessaire pour éventuellement pouvoir définir une clé étrangère sur cette colonne.
             $table->dateTime('dateHeureDebut');
-            $table->bigInteger('idClient')->unsigned();
+            $table->bigInteger('idDossier')->unsigned();
             $table->bigInteger('idService')->unsigned();
             $table->bigInteger('idClinique')->unsigned();
-            $table->bigInteger('idProfessionnel')->unsigned();
         });
     }
 

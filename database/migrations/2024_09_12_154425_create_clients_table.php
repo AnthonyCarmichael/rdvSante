@@ -20,6 +20,9 @@ return new class extends Migration
             $table->string('courriel');
             $table->string('telephone');
             $table->date('ddn');
+            $table->string('nomResponsable');
+            $table->string('prenomResponsable');
+            $table->string('lienResponsable');
             $table->bigInteger('idGenre')->unsigned();
         });
     }
