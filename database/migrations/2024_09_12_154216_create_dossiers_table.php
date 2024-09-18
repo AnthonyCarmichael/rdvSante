@@ -11,15 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('professionnels', function (Blueprint $table) {
+        Schema::create('dossiers', function (Blueprint $table) {
             $table->engine = 'InnoDB'; // Pour pouvoir utiliser les clés étrangères et les transactions
-            $table->bigIncrements('idProfessionnel'); // Clé primaire automatiquement créée avec "bigIncrements()".
+            $table->bigIncrements('idDossier'); // Clé primaire automatiquement créée avec "bigIncrements()".
             // "usigned()" nécessaire pour éventuellement pouvoir définir une clé étrangère sur cette colonne.
-            $table->string('nom');
-            $table->string('prenom');
-            $table->string('courriel');
-            $table->string('telephone');
-            $table->bigInteger('idProfession')->unsigned();
+            $table->date('dateCreation');
+            $table->bigInteger('idClient')->unsigned();
+        });
+
+        Schema::table('dossiers', function (Blueprint $table) {
+            $table->foreign('idClient')->references('idClient')->on('clients');
         });
     }
 
@@ -28,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('professionnels');
+        Schema::dropIfExists('dossiers');
     }
 };

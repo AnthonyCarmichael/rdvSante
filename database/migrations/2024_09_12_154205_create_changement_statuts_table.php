@@ -19,6 +19,14 @@ return new class extends Migration
             $table->bigInteger('idProfessionnel')->unsigned();
             $table->bigInteger('idStatut')->unsigned();
         });
+
+        Schema::table('changement_statuts', function (Blueprint $table) {
+            $table->foreign('idProfessionnel')->references('idProfessionnel')->on('professionnels');
+        });
+
+        Schema::table('changement_statuts', function (Blueprint $table) {
+            $table->foreign('idStatut')->references('idStatut')->on('statuts');
+        });
     }
 
     /**

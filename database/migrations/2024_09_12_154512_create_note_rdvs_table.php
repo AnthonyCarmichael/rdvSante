@@ -19,6 +19,10 @@ return new class extends Migration
             $table->text('note');
             $table->bigInteger('idRdv')->unsigned();
         });
+
+        Schema::table('note_rdvs', function (Blueprint $table) {
+            $table->foreign('idRdv')->references('idRdv')->on('rdvs');
+        });
     }
 
     /**

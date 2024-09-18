@@ -18,6 +18,10 @@ return new class extends Migration
             $table->string('nom');
             $table->bigInteger('idPays')->unsigned();
         });
+
+        Schema::table('provinces', function (Blueprint $table) {
+            $table->foreign('idPays')->references('idPays')->on('pays');
+        });
     }
 
     /**

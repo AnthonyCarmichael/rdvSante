@@ -20,6 +20,10 @@ return new class extends Migration
             $table->string('lien');
             $table->bigInteger('idDossier')->unsigned();
         });
+
+        Schema::table('fichiers', function (Blueprint $table) {
+            $table->foreign('idDossier')->references('idDossier')->on('dossiers');
+        });
     }
 
     /**

@@ -19,6 +19,10 @@ return new class extends Migration
             $table->text('valeur');
             $table->bigInteger('idSection')->unsigned();
         });
+
+        Schema::table('champs', function (Blueprint $table) {
+            $table->foreign('idSection')->references('idSection')->on('sections');
+        });
     }
 
     /**

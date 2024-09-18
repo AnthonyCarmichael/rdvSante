@@ -11,19 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('clients', function (Blueprint $table) {
+        Schema::create('villes', function (Blueprint $table) {
             $table->engine = 'InnoDB'; // Pour pouvoir utiliser les clés étrangères et les transactions
-            $table->bigIncrements('idClient'); // Clé primaire automatiquement créée avec "bigIncrements()".
+            $table->bigIncrements('idVille'); // Clé primaire automatiquement créée avec "bigIncrements()".
             // "usigned()" nécessaire pour éventuellement pouvoir définir une clé étrangère sur cette colonne.
             $table->string('nom');
-            $table->string('prenom');
-            $table->string('courriel');
-            $table->string('telephone');
-            $table->date('ddn');
-            $table->string('nomResponsable');
-            $table->string('prenomResponsable');
-            $table->string('lienResponsable');
-            $table->bigInteger('idGenre')->unsigned();
+            $table->bigInteger('idProvince')->unsigned();
+        });
+
+        Schema::table('villes', function (Blueprint $table) {
+            $table->foreign('idProvince')->references('idProvince')->on('provinces');
         });
     }
 
@@ -32,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('clients');
+        Schema::dropIfExists('villes');
     }
 };

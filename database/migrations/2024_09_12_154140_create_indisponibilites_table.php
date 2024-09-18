@@ -20,6 +20,10 @@ return new class extends Migration
             $table->text('note');
             $table->bigInteger('idProfessionnel')->unsigned();
         });
+
+        Schema::table('indisponibilites', function (Blueprint $table) {
+            $table->foreign('idProfessionnel')->references('idProfessionnel')->on('professionnels');
+        });
     }
 
     /**

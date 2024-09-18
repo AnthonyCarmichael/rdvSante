@@ -19,6 +19,10 @@ return new class extends Migration
             $table->text('description');
             $table->bigInteger('idLangue')->unsigned();
         });
+
+        Schema::table('type_fiches', function (Blueprint $table) {
+            $table->foreign('idLangue')->references('idLangue')->on('langues');
+        });
     }
 
     /**

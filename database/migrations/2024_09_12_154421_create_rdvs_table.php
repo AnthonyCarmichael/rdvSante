@@ -20,6 +20,18 @@ return new class extends Migration
             $table->bigInteger('idService')->unsigned();
             $table->bigInteger('idClinique')->unsigned();
         });
+
+        Schema::table('rdvs', function (Blueprint $table) {
+            $table->foreign('idDossier')->references('idDossier')->on('dossiers');
+        });
+
+        Schema::table('rdvs', function (Blueprint $table) {
+            $table->foreign('idService')->references('idService')->on('services');
+        });
+
+        Schema::table('rdvs', function (Blueprint $table) {
+            $table->foreign('idClinique')->references('idClinique')->on('cliniques');
+        });
     }
 
     /**

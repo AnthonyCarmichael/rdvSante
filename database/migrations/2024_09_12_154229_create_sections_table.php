@@ -18,6 +18,10 @@ return new class extends Migration
             $table->string('nom');
             $table->bigInteger('idTypeFiche')->unsigned();
         });
+
+        Schema::table('sections', function (Blueprint $table) {
+            $table->foreign('idTypeFiche')->references('idTypeFiche')->on('type_fiches');
+        });
     }
 
     /**

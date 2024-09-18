@@ -21,6 +21,18 @@ return new class extends Migration
             $table->bigInteger('idTypeTransaction')->unsigned();
             $table->bigInteger('idMoyenPaiement')->unsigned();
         });
+
+        Schema::table('transactions', function (Blueprint $table) {
+            $table->foreign('idTypeTransaction')->references('idTypeTransaction')->on('type_transactions');
+        });
+
+        Schema::table('transactions', function (Blueprint $table) {
+            $table->foreign('idMoyenPaiement')->references('idMoyenPaiement')->on('moyen_paiements');
+        });
+
+        Schema::table('transactions', function (Blueprint $table) {
+            $table->foreign('idRdv')->references('idRdv')->on('rdvs');
+        });
     }
 
     /**

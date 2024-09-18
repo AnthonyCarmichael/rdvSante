@@ -19,6 +19,14 @@ return new class extends Migration
             $table->bigInteger('idTypeFiche')->unsigned();
             $table->bigInteger('idDossier')->unsigned();
         });
+
+        Schema::table('fiche_cliniques', function (Blueprint $table) {
+            $table->foreign('idTypeFiche')->references('idTypeFiche')->on('type_fiches');
+        });
+
+        Schema::table('fiche_cliniques', function (Blueprint $table) {
+            $table->foreign('idDossier')->references('idDossier')->on('dossiers');
+        });
     }
 
     /**
