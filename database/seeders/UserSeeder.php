@@ -15,8 +15,9 @@ class UserSeeder extends Seeder
         DB::table('users')->insert([
             ['nom' => 'Admin',
             'prenom' => 'Admin',
-            'courriel' => 'admin@admin.com',
+            'email' => 'admin@admin.com',
             'telephone' => '123-456-7890',
+            'mdp' => 'admin',
             'idProfession' => '1',
             'idRole' => '1']
             ]);

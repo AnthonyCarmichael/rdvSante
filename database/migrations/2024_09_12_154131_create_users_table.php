@@ -17,8 +17,9 @@ return new class extends Migration
             // "usigned()" nécessaire pour éventuellement pouvoir définir une clé étrangère sur cette colonne.
             $table->string('nom');
             $table->string('prenom');
-            $table->string('courriel');
+            $table->string('email');
             $table->string('telephone');
+            $table->string('mdp');
             $table->bigInteger('idProfession')->unsigned();
             $table->bigInteger('idRole')->unsigned();
         });

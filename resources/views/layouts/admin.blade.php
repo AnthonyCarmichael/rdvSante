@@ -30,11 +30,11 @@
 
             <!-- Sidebar -->
             <!-- Ajouter -translate-x-full en JS pour fermer le Sidebar -->
-            <aside :class="{ '-translate-x-full': !open }" class="bg-mid-green z-10 text-darker-green px-4 py-4 absolute inset-y-0 left-0 md:relative 
+            <aside :class="{ '-translate-x-full': !open }" class="bg-mid-green z-10 text-darker-green px-4 py-4 absolute inset-y-0 left-0 md:relative
                 transform md:translate-x-0 overflow-y-auto transition ease-in-out duration-200 shadow-lg">
 
                 <div class="flex justify-end">
-                    <button type="button" @click="open = !open" class="md:hidden inline-flex justify-center items-center rounded-md absolute bg-pale-green 
+                    <button type="button" @click="open = !open" class="md:hidden inline-flex justify-center items-center rounded-md absolute bg-pale-green
                         hover:bg-white focus:outline-none">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="block size-6">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
@@ -46,7 +46,7 @@
                 <nav>
                     <ul>
                         <li><a class="hover:text-white" href="">Profil</a></li>
-                        <li><a class="hover:text-white" href="">Client</a></li>
+                        <li><a class="hover:text-white" href="{{ route('clients') }}">Client</a></li>
                         <li><a class="hover:text-white" href="">dossier</a></li>
                         <li><a class="hover:text-white" href="">Agenda</a></li>
                         <li><a class="hover:text-white" href="">Factures</a></li>
