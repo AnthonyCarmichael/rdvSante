@@ -20,6 +20,7 @@ export default {
                 'mid-green': '#B0D9B1',
                 'selected-green':'#79AC78',
                 'pale-green':'#DDF0E6',
+                'green':'#79AC78',
               },
         },
     },
