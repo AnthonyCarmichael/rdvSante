@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             // Vous pouvez ajouter d’autres "seeders" en les séparant par des virgules.
-            GenreSeeder::class, JourSeeder::class, LangueSeeder::class, MoyenPaiementSeeder::class, StatutSeeder::class, TypeTransactionSeeder::class
+            GenreSeeder::class, JourSeeder::class, LangueSeeder::class, MoyenPaiementSeeder::class, StatutSeeder::class, TypeTransactionSeeder::class, ProfessionSeeder::class, RoleSeeder::class, UserSeeder::class
             ]);
     }
 }

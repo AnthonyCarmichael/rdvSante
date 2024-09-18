@@ -16,6 +16,7 @@ return new class extends Migration
             $table->bigIncrements('idDossier'); // Clé primaire automatiquement créée avec "bigIncrements()".
             // "usigned()" nécessaire pour éventuellement pouvoir définir une clé étrangère sur cette colonne.
             $table->date('dateCreation');
+            $table->boolean('permissionPartage');
             $table->bigInteger('idClient')->unsigned();
         });
 

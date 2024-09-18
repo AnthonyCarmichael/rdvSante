@@ -16,7 +16,7 @@ return new class extends Migration
             $table->bigIncrements('idNoteRdv'); // Clé primaire automatiquement créée avec "bigIncrements()".
             // "usigned()" nécessaire pour éventuellement pouvoir définir une clé étrangère sur cette colonne.
             $table->dateTime('dateHeure');
-            $table->text('note');
+            $table->text('contenu');
             $table->bigInteger('idRdv')->unsigned();
         });
 

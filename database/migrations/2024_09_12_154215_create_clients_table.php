@@ -23,11 +23,19 @@ return new class extends Migration
             $table->string('nomResponsable');
             $table->string('prenomResponsable');
             $table->string('lienResponsable');
+            $table->string('rue');
+            $table->integer('noCivique');
+            $table->string('codePostal');
             $table->bigInteger('idGenre')->unsigned();
+            $table->bigInteger('idVille')->unsigned();
         });
 
         Schema::table('clients', function (Blueprint $table) {
             $table->foreign('idGenre')->references('idGenre')->on('genres');
+        });
+
+        Schema::table('clients', function (Blueprint $table) {
+            $table->foreign('idVille')->references('idVille')->on('villes');
         });
     }
 

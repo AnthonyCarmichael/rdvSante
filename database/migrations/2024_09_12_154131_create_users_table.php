@@ -12,13 +12,23 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken();
-            $table->timestamps();
+            $table->engine = 'InnoDB'; // Pour pouvoir utiliser les clés étrangères et les transactions
+            $table->bigIncrements('idProfessionnel'); // Clé primaire automatiquement créée avec "bigIncrements()".
+            // "usigned()" nécessaire pour éventuellement pouvoir définir une clé étrangère sur cette colonne.
+            $table->string('nom');
+            $table->string('prenom');
+            $table->string('courriel');
+            $table->string('telephone');
+            $table->bigInteger('idProfession')->unsigned();
+            $table->bigInteger('idRole')->unsigned();
+        });
+
+        Schema::table('users', function (Blueprint $table) {
+            $table->foreign('idProfession')->references('idProfession')->on('professions');
+        });
+
+        Schema::table('users', function (Blueprint $table) {
+            $table->foreign('idRole')->references('idRole')->on('roles');
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

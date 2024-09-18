@@ -32,7 +32,7 @@ return new class extends Migration
         });
 
         Schema::table('services', function (Blueprint $table) {
-            $table->foreign('idProfessionnel')->references('idProfessionnel')->on('professionnels');
+            $table->foreign('idProfessionnel')->references('idProfessionnel')->on('users');
         });
     }
 

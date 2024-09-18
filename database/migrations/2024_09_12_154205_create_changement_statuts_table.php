@@ -21,7 +21,7 @@ return new class extends Migration
         });
 
         Schema::table('changement_statuts', function (Blueprint $table) {
-            $table->foreign('idProfessionnel')->references('idProfessionnel')->on('professionnels');
+            $table->foreign('idProfessionnel')->references('idProfessionnel')->on('users');
         });
 
         Schema::table('changement_statuts', function (Blueprint $table) {

@@ -16,6 +16,9 @@ return new class extends Migration
             $table->bigIncrements('idClinique'); // Clé primaire automatiquement créée avec "bigIncrements()".
             // "usigned()" nécessaire pour éventuellement pouvoir définir une clé étrangère sur cette colonne.
             $table->string('nom');
+            $table->string('rue');
+            $table->integer('noCivique');
+            $table->string('codePostal');
             $table->bigInteger('idVille')->unsigned();
         });
 
