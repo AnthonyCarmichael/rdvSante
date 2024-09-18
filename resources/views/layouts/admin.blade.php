@@ -71,7 +71,7 @@
                     </div>
                 </nav>
             <!-- Main content -->
-            <main :class="{ 'ml-40 md:ml-0': open, 'ml-10': !open }" class="transition-all duration-300">
+            <main :class="{ 'ml-32 md:ml-0': open, 'ml-10 md:ml-0': !open }" class="transition-all duration-300">
                 <div>
                     {{ $slot}}
                 </div>
