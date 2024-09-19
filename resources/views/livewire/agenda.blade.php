@@ -1,21 +1,10 @@
 
 <div class="">
     <div>
-        <button 
-            type="button" 
-            class="{{ $view === 'semaine' ? 'bg-green text-white' : 'bg-green text-darker-green hover:bg-green hover:text-white'}}"
-            wire:click="setView('semaine')"
-        >
-            Semaine
-        </button>
-
-        <button 
-            type="button" 
-            class="{{ $view === 'mois' ? 'bg-green text-white' : 'bg-green text-darker-green hover:bg-green hover:text-white'}}"
-            wire:click="setView('mois')"
-        >
-            Mois
-        </button>
+        <select id="view" name="view" wire:model="view" wire:change="setView($event.target.value)">
+            <option value="semaine" {{ $view === 'semaine' ? 'selected' : '' }}>Semaine</option>
+            <option value="mois" {{ $view === 'mois' ? 'selected' : '' }}>Mois</option>
+        </select>
     </div>
 
     <!-- Affichage de la vue sélectionnée -->
