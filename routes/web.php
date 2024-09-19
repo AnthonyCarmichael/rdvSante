@@ -2,11 +2,14 @@
 
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ProfileController;
+use App\Livewire\Agenda;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('index');
 })->name('index');
+
+Route::get('/agenda', Agenda::class)->name('agenda');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
