@@ -1,7 +1,8 @@
 
 <div class="">
     <div>
-        <select id="view" name="view" wire:model="view" wire:change="setView($event.target.value)">
+        <select id="view" name="view" wire:model="view" wire:change="setView($event.target.value)"
+            class="border-none bg-mid-green">
             <option value="semaine" {{ $view === 'semaine' ? 'selected' : '' }}>Semaine</option>
             <option value="mois" {{ $view === 'mois' ? 'selected' : '' }}>Mois</option>
         </select>
@@ -11,7 +12,7 @@
     <div>
         @if($view === 'semaine')
             <!-- Affichage de la vue semaine -->
-            <p>Vue Semaine {{$startingDate}} </p>
+            <p>Vue Semaine {{$startingDate->format('d-M-Y')}} </p>
             
         @elseif($view === 'mois')
             <!-- Affichage de la vue mois -->
@@ -20,31 +21,23 @@
     </div>
 
     
-    <table class="text-left table-fixed">
+    <table class="w-full text-sm text-gray-500 dark:text-gray-400">
         <thead>
-            <tr>
+            <tr class="bg-mid-green">
                 <!-- Titre col -->
-                <th>Heure</th>
-                <th>Lundi</th>
-                <th>Mardi</th>
-                <th>Mercredi</th>
-                <th>Jeudi</th>
-                <th>Vendredi</th>
-                <th>Samedi</th>
-                <th>Dimanche</th>
+                <th class="border-black">Heure </th>
+                <th>Dim {{$startingDate->format('d-M-Y')}}</th>
+                <th>Lun </th>
+                <th>Mar </th>
+                <th>Mer </th>
+                <th>Jeu </th>
+                <th>Ven </th>
+                <th>Sam </th>
+
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
+            
         </tbody>
         <tfoot>
 

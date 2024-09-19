@@ -6,24 +6,30 @@ use Livewire\Component;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 
+
 class Agenda extends Component
 {
     public $view;
+    public $now;
     public $startingDate;
 
     public function mount()
     {
         $this->view = "semaine";
-        $this->startingDate = Carbon::now()->format('d-M-Y');
+        $this->now= Carbon::now();
+        $this->startingDate = $this->now->modify('last week sunday');
     }
 
     public function setView($view)
     {
         if ($view !== $this->view) {
             $this->view = $view;
-            $this->startingDate = Carbon::now()->format('d-M-Y');
+            #$start = new DateTime();
+            #$this->startingDate = $start->modify('this week sunday');
         }
     }
+
+    
 
     public function render()
     {
