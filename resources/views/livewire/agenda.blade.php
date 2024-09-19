@@ -27,13 +27,18 @@
                 <!-- Titre col -->
                 <th class="border-black">Heure </th>
                 <th>Dim {{$startingDate->format('d-M-Y')}}</th>
-                <th>Lun </th>
+                
+                <?php
+                    foreach ($datesArr as $date) {
+                        '<th>'.$date->format("d-M-Y").'</th>';
+                    }
+                    #print_r($datesArr)
+                ?>
                 <th>Mar </th>
                 <th>Mer </th>
                 <th>Jeu </th>
                 <th>Ven </th>
                 <th>Sam </th>
-
             </tr>
         </thead>
         <tbody>

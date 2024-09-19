@@ -12,12 +12,19 @@ class Agenda extends Component
     public $view;
     public $now;
     public $startingDate;
+    public $datesArr;
 
     public function mount()
     {
         $this->view = "semaine";
         $this->now= Carbon::now();
         $this->startingDate = $this->now->modify('last week sunday');
+        $this->datesArr = [];
+        for ($i=0; $i < 6; $i++) { 
+            
+            $date = $this->startingDate->copy()->addDays($i);
+            $this->datesArr = $date;
+        }
     }
 
     public function setView($view)
