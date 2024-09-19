@@ -3,6 +3,8 @@
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ProfileController;
 use App\Livewire\Agenda;
+use App\Http\Controllers\ServiceController;
+use App\Models\Service;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -27,6 +29,12 @@ Route::middleware('auth')->group(function () {
 
 Route::controller(ClientController::class)->group(function() {
     Route::get('/Clients', 'index')->name('clients');
+});
+
+
+//Routes pour les services
+Route::controller(ServiceController::class)->group(function () {
+    Route::post('/service/ajouterService','store')->name('ajouterService');
 });
 
 
