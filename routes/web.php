@@ -9,7 +9,11 @@ Route::get('/', function () {
     return view('index');
 })->name('index');
 
-Route::get('/agenda', Agenda::class)->name('agenda');
+Route::get('/agenda', function () {
+    return view('agenda');
+})->name('agenda');
+
+//Route::get('/agenda', Agenda::class)->name('agenda');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

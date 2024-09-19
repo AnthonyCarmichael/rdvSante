@@ -10,6 +10,6 @@ class Agenda extends Component
 
     public function render()
     {
-        return view('livewire.agenda')->layout('layouts.admin');
+        return view('livewire.agenda');
     }
 }
