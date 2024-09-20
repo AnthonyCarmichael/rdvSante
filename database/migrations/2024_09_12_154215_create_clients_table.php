@@ -20,14 +20,14 @@ return new class extends Migration
             $table->string('courriel');
             $table->string('telephone');
             $table->date('ddn');
-            $table->string('nomResponsable');
-            $table->string('prenomResponsable');
-            $table->string('lienResponsable');
-            $table->string('rue');
-            $table->integer('noCivique');
-            $table->string('codePostal');
+            $table->string('nomResponsable')->nullable();
+            $table->string('prenomResponsable')->nullable();
+            $table->string('lienResponsable')->nullable();
+            $table->string('rue')->nullable();
+            $table->integer('noCivique')->nullable();
+            $table->string('codePostal')->nullable();
             $table->bigInteger('idGenre')->unsigned();
-            $table->bigInteger('idVille')->unsigned();
+            $table->bigInteger('idVille')->nullable()->unsigned();
         });
 
         Schema::table('clients', function (Blueprint $table) {

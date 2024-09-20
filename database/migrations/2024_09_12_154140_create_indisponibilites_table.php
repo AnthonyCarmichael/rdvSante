@@ -17,7 +17,7 @@ return new class extends Migration
             // "usigned()" nécessaire pour éventuellement pouvoir définir une clé étrangère sur cette colonne.
             $table->dateTime('dateHeureDebut');
             $table->dateTime('dateHeureFin');
-            $table->text('note');
+            $table->text('note')->nullable();
             $table->bigInteger('idProfessionnel')->unsigned();
         });
 
