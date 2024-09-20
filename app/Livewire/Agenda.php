@@ -22,8 +22,9 @@ class Agenda extends Component
         $this->datesArr = [];
         for ($i=0; $i < 6; $i++) { 
             
-            $date = $this->startingDate->copy()->addDays($i);
-            $this->datesArr = $date;
+            $date = $this->startingDate->copy()->addDays($i+1);
+            $this->datesArr[] = $date;
+            
         }
     }
 
