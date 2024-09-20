@@ -37,5 +37,8 @@ Route::controller(ServiceController::class)->group(function () {
     Route::post('/service/ajouterService','store')->name('ajouterService');
 });
 
+Route::view('profile', 'profile')
+    ->middleware(['auth'])
+    ->name('profile');
 
 require __DIR__.'/auth.php';
