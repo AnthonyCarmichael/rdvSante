@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Client;
+use App\Models\Genre;
+use App\Models\Ville;
 use Illuminate\Http\Request;
 
 class ClientController extends Controller
@@ -14,7 +16,7 @@ class ClientController extends Controller
     {
         return view('client/clients', [
             // D’autres paramètres peuvent être passés à la vue en les séparant par une virgule.
-            'clients' => Client::All()
+            'clients' => Client::All(), 'genres' => Genre::All(), 'villes' => Ville::all()
             ]);
 
     }
