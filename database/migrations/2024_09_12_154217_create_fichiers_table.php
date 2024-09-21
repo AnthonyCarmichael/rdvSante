@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('fichiers', function (Blueprint $table) {
             $table->engine = 'InnoDB'; // Pour pouvoir utiliser les clés étrangères et les transactions
-            $table->bigIncrements('idFichier'); // Clé primaire automatiquement créée avec "bigIncrements()".
+            $table->bigIncrements('id'); // Clé primaire automatiquement créée avec "bigIncrements()".
             // "usigned()" nécessaire pour éventuellement pouvoir définir une clé étrangère sur cette colonne.
             $table->string('nom');
             $table->dateTime('dateHeureAjout');
@@ -22,7 +22,7 @@ return new class extends Migration
         });
 
         Schema::table('fichiers', function (Blueprint $table) {
-            $table->foreign('idDossier')->references('idDossier')->on('dossiers');
+            $table->foreign('idDossier')->references('id')->on('dossiers');
         });
     }
 

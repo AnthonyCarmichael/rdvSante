@@ -32,7 +32,7 @@
                 <td class="w-2/12 bg-table-green pr-4">{{ $client->telephone }}</td>
                 <td class="w-2/12 bg-table-green pr-4">{{ $client->ddn }}</td>
                 <td class="w-2/12 bg-table-green pr-4 justify-between"><button
-                        class="w-5/12 bg-selected-green mx-1 my-1 rounded p-0.5" type="button" wire:click="delete" wire:confirm="Sure">Modifier</button><button
+                        class="w-5/12 bg-selected-green mx-1 my-1 rounded p-0.5" type="button">Modifier</button><button
                         class="w-6/12 bg-selected-green mx-0.5 rounded p-0.5" type="button">Supprimer</button>
                 </td>
             </tr>
@@ -43,6 +43,11 @@
 
     </table>
     <div class="flex justify-end">
-        <button class="w-2/12 bg-selected-green mx-1 my-2 rounded p-0.5" type="button">Ajouter</button>
+        <button class="w-2/12 bg-selected-green mx-1 my-2 rounded p-0.5 hide" type="button" wire:click="ajouterClient()">Ajouter</button>
     </div>
+    @if ($action == 'Ajouter')
+        {
+        <p> Yeah!!!</p>
+        }
+    @endif
 </div>

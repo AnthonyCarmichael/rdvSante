@@ -33,20 +33,20 @@
 
                     <?php
                     $heure = new DateTime('7:00');
-                    for ($i=0; $i < 30; $i++) { 
-                        
+                    for ($i=0; $i < 30; $i++) {
+
                         ?>
-                        
+
                         <!-- Gestion de l'aternance des couleurs dans l'agenda -->
                         @if(($i %4)<2)
                             <tr class="border-solid border-2 border-gray-600  bg-gray-100 text-center">
-                            
+
                         @else
                             <tr class="border-solid border-2 border-gray-600  bg-mid-green text-center">
                         @endif
 
                         <!-- Gestion du temps -->
-                        
+
                             <td class="border-solid border-2 border-gray-600"><?php echo $heure->format('H:i') ?></td>
                             <td class="border-solid border-2 border-gray-600"></td>
                             <td class="border-solid border-2 border-gray-600"></td>
@@ -56,27 +56,27 @@
                             <td class="border-solid border-2 border-gray-600"></td>
                             <td class="border-solid border-2 border-gray-600"></td>
                         </tr>
-                    
-                    
+
+
                     <?php
                         $heure->modify('+30 minutes');
                     }
                     ?>
-                    
+
                 </tbody>
                 <tfoot>
 
                 </tfoot>
             </table>
-            
+
         @elseif($view === 'mois')
             <!-- Affichage de la vue mois -->
             <p>Vue Mois NOT READY</p>
         @endif
     </div>
 
-    
-     
+
+
 </div>
 
 

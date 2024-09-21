@@ -8,5 +8,5 @@
 
 
     </div>
-    </div>
-    </x-app-layout>
+
+    </x-admin-layout>

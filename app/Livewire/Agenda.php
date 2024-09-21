@@ -20,11 +20,11 @@ class Agenda extends Component
         $this->now= Carbon::now();
         $this->startingDate = $this->now->modify('last week sunday');
         $this->datesArr = [];
-        for ($i=0; $i < 6; $i++) { 
-            
+        for ($i=0; $i < 6; $i++) {
+
             $date = $this->startingDate->copy()->addDays($i+1);
             $this->datesArr[] = $date;
-            
+
         }
     }
 
@@ -37,7 +37,7 @@ class Agenda extends Component
         }
     }
 
-    
+
 
     public function render()
     {

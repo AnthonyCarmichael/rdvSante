@@ -7,6 +7,7 @@ use Livewire\Component;
 class AjouterClient extends Component
 {
     public $clients;
+    public $action;
 
     public function render()
     {
@@ -17,4 +18,8 @@ class AjouterClient extends Component
         $this->clients = $clients;
     }
 
+    public function ajouterClient()
+    {
+        $this->action = 'Ajouter';
+    }
 }

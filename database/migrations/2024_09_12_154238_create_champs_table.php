@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('champs', function (Blueprint $table) {
             $table->engine = 'InnoDB'; // Pour pouvoir utiliser les clés étrangères et les transactions
-            $table->bigIncrements('idChamp'); // Clé primaire automatiquement créée avec "bigIncrements()".
+            $table->bigIncrements('id'); // Clé primaire automatiquement créée avec "bigIncrements()".
             // "usigned()" nécessaire pour éventuellement pouvoir définir une clé étrangère sur cette colonne.
             $table->string('nom');
             $table->text('valeur');
@@ -21,7 +21,7 @@ return new class extends Migration
         });
 
         Schema::table('champs', function (Blueprint $table) {
-            $table->foreign('idSection')->references('idSection')->on('sections');
+            $table->foreign('idSection')->references('id')->on('sections');
         });
     }
 

@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('clinique_professionnels', function (Blueprint $table) {
             $table->engine = 'InnoDB';
-            $table->bigIncrements('idCliniqueProfessionnel');
+            $table->bigIncrements('id');
             $table->bigInteger('idClinique')->unsigned();
             $table->bigInteger('idProfessionnel')->unsigned();
         });
 
         Schema::table('clinique_professionnels', function (Blueprint $table) {
-            $table->foreign('idClinique')->references('idClinique')->on('cliniques');
-            $table->foreign('idProfessionnel')->references('idProfessionnel')->on('users');
+            $table->foreign('idClinique')->references('id')->on('cliniques');
+            $table->foreign('idProfessionnel')->references('id')->on('users');
         });
     }
 
