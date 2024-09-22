@@ -90,6 +90,8 @@
     <?php echo $endingDate ?>
     <?php var_dump(sizeof($datesArr)) ?>
 
+    @livewire('IndisponibiliteComponent')
+
 
     
 

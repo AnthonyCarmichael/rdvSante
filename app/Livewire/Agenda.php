@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Indisponibilite;
 use Livewire\Component;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;

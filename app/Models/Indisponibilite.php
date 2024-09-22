@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Indisponibilite extends Model
 {
     use HasFactory;
+    protected $fillable = ['note', 'dateHeureDebut', 'dateHeureFin', 'idProfessionnel'];
+
 }
