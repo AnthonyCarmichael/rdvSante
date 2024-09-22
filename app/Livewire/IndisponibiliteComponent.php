@@ -43,7 +43,7 @@ class IndisponibiliteComponent extends Component
 
     public function render()
     {
-        return view('livewire.indisponibilite',['indisponibilites' => $this->indisponibilites]);
+        return view('livewire.Indisponibilite-component',['indisponibilites' => $this->indisponibilites]);
     }
     
 }
