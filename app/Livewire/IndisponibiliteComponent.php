@@ -10,7 +10,7 @@ class IndisponibiliteComponent extends Component
     public $note;
     public $dateHeureDebut;
     public $dateHeureFin;
-    public $indisponibilitesArr;
+    public $indisponibilites;
 
     protected function rules()
     {
@@ -35,6 +35,7 @@ class IndisponibiliteComponent extends Component
             'note' => $this->note,
             'dateHeureDebut' => $this->dateHeureDebut,
             'dateHeureFin' => $this->dateHeureFin,
+            'idProfessionnel' => 1, # A changer!!
         ]);
 
         $this->reset(['note', 'dateHeureDebut', 'dateHeureFin']);

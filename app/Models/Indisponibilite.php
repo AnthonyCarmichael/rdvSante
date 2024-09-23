@@ -9,5 +9,5 @@ class Indisponibilite extends Model
 {
     use HasFactory;
     protected $fillable = ['note', 'dateHeureDebut', 'dateHeureFin', 'idProfessionnel'];
-
+    public $timestamps = false;
 }
