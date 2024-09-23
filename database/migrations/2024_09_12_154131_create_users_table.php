@@ -17,11 +17,15 @@ return new class extends Migration
             // "usigned()" nécessaire pour éventuellement pouvoir définir une clé étrangère sur cette colonne.
             $table->string('nom');
             $table->string('prenom');
-            $table->string('email');
+            $table->string('email')->unique();
+            $table->timestamp('email_verified_at')->nullable();
             $table->string('telephone');
             $table->string('password');
+            $table->rememberToken();
+            $table->timestamps();
             $table->bigInteger('idProfession')->unsigned();
             $table->bigInteger('idRole')->unsigned();
+
         });
 
         Schema::table('users', function (Blueprint $table) {
