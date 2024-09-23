@@ -15,6 +15,7 @@ class Agenda extends Component
     public $startingDate;
     public $endingDate;
     public $datesArr;
+    public $showModal = false;
 
     public function mount()
     {
@@ -63,13 +64,7 @@ class Agenda extends Component
                 $this->datesArr[] = $date;
             }
         }
-
-
-
     }
-
-
-
     public function render()
     {
         return view('livewire.agenda');

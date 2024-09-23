@@ -17,7 +17,7 @@ class IndisponibiliteComponent extends Component
         return [
             'note' => 'required|string|max:255',
             'dateHeureDebut' => 'required|date',
-            'dateHeureFin' => 'required|date|after:start_date',
+            'dateHeureFin' => 'required|date|after:dateHeureDebut',
         ];
     }
 
@@ -40,6 +40,7 @@ class IndisponibiliteComponent extends Component
 
         $this->reset(['note', 'dateHeureDebut', 'dateHeureFin']);
         $this->indisponibilitesArr = Indisponibilite::all();
+        
     }
 
     public function render()
