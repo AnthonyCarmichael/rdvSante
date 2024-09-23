@@ -39,7 +39,10 @@ class IndisponibiliteComponent extends Component
         ]);
 
         $this->reset(['note', 'dateHeureDebut', 'dateHeureFin']);
-        $this->indisponibilitesArr = Indisponibilite::all();
+        $this->indisponibilites = Indisponibilite::all();
+        $this->dispatch('close-modal');
+        #exemple open modal dispatch
+        #$this->dispatch('open-modal', name: 'modal-name');
         
     }
 

@@ -1,7 +1,8 @@
 @props([
     'name',
     'show' => false,
-    'maxWidth' => '2xl'
+    'maxWidth' => '2xl',
+    'title'
 ])
 
 @php
@@ -16,6 +17,7 @@ $maxWidth = [
 
 <div
     x-data="{
+        name : '{{ $name }}',
         show: @js($show),
         focusables() {
             // All focusable element types...
@@ -39,8 +41,9 @@ $maxWidth = [
             document.body.classList.remove('overflow-y-hidden');
         }
     })"
-    x-on:open-modal.window="$event.detail == '{{ $name }}' ? show = true : null"
-    x-on:close-modal.window="$event.detail == '{{ $name }}' ? show = false : null"
+
+    x-on:open-modal.window="show = ($event.detail.name === name)"
+    x-on:close-modal.window="show = false"
     x-on:close.stop="show = false"
     x-on:keydown.escape.window="show = false"
     x-on:keydown.tab.prevent="$event.shiftKey || nextFocusable().focus()"
@@ -72,7 +75,20 @@ $maxWidth = [
         x-transition:leave="ease-in duration-200"
         x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
         x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-    >
-        {{ $slot }}
+        >
+        <div class="flex justify-end">
+            <button x-on:click="$dispatch('close-modal')"  class="bg-gray-500 hover:bg-gray-700 text-white py-1 px-4 rounded mr-2 mt-2">X</button>
+        </div>
+        <div class="px-8 pb-4">
+            @if (isset($title))
+                <h2 class="text-xl font-bold mb-4">
+                    {{ $title}}
+                </h2>
+            @endif
+
+            {{ $slot }}
+        </div>
+
+        
     </div>
 </div>

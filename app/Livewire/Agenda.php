@@ -15,7 +15,6 @@ class Agenda extends Component
     public $startingDate;
     public $endingDate;
     public $datesArr;
-    public $showModal = false;
 
     public function mount()
     {
