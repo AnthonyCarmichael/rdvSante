@@ -10,7 +10,7 @@ class ProfessionProfessionnel extends Pivot
     use HasFactory;
 
     protected $table = 'professionProfessionnels';
-    protected $primaryKey = 'idProfessionProfessionnel';
+    protected $primaryKey = 'id';
     public $incrementing = true;
     public $timestamps = false;
 }

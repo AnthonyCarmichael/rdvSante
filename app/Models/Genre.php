@@ -10,6 +10,6 @@ class Genre extends Model
     use HasFactory;
 
     protected $table = 'genres';
-    protected $primaryKey = 'idGenre';
+    protected $primaryKey = 'id';
     public $timestamps = false;
 }

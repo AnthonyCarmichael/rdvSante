@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('services', function (Blueprint $table) {
             $table->engine = 'InnoDB'; // Pour pouvoir utiliser les clés étrangères et les transactions
-            $table->bigIncrements('idService'); // Clé primaire automatiquement créée avec "bigIncrements()".
+            $table->bigIncrements('id'); // Clé primaire automatiquement créée avec "bigIncrements()".
             // "usigned()" nécessaire pour éventuellement pouvoir définir une clé étrangère sur cette colonne.
             $table->string('nom');
             $table->text('description');
@@ -28,11 +28,11 @@ return new class extends Migration
         });
 
         Schema::table('services', function (Blueprint $table) {
-            $table->foreign('idCategorieService')->references('idCategorieService')->on('categorie_services');
+            $table->foreign('idCategorieService')->references('id')->on('categorie_services');
         });
 
         Schema::table('services', function (Blueprint $table) {
-            $table->foreign('idProfessionnel')->references('idProfessionnel')->on('users');
+            $table->foreign('idProfessionnel')->references('id')->on('users');
         });
     }
 

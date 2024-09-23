@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('clients', function (Blueprint $table) {
             $table->engine = 'InnoDB'; // Pour pouvoir utiliser les clés étrangères et les transactions
-            $table->bigIncrements('idClient'); // Clé primaire automatiquement créée avec "bigIncrements()".
+            $table->bigIncrements('id'); // Clé primaire automatiquement créée avec "bigIncrements()".
             // "usigned()" nécessaire pour éventuellement pouvoir définir une clé étrangère sur cette colonne.
             $table->string('nom');
             $table->string('prenom');
@@ -31,11 +31,11 @@ return new class extends Migration
         });
 
         Schema::table('clients', function (Blueprint $table) {
-            $table->foreign('idGenre')->references('idGenre')->on('genres');
+            $table->foreign('idGenre')->references('id')->on('genres');
         });
 
         Schema::table('clients', function (Blueprint $table) {
-            $table->foreign('idVille')->references('idVille')->on('villes');
+            $table->foreign('idVille')->references('id')->on('villes');
         });
     }
 

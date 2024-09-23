@@ -13,15 +13,15 @@ return new class extends Migration
     {
         Schema::create('dossier_professionnels', function (Blueprint $table) {
             $table->engine = 'InnoDB';
-            $table->bigIncrements('idDossierProfessionnel');
+            $table->bigIncrements('id');
             $table->boolean('principal');
             $table->bigInteger('idDossier')->unsigned();
             $table->bigInteger('idProfessionnel')->unsigned();
         });
 
         Schema::table('dossier_professionnels', function (Blueprint $table) {
-            $table->foreign('idDossier')->references('idDossier')->on('dossiers');
-            $table->foreign('idProfessionnel')->references('idProfessionnel')->on('users');
+            $table->foreign('idDossier')->references('id')->on('dossiers');
+            $table->foreign('idProfessionnel')->references('id')->on('users');
         });
     }
 

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->engine = 'InnoDB'; // Pour pouvoir utiliser les clés étrangères et les transactions
-            $table->bigIncrements('idTransaction'); // Clé primaire automatiquement créée avec "bigIncrements()".
+            $table->bigIncrements('id'); // Clé primaire automatiquement créée avec "bigIncrements()".
             // "usigned()" nécessaire pour éventuellement pouvoir définir une clé étrangère sur cette colonne.
             $table->decimal('montant', 5, 2);
             $table->dateTime('dateHeure');
@@ -23,15 +23,15 @@ return new class extends Migration
         });
 
         Schema::table('transactions', function (Blueprint $table) {
-            $table->foreign('idTypeTransaction')->references('idTypeTransaction')->on('type_transactions');
+            $table->foreign('idTypeTransaction')->references('id')->on('type_transactions');
         });
 
         Schema::table('transactions', function (Blueprint $table) {
-            $table->foreign('idMoyenPaiement')->references('idMoyenPaiement')->on('moyen_paiements');
+            $table->foreign('idMoyenPaiement')->references('id')->on('moyen_paiements');
         });
 
         Schema::table('transactions', function (Blueprint $table) {
-            $table->foreign('idRdv')->references('idRdv')->on('rdvs');
+            $table->foreign('idRdv')->references('id')->on('rdvs');
         });
     }
 

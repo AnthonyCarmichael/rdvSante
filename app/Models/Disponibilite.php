@@ -10,7 +10,7 @@ class Disponibilite extends Model
     use HasFactory;
 
     protected $table = 'disponibilites';
-    protected $primaryKey = 'idDisponibilite';
+    protected $primaryKey = 'id';
     public $timestamps = false;
 
 }

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('changement_statuts', function (Blueprint $table) {
             $table->engine = 'InnoDB'; // Pour pouvoir utiliser les clés étrangères et les transactions
-            $table->bigIncrements('idChangement'); // Clé primaire automatiquement créée avec "bigIncrements()".
+            $table->bigIncrements('id'); // Clé primaire automatiquement créée avec "bigIncrements()".
             // "usigned()" nécessaire pour éventuellement pouvoir définir une clé étrangère sur cette colonne.
             $table->date('dateChangement');
             $table->bigInteger('idProfessionnel')->unsigned();
@@ -21,11 +21,11 @@ return new class extends Migration
         });
 
         Schema::table('changement_statuts', function (Blueprint $table) {
-            $table->foreign('idProfessionnel')->references('idProfessionnel')->on('users');
+            $table->foreign('idProfessionnel')->references('id')->on('users');
         });
 
         Schema::table('changement_statuts', function (Blueprint $table) {
-            $table->foreign('idStatut')->references('idStatut')->on('statuts');
+            $table->foreign('idStatut')->references('id')->on('statuts');
         });
     }
 
