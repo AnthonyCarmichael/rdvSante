@@ -19,12 +19,16 @@ class Agenda extends Component
     public function mount()
     {
         $this->view = "semaine";
-        Carbon::setLocale('fr');
-        $this->now= Carbon::now();
-        
+        Carbon::setLocale('fr_CA');
+
+        // Obtenir l'heure actuelle en UTC
+        $this->now = Carbon::now('UTC');
+
+        $this->now->setTimezone('America/Toronto');
+
         $this->startingDate = $this->now->copy()->modify('this week sunday');
         $this->endingDate = $this->startingDate->copy()->modify('+6 days');
-    
+
         
         $this->datesArr = [];
         for ($i=0; $i < 7; $i++) {
