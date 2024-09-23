@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('prenom');
             $table->string('email');
             $table->string('telephone');
-            $table->string('mdp');
+            $table->string('password');
             $table->bigInteger('idProfession')->unsigned();
             $table->bigInteger('idRole')->unsigned();
         });
