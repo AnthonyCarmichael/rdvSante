@@ -51,7 +51,7 @@
         <form action="ajouterClient" method="post" class="bg-white p-4 rounded-lg z-10 absolute top-12 left-32">
             <h2 class="text-2xl font-bold mb-8">Ajouter un client</h2>
             <fieldset class="border-solid border-2 border-black p-4 m-4 rounded">
-                <legend class="font-bold">Informations personnelles</legend>
+                <legend class="font-bold">Informations du client</legend>
                 <div class="grid grid-cols-6 gap-y-4 mr-16">
 
                     <label class="text-sm text-right" for="nom">Nom:*</label>
@@ -90,7 +90,7 @@
                     <label class="text-sm text-right" for="prenomResponsable">Prénom du responsable:</label>
                     <input class="h-8 text-xs ml-2" type="text" id="prenomResponsable" name="prenomResponsable" />
 
-                    <label class="text-sm text-right" for="lienResponsable">Lien avec le responsable:</label>
+                    <label class="text-sm text-right" for="lienResponsable">Lien avec le client:</label>
                     <input class="h-8 text-xs ml-2" type="text" id="lienResponsable" name="lienResponsable" />
                 </div>
             </fieldset>
@@ -114,12 +114,15 @@
                             <option value={{ $ville->nom }}> {{ $ville->nom }}</option>
                         @endforeach
                     </select>
+
+                    <label class="text-sm text-right" for="codePostal">Code postal:</label>
+                    <input class="h-8 text-xs ml-2" type="text" id="codePostal" name="codePostal" />
                 </div>
 
             </fieldset>
             <div class="flex justify-center">
                 <button class="w-3/12 bg-selected-green mx-1 my-1 rounded p-0.5" type="button">Confirmer</button>
-                <button class="w-3/12 bg-selected-green mx-0.5 my-1 rounded p-0.5" type="button">Annuler</button>
+                <button class="w-3/12 bg-selected-green mx-0.5 my-1 rounded p-0.5" type="button" wire:click="annulerAjouteClient()">Annuler</button>
             </div>
 
         </form>

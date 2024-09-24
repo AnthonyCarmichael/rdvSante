@@ -28,4 +28,9 @@ class AjouterClient extends Component
     {
         $this->action = 'Ajouter';
     }
+
+    public function annulerAjouteClient()
+    {
+        $this->action = '';
+    }
 }
