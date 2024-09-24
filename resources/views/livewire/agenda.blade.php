@@ -21,22 +21,13 @@
                         <!-- Titre col -->
                         <th class="border-solid border-2 border-gray-600">Heure </th>
 
-                        <!--
-                        <th class="border-solid border-2 border-gray-600">Dim {{$datesArr[0]->format('d-M')}}</th>
-                        <th class="border-solid border-2 border-gray-600">Lun {{$datesArr[1]->format('d-M')}}</th>
-                        <th class="border-solid border-2 border-gray-600">Mar {{$datesArr[2]->format('d-M')}}</th>
-                        <th class="border-solid border-2 border-gray-600">Mer {{$datesArr[3]->format('d-M')}}</th>
-                        <th class="border-solid border-2 border-gray-600">Jeu {{$datesArr[4]->format('d-M')}}</th>
-                        <th class="border-solid border-2 border-gray-600">Ven {{$datesArr[5]->format('d-M')}}</th>
-                        <th class="border-solid border-2 border-gray-600">Sam {{$datesArr[6]->format('d-M')}}</th>
--->
-                        <?php 
+                        <?php
                         foreach ($datesArr as $date) {?>
                             <th class="border-solid border-2 border-gray-600">{{$date->translatedFormat('l d')}}</th>
                             <?php
                         }
 
-                        
+
                         ?>
                     </tr>
                 </thead>
@@ -85,7 +76,7 @@
             <p>Vue Mois NOT READY</p>
         @endif
     </div>
-   
+
     <?php echo $startingDate ?>
     <?php echo $endingDate ?>
     <?php var_dump(sizeof($datesArr)) ?>
@@ -93,7 +84,7 @@
     @livewire('IndisponibiliteComponent')
 
 
-    
+
 
 </div>
 
