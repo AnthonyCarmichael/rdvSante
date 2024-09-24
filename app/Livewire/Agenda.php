@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Indisponibilite;
 use Livewire\Component;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
@@ -12,17 +13,28 @@ class Agenda extends Component
     public $view;
     public $now;
     public $startingDate;
+    public $endingDate;
     public $datesArr;
 
     public function mount()
     {
         $this->view = "semaine";
-        $this->now= Carbon::now();
-        $this->startingDate = $this->now->modify('last week sunday');
-        $this->datesArr = [];
-        for ($i=0; $i < 6; $i++) {
+        Carbon::setLocale('fr_CA');
 
-            $date = $this->startingDate->copy()->addDays($i+1);
+
+        // Obtenir l'heure actuelle en UTC
+        $this->now = Carbon::now('UTC');
+
+        $this->now->setTimezone('America/Toronto');
+
+        $this->startingDate = $this->now->copy()->modify('last sunday');
+        $this->endingDate = $this->startingDate->copy()->modify('+6 days');
+
+
+        $this->datesArr = [];
+        for ($i=0; $i < 7; $i++) {
+
+            $date = $this->startingDate->copy()->addDays($i);
             $this->datesArr[] = $date;
 
         }
@@ -30,15 +42,29 @@ class Agenda extends Component
 
     public function setView($view)
     {
-        if ($view !== $this->view) {
-            $this->view = $view;
-            #$start = new DateTime();
-            #$this->startingDate = $start->modify('this week sunday');
+        $this->view = $view;
+
+        if ($this->view == "semaine") {
+            $this->startingDate = $this->now->copy()->modify('this week sunday');
+            $this->endingDate = $this->startingDate->copy()->modify('+6 days');
+            $this->datesArr = [];
+
+            for ($i = 0; $i < 7; $i++) {
+                $date = $this->startingDate->copy()->addDays($i);
+                $this->datesArr[] = $date;
+            }
+
+        } elseif ($this->view == "mois") {
+            $this->startingDate = $this->now->copy()->firstOfMonth();
+            $this->endingDate = $this->now->copy()->lastOfMonth();
+            $this->datesArr = [];
+
+            for ($i = 0; $i < $this->now->daysInMonth; $i++) {
+                $date = $this->startingDate->copy()->addDays($i);
+                $this->datesArr[] = $date;
+            }
         }
     }
-
-
-
     public function render()
     {
         return view('livewire.agenda');

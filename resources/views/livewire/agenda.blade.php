@@ -12,7 +12,7 @@
     <div class="w-full text-gray-800 dark:text-gray-400">
         @if($view === 'semaine')
             <!-- Affichage de la vue semaine -->
-            <p class="bg-mid-green border-solid border-2 border-gray-600 mb-1 mt-1 font-bold text-center ">Semaine du {{$startingDate->format('d-M-Y')}} </p>
+            <p class="bg-mid-green border-solid border-2 border-gray-600 mb-1 mt-1 font-bold text-center ">Semaine du {{$startingDate->translatedFormat('d F')}} au {{$endingDate->translatedFormat('d F Y')}} </p>
 
 
             <table class="w-full text-sm text-darker-green dark:text-gray-400">
@@ -20,13 +20,15 @@
                     <tr class="bg-mid-green">
                         <!-- Titre col -->
                         <th class="border-solid border-2 border-gray-600">Heure </th>
-                        <th class="border-solid border-2 border-gray-600">Dim {{$startingDate->format('d-M')}}</th>
-                        <th class="border-solid border-2 border-gray-600">Lun {{$datesArr[0]->format('d-M')}}</th>
-                        <th class="border-solid border-2 border-gray-600">Mar {{$datesArr[1]->format('d-M')}}</th>
-                        <th class="border-solid border-2 border-gray-600">Mer {{$datesArr[2]->format('d-M')}}</th>
-                        <th class="border-solid border-2 border-gray-600">Jeu {{$datesArr[3]->format('d-M')}}</th>
-                        <th class="border-solid border-2 border-gray-600">Ven {{$datesArr[4]->format('d-M')}}</th>
-                        <th class="border-solid border-2 border-gray-600">Sam {{$datesArr[5]->format('d-M')}}</th>
+
+                        <?php
+                        foreach ($datesArr as $date) {?>
+                            <th class="border-solid border-2 border-gray-600">{{$date->translatedFormat('l d')}}</th>
+                            <?php
+                        }
+
+
+                        ?>
                     </tr>
                 </thead>
                 <tbody>
@@ -74,6 +76,13 @@
             <p>Vue Mois NOT READY</p>
         @endif
     </div>
+
+    <?php echo $startingDate ?>
+    <?php echo $endingDate ?>
+    <?php var_dump(sizeof($datesArr)) ?>
+
+    @livewire('IndisponibiliteComponent')
+
 
 
 
