@@ -15,7 +15,7 @@
             <p class="bg-mid-green border-solid border-2 border-gray-600 mb-1 mt-1 font-bold text-center ">Semaine du {{$startingDate->translatedFormat('d F')}} au {{$endingDate->translatedFormat('d F Y')}} </p>
 
 
-            <table class="w-full text-sm text-darker-green dark:text-gray-400">
+            <table class="table-fixed w-full text-sm text-darker-green dark:text-gray-400">
                 <thead>
                     <tr class="bg-mid-green">
                         <!-- Titre col -->
@@ -53,8 +53,26 @@
                             <!-- colonne interactive de l'agenda -->
                             <?php
                                 for ($j=0; $j <7; $j++) {
+                                    $findIndispo = false;
                                     ?>
-                                    <td class="border-solid border-2 border-gray-600"><button wire:click="openModalIndispo('<?php echo $selectedDateTime->format('Y-m-d H:i'); ?>')" class="w-full h-full">test</button></td>
+                                    <td class="border-solid border-2 border-gray-600">
+
+                                        @foreach ($indispoArr as $indispo)
+                                            @if ($indispo->dateHeureDebut == $selectedDateTime)
+                                                
+                                                @livewire('IndisponibiliteComponent')
+                                                <?php $findIndispo = true?> 
+                                                @break
+                                            @endif
+
+                                        @endforeach
+
+                                        @if ($findIndispo != true)
+                                            <button wire:click="openModalIndispo('<?php echo $selectedDateTime->format('Y-m-d H:i'); ?>')" 
+                                                    class="w-full h-full hover:bg-blue-400">test
+                                            </button>
+                                        @endif
+                                    </td>
                                     <?php
                                     $selectedDateTime->modify('+1 day');
                                 }
@@ -84,8 +102,32 @@
     <?php echo $endingDate ?>
     <?php var_dump(sizeof($datesArr)) ?>
 
-    @livewire('IndisponibiliteComponent', ['someVariable' => $selectedTime])
 
+
+    <h3>Indisponibilités</h3>
+    <ul>
+        @foreach($indispoArr as $indisponibilite)
+            <li>{{ $indisponibilite->note }} ({{ $indisponibilite->dateHeureDebut }} - {{ $indisponibilite->dateHeureFin }})</li>
+        @endforeach
+    </ul>
+    <div>
+        <x-modal title="Ajouter une indisponibilité le {{$selectedTime}}" name="ajouterIndisponibilite" :show="false">
+            <form wire:submit.prevent="createIndisponibilite">
+                <input type="text" wire:model="note" placeholder="Note" required>
+                <input type="datetime-local" wire:model="dateHeureDebut" required>
+                <input type="datetime-local" wire:model="dateHeureFin" required>
+                <input type="time" wire:model="selectedTime" required>
+
+                <div class="">
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">Confirmer</button>
+                </div>
+            </form>
+        </x-modal>
+
+        <button x-data x-on:click="$dispatch('open-modal', { name : 'ajouterIndisponibilite'  })" class="px-3 py-1 bg-teal-500 text-white rounded">
+            Ajouter une indisponibilité
+        </button>
+    </div>
 
 
 
