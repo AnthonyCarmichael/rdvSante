@@ -26,15 +26,15 @@
                             <th class="border-solid border-2 border-gray-600">{{$date->translatedFormat('l d')}}</th>
                             <?php
                         }
-
-
                         ?>
                     </tr>
                 </thead>
                 <tbody>
 
                     <?php
-                    $heure = new DateTime('7:00');
+                    $selectedDateTime = $startingDate->copy();
+                    $selectedDateTime->setTime(7, 0, 0);
+
                     for ($i=0; $i < 30; $i++) {
 
                         ?>
@@ -47,21 +47,24 @@
                             <tr class="border-solid border-2 border-gray-600  bg-mid-green text-center">
                         @endif
 
-                        <!-- Gestion du temps -->
-
-                            <td class="border-solid border-2 border-gray-600"><?php echo $heure->format('H:i') ?></td>
-                            <td class="border-solid border-2 border-gray-600"></td>
-                            <td class="border-solid border-2 border-gray-600"></td>
-                            <td class="border-solid border-2 border-gray-600"></td>
-                            <td class="border-solid border-2 border-gray-600"></td>
-                            <td class="border-solid border-2 border-gray-600"></td>
-                            <td class="border-solid border-2 border-gray-600"></td>
-                            <td class="border-solid border-2 border-gray-600"></td>
+                        <!-- colonne temps -->
+                        <td class="border-solid border-2 border-gray-600"><?php echo $selectedDateTime->format('H:i') ?></td>
+                            
+                            <!-- colonne interactive de l'agenda -->
+                            <?php
+                                for ($j=0; $j <7; $j++) {
+                                    ?>
+                                    <td class="border-solid border-2 border-gray-600"><button wire:click="createIndispoModal('<?php echo $selectedDateTime->format('Y-m-d H:i'); ?>')" class="w-full h-full">test</button></td>
+                                    <?php
+                                    $selectedDateTime->modify('+1 day');
+                                }
+                                $selectedDateTime->modify('-7 day');
+                            ?>
                         </tr>
 
 
                     <?php
-                        $heure->modify('+30 minutes');
+                        $selectedDateTime->modify('+30 minutes');
                     }
                     ?>
 
@@ -84,7 +87,24 @@
     @livewire('IndisponibiliteComponent')
 
 
+    <div>
+        <x-modal title="Ajouter une indisponibilité à partir du {{$selectedTime}}" name="ajouterIndisponibilite" :show="false">
+            <!-- Contenu du modal -->
+            <form wire:submit.prevent="createIndisponibilite">
+                <input type="text" wire:model="note" placeholder="Note" required>
+                <input type="datetime-local" wire:model="selectedTime" required>
+                <input type="datetime-local" wire:model="dateHeureFin" required>
 
+                <div class="">
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">Confirmer</button>
+                </div>
+            </form>
+        </x-modal>
+
+        <button x-data x-on:click="$dispatch('open-modal', { name : 'ajouterIndisponibilite'  })" class="px-3 py-1 bg-teal-500 text-white rounded">
+            Ajouter une indisponibilité
+        </button>
+    </div>
 
 </div>
 

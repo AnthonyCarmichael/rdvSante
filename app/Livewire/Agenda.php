@@ -15,6 +15,7 @@ class Agenda extends Component
     public $startingDate;
     public $endingDate;
     public $datesArr;
+    public $selectedTime;
 
     public function mount()
     {
@@ -68,5 +69,11 @@ class Agenda extends Component
     public function render()
     {
         return view('livewire.agenda');
+    }
+    
+    public function createIndispoModal($selectedTime) {
+        $this->selectedTime = Carbon::createFromFormat('Y-m-d H:i', $selectedTime);
+        #dd($this->selectedTime);
+        $this->dispatch('open-modal', name: 'ajouterIndisponibilite');
     }
 }
