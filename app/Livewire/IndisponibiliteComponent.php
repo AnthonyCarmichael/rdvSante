@@ -11,6 +11,14 @@ class IndisponibiliteComponent extends Component
     public $dateHeureDebut;
     public $dateHeureFin;
     public $indisponibilites;
+    public $selectedTime;
+
+    protected $listeners = ['timeUpdated' => 'updateTime'];
+
+    public function updateTime($newTime)
+    {
+        $this->selectedTime = $newTime['time'];
+    }
 
     protected function rules()
     {

@@ -71,9 +71,15 @@ class Agenda extends Component
         return view('livewire.agenda');
     }
     
-    public function createIndispoModal($selectedTime) {
-        $this->selectedTime = Carbon::createFromFormat('Y-m-d H:i', $selectedTime);
+    public function openModalIndispo($selectedTime) {
+        $this->updateSelectedTime($selectedTime);
         #dd($this->selectedTime);
         $this->dispatch('open-modal', name: 'ajouterIndisponibilite');
+    }
+
+    public function updateSelectedTime($newTime)
+    {
+        $this->selectedTime = $newTime;
+        $this->dispatch('timeUpdated', ['time' => $this->selectedTime]);
     }
 }

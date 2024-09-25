@@ -54,7 +54,7 @@
                             <?php
                                 for ($j=0; $j <7; $j++) {
                                     ?>
-                                    <td class="border-solid border-2 border-gray-600"><button wire:click="createIndispoModal('<?php echo $selectedDateTime->format('Y-m-d H:i'); ?>')" class="w-full h-full">test</button></td>
+                                    <td class="border-solid border-2 border-gray-600"><button wire:click="openModalIndispo('<?php echo $selectedDateTime->format('Y-m-d H:i'); ?>')" class="w-full h-full">test</button></td>
                                     <?php
                                     $selectedDateTime->modify('+1 day');
                                 }
@@ -84,27 +84,10 @@
     <?php echo $endingDate ?>
     <?php var_dump(sizeof($datesArr)) ?>
 
-    @livewire('IndisponibiliteComponent')
+    @livewire('IndisponibiliteComponent', ['someVariable' => $selectedTime])
 
 
-    <div>
-        <x-modal title="Ajouter une indisponibilité à partir du {{$selectedTime}}" name="ajouterIndisponibilite" :show="false">
-            <!-- Contenu du modal -->
-            <form wire:submit.prevent="createIndisponibilite">
-                <input type="text" wire:model="note" placeholder="Note" required>
-                <input type="datetime-local" wire:model="selectedTime" required>
-                <input type="datetime-local" wire:model="dateHeureFin" required>
 
-                <div class="">
-                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">Confirmer</button>
-                </div>
-            </form>
-        </x-modal>
-
-        <button x-data x-on:click="$dispatch('open-modal', { name : 'ajouterIndisponibilite'  })" class="px-3 py-1 bg-teal-500 text-white rounded">
-            Ajouter une indisponibilité
-        </button>
-    </div>
 
 </div>
 
