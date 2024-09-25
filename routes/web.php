@@ -43,5 +43,9 @@ Route::view('profile', 'profile')
 
 Route::view('/welcome', 'welcome');
 
+Route::get('/profil', function () {
+    return view('profil');
+})->name('profil');
+
 
 require __DIR__.'/auth.php';
