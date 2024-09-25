@@ -79,7 +79,7 @@ class Agenda extends Component
     {
         return view('livewire.agenda');
     }
-    
+
     public function openModalIndispo($selectedTime) {
         #$this->updateSelectedTime($selectedTime);
         #dd($this->selectedTime);
@@ -102,7 +102,7 @@ class Agenda extends Component
             'dateHeureDebut' => 'required|date',
             'dateHeureFin' => 'required|date|after:dateHeureDebut',
         ]);
-        
+
         Indisponibilite::create([
             'note' => $this->note,
             'dateHeureDebut' => $this->dateHeureDebut,
@@ -114,6 +114,11 @@ class Agenda extends Component
         $this->dispatch('close-modal');
         #exemple open modal dispatch
         #$this->dispatch('open-modal', name: 'modal-name');
-        
+        $this->indispoArr = Indisponibilite::where('dateHeureDebut', '>=', $this->startingDate)->get();
+
+    }
+
+    public function consultIndispo() {
+
     }
 }

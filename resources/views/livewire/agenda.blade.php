@@ -41,35 +41,45 @@
 
                         <!-- Gestion de l'aternance des couleurs dans l'agenda -->
                         @if(($i %4)<2)
-                            <tr class="border-solid border-2 border-gray-600  bg-gray-100 text-center">
+                            <tr class="bg-gray-100 text-center">
 
                         @else
-                            <tr class="border-solid border-2 border-gray-600  bg-mid-green text-center">
+                            <tr class=" bg-mid-green text-center">
                         @endif
 
                         <!-- colonne temps -->
                         <td class="border-solid border-2 border-gray-600"><?php echo $selectedDateTime->format('H:i') ?></td>
-                            
+
                             <!-- colonne interactive de l'agenda -->
                             <?php
+
                                 for ($j=0; $j <7; $j++) {
                                     $findIndispo = false;
                                     ?>
-                                    <td class="border-solid border-2 border-gray-600">
+                                    <td class="relative">
 
                                         @foreach ($indispoArr as $indispo)
-                                            @if ($indispo->dateHeureDebut == $selectedDateTime)
-                                                
-                                                @livewire('IndisponibiliteComponent')
-                                                <?php $findIndispo = true?> 
+                                            @if ($indispo->dateHeureDebut <= $selectedDateTime && $indispo->dateHeureFin > $selectedDateTime )
+
+                                                <button class="absolute top-0 left-0 w-full h-full bg-orange-500 border-b-2 border-r-2 border-gray-600 transition duration-300 ease-in-out"
+                                                    value="{{$indispo->id}}"
+                                                    onclick="console.log(event.target.value);"
+                                                    onmouseover="document.querySelectorAll('button[value=\'{{$indispo->id}}\']').forEach(btn => btn.classList.add('hover-effect'))"
+                                                    onmouseout="document.querySelectorAll('button[value=\'{{$indispo->id}}\']').forEach(btn => btn.classList.remove('hover-effect'))">
+
+
+                                                </button>
+
+
+                                                <?php $findIndispo = true?>
                                                 @break
                                             @endif
 
                                         @endforeach
 
                                         @if ($findIndispo != true)
-                                            <button wire:click="openModalIndispo('<?php echo $selectedDateTime->format('Y-m-d H:i'); ?>')" 
-                                                    class="w-full h-full hover:bg-blue-400">test
+                                            <button wire:click="openModalIndispo('<?php echo $selectedDateTime->format('Y-m-d H:i'); ?>')"
+                                                    class="absolute top-0 left-0 w-full h-full hover:bg-blue-400 border-b-2 border-r-2 border-gray-600 transition duration-300 ease-in-out">
                                             </button>
                                         @endif
                                     </td>
