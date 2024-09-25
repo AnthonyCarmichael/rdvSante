@@ -55,14 +55,19 @@ class Agenda extends Component
         $this->view = $view;
 
         if ($this->view == "semaine") {
-            $this->startingDate = $this->now->copy()->modify('this week sunday');
+            $this->startingDate = $this->now->copy()->modify('last sunday');
             $this->endingDate = $this->startingDate->copy()->modify('+6 days');
-            $this->datesArr = [];
 
-            for ($i = 0; $i < 7; $i++) {
+
+            $this->datesArr = [];
+            for ($i=0; $i < 7; $i++) {
+
                 $date = $this->startingDate->copy()->addDays($i);
                 $this->datesArr[] = $date;
+
             }
+
+            $this->indispoArr = Indisponibilite::where('dateHeureDebut', '>=', $this->startingDate)->get();
 
         } elseif ($this->view == "mois") {
             $this->startingDate = $this->now->copy()->firstOfMonth();
