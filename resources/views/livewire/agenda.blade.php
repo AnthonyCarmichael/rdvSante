@@ -12,8 +12,13 @@
     <div class="w-full text-gray-800 dark:text-gray-400">
         @if($view === 'semaine')
             <!-- Affichage de la vue semaine -->
-            <p class="bg-mid-green border-solid border-2 border-gray-600 mb-1 mt-1 font-bold text-center ">Semaine du {{$startingDate->translatedFormat('d F')}} au {{$endingDate->translatedFormat('d F Y')}} </p>
-
+             <div class="flex w-full bg-mid-green border-solid border-2 border-gray-600 mb-1 mt-1 font-bold text-center justify-between">
+                <button wire:click="changeStartingDate(-7)"
+                    class="text-xl ml-6 hover:text-white"><</button>
+                <p class="">Semaine du {{$startingDate->translatedFormat('d F')}} au {{$endingDate->translatedFormat('d F Y')}} </p>
+                <button wire:click="changeStartingDate(7)"
+                    class="text-xl mr-6 hover:text-white">></button>
+             </div>
 
             <table class="table-fixed w-full text-sm text-darker-green dark:text-gray-400">
                 <thead>
@@ -57,28 +62,27 @@
                                     $findIndispo = false;
                                     ?>
                                     <td class="relative">
-
+                                    @if (!empty($indispoArr))
                                         @foreach ($indispoArr as $indispo)
                                             @if ($indispo->dateHeureDebut <= $selectedDateTime && $indispo->dateHeureFin > $selectedDateTime )
 
                                                 <button class="absolute top-0 left-0 w-full h-full bg-orange-500 border-b-2 border-r-2 border-gray-600"
+                                                    wire:click="consulterModalIndispo({{$indispo}})"
                                                     value="{{$indispo->id}}"
                                                     onclick="console.log(event.target.value);"
                                                     onmouseover="document.querySelectorAll('button[value=\'{{$indispo->id}}\']').forEach(btn => btn.classList.add('hover-effect'))"
                                                     onmouseout="document.querySelectorAll('button[value=\'{{$indispo->id}}\']').forEach(btn => btn.classList.remove('hover-effect'))">
-
-
                                                 </button>
-
-
                                                 <?php $findIndispo = true?>
                                                 @break
                                             @endif
-
                                         @endforeach
 
+                                    @endif
+
+
                                         @if ($findIndispo != true)
-                                            <button wire:click="openModalIndispo('<?php echo $selectedDateTime->format('Y-m-d H:i'); ?>')"
+                                            <button wire:click="openModalIndispo('<?php echo $selectedDateTime ?>')"
                                                     class="absolute top-0 left-0 w-full h-full hover:bg-blue-400 border-b-2 border-r-2 border-gray-600">
                                             </button>
                                         @endif
@@ -120,27 +124,6 @@
             <li>{{ $indisponibilite->note }} ({{ $indisponibilite->dateHeureDebut }} - {{ $indisponibilite->dateHeureFin }})</li>
         @endforeach
     </ul>
-    <div>
-        <x-modal title="Ajouter une indisponibilité le {{$selectedTime}}" name="ajouterIndisponibilite" :show="false">
-            <form wire:submit.prevent="createIndisponibilite">
-                <input type="text" wire:model="note" placeholder="Note" required>
-                <input type="datetime-local" wire:model="dateHeureDebut" required>
-                <input type="datetime-local" wire:model="dateHeureFin" required>
-                <input type="time" wire:model="selectedTime" required>
-
-                <div class="">
-                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">Confirmer</button>
-                </div>
-            </form>
-        </x-modal>
-
-        <button x-data x-on:click="$dispatch('open-modal', { name : 'ajouterIndisponibilite'  })" class="px-3 py-1 bg-teal-500 text-white rounded">
-            Ajouter une indisponibilité
-        </button>
-    </div>
-
-
-
 </div>
 
 

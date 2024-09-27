@@ -23,6 +23,9 @@ class Agenda extends Component
     public $dateHeureDebut;
     public $dateHeureFin;
 
+    protected $listeners = ['refreshAgenda' => 'refreshAgenda'];
+
+
     public function mount()
     {
         $this->view = "semaine";
@@ -86,44 +89,43 @@ class Agenda extends Component
     }
 
     public function openModalIndispo($selectedTime) {
-        #$this->updateSelectedTime($selectedTime);
-        #dd($this->selectedTime);
-        $this->selectedTime = $selectedTime;
-        $this->dispatch('open-modal', name: 'ajouterIndisponibilite');
+        $this->dispatch('createIndispoModal', $selectedTime);
+
     }
 
-    /*
+
     public function updateSelectedTime($newTime)
     {
         $this->selectedTime = $newTime;
         $this->dispatch('timeUpdated', ['time' => $this->selectedTime]);
     }
-*/
 
-    public function createIndisponibilite()
-    {
-        $this->validate([
-            'note' => 'required|string',
-            'dateHeureDebut' => 'required|date',
-            'dateHeureFin' => 'required|date|after:dateHeureDebut',
-        ]);
-
-        Indisponibilite::create([
-            'note' => $this->note,
-            'dateHeureDebut' => $this->dateHeureDebut,
-            'dateHeureFin' => $this->dateHeureFin,
-            'idProfessionnel' => 1, # A changer!!
-        ]);
-
-        $this->reset(['note', 'dateHeureDebut', 'dateHeureFin']);
-        $this->dispatch('close-modal');
-        #exemple open modal dispatch
-        #$this->dispatch('open-modal', name: 'modal-name');
-        $this->indispoArr = Indisponibilite::where('dateHeureDebut', '>=', $this->startingDate)->get();
-
+    public function refreshAgenda(){
+        $this->indispoArr = [];
+        $this->indispoArr = Indisponibilite::where('dateHeureDebut', '>=', $this->startingDate)
+                                            ->where('dateHeureFin', '>', $this->startingDate)->get();
     }
 
-    public function consultIndispo() {
+    public function changeStartingDate($days) {
+        $this->startingDate->addDays($days);
+        $this->endingDate->addDays($days);
 
+        $this->datesArr = [];
+        for ($i=0; $i < 7; $i++) {
+
+            $date = $this->startingDate->copy()->addDays($i);
+            $this->datesArr[] = $date;
+
+        }
+        $this->refreshAgenda();
     }
+
+    public function consulterModalIndispo(Indisponibilite $indispo) {
+
+        $this->dispatch('consulterModalIndispo', $indispo);
+    }
+
+
+
+
 }
