@@ -62,7 +62,7 @@
                                     $findIndispo = false;
                                     ?>
                                     <td class="relative">
-
+                                    @if (!empty($indispoArr))
                                         @foreach ($indispoArr as $indispo)
                                             @if ($indispo->dateHeureDebut <= $selectedDateTime && $indispo->dateHeureFin > $selectedDateTime )
 
@@ -71,16 +71,14 @@
                                                     onclick="console.log(event.target.value);"
                                                     onmouseover="document.querySelectorAll('button[value=\'{{$indispo->id}}\']').forEach(btn => btn.classList.add('hover-effect'))"
                                                     onmouseout="document.querySelectorAll('button[value=\'{{$indispo->id}}\']').forEach(btn => btn.classList.remove('hover-effect'))">
-
-
                                                 </button>
-
-
                                                 <?php $findIndispo = true?>
                                                 @break
                                             @endif
-
                                         @endforeach
+                                    
+                                    @endif
+                                       
 
                                         @if ($findIndispo != true)
                                             <button wire:click="openModalIndispo('<?php echo $selectedDateTime ?>')"

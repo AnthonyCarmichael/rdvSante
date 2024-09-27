@@ -103,7 +103,9 @@ class Agenda extends Component
     }
 
     public function refreshAgenda(){
-        $this->indispoArr = Indisponibilite::where('dateHeureDebut', '>=', $this->startingDate)->get();
+        $this->indispoArr = [];
+        $this->indispoArr = Indisponibilite::where('dateHeureDebut', '>=', $this->startingDate)
+                                            ->where('dateHeureFin', '>', $this->startingDate)->get();
     }
 
     public function changeStartingDate($days) {
@@ -117,7 +119,7 @@ class Agenda extends Component
             $this->datesArr[] = $date;
 
         }
-        
+        $this->refreshAgenda();
     }
 
 
