@@ -1,6 +1,6 @@
 <div>
     <div class="overflow-auto max-h-96">
-        <table class="table-auto">
+        <table class="table-auto w-full">
             <thead class="sticky top-0">
                 <tr>
                     <th class="border-solid border-b-2 border-black bg-mid-green text-left">Prénom</th>

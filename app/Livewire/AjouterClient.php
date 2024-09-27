@@ -111,6 +111,20 @@ class AjouterClient extends Component
     public function getInfoClient($id)
     {
         $client = Client::where('id', '=', $id);
+            $this->nom;
+            $this->prenom;
+            $this->courriel;
+            $this->telephone;
+            $this->ddn;
+            $this->genre;
+            $this->nomResponsable;
+            $this->prenomResponsable;
+            $this->lienResponsable;
+            $this->rue;
+            $this->noCivique;
+            $this->codePostal;
+            $this->idVille;
+
     }
 
 }
