@@ -19,7 +19,7 @@
 
 
     <x-modal title="Consulter l'indisponibilité du {{$dateHeureDebut}} au {{$dateHeureFin}}" name="consulterIndisponibilite" :show="false">
-        <form wire:submit.prevent="createIndisponibilite">
+        <form wire:submit.prevent="consulterIndisponibilite">
             <div>
                 <label class="block" for="note">Note :</label>
                 <input type="text" name="note" wire:model="note" placeholder="Note" required>
