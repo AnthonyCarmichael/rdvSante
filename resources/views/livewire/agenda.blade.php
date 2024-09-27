@@ -12,10 +12,15 @@
     <div class="w-full text-gray-800 dark:text-gray-400">
         @if($view === 'semaine')
             <!-- Affichage de la vue semaine -->
-            <p class="bg-mid-green border-solid border-2 border-gray-600 mb-1 mt-1 font-bold text-center ">Semaine du {{$startingDate->translatedFormat('d F')}} au {{$endingDate->translatedFormat('d F Y')}} </p>
+             <div class="flex w-full bg-mid-green border-solid border-2 border-gray-600 mb-1 mt-1 font-bold text-center justify-between">
+                <button wire:click="changeStartingDate(-7)"
+                    class="text-xl ml-6 hover:text-white"><</button>
+                <p class="">Semaine du {{$startingDate->translatedFormat('d F')}} au {{$endingDate->translatedFormat('d F Y')}} </p>
+                <button wire:click="changeStartingDate(7)"
+                    class="text-xl mr-6 hover:text-white">></button>
+             </div>
 
-
-            <table class="w-full text-sm text-darker-green dark:text-gray-400">
+            <table class="table-fixed w-full text-sm text-darker-green dark:text-gray-400">
                 <thead>
                     <tr class="bg-mid-green">
                         <!-- Titre col -->
@@ -26,42 +31,72 @@
                             <th class="border-solid border-2 border-gray-600">{{$date->translatedFormat('l d')}}</th>
                             <?php
                         }
-
-
                         ?>
                     </tr>
                 </thead>
                 <tbody>
 
                     <?php
-                    $heure = new DateTime('7:00');
+                    $selectedDateTime = $startingDate->copy();
+                    $selectedDateTime->setTime(7, 0, 0);
+
                     for ($i=0; $i < 30; $i++) {
 
                         ?>
 
                         <!-- Gestion de l'aternance des couleurs dans l'agenda -->
                         @if(($i %4)<2)
-                            <tr class="border-solid border-2 border-gray-600  bg-gray-100 text-center">
+                            <tr class="bg-gray-100 text-center">
 
                         @else
-                            <tr class="border-solid border-2 border-gray-600  bg-mid-green text-center">
+                            <tr class=" bg-mid-green text-center">
                         @endif
 
-                        <!-- Gestion du temps -->
+                        <!-- colonne temps -->
+                        <td class="border-solid border-2 border-gray-600"><?php echo $selectedDateTime->format('H:i') ?></td>
 
-                            <td class="border-solid border-2 border-gray-600"><?php echo $heure->format('H:i') ?></td>
-                            <td class="border-solid border-2 border-gray-600"></td>
-                            <td class="border-solid border-2 border-gray-600"></td>
-                            <td class="border-solid border-2 border-gray-600"></td>
-                            <td class="border-solid border-2 border-gray-600"></td>
-                            <td class="border-solid border-2 border-gray-600"></td>
-                            <td class="border-solid border-2 border-gray-600"></td>
-                            <td class="border-solid border-2 border-gray-600"></td>
+                            <!-- colonne interactive de l'agenda -->
+                            <?php
+
+                                for ($j=0; $j <7; $j++) {
+                                    $findIndispo = false;
+                                    ?>
+                                    <td class="relative">
+                                    @if (!empty($indispoArr))
+                                        @foreach ($indispoArr as $indispo)
+                                            @if ($indispo->dateHeureDebut <= $selectedDateTime && $indispo->dateHeureFin > $selectedDateTime )
+
+                                                <button class="absolute top-0 left-0 w-full h-full bg-orange-500 border-b-2 border-r-2 border-gray-600"
+                                                    wire:click="consulterModalIndispo({{$indispo}})"
+                                                    value="{{$indispo->id}}"
+                                                    onclick="console.log(event.target.value);"
+                                                    onmouseover="document.querySelectorAll('button[value=\'{{$indispo->id}}\']').forEach(btn => btn.classList.add('hover-effect'))"
+                                                    onmouseout="document.querySelectorAll('button[value=\'{{$indispo->id}}\']').forEach(btn => btn.classList.remove('hover-effect'))">
+                                                </button>
+                                                <?php $findIndispo = true?>
+                                                @break
+                                            @endif
+                                        @endforeach
+
+                                    @endif
+
+
+                                        @if ($findIndispo != true)
+                                            <button wire:click="openModalIndispo('<?php echo $selectedDateTime ?>')"
+                                                    class="absolute top-0 left-0 w-full h-full hover:bg-blue-400 border-b-2 border-r-2 border-gray-600">
+                                            </button>
+                                        @endif
+                                    </td>
+                                    <?php
+                                    $selectedDateTime->modify('+1 day');
+                                }
+                                $selectedDateTime->modify('-7 day');
+                            ?>
                         </tr>
 
 
                     <?php
-                        $heure->modify('+30 minutes');
+                        $selectedDateTime->modify('+30 minutes');
                     }
                     ?>
 
@@ -81,11 +116,14 @@
     <?php echo $endingDate ?>
     <?php var_dump(sizeof($datesArr)) ?>
 
-    @livewire('IndisponibiliteComponent')
 
 
-
-
+    <h3>Indisponibilités</h3>
+    <ul>
+        @foreach($indispoArr as $indisponibilite)
+            <li>{{ $indisponibilite->note }} ({{ $indisponibilite->dateHeureDebut }} - {{ $indisponibilite->dateHeureFin }})</li>
+        @endforeach
+    </ul>
 </div>
 
 

@@ -15,6 +15,16 @@ class Agenda extends Component
     public $startingDate;
     public $endingDate;
     public $datesArr;
+    public $selectedTime;
+
+    public $indispoArr;
+
+    public $note;
+    public $dateHeureDebut;
+    public $dateHeureFin;
+
+    protected $listeners = ['refreshAgenda' => 'refreshAgenda'];
+
 
     public function mount()
     {
@@ -38,6 +48,9 @@ class Agenda extends Component
             $this->datesArr[] = $date;
 
         }
+
+
+        $this->indispoArr = Indisponibilite::where('dateHeureDebut', '>=', $this->startingDate)->get();
     }
 
     public function setView($view)
@@ -45,14 +58,19 @@ class Agenda extends Component
         $this->view = $view;
 
         if ($this->view == "semaine") {
-            $this->startingDate = $this->now->copy()->modify('this week sunday');
+            $this->startingDate = $this->now->copy()->modify('last sunday');
             $this->endingDate = $this->startingDate->copy()->modify('+6 days');
-            $this->datesArr = [];
 
-            for ($i = 0; $i < 7; $i++) {
+
+            $this->datesArr = [];
+            for ($i=0; $i < 7; $i++) {
+
                 $date = $this->startingDate->copy()->addDays($i);
                 $this->datesArr[] = $date;
+
             }
+
+            $this->indispoArr = Indisponibilite::where('dateHeureDebut', '>=', $this->startingDate)->get();
 
         } elseif ($this->view == "mois") {
             $this->startingDate = $this->now->copy()->firstOfMonth();
@@ -69,4 +87,45 @@ class Agenda extends Component
     {
         return view('livewire.agenda');
     }
+
+    public function openModalIndispo($selectedTime) {
+        $this->dispatch('createIndispoModal', $selectedTime);
+
+    }
+
+
+    public function updateSelectedTime($newTime)
+    {
+        $this->selectedTime = $newTime;
+        $this->dispatch('timeUpdated', ['time' => $this->selectedTime]);
+    }
+
+    public function refreshAgenda(){
+        $this->indispoArr = [];
+        $this->indispoArr = Indisponibilite::where('dateHeureDebut', '>=', $this->startingDate)
+                                            ->where('dateHeureFin', '>', $this->startingDate)->get();
+    }
+
+    public function changeStartingDate($days) {
+        $this->startingDate->addDays($days);
+        $this->endingDate->addDays($days);
+
+        $this->datesArr = [];
+        for ($i=0; $i < 7; $i++) {
+
+            $date = $this->startingDate->copy()->addDays($i);
+            $this->datesArr[] = $date;
+
+        }
+        $this->refreshAgenda();
+    }
+
+    public function consulterModalIndispo(Indisponibilite $indispo) {
+
+        $this->dispatch('consulterModalIndispo', $indispo);
+    }
+
+
+
+
 }

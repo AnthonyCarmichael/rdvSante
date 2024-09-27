@@ -1,19 +1,15 @@
 <div>
-    <h3>Indisponibilités</h3>
-    <ul>
-        @foreach($indisponibilites as $indisponibilite)
-            <li>{{ $indisponibilite->note }} ({{ $indisponibilite->dateHeureDebut }} - {{ $indisponibilite->dateHeureFin }})</li>
-        @endforeach
-    </ul>
-
-
-    <x-modal title="Ajouter une indisponibilité" name="ajouterIndisponibilite" :show="false">
-        <!-- Contenu du modal -->
+    <x-modal title="Ajouter une indisponibilité le {{$selectedTime}}" name="ajouterIndisponibilite" :show="false">
         <form wire:submit.prevent="createIndisponibilite">
-            <input type="text" wire:model="note" placeholder="Note" required>
-            <input type="datetime-local" wire:model="dateHeureDebut" required>
-            <input type="datetime-local" wire:model="dateHeureFin" required>
+            <div>
+                <label class="block" for="note">Note :</label>
+                <input type="text" name="note" wire:model="note" placeholder="Note" required>
+            </div>
 
+            <div class="my-4">
+                <label class="block" for="dateFin">Date et heure de la fin de l'indisponibilité :</label>
+                <input type="datetime-local" wire:model="dateHeureFin" min="{{$selectedTime }}"required>
+            </div>
 
             <div class="">
                 <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">Confirmer</button>
@@ -21,7 +17,22 @@
         </form>
     </x-modal>
 
-    <button x-data x-on:click="$dispatch('open-modal', { name : 'ajouterIndisponibilite'  })" class="px-3 py-1 bg-teal-500 text-white rounded">
-        Ajouter une indisponibilité
-    </button>
+
+    <x-modal title="Consulter l'indisponibilité du {{$dateHeureDebut}} au {{$dateHeureFin}}" name="consulterIndisponibilite" :show="false">
+        <form wire:submit.prevent="consulterIndisponibilite">
+            <div>
+                <label class="block" for="note">Note :</label>
+                <input type="text" name="note" wire:model="note" placeholder="Note" required>
+            </div>
+
+            <div class="my-4">
+                <label class="block" for="dateFin">Date et heure de la fin de l'indisponibilité :</label>
+                <input type="datetime-local" wire:model="dateHeureFin" min="{{$selectedTime }}"required>
+            </div>
+
+            <div class="">
+                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">Confirmer</button>
+            </div>
+        </form>
+    </x-modal>
 </div>

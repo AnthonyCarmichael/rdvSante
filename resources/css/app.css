@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+.hover-effect {
+    background-color: #f9a768; /* Change la couleur de fond au survol */
+}

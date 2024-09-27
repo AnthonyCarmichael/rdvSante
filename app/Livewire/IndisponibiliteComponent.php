@@ -10,7 +10,19 @@ class IndisponibiliteComponent extends Component
     public $note;
     public $dateHeureDebut;
     public $dateHeureFin;
-    public $indisponibilites;
+    public $selectedTime;
+
+    protected $listeners = ['timeUpdated' => 'updateTime',
+                            'passingIndispo' => 'passingIndispo',
+                            'resetIndispo' => 'resetIndispo',
+                            'createIndispoModal' => 'createIndispoModal',
+                            'consulterModalIndispo' => 'consulterModalIndispo'];
+
+
+    public function updateTime($newTime)
+    {
+        $this->selectedTime = $newTime['time'];
+    }
 
     protected function rules()
     {
@@ -23,13 +35,33 @@ class IndisponibiliteComponent extends Component
 
     public function mount()
     {
-        $this->indisponibilites = Indisponibilite::all();
         #dd($this->indisponibilites);
     }
 
+
+
+    public function render()
+    {
+        return view('livewire.Indisponibilite-component');
+    }
+
+
+    public function createIndispoModal($selectedTime) {
+        $this->reset();
+        $this->selectedTime = $selectedTime;
+        $this->dispatch('open-modal', name: 'ajouterIndisponibilite');
+    }
+
+
     public function createIndisponibilite()
     {
-        $this->validate();
+        $this->dateHeureDebut = $this->selectedTime;
+        $this->validate([
+            'note' => 'required|string',
+            'dateHeureDebut' => 'required|date',
+            'dateHeureFin' => 'required|date|after:dateHeureDebut',
+        ]);
+
 
         Indisponibilite::create([
             'note' => $this->note,
@@ -39,16 +71,24 @@ class IndisponibiliteComponent extends Component
         ]);
 
         $this->reset(['note', 'dateHeureDebut', 'dateHeureFin']);
-        $this->indisponibilites = Indisponibilite::all();
         $this->dispatch('close-modal');
         #exemple open modal dispatch
         #$this->dispatch('open-modal', name: 'modal-name');
+        $this->dispatch('refreshAgenda');
 
     }
 
-    public function render()
-    {
-        return view('livewire.Indisponibilite-component',['indisponibilites' => $this->indisponibilites]);
+    public function consulterModalIndispo(Indisponibilite $indispo) {
+        $this->reset();
+        $this->note = $indispo->note;
+        $this->dateHeureDebut = $indispo->dateHeureDebut;
+        $this->dateHeureFin = $indispo->dateHeureFin;
+        $this->dispatch('open-modal', name: 'consulterIndisponibilite');
+
+    }
+
+    public function resetIndispo(){
+        $this->reset(['note', 'dateHeureDebut', 'dateHeureFin']);
     }
 
 }
