@@ -17,7 +17,6 @@ class AjouterService extends Component
     public $dureeservice;
     public $prixservice;
     public $taxableservice = false;
-    public $pauserdv = false;
     public $dureepause;
     public $rdvderniereminute = false;
     public $tempsavantrdv;
@@ -38,36 +37,33 @@ class AjouterService extends Component
     {
         $validatedData = $this->validate([
             'nomservice' => 'required|string|max:255',
-            'categorieservice' => 'required|exists:categorie_services,id', // Valider l'existence de la catégorie
+            'categorieservice' => 'required|exists:categorie_services,id',
             'descriptionservice' => 'nullable|string',
             'dureeservice' => 'required|integer',
             'prixservice' => 'required|numeric|min:0',
             'taxableservice' => 'nullable|boolean',
-            'pauserdv' => 'nullable|boolean',
             'dureepause' => 'nullable|integer|min:0',
             'rdvderniereminute' => 'nullable|boolean',
             'tempsavantrdv' => 'nullable|integer|min:0',
             'personneacharge' => 'nullable|boolean',
         ]);
 
-        // Création du service
         Service::create([
             'nom' => $validatedData['nomservice'],
             'description' => $validatedData['descriptionservice'],
             'prix' => $validatedData['prixservice'],
-            'taxable' => $validatedData['taxableservice'] ?? false, // Assurer une valeur booléenne
+            'taxable' => $validatedData['taxableservice'] ?? false,
             'minutePause' => $validatedData['dureepause'] ?? 0,
             'nombreHeureLimiteReservation' => $validatedData['tempsavantrdv'] ?? 0,
             'droitPersonneACharge' => $validatedData['personneacharge'] ?? false,
-            'actif' => true, // Par défaut, on suppose que le service est actif
+            'actif' => true, #Désactivaion du service possible?
             'idCategorieService' => $validatedData['categorieservice'],
-            'idProfessionnel' => 1, // Remplace avec l'ID de l'utilisateur connecté
+            'idProfessionnel' => 1, #idProffessionnel à modifier doit être celui de l'utilisateur présentement connecté
         ]);
 
-        // Rafraîchir les services après l'ajout
-        $this->services = Service::where('idProfessionnel', 1)->get();
+        $this->services = Service::where('idProfessionnel', 1)->get(); #idProffessionnel à modifier doit être celui de l'utilisateur présentement connecté
 
-        // Fermer le modal
+        $this->resetExcept('services','categories');
         $this->dispatch('close-modal');
     }
 
