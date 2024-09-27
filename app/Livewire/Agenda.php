@@ -106,6 +106,20 @@ class Agenda extends Component
         $this->indispoArr = Indisponibilite::where('dateHeureDebut', '>=', $this->startingDate)->get();
     }
 
+    public function changeStartingDate($days) {
+        $this->startingDate->addDays($days);
+        $this->endingDate->addDays($days);
+
+        $this->datesArr = [];
+        for ($i=0; $i < 7; $i++) {
+
+            $date = $this->startingDate->copy()->addDays($i);
+            $this->datesArr[] = $date;
+
+        }
+        
+    }
+
 
 
 

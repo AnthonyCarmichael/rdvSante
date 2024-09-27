@@ -12,8 +12,13 @@
     <div class="w-full text-gray-800 dark:text-gray-400">
         @if($view === 'semaine')
             <!-- Affichage de la vue semaine -->
-            <p class="bg-mid-green border-solid border-2 border-gray-600 mb-1 mt-1 font-bold text-center ">Semaine du {{$startingDate->translatedFormat('d F')}} au {{$endingDate->translatedFormat('d F Y')}} </p>
-
+             <div class="flex w-full bg-mid-green border-solid border-2 border-gray-600 mb-1 mt-1 font-bold text-center justify-between">
+                <button wire:click="changeStartingDate(-7)"
+                    class="text-xl ml-6 hover:text-white"><</button>
+                <p class="">Semaine du {{$startingDate->translatedFormat('d F')}} au {{$endingDate->translatedFormat('d F Y')}} </p>
+                <button wire:click="changeStartingDate(7)"
+                    class="text-xl mr-6 hover:text-white">></button>
+             </div>
 
             <table class="table-fixed w-full text-sm text-darker-green dark:text-gray-400">
                 <thead>
