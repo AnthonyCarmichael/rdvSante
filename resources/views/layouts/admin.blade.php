@@ -30,7 +30,7 @@
 
             <!-- Sidebar -->
             <!-- Ajouter -translate-x-full en JS pour fermer le Sidebar -->
-            <aside :class="{ '-translate-x-full': !open }" 
+            <aside :class="{ '-translate-x-full': !open }"
                 class="bg-mid-green z-10 text-darker-green absolute inset-y-0 left-0
                 transform overflow-y-auto transition ease-in-out duration-200 shadow-lg">
 
@@ -60,8 +60,8 @@
                             </a>
                         </li>
 
-                        <li class="block {{ (Route::is('')) ? 'text-white bg-green' : ''}} nav-item p4">
-                            <a class="hover:text-white" href="">
+                        <li class="block {{ (Route::is('profil')) ? 'text-white bg-green' : ''}} nav-item p4">
+                            <a class="hover:text-white" href="{{ route('profil')}}">
                                 <div class="flex justify-center">
                                     <button class="">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
