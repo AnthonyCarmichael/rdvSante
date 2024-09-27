@@ -30,7 +30,7 @@ class IndisponibiliteComponent extends Component
     public function createIndisponibilite()
     {
         $this->validate();
-        
+
         Indisponibilite::create([
             'note' => $this->note,
             'dateHeureDebut' => $this->dateHeureDebut,
@@ -43,12 +43,12 @@ class IndisponibiliteComponent extends Component
         $this->dispatch('close-modal');
         #exemple open modal dispatch
         #$this->dispatch('open-modal', name: 'modal-name');
-        
+
     }
 
     public function render()
     {
         return view('livewire.Indisponibilite-component',['indisponibilites' => $this->indisponibilites]);
     }
-    
+
 }

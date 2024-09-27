@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Client extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['nom', 'prenom', 'courriel', 'telephone', 'ddn', 'idGenre', 'nomResponsable', 'prenomResponsable', 'lienResponsable', 'rue', 'noCivique', 'codePostal', 'idVille'];
+
+    public $timestamps = false;
 }
