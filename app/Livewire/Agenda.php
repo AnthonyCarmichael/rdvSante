@@ -89,13 +89,11 @@ class Agenda extends Component
     }
 
     public function openModalIndispo($selectedTime) {
-        $this->updateSelectedTime($selectedTime);
-        #dd($this->selectedTime);
-        #$this->selectedTime = $selectedTime;
-        $this->dispatch('open-modal', name: 'ajouterIndisponibilite');
+        $this->dispatch('createIndispoModal', $selectedTime);
+
     }
 
-    
+
     public function updateSelectedTime($newTime)
     {
         $this->selectedTime = $newTime;
@@ -120,6 +118,11 @@ class Agenda extends Component
 
         }
         $this->refreshAgenda();
+    }
+
+    public function consulterModalIndispo(Indisponibilite $indispo) {
+
+        $this->dispatch('consulterModalIndispo', $indispo);
     }
 
 
