@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CategorieService;
 use App\Models\Service;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ServiceController extends Controller
@@ -12,7 +14,9 @@ class ServiceController extends Controller
      */
     public function index()
     {
-        //
+        return view('client/clients', [
+            'services' => Service::All(), 'categories' => CategorieService::All(), 'professionnels' => User::all()
+        ]);
     }
 
     /**
