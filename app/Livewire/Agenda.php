@@ -23,6 +23,9 @@ class Agenda extends Component
     public $dateHeureDebut;
     public $dateHeureFin;
 
+    protected $listeners = ['refreshAgenda' => 'refreshAgenda'];
+
+
     public function mount()
     {
         $this->view = "semaine";
@@ -86,43 +89,24 @@ class Agenda extends Component
     }
 
     public function openModalIndispo($selectedTime) {
-        #$this->updateSelectedTime($selectedTime);
+        $this->updateSelectedTime($selectedTime);
         #dd($this->selectedTime);
-        $this->selectedTime = $selectedTime;
+        #$this->selectedTime = $selectedTime;
         $this->dispatch('open-modal', name: 'ajouterIndisponibilite');
     }
 
-    /*
+    
     public function updateSelectedTime($newTime)
     {
         $this->selectedTime = $newTime;
         $this->dispatch('timeUpdated', ['time' => $this->selectedTime]);
     }
-*/
 
-    public function createIndisponibilite()
-    {
-
-        $this->validate([
-            'note' => 'required|string',
-            'dateHeureDebut' => 'required|date',
-            'dateHeureFin' => 'required|date|after:dateHeureDebut',
-        ]);
-        
-
-        Indisponibilite::create([
-            'note' => $this->note,
-            'dateHeureDebut' => $this->dateHeureDebut,
-            'dateHeureFin' => $this->dateHeureFin,
-            'idProfessionnel' => 1, # A changer!!
-        ]);
-
-        $this->reset(['note', 'dateHeureDebut', 'dateHeureFin']);
-        $this->dispatch('close-modal');
-        #exemple open modal dispatch
-        #$this->dispatch('open-modal', name: 'modal-name');
+    public function refreshAgenda(){
         $this->indispoArr = Indisponibilite::where('dateHeureDebut', '>=', $this->startingDate)->get();
-
     }
+
+
+
 
 }
