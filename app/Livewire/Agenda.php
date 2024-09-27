@@ -102,11 +102,13 @@ class Agenda extends Component
 
     public function createIndisponibilite()
     {
+
         $this->validate([
             'note' => 'required|string',
             'dateHeureDebut' => 'required|date',
             'dateHeureFin' => 'required|date|after:dateHeureDebut',
         ]);
+        
 
         Indisponibilite::create([
             'note' => $this->note,
@@ -123,7 +125,4 @@ class Agenda extends Component
 
     }
 
-    public function consultIndispo() {
-
-    }
 }
