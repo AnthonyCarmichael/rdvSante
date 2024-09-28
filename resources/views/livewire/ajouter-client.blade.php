@@ -24,8 +24,7 @@
                     <td class="w-2/12 bg-white pr-4">{{ $client->telephone }}</td>
                     <td class="w-2/12 bg-white pr-4">{{ $client->ddn }}</td>
                     <td class="w-2/12 bg-white pr-4 justify-between"><button
-                            class="w-5/12 bg-selected-green mx-1 my-1 rounded p-0.5" type="button" wire:click="getInfoClient({{ $client->id }})" x-data
-                            x-on:click="$dispatch('open-modal', { name : 'modifierClient'  })">Modifier</button><button
+                            class="w-5/12 bg-selected-green mx-1 my-1 rounded p-0.5" type="button" wire:click="getInfoClient({{ $client->id }})">Modifier</button><button
                             class="w-6/12 bg-selected-green mx-0.5 rounded p-0.5" type="button">Supprimer</button>
                     </td>
                 </tr>
@@ -50,7 +49,7 @@
         </table>
     </div>
     <div class="flex justify-end z-0">
-        <button x-data x-on:click="$dispatch('open-modal', { name : 'ajouterClient'  })"
+        <button wire:click="formAjout"
             class="w-2/12 bg-selected-green mx-1 my-2 rounded p-0.5 hide" type="button">Ajouter</button>
     </div>
     <x-modal title="Ajouter un client" name="ajouterClient" :show="false">
@@ -79,8 +78,8 @@
 
                     <label class="text-sm text-right" for="genre">Genre:*</label>
                     <select wire:model="genre" id="genre" name="genre" class="h-8 text-xs ml-2">
-                        @foreach ($genres as $genre)
-                            <option value={{ $genre->id }}> {{ $genre->nom }}</option>
+                        @foreach ($genres as $g)
+                            <option value={{ $g->id }} {{ $g->id === $genre ? 'selected' : '' }}> {{ $g->nom }}</option>
                         @endforeach
                     </select>
 
@@ -138,7 +137,7 @@
     </x-modal>
 
     <x-modal title="Modifier un client" name="modifierClient" :show="false">
-        <form wire:submit.prevent="ajoutClient" class="bg-white p-4 rounded-lg">
+        <form wire:submit.prevent="modifClient" class="bg-white p-4 rounded-lg">
             <fieldset class="border-solid border-2 border-black p-4 m-4 rounded">
                 <legend class="font-bold">Informations du client</legend>
                 <div class="grid grid-cols-4 gap-y-4">

@@ -15,6 +15,7 @@ class AjouterClient extends Component
     public $villes;
     public $action;
 
+    public $client;
     public $nom;
     public $prenom;
     public $courriel;
@@ -108,22 +109,81 @@ class AjouterClient extends Component
 
     }
 
+    public function modifClient()
+    {
+        $villeFound = False;
+        foreach ($this->villes as $v) {
+            if ($this->ville == $v->nom) {
+                $this->idVille = $v->id;
+                $villeFound == True;
+                break;
+            }
+        }
+        if ($villeFound == False && $this->ville != null) {
+            $this->idVille = Ville::insertGetId([
+                'nom' => $this->ville,
+                'idProvince' => '1'
+            ]);
+        }
+        if ($this->ville == " ") {
+            $this->idVille = null;
+        }
+
+        $this->validate();
+
+        Client::find($this->client->id)->update([
+            'nom' => $this->nom,
+            'prenom' => $this->prenom,
+            'courriel' => $this->courriel,
+            'telephone' => $this->telephone,
+            'ddn' => $this->ddn,
+            'idGenre' => $this->genre,
+            'nomResponsable' => $this->nomResponsable,
+            'prenomResponsable' => $this->prenomResponsable,
+            'lienResponsable' => $this->lienResponsable,
+            'rue' => $this->rue,
+            'noCivique' => $this->noCivique,
+            'codePostal' => $this->codePostal,
+            'idVille' => $this->idVille
+        ]);
+
+        $this->reset(['nom', 'prenom', 'courriel', 'telephone', 'ddn', 'genre', 'nomResponsable', 'prenomResponsable', 'lienResponsable', 'rue', 'noCivique', 'codePostal', 'ville']);
+        $this->clients = Client::all();
+        $this->villes = Ville::all();
+        $this->dispatch('close-modal');
+        #exemple open modal dispatch
+        #$this->dispatch('open-modal', name: 'modal-name');
+
+    }
+
     public function getInfoClient($id)
     {
-        $client = Client::where('id', '=', $id);
-            $this->nom;
-            $this->prenom;
-            $this->courriel;
-            $this->telephone;
-            $this->ddn;
-            $this->genre;
-            $this->nomResponsable;
-            $this->prenomResponsable;
-            $this->lienResponsable;
-            $this->rue;
-            $this->noCivique;
-            $this->codePostal;
-            $this->idVille;
+        $this->client = Client::find($id);
+        $this->nom = $this->client->nom;
+        $this->prenom = $this->client->prenom;
+        $this->courriel = $this->client->courriel;
+        $this->telephone = $this->client->telephone;
+        $this->ddn = $this->client->ddn;
+        $this->genre = $this->client->idGenre;
+        $this->nomResponsable = $this->client->nomResponsable;
+        $this->prenomResponsable = $this->client->prenomResponsable;
+        $this->lienResponsable = $this->client->lienResponsable;
+        $this->rue = $this->client->rue;
+        $this->noCivique = $this->client->noCivique;
+        $this->codePostal = $this->client->codePostal;
+        $ville = Ville::find($this->client->idVille);
+        if ($ville != null) {
+            $this->ville = $ville->nom;
+        }
+        $this->dispatch('open-modal', name: 'modifierClient');
+
+    }
+
+    public function formAjout()
+    {
+
+        $this->dispatch('open-modal', name: 'ajouterClient');
+        $this->reset(['nom', 'prenom', 'courriel', 'telephone', 'ddn', 'genre', 'nomResponsable', 'prenomResponsable', 'lienResponsable', 'rue', 'noCivique', 'codePostal', 'ville']);
 
     }
 
