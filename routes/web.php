@@ -18,10 +18,6 @@ Route::get('/agenda', function () {
 
 //Route::get('/agenda', Agenda::class)->middleware('auth')->name('agenda');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->middleware('auth')->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->middleware('auth')->name('profile.update');
