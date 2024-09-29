@@ -174,9 +174,6 @@
             </div>
         </x-modal>
 
-        <!--Petits problèmes lors de la modification d'un service... La modification s'effectue mais on a toujours besoin d'actualiser la page
-        pour voir les modifs... la durée de la pause ne s'Affiche pas dans le formulaire de modification(why?)-->
-
         <x-modal title="Modifier un service" name="modifierService" :show="false">
             <div class="bg-white p-6 rounded-lg shadow-md">
                 <form wire:submit.prevent="updateService">
@@ -268,7 +265,7 @@
             </div>
         </x-modal>
 
-        <button class="w-2/12 bg-selected-green mx-1 my-2 rounded p-0.5 hide" x-data x-on:click="$dispatch('open-modal', { name : 'ajouterService' })">
+        <button class="w-2/12 bg-selected-green mx-1 my-2 rounded p-0.5 hide" wire:click="openModalAjouterService()">
             Ajouter
         </button>
     </div>

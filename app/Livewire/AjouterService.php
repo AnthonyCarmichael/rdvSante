@@ -3,7 +3,9 @@
 namespace App\Livewire;
 
 use App\Models\CategorieService;
+use App\Models\Profession;
 use App\Models\Service;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class AjouterService extends Component
@@ -34,8 +36,19 @@ class AjouterService extends Component
     public function mount()
     {
         $this->services = Service::where('idProfessionnel', 1)->get();
-        $this->categories = CategorieService::all();
+        $this->categories = Profession::all();
         #dd($this->services);
+    }
+
+    public function refreshTable()
+    {
+        $this->services = Service::where('idProfessionnel', 1)->get();
+    }
+
+    public function openModalAjouterService()
+    {
+        $this->resetExcept('services','categories');
+        $this->dispatch('open-modal', name : 'ajouterService');
     }
 
     public function loadServices()
@@ -103,10 +116,10 @@ class AjouterService extends Component
             'droitPersonneACharge' => $validatedData['personneacharge'] ?? false,
             'actif' => true, #Désactivaion du service possible?
             'idCategorieService' => $validatedData['categorieservice'],
-            'idProfessionnel' => 1, #idProffessionnel à modifier doit être celui de l'utilisateur présentement connecté
+            'idProfessionnel' => Auth::user()->id, #idProffessionnel à modifier doit être celui de l'utilisateur présentement connecté
         ]);
 
-        $this->services = Service::where('idProfessionnel', 1)->get(); #idProffessionnel à modifier doit être celui de l'utilisateur présentement connecté
+        $this->services = Service::where('idProfessionnel', Auth::user()->id)->get(); #idProffessionnel à modifier doit être celui de l'utilisateur présentement connecté
 
         $this->resetExcept('services','categories');
         $this->dispatch('close-modal');
@@ -161,6 +174,7 @@ class AjouterService extends Component
             ]);
 
             $this->resetExcept('services', 'categories');
+            $this->refreshTable();
             $this->dispatch('close-modal');
         }
     }
