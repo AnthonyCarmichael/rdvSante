@@ -122,10 +122,8 @@ class Agenda extends Component
 
     public function consulterModalIndispo(Indisponibilite $indispo) {
 
+        #dd($indispo);
         $this->dispatch('consulterModalIndispo', $indispo);
     }
-
-
-
 
 }

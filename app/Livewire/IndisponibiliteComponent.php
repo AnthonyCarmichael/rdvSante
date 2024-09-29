@@ -7,10 +7,14 @@ use App\Models\Indisponibilite;
 
 class IndisponibiliteComponent extends Component
 {
+    public $id;
     public $note;
     public $dateHeureDebut;
     public $dateHeureFin;
     public $selectedTime;
+
+    public $tempNote;
+    public $tempDateHeureFin;
 
     protected $listeners = ['timeUpdated' => 'updateTime',
                             'passingIndispo' => 'passingIndispo',
@@ -80,10 +84,12 @@ class IndisponibiliteComponent extends Component
 
     public function consulterModalIndispo(Indisponibilite $indispo) {
         $this->reset();
-        $this->note = $indispo->note;
+        $this->id = $indispo->id;
+        $this->note = $this->tempNote = $indispo->note;
         $this->dateHeureDebut = $indispo->dateHeureDebut;
-        $this->dateHeureFin = $indispo->dateHeureFin;
+        $this->dateHeureFin = $this->tempDateHeureFin = $indispo->dateHeureFin;
         $this->dispatch('open-modal', name: 'consulterIndisponibilite');
+        #dd($this);
 
     }
 
@@ -91,4 +97,35 @@ class IndisponibiliteComponent extends Component
         $this->reset(['note', 'dateHeureDebut', 'dateHeureFin']);
     }
 
+
+    public function modifierIndisponibilite()
+    {
+        $this->validate([
+            'note' => 'required|string',
+            'dateHeureDebut' => 'required|date',
+            'dateHeureFin' => 'required|date|after:dateHeureDebut',
+        ]);
+
+
+        Indisponibilite::create([
+            'note' => $this->note,
+            'dateHeureDebut' => $this->dateHeureDebut,
+            'dateHeureFin' => $this->dateHeureFin,
+            'idProfessionnel' => 1, # A changer!!
+        ]);
+
+        $this->reset(['note', 'dateHeureDebut', 'dateHeureFin']);
+        $this->dispatch('close-modal');
+        #exemple open modal dispatch
+        #$this->dispatch('open-modal', name: 'modal-name');
+        $this->dispatch('refreshAgenda');
+
+    }
+
+    public function annuler()
+    {
+        #dd($this);
+        $this->tempNote = $this->note;
+        $this->tempDateHeureFin = $this->dateHeureFin;
+    }
 }
