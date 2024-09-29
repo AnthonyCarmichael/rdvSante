@@ -5,6 +5,8 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\Indisponibilite;
 
+use Carbon\Carbon;
+
 class IndisponibiliteComponent extends Component
 {
     public $id;
@@ -86,8 +88,9 @@ class IndisponibiliteComponent extends Component
         $this->reset();
         $this->id = $indispo->id;
         $this->note = $this->tempNote = $indispo->note;
-        $this->dateHeureDebut = $indispo->dateHeureDebut;
-        $this->dateHeureFin = $this->tempDateHeureFin = $indispo->dateHeureFin;
+        $this->dateHeureDebut = Carbon::parse($indispo->dateHeureDebut)->format('Y-m-d H:i:s');
+        $this->dateHeureFin = $this->tempDateHeureFin = Carbon::parse($indispo->dateHeureFin)->format('Y-m-d H:i:s');
+    
         $this->dispatch('open-modal', name: 'consulterIndisponibilite');
         #dd($this);
 
@@ -100,25 +103,35 @@ class IndisponibiliteComponent extends Component
 
     public function modifierIndisponibilite()
     {
+
         $this->validate([
-            'note' => 'required|string',
+            'tempNote' => 'required|string',
             'dateHeureDebut' => 'required|date',
-            'dateHeureFin' => 'required|date|after:dateHeureDebut',
+            'tempDateHeureFin' => 'required|date|after:dateHeureDebut',
         ]);
 
 
-        Indisponibilite::create([
-            'note' => $this->note,
-            'dateHeureDebut' => $this->dateHeureDebut,
-            'dateHeureFin' => $this->dateHeureFin,
-            'idProfessionnel' => 1, # A changer!!
-        ]);
+        $indispo = Indisponibilite::find($this->id);
+        
+        if ($indispo) {
 
-        $this->reset(['note', 'dateHeureDebut', 'dateHeureFin']);
+            $this->note = $this->tempNote;
+            $this->dateHeureFin = $this->tempDateHeureFin;
+
+            $indispo->note = $this->tempNote;
+            $indispo->dateHeureFin = $this->tempDateHeureFin;
+            
+            $indispo->save();
+        }
+        else {
+            session()->flash('error', 'Indisponibilité non trouvée.');
+        }
+
+
+        $this->reset();
         $this->dispatch('close-modal');
-        #exemple open modal dispatch
-        #$this->dispatch('open-modal', name: 'modal-name');
         $this->dispatch('refreshAgenda');
+        $this->consulterModalIndispo($indispo);
 
     }
 
