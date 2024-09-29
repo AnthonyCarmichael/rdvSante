@@ -18,14 +18,16 @@
     </x-modal>
 
     
-    <x-modal title="Consulter l'indisponibilité du {{$dateHeureDebut}} au {{$dateHeureFin}}" name="consulterIndisponibilite" :show="false">
+    <x-modal title="Indisponible" name="consulterIndisponibilite" :show="false">
+        <p>Du : {{$dateHeureDebut}}</p>
+        <p class="mb-4">au : {{$dateHeureFin}}</p>
         <div x-data="{ editable: false }" @reset-editable.window="editable = false">
             <form wire:submit.prevent="modifierIndisponibilite" >
                 <div>
                     <label class="block" for="note">Note :</label>
                     <input type="text" name="note" wire:model="tempNote" placeholder="Note" required :readonly="!editable"
                         x-bind:class="editable ? 'bg-white' : 'bg-gray-200 text-gray-500 cursor-not-allowed'" 
-                        class="border rounded py-2 px-3 transition duration-150 ease-in-out">
+                        class="w-full border rounded py-2 px-3 transition duration-150 ease-in-out">
                 </div>
 
                 <div class="my-4">
