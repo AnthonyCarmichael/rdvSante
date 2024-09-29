@@ -141,4 +141,13 @@ class IndisponibiliteComponent extends Component
         $this->tempNote = $this->note;
         $this->tempDateHeureFin = $this->dateHeureFin;
     }
+
+    public function deleteIndispo(){
+
+        $deleted = Indisponibilite::destroy($this->id);
+        $this->reset();
+        $this->dispatch('close-modal');
+        $this->dispatch('refreshAgenda');
+
+    }
 }

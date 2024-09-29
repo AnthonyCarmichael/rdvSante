@@ -44,8 +44,11 @@
                     <button type="button" @click="editable = false; @this.annuler()" x-show="editable" class="px-4 py-2 bg-red-500 hover:bg-red-700 text-white rounded">
                         Annuler
                     </button>
-                    <button type="button" @click="editable = !editable" x-show="!editable" class="px-4 py-2 bg-blue-500 text-white rounded bg-orange-500">
+                    <button type="button" @click="editable = !editable" x-show="!editable" class="px-4 py-2 text-white rounded bg-orange-500 hover:bg-orange-700">
                         Modifier
+                    </button>
+                    <button type="button" @click="$dispatch('open-modal', { name: 'confirmDeleteModal' });" x-show="!editable" class="ml-4 px-4 py-2 bg-blue-500 text-white rounded bg-red-500 hover:bg-red-700">
+                        Supprimer
                     </button>
                 </div>
 
@@ -54,6 +57,13 @@
         </div>
     </x-modal>
 
+    <x-modal title="Confirmer la Suppression" name="confirmDeleteModal" :show="false">
+        <p>Êtes-vous sûr de vouloir supprimer cette indisponibilité ?</p>
+        <div class="flex mt-8">
+            <button wire:click="deleteIndispo" class="mr-4 px-4 py-2 bg-red-500 hover:bg-red-700 text-white rounded">Supprimer</button>
+            <button @click="$dispatch('open-modal', { name: 'consulterIndisponibilite' });" class="px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white rounded">Annuler</button>
+        </div>
+    </x-modal>
   
 
 </div>
