@@ -7,14 +7,20 @@ use Livewire\Component;
 use App\Models\Client;
 
 use App\Models\Ville;
+use App\Models\Genre;
 
 class AjouterClient extends Component
 {
     public $clients;
+    public $prenomFiltre = [];
+    public $nomFiltre = [];
+    public $filtreNom;
+    public $filtrePrenom;
     public $genres;
     public $villes;
     public $action;
 
+    public $idClient;
     public $client;
     public $nom;
     public $prenom;
@@ -38,6 +44,30 @@ class AjouterClient extends Component
     public function mount($clients, $genres, $villes)
     {
         $this->clients = $clients;
+
+        foreach ($this->clients as $c) {
+            $nomFound = false;
+
+            $prenomFound = false;
+            foreach ($this->nomFiltre as $n) {
+                if ($n == $c->nom) {
+                    $nomFound = true;
+                    break;
+                }
+            }
+            foreach ($this->prenomFiltre as $p) {
+                if ($p == $c->prenom) {
+                    $prenomFound = true;
+                    break;
+                }
+            }
+            if (!$nomFound) {
+                array_push($this->nomFiltre, $c->nom);
+            }
+            if (!$prenomFound) {
+                array_push($this->prenomFiltre, $c->prenom);
+            }
+        }
 
         $this->genres = $genres;
 
@@ -64,11 +94,13 @@ class AjouterClient extends Component
 
     public function ajoutClient()
     {
+        $this->validate();
+
         $villeFound = False;
         foreach ($this->villes as $v) {
             if ($this->ville == $v->nom) {
                 $this->idVille = $v->id;
-                $villeFound == True;
+                $villeFound = True;
                 break;
             }
         }
@@ -79,10 +111,9 @@ class AjouterClient extends Component
             ]);
         }
         if ($this->ville == " ") {
-            $this->ville = null;
+            $this->idVille = null;
         }
 
-        $this->validate();
 
         Client::create([
             'nom' => $this->nom,
@@ -111,11 +142,13 @@ class AjouterClient extends Component
 
     public function modifClient()
     {
+        $this->validate();
+
         $villeFound = False;
         foreach ($this->villes as $v) {
             if ($this->ville == $v->nom) {
                 $this->idVille = $v->id;
-                $villeFound == True;
+                $villeFound = True;
                 break;
             }
         }
@@ -128,8 +161,6 @@ class AjouterClient extends Component
         if ($this->ville == " ") {
             $this->idVille = null;
         }
-
-        $this->validate();
 
         Client::find($this->client->id)->update([
             'nom' => $this->nom,
@@ -171,9 +202,10 @@ class AjouterClient extends Component
         $this->rue = $this->client->rue;
         $this->noCivique = $this->client->noCivique;
         $this->codePostal = $this->client->codePostal;
-        $ville = Ville::find($this->client->idVille);
-        if ($ville != null) {
-            $this->ville = $ville->nom;
+        $v = Ville::find($this->client->idVille);
+        if ($v != null) {
+            $this->ville = $v->nom;
+            $this->idVille = $v->id;
         }
         $this->dispatch('open-modal', name: 'modifierClient');
 
@@ -185,6 +217,38 @@ class AjouterClient extends Component
         $this->dispatch('open-modal', name: 'ajouterClient');
         $this->reset(['nom', 'prenom', 'courriel', 'telephone', 'ddn', 'genre', 'nomResponsable', 'prenomResponsable', 'lienResponsable', 'rue', 'noCivique', 'codePostal', 'ville']);
 
+    }
+
+    public function consulterClient($id)
+    {
+        $this->client = Client::find($id);
+        $this->idClient = $this->client->id;
+        $this->nom = $this->client->nom;
+        $this->prenom = $this->client->prenom;
+        $this->courriel = $this->client->courriel;
+        $this->telephone = $this->client->telephone;
+        $this->ddn = $this->client->ddn;
+        $g = Genre::find($this->client->idGenre);
+        $this->genre = $g->nom;
+        $this->nomResponsable = $this->client->nomResponsable;
+        $this->prenomResponsable = $this->client->prenomResponsable;
+        $this->lienResponsable = $this->client->lienResponsable;
+        $this->rue = $this->client->rue;
+        $this->noCivique = $this->client->noCivique;
+        $this->codePostal = $this->client->codePostal;
+        $v = Ville::find($this->client->idVille);
+        if ($v != null) {
+            $this->ville = $v->nom;
+            $this->idVille = $v->id;
+        }
+        $this->dispatch('open-modal', name: 'consulterClient');
+
+    }
+
+
+    public function filtreClient()
+    {
+        $this->clients = Client::where('nom','like', '%'.$this->filtreNom.'%' )->where('prenom', 'like', '%'.$this->filtrePrenom.'%')->get();
     }
 
 }
