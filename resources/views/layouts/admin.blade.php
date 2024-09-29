@@ -19,9 +19,21 @@
         <header>
             <!-- Logo -->
             <nav class="bg-dark-green p-2">
-                <div class="flex text-white items-center ml-0">
-                    <img class="w-[4rem]" src="{{ asset('img/logoRdvSante.png') }}" alt="Logo">
-                    <h1 class="ml-6 text-2xl font-extrabold">Rendez-vous santé</h1>
+                <div class="flex justify-between items-center">
+                    <div class="flex text-white items-center ml-0">
+                        <img class="w-[4rem]" src="{{ asset('img/logoRdvSante.png') }}" alt="Logo">
+                        <h1 class="ml-6 text-2xl font-extrabold">Rendez-vous santé</h1>
+                    </div>
+
+                    @auth
+                        <!-- Bouton de déconnexion -->
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="text-white bg-mid-green hover:bg-red-700 px-4 py-2 rounded-md">
+                                Déconnexion
+                            </button>
+                        </form>
+                    @endauth
                 </div>
             </nav>
         </header>

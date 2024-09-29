@@ -5,47 +5,51 @@ use App\Http\Controllers\ProfileController;
 use App\Livewire\Agenda;
 use App\Http\Controllers\ServiceController;
 use App\Models\Service;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('index');
-})->name('index');
+})->middleware('auth')->name('index');
 
 Route::get('/agenda', function () {
     return view('agenda');
-})->name('agenda');
+})->middleware('auth')->name('agenda');
 
-//Route::get('/agenda', Agenda::class)->name('agenda');
+//Route::get('/agenda', Agenda::class)->middleware('auth')->name('agenda');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/profile', [ProfileController::class, 'edit'])->middleware('auth')->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->middleware('auth')->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->middleware('auth')->name('profile.destroy');
 });
 
 Route::controller(ClientController::class)->group(function() {
-    Route::get('/Clients', 'index')->name('clients');
+    Route::get('/Clients', 'index')->middleware('auth')->name('clients');
 });
 
 
 //Routes pour les services
 Route::controller(ServiceController::class)->group(function () {
-    Route::post('/service/ajouterService','store')->name('ajouterService');
+    Route::post('/service/ajouterService','store')->middleware('auth')->name('ajouterService');
 });
 
 Route::view('profile', 'profile')
-    ->middleware(['auth'])
-    ->name('profile');
+    ->middleware(['auth'])->name('profile');
 
 Route::view('/welcome', 'welcome');
 
 Route::get('/profil', function () {
     return view('profil');
-})->name('profil');
+})->middleware('auth')->name('profil');
 
+Route::post('/logout', function () {
+    Auth::logout();
+    return redirect('/login');
+})->name('logout');
 
 require __DIR__.'/auth.php';
