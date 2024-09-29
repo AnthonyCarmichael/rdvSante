@@ -5,12 +5,18 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\Indisponibilite;
 
+use Carbon\Carbon;
+
 class IndisponibiliteComponent extends Component
 {
+    public $id;
     public $note;
     public $dateHeureDebut;
     public $dateHeureFin;
     public $selectedTime;
+
+    public $tempNote;
+    public $tempDateHeureFin;
 
     protected $listeners = ['timeUpdated' => 'updateTime',
                             'passingIndispo' => 'passingIndispo',
@@ -80,10 +86,13 @@ class IndisponibiliteComponent extends Component
 
     public function consulterModalIndispo(Indisponibilite $indispo) {
         $this->reset();
-        $this->note = $indispo->note;
-        $this->dateHeureDebut = $indispo->dateHeureDebut;
-        $this->dateHeureFin = $indispo->dateHeureFin;
+        $this->id = $indispo->id;
+        $this->note = $this->tempNote = $indispo->note;
+        $this->dateHeureDebut = Carbon::parse($indispo->dateHeureDebut)->format('Y-m-d H:i:s');
+        $this->dateHeureFin = $this->tempDateHeureFin = Carbon::parse($indispo->dateHeureFin)->format('Y-m-d H:i:s');
+    
         $this->dispatch('open-modal', name: 'consulterIndisponibilite');
+        #dd($this);
 
     }
 
@@ -91,4 +100,54 @@ class IndisponibiliteComponent extends Component
         $this->reset(['note', 'dateHeureDebut', 'dateHeureFin']);
     }
 
+
+    public function modifierIndisponibilite()
+    {
+
+        $this->validate([
+            'tempNote' => 'required|string',
+            'dateHeureDebut' => 'required|date',
+            'tempDateHeureFin' => 'required|date|after:dateHeureDebut',
+        ]);
+
+
+        $indispo = Indisponibilite::find($this->id);
+        
+        if ($indispo) {
+
+            $this->note = $this->tempNote;
+            $this->dateHeureFin = $this->tempDateHeureFin;
+
+            $indispo->note = $this->tempNote;
+            $indispo->dateHeureFin = $this->tempDateHeureFin;
+            
+            $indispo->save();
+        }
+        else {
+            session()->flash('error', 'Indisponibilité non trouvée.');
+        }
+
+
+        $this->reset();
+        $this->dispatch('close-modal');
+        $this->dispatch('refreshAgenda');
+        $this->consulterModalIndispo($indispo);
+
+    }
+
+    public function annuler()
+    {
+        #dd($this);
+        $this->tempNote = $this->note;
+        $this->tempDateHeureFin = $this->dateHeureFin;
+    }
+
+    public function deleteIndispo(){
+
+        $deleted = Indisponibilite::destroy($this->id);
+        $this->reset();
+        $this->dispatch('close-modal');
+        $this->dispatch('refreshAgenda');
+
+    }
 }

@@ -50,7 +50,7 @@ class Agenda extends Component
         }
 
 
-        $this->indispoArr = Indisponibilite::where('dateHeureDebut', '>=', $this->startingDate)->get();
+        $this->indispoArr = Indisponibilite::where('dateHeureFin', '>=', $this->startingDate)->get();
     }
 
     public function setView($view)
@@ -70,7 +70,7 @@ class Agenda extends Component
 
             }
 
-            $this->indispoArr = Indisponibilite::where('dateHeureDebut', '>=', $this->startingDate)->get();
+            $this->indispoArr = Indisponibilite::where('dateHeureFin', '>=', $this->startingDate)->get();
 
         } elseif ($this->view == "mois") {
             $this->startingDate = $this->now->copy()->firstOfMonth();
@@ -102,8 +102,7 @@ class Agenda extends Component
 
     public function refreshAgenda(){
         $this->indispoArr = [];
-        $this->indispoArr = Indisponibilite::where('dateHeureDebut', '>=', $this->startingDate)
-                                            ->where('dateHeureFin', '>', $this->startingDate)->get();
+        $this->indispoArr = Indisponibilite::where('dateHeureFin', '>=', $this->startingDate)->get();
     }
 
     public function changeStartingDate($days) {
@@ -115,17 +114,14 @@ class Agenda extends Component
 
             $date = $this->startingDate->copy()->addDays($i);
             $this->datesArr[] = $date;
-
         }
         $this->refreshAgenda();
     }
 
     public function consulterModalIndispo(Indisponibilite $indispo) {
 
+        #dd($indispo);
         $this->dispatch('consulterModalIndispo', $indispo);
     }
-
-
-
 
 }

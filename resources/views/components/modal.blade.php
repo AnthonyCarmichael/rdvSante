@@ -43,9 +43,9 @@ $maxWidth = [
     })"
 
     x-on:open-modal.window="show = ($event.detail.name === name)"
-    x-on:close-modal.window="show = false"
-    x-on:close.stop="show = false"
-    x-on:keydown.escape.window="show = false"
+    x-on:close-modal.window="show = false; $dispatch('reset-editable')"
+    x-on:close.stop="show = false; $dispatch('reset-editable')"
+    x-on:keydown.escape.window="show = false; $dispatch('reset-editable')"
     x-on:keydown.tab.prevent="$event.shiftKey || nextFocusable().focus()"
     x-on:keydown.shift.tab.prevent="prevFocusable().focus()"
     x-show="show"
@@ -55,7 +55,7 @@ $maxWidth = [
     <div
         x-show="show"
         class="fixed inset-0 transform transition-all"
-        x-on:click="show = false"
+        x-on:click="show = false; $dispatch('reset-editable')"
         x-transition:enter="ease-out duration-300"
         x-transition:enter-start="opacity-0"
         x-transition:enter-end="opacity-100"
