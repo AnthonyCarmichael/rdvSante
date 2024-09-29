@@ -2,10 +2,15 @@
 <div class="">
     <div>
         <select id="view" name="view" wire:model="view" wire:change="setView($event.target.value)"
-            class="border-solid border-2 border-gray-600  bg-mid-green">
+            class="border-none bg-mid-green">
             <option value="semaine" {{ $view === 'semaine' ? 'selected' : '' }}>Semaine</option>
             <option value="mois" {{ $view === 'mois' ? 'selected' : '' }}>Mois</option>
         </select>
+
+        <div>
+            <input class="mt-6 border-none bg-pale-green" placeholder="Sélectionnez une date" type="date" wire:model="settingDate" wire:change="dateChanged" name="settingDate" style="text-indent: -9999px;"> 
+        </div>
+
     </div>
 
     <!-- Affichage de la vue sélectionnée -->
@@ -15,7 +20,7 @@
              <div class="flex w-full bg-mid-green border-solid border-2 border-gray-600 mb-1 mt-1 font-bold text-center justify-between">
                 <button wire:click="changeStartingDate(-7)"
                     class="text-xl ml-6 hover:text-white"><</button>
-                <p class="">Semaine du {{$startingDate->translatedFormat('d F')}} au {{$endingDate->translatedFormat('d F Y')}} </p>
+                <p class="">{{$startingDate->translatedFormat('d F')}} au {{$endingDate->translatedFormat('d F Y')}} </p>
                 <button wire:click="changeStartingDate(7)"
                     class="text-xl mr-6 hover:text-white">></button>
              </div>

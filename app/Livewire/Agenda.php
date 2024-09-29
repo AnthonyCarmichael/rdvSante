@@ -23,6 +23,8 @@ class Agenda extends Component
     public $dateHeureDebut;
     public $dateHeureFin;
 
+    public $settingDate;
+
     protected $listeners = ['refreshAgenda' => 'refreshAgenda'];
 
 
@@ -32,9 +34,7 @@ class Agenda extends Component
         Carbon::setLocale('fr_CA');
 
         // Obtenir l'heure actuelle en UTC
-        $this->now = Carbon::now('UTC');
-
-        $this->now->setTimezone('America/Toronto');
+        $this->now = Carbon::now('America/Toronto');
 
         if ($this->now->isSunday())
             $this->startingDate = $this->now->copy();
@@ -55,36 +55,7 @@ class Agenda extends Component
     public function setView($view)
     {
         $this->view = $view;
-
-        if ($this->view == "semaine") {
-            
-            if ($this->now->isSunday())
-                $this->startingDate = $this->now->copy();
-            else
-                $this->startingDate = $this->now->copy()->modify('last sunday');
-            $this->endingDate = $this->startingDate->copy()->modify('+6 days');
-
-
-            $this->datesArr = [];
-            for ($i=0; $i < 7; $i++) {
-
-                $date = $this->startingDate->copy()->addDays($i);
-                $this->datesArr[] = $date;
-
-            }
-
-            $this->indispoArr = Indisponibilite::where('dateHeureFin', '>=', $this->startingDate)->get();
-
-        } elseif ($this->view == "mois") {
-            $this->startingDate = $this->now->copy()->firstOfMonth();
-            $this->endingDate = $this->now->copy()->lastOfMonth();
-            $this->datesArr = [];
-
-            for ($i = 0; $i < $this->now->daysInMonth; $i++) {
-                $date = $this->startingDate->copy()->addDays($i);
-                $this->datesArr[] = $date;
-            }
-        }
+        $this->fullRefresh($this->now);
     }
     public function render()
     {
@@ -108,6 +79,38 @@ class Agenda extends Component
         $this->indispoArr = Indisponibilite::where('dateHeureFin', '>=', $this->startingDate)->get();
     }
 
+    public function fullRefresh($startingDate){
+        if ($this->view == "semaine") {
+            
+            if ($startingDate->isSunday())
+                $this->startingDate = $startingDate->copy();
+            else
+                $this->startingDate = $startingDate->copy()->modify('last sunday');
+            $this->endingDate = $this->startingDate->copy()->modify('+6 days');
+
+
+            $this->datesArr = [];
+            for ($i=0; $i < 7; $i++) {
+
+                $date = $this->startingDate->copy()->addDays($i);
+                $this->datesArr[] = $date;
+
+            }
+
+            $this->indispoArr = Indisponibilite::where('dateHeureFin', '>=', $this->startingDate)->get();
+
+        } elseif ($this->view == "mois") {
+            $this->startingDate = $startingDate->copy()->firstOfMonth();
+            $this->endingDate = $startingDate->copy()->lastOfMonth();
+            $this->datesArr = [];
+
+            for ($i = 0; $i < $startingDate->daysInMonth; $i++) {
+                $date = $this->startingDate->copy()->addDays($i);
+                $this->datesArr[] = $date;
+            }
+        }
+    }
+
     public function changeStartingDate($days) {
         $this->startingDate->addDays($days);
         $this->endingDate->addDays($days);
@@ -125,6 +128,14 @@ class Agenda extends Component
 
         #dd($indispo);
         $this->dispatch('consulterModalIndispo', $indispo);
+    }
+
+    public function dateChanged()
+    {
+        $this->settingDate = Carbon::parse($this->settingDate);
+        #dd($this->settingDate->isSunday());
+        $this->fullRefresh($this->settingDate);
+        
     }
 
 }
