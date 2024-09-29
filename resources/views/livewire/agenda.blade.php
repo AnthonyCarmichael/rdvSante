@@ -25,7 +25,7 @@
                     class="text-xl mr-6 hover:text-white">></button>
              </div>
 
-            <table class="table-fixed w-full text-sm text-darker-green dark:text-gray-400">
+            <table class="border-solid border-2 border-gray-600 table-fixed w-full text-sm text-darker-green dark:text-gray-400 ">
                 <thead>
                     <tr class="bg-mid-green">
                         <!-- Titre col -->
@@ -71,7 +71,7 @@
                                         @foreach ($indispoArr as $indispo)
                                             @if ($indispo->dateHeureDebut <= $selectedDateTime && $indispo->dateHeureFin > $selectedDateTime )
 
-                                                <button class="absolute top-0 left-0 w-full h-full bg-orange-500 border-b-2 border-r-2 border-gray-600"
+                                                <button class="absolute top-0 left-0 w-full h-full bg-orange-500 border-dotted border-b-2 border-r-2 border-gray-600"
                                                     wire:click="consulterModalIndispo({{$indispo}})"
                                                     value="{{$indispo->id}}"
                                                     onclick="console.log(event.target.value);"
@@ -88,7 +88,7 @@
 
                                         @if ($findIndispo != true)
                                             <button wire:click="openModalIndispo('<?php echo $selectedDateTime ?>')"
-                                                    class="absolute top-0 left-0 w-full h-full hover:bg-blue-400 border-b-2 border-r-2 border-gray-600">
+                                                    class="absolute top-0 left-0 w-full h-full hover:bg-blue-400 border-dotted border-b-2 border-r-2 border-gray-600">
                                             </button>
                                         @endif
                                     </td>

@@ -40,6 +40,8 @@ class Agenda extends Component
             $this->startingDate = $this->now->copy();
         else
             $this->startingDate = $this->now->copy()->modify('last sunday');
+
+        $this->startingDate->setTime(7, 0);
         $this->endingDate = $this->startingDate->copy()->modify('+6 days');
         
         $this->datesArr = [];
@@ -50,6 +52,7 @@ class Agenda extends Component
 
 
         $this->indispoArr = Indisponibilite::where('dateHeureFin', '>=', $this->startingDate)->get();
+        #dd($this->startingDate);
     }
 
     public function setView($view)
@@ -86,6 +89,7 @@ class Agenda extends Component
                 $this->startingDate = $startingDate->copy();
             else
                 $this->startingDate = $startingDate->copy()->modify('last sunday');
+            $startingDate->setTime(7, 0);
             $this->endingDate = $this->startingDate->copy()->modify('+6 days');
 
 
@@ -133,7 +137,7 @@ class Agenda extends Component
     public function dateChanged()
     {
         $this->settingDate = Carbon::parse($this->settingDate);
-        #dd($this->settingDate->isSunday());
+        #dd($this->settingDate);
         $this->fullRefresh($this->settingDate);
         
     }
