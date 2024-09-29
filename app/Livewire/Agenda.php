@@ -114,7 +114,6 @@ class Agenda extends Component
 
             $date = $this->startingDate->copy()->addDays($i);
             $this->datesArr[] = $date;
-
         }
         $this->refreshAgenda();
     }
