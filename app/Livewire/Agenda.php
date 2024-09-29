@@ -31,22 +31,21 @@ class Agenda extends Component
         $this->view = "semaine";
         Carbon::setLocale('fr_CA');
 
-
         // Obtenir l'heure actuelle en UTC
         $this->now = Carbon::now('UTC');
 
         $this->now->setTimezone('America/Toronto');
 
-        $this->startingDate = $this->now->copy()->modify('last sunday');
+        if ($this->now->isSunday())
+            $this->startingDate = $this->now->copy();
+        else
+            $this->startingDate = $this->now->copy()->modify('last sunday');
         $this->endingDate = $this->startingDate->copy()->modify('+6 days');
-
-
+        
         $this->datesArr = [];
         for ($i=0; $i < 7; $i++) {
-
             $date = $this->startingDate->copy()->addDays($i);
             $this->datesArr[] = $date;
-
         }
 
 
@@ -58,7 +57,11 @@ class Agenda extends Component
         $this->view = $view;
 
         if ($this->view == "semaine") {
-            $this->startingDate = $this->now->copy()->modify('last sunday');
+            
+            if ($this->now->isSunday())
+                $this->startingDate = $this->now->copy();
+            else
+                $this->startingDate = $this->now->copy()->modify('last sunday');
             $this->endingDate = $this->startingDate->copy()->modify('+6 days');
 
 
