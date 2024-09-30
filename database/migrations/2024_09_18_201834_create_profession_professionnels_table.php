@@ -15,12 +15,12 @@ return new class extends Migration
             $table->engine = 'InnoDB';
             $table->bigIncrements('id');
             $table->bigInteger('idProfession')->unsigned();
-            $table->bigInteger('idProfessionnel')->unsigned();
+            $table->bigInteger('user_id')->unsigned();
         });
 
         Schema::table('profession_professionnels', function (Blueprint $table) {
-            $table->foreign('idProfession')->references('id')->on('professions');
-            $table->foreign('idProfessionnel')->references('id')->on('users');
+            $table->foreign('idProfession')->references('id')->on('professions')->constrained()->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->constrained()->onDelete('cascade');
         });
     }
 

@@ -2,8 +2,12 @@
 
 namespace App\Livewire;
 
+use App\Models\ProfessionProfessionnel;
+use App\Models\User;
+
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+
 
 class Compte extends Component
 {
@@ -22,7 +26,7 @@ class Compte extends Component
         $this->prenom = $user->prenom;
         $this->email = $user->email;
         $this->telephone = $user->telephone;
-        $this->idProfession = $user->idProfession;
+        $this->idProfession = [$user->idProfession];
         $this->idRole = $user->idRole;
     }
 
@@ -35,17 +39,29 @@ class Compte extends Component
             'telephone' => 'required|string|max:15',
         ]);
 
-        $user = Auth::user();
-        $user->update([
-            'nom' => $this->nom,
-            'prenom' => $this->prenom,
-            'email' => $this->email,
-            'telephone' => $this->telephone,
-            'idProfession' => $this->idProfession,
-            'idRole' => $this->idRole,
-        ]);
+        $user = User::find(Auth::user()->id);
 
-        session()->flash('message', 'Profil mis à jour avec succès.');
+        if ($user) {
+            $user->update([
+                'nom' => $this->nom,
+                'prenom' => $this->prenom,
+                'email' => $this->email,
+                'telephone' => $this->telephone,
+                'idRole' => $this->idRole,
+            ]);
+
+            ProfessionProfessionnel::where('user_id', $user->id)->delete();
+
+            foreach ($this->idProfession as $id) {
+                ProfessionProfessionnel::create([
+                    'idProfession' =>$id,
+                    'user_id' => $user->id
+                ]);
+            }
+
+
+            session()->flash('message', 'Profil mis à jour avec succès.');
+        }
     }
 
     public function render()

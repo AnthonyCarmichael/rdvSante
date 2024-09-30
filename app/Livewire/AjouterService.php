@@ -2,7 +2,6 @@
 
 namespace App\Livewire;
 
-use App\Models\CategorieService;
 use App\Models\Profession;
 use App\Models\Service;
 use Illuminate\Support\Facades\Auth;
@@ -11,10 +10,10 @@ use Livewire\Component;
 class AjouterService extends Component
 {
     public $services;
-    public $categories;
+    public $professions;
 
     public $nomservice;
-    public $categorieservice;
+    public $professionservice;
     public $descriptionservice;
     public $dureeservice;
     public $prixservice;
@@ -36,8 +35,8 @@ class AjouterService extends Component
     public function mount()
     {
         $this->services = Service::where('idProfessionnel', 1)->get();
-        $this->categories = Profession::all();
-        #dd($this->services);
+        $this->professions = Profession::all();
+        #dd($this->professions);
     }
 
     public function refreshTable()
@@ -47,7 +46,7 @@ class AjouterService extends Component
 
     public function openModalAjouterService()
     {
-        $this->resetExcept('services','categories');
+        $this->resetExcept('services','professions');
         $this->dispatch('open-modal', name : 'ajouterService');
     }
 
@@ -96,7 +95,7 @@ class AjouterService extends Component
     {
         $validatedData = $this->validate([
             'nomservice' => 'required|string|max:255',
-            'categorieservice' => 'required|exists:categorie_services,id',
+            'professionservice' => 'required|exists:profession_services,id',
             'descriptionservice' => 'nullable|string',
             'prixservice' => 'required|numeric|min:0',
             'taxableservice' => 'nullable|boolean',
@@ -115,13 +114,13 @@ class AjouterService extends Component
             'nombreHeureLimiteReservation' => $validatedData['tempsavantrdv'] ?? 0,
             'droitPersonneACharge' => $validatedData['personneacharge'] ?? false,
             'actif' => true, #Désactivaion du service possible?
-            'idCategorieService' => $validatedData['categorieservice'],
+            'idProfessionService' => $validatedData['professionservice'],
             'idProfessionnel' => Auth::user()->id, #idProffessionnel à modifier doit être celui de l'utilisateur présentement connecté
         ]);
 
         $this->services = Service::where('idProfessionnel', Auth::user()->id)->get(); #idProffessionnel à modifier doit être celui de l'utilisateur présentement connecté
 
-        $this->resetExcept('services','categories');
+        $this->resetExcept('services','professions');
         $this->dispatch('close-modal');
     }
 
@@ -130,7 +129,7 @@ class AjouterService extends Component
         $service = Service::findOrFail($id);
         $this->service_id = $service->id;
         $this->nomservice = $service->nom;
-        $this->categorieservice = $service->idCategorieService;
+        $this->professionservice = $service->idProfessionService;
         $this->descriptionservice = $service->description;
         $this->dureeservice = $service->dureeservice;
         $this->prixservice = $service->prix;
@@ -147,7 +146,7 @@ class AjouterService extends Component
     {
         $validatedData = $this->validate([
             'nomservice' => 'required|string|max:255',
-            'categorieservice' => 'required|exists:categorie_services,id',
+            'professionservice' => 'required|exists:profession_services,id',
             'descriptionservice' => 'nullable|string',
             'prixservice' => 'required|numeric|min:0',
             'taxableservice' => 'nullable|boolean',
@@ -169,11 +168,11 @@ class AjouterService extends Component
                 'nombreHeureLimiteReservation' => $validatedData['tempsavantrdv'] ?? 0,
                 'droitPersonneACharge' => $validatedData['personneacharge'] ?? false,
                 'actif' => true,
-                'idCategorieService' => $validatedData['categorieservice'],
+                'idProfessionService' => $validatedData['professionservice'],
                 'idProfessionnel' => 1,
             ]);
 
-            $this->resetExcept('services', 'categories');
+            $this->resetExcept('services', 'professions');
             $this->refreshTable();
             $this->dispatch('close-modal');
         }
