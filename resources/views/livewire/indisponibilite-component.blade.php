@@ -1,6 +1,8 @@
 <div>
-    <x-modal title="Ajouter une indisponibilité le {{$selectedTime}}" name="ajouterIndisponibilite" :show="false">
+    <x-modal title="Ajouter une indisponibilité" name="ajouterIndisponibilite" :show="false">
         <form wire:submit.prevent="createIndisponibilite">
+            <p class="font-bold">Date et heure sélectionnées:</p>  
+            <p class="mb-5">{{$selectedTime}}</p>
             <div>
                 <label class="block" for="note">Note :</label>
                 <input type="text" name="note" wire:model="note" placeholder="Note" required>
