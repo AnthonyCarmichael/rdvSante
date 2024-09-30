@@ -18,7 +18,7 @@ class Service extends Model
         'nombreHeureLimiteReservation',
         'droitPersonneACharge',
         'actif',
-        'idCategorieService',
+        'idProfessionService',
         'idProfessionnel',
     ];
 

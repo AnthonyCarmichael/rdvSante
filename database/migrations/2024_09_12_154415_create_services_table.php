@@ -23,12 +23,12 @@ return new class extends Migration
             $table->integer('nombreHeureLimiteReservation');
             $table->boolean('droitPersonneACharge');
             $table->boolean('actif');
-            $table->bigInteger('idCategorieService')->unsigned();
+            $table->bigInteger('idProfessionService')->unsigned();
             $table->bigInteger('idProfessionnel')->unsigned();
         });
 
         Schema::table('services', function (Blueprint $table) {
-            $table->foreign('idCategorieService')->references('id')->on('categorie_services');
+            $table->foreign('idProfessionService')->references('id')->on('professions');
         });
 
         Schema::table('services', function (Blueprint $table) {

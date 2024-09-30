@@ -95,7 +95,7 @@ class AjouterService extends Component
     {
         $validatedData = $this->validate([
             'nomservice' => 'required|string|max:255',
-            'professionservice' => 'required|exists:profession_services,id',
+            'professionservice' => 'required|exists:professions,id',
             'descriptionservice' => 'nullable|string',
             'prixservice' => 'required|numeric|min:0',
             'taxableservice' => 'nullable|boolean',
@@ -146,7 +146,7 @@ class AjouterService extends Component
     {
         $validatedData = $this->validate([
             'nomservice' => 'required|string|max:255',
-            'professionservice' => 'required|exists:profession_services,id',
+            'professionservice' => 'required|exists:professions,id',
             'descriptionservice' => 'nullable|string',
             'prixservice' => 'required|numeric|min:0',
             'taxableservice' => 'nullable|boolean',
