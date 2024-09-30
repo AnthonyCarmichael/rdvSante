@@ -132,8 +132,8 @@ class AjouterClient extends Component
         ]);
 
         $this->reset(['nom', 'prenom', 'courriel', 'telephone', 'ddn', 'genre', 'nomResponsable', 'prenomResponsable', 'lienResponsable', 'rue', 'noCivique', 'codePostal', 'ville']);
-        $this->clients = Client::all();
-        $this->villes = Ville::all();
+        $this->clients = Client::orderBy('nom', 'asc')->get();
+        $this->villes = Ville::orderBy('nom', 'asc')->get();
         $this->dispatch('close-modal');
         #exemple open modal dispatch
         #$this->dispatch('open-modal', name: 'modal-name');
@@ -179,8 +179,8 @@ class AjouterClient extends Component
         ]);
 
         $this->reset(['nom', 'prenom', 'courriel', 'telephone', 'ddn', 'genre', 'nomResponsable', 'prenomResponsable', 'lienResponsable', 'rue', 'noCivique', 'codePostal', 'ville']);
-        $this->clients = Client::all();
-        $this->villes = Ville::all();
+        $this->clients = Client::orderBy('nom', 'asc')->get();
+        $this->villes = Ville::orderBy('nom', 'asc')->get();
         $this->dispatch('close-modal');
         #exemple open modal dispatch
         #$this->dispatch('open-modal', name: 'modal-name');
@@ -248,7 +248,7 @@ class AjouterClient extends Component
 
     public function filtreClient()
     {
-        $this->clients = Client::where('nom','like', '%'.$this->filtreNom.'%' )->where('prenom', 'like', '%'.$this->filtrePrenom.'%')->get();
+        $this->clients = Client::where('nom','like', '%'.$this->filtreNom.'%' )->where('prenom', 'like', '%'.$this->filtrePrenom.'%')->orderBy('nom', 'asc')->get();
     }
 
 }
