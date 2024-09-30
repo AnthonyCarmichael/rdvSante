@@ -46,7 +46,7 @@ class AjouterService extends Component
 
     public function openModalAjouterService()
     {
-        $this->resetExcept('services','services');
+        $this->resetExcept('services','professions');
         $this->dispatch('open-modal', name : 'ajouterService');
     }
 
