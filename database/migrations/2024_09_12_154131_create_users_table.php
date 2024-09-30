@@ -23,14 +23,10 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
-            $table->bigInteger('idProfession')->unsigned();
             $table->bigInteger('idRole')->unsigned();
 
         });
 
-        Schema::table('users', function (Blueprint $table) {
-            $table->foreign('idProfession')->references('id')->on('professions');
-        });
 
         Schema::table('users', function (Blueprint $table) {
             $table->foreign('idRole')->references('id')->on('roles');

@@ -93,12 +93,12 @@
                     </div>
 
                     <div class="mb-4">
-                        <label for="categorieservice" class="block text-sm font-medium text-gray-700">Catégorie</label>
-                        <select name="categorieservice" id="categorieservice" wire:model="categorieservice"
+                        <label for="professionservice" class="block text-sm font-medium text-gray-700">Profession</label>
+                        <select name="professionservice" id="professionservice" wire:model="professionservice"
                                 class="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                            <option value="">Sélectionner une catégorie</option>
-                            @foreach($categories as $categorie)
-                                <option value="{{ $categorie->id }}">{{ $categorie->nom }}</option>
+                            <option value="">Sélectionner une profession</option>
+                            @foreach($professions as $profession)
+                                <option value="{{ $profession->id }}">{{ $profession->nom }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -184,12 +184,12 @@
                     </div>
 
                     <div class="mb-4">
-                        <label for="categorieservice" class="block text-sm font-medium text-gray-700">Catégorie</label>
-                        <select name="categorieservice" id="categorieservice" wire:model="categorieservice"
+                        <label for="professionservice" class="block text-sm font-medium text-gray-700">Profession</label>
+                        <select name="professionservice" id="professionservice" wire:model="professionservice"
                                 class="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                            <option value="">Sélectionner une catégorie</option>
-                            @foreach($categories as $categorie)
-                                <option value="{{ $categorie->id }}">{{ $categorie->nom }}</option>
+                            <option value="">Sélectionner une profession</option>
+                            @foreach($professions as $profession)
+                                <option value="{{ $profession->id }}">{{ $profession->nom }}</option>
                             @endforeach
                         </select>
                     </div>

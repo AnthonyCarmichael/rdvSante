@@ -6,7 +6,7 @@ use Livewire\Component;
 
 class Profil extends Component
 {
-    public $view = 'AjouterService';
+    public $view = 'Compte';
 
     public function setView($view)
     {

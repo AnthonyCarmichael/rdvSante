@@ -27,10 +27,11 @@ class User extends Authenticatable
         return $this->belongsToMany(Clinique::class);
     }
 
-    public function professions(): BelongsToMany
+    public function professions()
     {
-        return $this->belongsToMany(Profession::class);
+        return $this->belongsToMany(Profession::class, 'profession_professionnels');
     }
+
 
     /**
      * The attributes that are mass assignable.
@@ -39,8 +40,11 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'prenom',
         'email',
         'password',
+        'telephone',
+        'idProfession',
     ];
 
     /**
