@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 class DiponibiliteProfessionnel extends Pivot
 {
     use HasFactory;
-    protected $table = 'diponibiliteProfessionnels';
+    protected $table = 'diponibilite_professionnels';
     protected $primaryKey = 'id';
     public $incrementing = true;
     public $timestamps = false;

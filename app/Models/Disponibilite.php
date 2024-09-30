@@ -11,6 +11,8 @@ class Disponibilite extends Model
 
     protected $table = 'disponibilites';
     protected $primaryKey = 'id';
+
+    protected $fillable = ['heureDebut', 'heureFin', 'idJour'];
     public $timestamps = false;
 
 }
