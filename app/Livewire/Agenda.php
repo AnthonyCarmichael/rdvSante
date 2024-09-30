@@ -67,7 +67,7 @@ class Agenda extends Component
 
     public function openModalIndispo($selectedTime) {
         $date = Carbon::parse($selectedTime);
-        $this->dispatch('createIndispoModal', $date->translatedFormat('l \l\e d F Y H:i'));
+        $this->dispatch('createIndispoModal', $date->translatedFormat('l \l\e d F Y \à H:i'));
 
     }
 
