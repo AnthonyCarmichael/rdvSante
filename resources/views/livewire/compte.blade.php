@@ -31,8 +31,6 @@
                 @error('telephone') <span class="error text-red-600">{{ $message }}</span> @enderror
             </div>
 
-
-            <!-- Sélection multiple des professions -->
             <div class="mb-4">
                 <label for="idProfession" class="block text-sm font-medium">Sélectionnez vos professions</label>
                 <select id="idProfession" wire:model="idProfession" multiple class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
@@ -40,7 +38,6 @@
                         <option value="{{ $profession->id }}">{{ $profession->nom }}</option>
                     @endforeach
                 </select>
-
             </div>
 
             <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 focus:ring-4 focus:ring-blue-300">
@@ -51,7 +48,6 @@
 </div>
 
 <script>
-    // Fonction pour gérer les changements dans le dropdown
     document.getElementById('idProfession').addEventListener('change', function() {
         let selectedOptions = Array.from(this.selectedOptions).map(option => option.text).join(', ');
         console.log('Professions sélectionnées:', selectedOptions);
