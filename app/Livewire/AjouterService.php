@@ -156,10 +156,10 @@ class AjouterService extends Component
             'droitPersonneACharge' => $validatedData['personneacharge'] ?? false,
             'actif' => true, #Désactivaion du service possible?
             'idProfessionService' => $validatedData['professionservice'],
-            'idProfessionnel' => Auth::user()->id, #idProffessionnel à modifier doit être celui de l'utilisateur présentement connecté
+            'idProfessionnel' => Auth::user()->id,
         ]);
 
-        $this->services = Service::where('idProfessionnel', Auth::user()->id)->get(); #idProffessionnel à modifier doit être celui de l'utilisateur présentement connecté
+        $this->services = Service::where('idProfessionnel', Auth::user()->id)->get();
 
         $this->resetExcept('services','professions');
         $this->dispatch('close-modal');

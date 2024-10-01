@@ -266,16 +266,16 @@
         <x-modal title="Informations service" name="consulterService" :show="false">
             <div class="border-solid border-2 border-black p-4 m-4 rounded">
                 <div class="grid grid-cols-4 gap-y-4">
-                    <p class="text-sm text-right font-bold" for="nomservice">Nom sercice:</p>
+                    <p class="text-sm text-right font-bold" for="nomservice">Nom service:</p>
                     <p class="h-8 text-sm ml-2"> {{ $nomservice }}</p>
 
                     <p class="text-sm text-right font-bold" for="professionservice">Profession:</p>
                     <p class="h-8 text-sm ml-2"> {{ $professionservice }}</p>
 
-                    <p class="text-sm text-right font-bold" for="descriptionservice">DEscription:</p>
+                    <p class="text-sm text-right font-bold" for="descriptionservice">Description:</p>
                     <p class="h-8 text-sm ml-2"> {{ $descriptionservice }}</p>
 
-                    <p class="text-sm text-right font-bold" for="dureeservice">Dur/e du service:</p>
+                    <p class="text-sm text-right font-bold" for="dureeservice">Durée du service:</p>
                     <p class="h-8 text-sm ml-2"> {{ $dureeservice }}</p>
 
                     <p class="text-sm text-right font-bold" for="prixservice">Prix du service:</p>
