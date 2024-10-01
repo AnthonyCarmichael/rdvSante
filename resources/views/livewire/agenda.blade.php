@@ -14,7 +14,7 @@
     </div>
 
     <!-- Affichage de la vue sélectionnée -->
-    <div class="w-full text-gray-800 dark:text-gray-400">
+    <div class="w-full text-gray-800">
         @if($view === 'semaine')
             <!-- Affichage de la vue semaine -->
              <div class="flex w-full bg-mid-green border-solid border-2 border-gray-600 mb-1 mt-1 font-bold text-center justify-between">
@@ -25,7 +25,7 @@
                     class="text-xl mr-6 hover:text-white">></button>
              </div>
 
-            <table class="border-solid border-2 border-gray-600 table-fixed w-full text-sm text-darker-green dark:text-gray-400 ">
+            <table class="border-solid border-2 border-gray-600 table-fixed w-full text-sm text-darker-green">
                 <thead>
                     <tr class="bg-mid-green">
                         <!-- Titre col -->
