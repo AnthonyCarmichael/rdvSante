@@ -135,10 +135,12 @@ class Agenda extends Component
 
     public function dateChanged()
     {
+        Carbon::setLocale('fr_CA');
         $this->settingDate = Carbon::parse($this->settingDate);
-        #dd($this->settingDate);
-        $this->fullRefresh($this->settingDate);
-        
+        $this->settingDate->setTimezone('America/Toronto');
+        $this->settingDate->addHours(4);
+        $this->fullRefresh($this->settingDate->copy());
+        $this->now = Carbon::now('America/Toronto');
     }
 
 }
