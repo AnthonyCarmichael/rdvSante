@@ -88,13 +88,13 @@
                 <form wire:submit.prevent="ajouterService">
                     <div class="mb-4">
                         <label for="nomservice" class="block text-sm font-medium text-gray-700">Nom du service</label>
-                        <input type="text" name="nomservice" id="nomservice" wire:model="nomservice"
+                        <input required minlength="3" type="text" name="nomservice" id="nomservice" wire:model="nomservice"
                             class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                     </div>
 
                     <div class="mb-4">
                         <label for="professionservice" class="block text-sm font-medium text-gray-700">Profession</label>
-                        <select name="professionservice" id="professionservice" wire:model="professionservice"
+                        <select required name="professionservice" id="professionservice" wire:model="professionservice"
                                 class="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                             <option value="">Sélectionner une profession</option>
                             @foreach($professions as $profession)
@@ -104,20 +104,20 @@
                     </div>
 
                     <div class="mb-4">
-                        <label for="descriptionservice" class="block text-sm font-medium text-gray-700">Description</label>
-                        <textarea name="descriptionservice" id="descriptionservice" wire:model="descriptionservice"
+                        <label required for="descriptionservice" class="block text-sm font-medium text-gray-700">Description</label>
+                        <textarea required name="descriptionservice" id="descriptionservice" wire:model="descriptionservice"
                                 class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" rows="4"></textarea>
                     </div>
 
                     <div class="mb-4">
                         <label for="dureeservice" class="block text-sm font-medium text-gray-700">Durée (minutes)</label>
-                        <input type="number" name="dureeservice" id="dureeservice" wire:model="dureeservice"
+                        <input required min="1" type="number" name="dureeservice" id="dureeservice" wire:model="dureeservice"
                             class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                     </div>
 
                     <div class="mb-4">
                         <label for="prixservice" class="block text-sm font-medium text-gray-700">Prix</label>
-                        <input type="number" name="prixservice" id="prixservice" wire:model="prixservice"
+                        <input required min="0" step="0.01" type="number" name="prixservice" id="prixservice" wire:model="prixservice"
                             class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                     </div>
 
@@ -137,7 +137,7 @@
                         </label>
                         <div class="mt-2" x-show="pauserdv">
                             <label for="dureepause" class="block text-sm font-medium text-gray-700">Durée de la pause (minutes)</label>
-                            <input type="number" name="dureepause" id="dureepause" wire:model="dureepause"
+                            <input required min="0" type="number" name="dureepause" id="dureepause" wire:model="dureepause"
                                 class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                         </div>
                     </div>
@@ -150,7 +150,7 @@
                         </label>
                         <div class="mt-2" x-show="rdvderniereminute">
                             <label for="tempsavantrdv" class="block text-sm font-medium text-gray-700">Temps minimum avant rendez-vous (heures)</label>
-                            <input type="number" name="tempsavantrdv" id="tempsavantrdv" wire:model="tempsavantrdv"
+                            <input type="number" name="tempsavantrdv" required min="0" id="tempsavantrdv" wire:model="tempsavantrdv"
                                 class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                         </div>
                     </div>
@@ -178,13 +178,13 @@
                 <form wire:submit.prevent="updateService">
                     <div class="mb-4">
                         <label for="nomservice" class="block text-sm font-medium text-gray-700">Nom du service</label>
-                        <input type="text" name="nomservice" id="nomservice" wire:model="nomservice"
+                        <input required minlength="3" type="text" name="nomservice" id="nomservice" wire:model="nomservice"
                             class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                     </div>
 
                     <div class="mb-4">
                         <label for="professionservice" class="block text-sm font-medium text-gray-700">Profession</label>
-                        <select name="professionservice" id="professionservice" wire:model="professionservice"
+                        <select required name="professionservice" id="professionservice" wire:model="professionservice"
                                 class="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                             <option value="">Sélectionner une profession</option>
                             @foreach($professions as $profession)
@@ -194,20 +194,20 @@
                     </div>
 
                     <div class="mb-4">
-                        <label for="descriptionservice" class="block text-sm font-medium text-gray-700">Description</label>
-                        <textarea name="descriptionservice" id="descriptionservice" wire:model="descriptionservice"
+                        <label required for="descriptionservice" class="block text-sm font-medium text-gray-700">Description</label>
+                        <textarea required name="descriptionservice" id="descriptionservice" wire:model="descriptionservice"
                                 class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" rows="4"></textarea>
                     </div>
 
                     <div class="mb-4">
                         <label for="dureeservice" class="block text-sm font-medium text-gray-700">Durée (minutes)</label>
-                        <input type="number" name="dureeservice" id="dureeservice" wire:model="dureeservice"
+                        <input required min="1" type="number" name="dureeservice" id="dureeservice" wire:model="dureeservice"
                             class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                     </div>
 
                     <div class="mb-4">
                         <label for="prixservice" class="block text-sm font-medium text-gray-700">Prix</label>
-                        <input type="number" name="prixservice" id="prixservice" wire:model="prixservice"
+                        <input required min="0" step="0.01" type="number" name="prixservice" id="prixservice" wire:model="prixservice"
                             class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                     </div>
 
@@ -227,7 +227,7 @@
                         </label>
                         <div class="mt-2" x-show="pauserdv">
                             <label for="dureepause" class="block text-sm font-medium text-gray-700">Durée de la pause (minutes)</label>
-                            <input type="number" name="dureepause" id="dureepause" wire:model="dureepause"
+                            <input required min="0" type="number" name="dureepause" id="dureepause" wire:model="dureepause"
                                 class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                         </div>
                     </div>
@@ -240,7 +240,7 @@
                         </label>
                         <div class="mt-2" x-show="rdvderniereminute">
                             <label for="tempsavantrdv" class="block text-sm font-medium text-gray-700">Temps minimum avant rendez-vous (heures)</label>
-                            <input type="number" name="tempsavantrdv" id="tempsavantrdv" wire:model="tempsavantrdv"
+                            <input type="number" name="tempsavantrdv" required min="0" id="tempsavantrdv" wire:model="tempsavantrdv"
                                 class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                         </div>
                     </div>
