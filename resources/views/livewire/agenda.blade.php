@@ -8,13 +8,13 @@
             <option value="mois" {{ $view === 'mois' ? 'selected' : '' }}>Mois</option>
         </select>
 
-
+        <div>
+            <input class="mt-6 border-none bg-pale-green" placeholder="Sélectionnez une date" type="date" wire:model="settingDate" wire:change="dateChanged" name="settingDate" style="text-indent: -9999px;"> 
+        </div>
 
     </div>
 -->
-    <div>
-        <input class="border-none bg-pale-green" placeholder="Sélectionnez une date" type="date" wire:model="settingDate" wire:change="dateChanged" name="settingDate" style="text-indent: -9999px;"> 
-    </div>
+
     <!-- Affichage de la vue sélectionnée -->
     <div class="w-full text-gray-800">
         @if($view === 'semaine')
