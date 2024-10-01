@@ -33,7 +33,7 @@
 
                         <?php
                         foreach ($datesArr as $date) {?>
-                            <th class="border-solid border-2 border-gray-600">{{$date->translatedFormat('l d')}}</th>
+                            <th class="{{ $date->isSameDay($now) ? ' bg-blue-400' : '' }} border-solid border-2 border-gray-600">{{$date->translatedFormat('l d')}}</th>
                             <?php
                         }
                         ?>
@@ -66,7 +66,7 @@
                                 for ($j=0; $j <7; $j++) {
                                     $findIndispo = false;
                                     ?>
-                                    <td class="relative">
+                                    <td class="relative {{ $selectedDateTime <= $now && $now < $selectedDateTime->copy()->addMinutes(30) ? 'border-2 border-blue-700' : '' }}">
                                     @if (!empty($indispoArr))
                                         @foreach ($indispoArr as $indispo)
                                             @if ($indispo->dateHeureDebut <= $selectedDateTime && $indispo->dateHeureFin > $selectedDateTime )
@@ -86,11 +86,11 @@
                                     @endif
 
 
-                                        @if ($findIndispo != true)
-                                            <button wire:click="openModalIndispo('<?php echo $selectedDateTime ?>')"
-                                                    class="absolute top-0 left-0 w-full h-full hover:bg-blue-400 border-dotted border-b-2 border-r-2 border-gray-600">
-                                            </button>
-                                        @endif
+                                    @if ($findIndispo != true)
+                                        <button wire:click="openModalIndispo('<?php echo $selectedDateTime ?>')"
+                                                class="absolute top-0 left-0 w-full h-full hover:bg-blue-400 border-dotted border-b-2 border-r-2 border-gray-600">
+                                        </button>
+                                    @endif
                                     </td>
                                     <?php
                                     $selectedDateTime->modify('+1 day');
@@ -117,18 +117,6 @@
         @endif
     </div>
 
-    <?php echo $startingDate ?>
-    <?php echo $endingDate ?>
-    <?php var_dump(sizeof($datesArr)) ?>
-
-
-
-    <h3>Indisponibilités</h3>
-    <ul>
-        @foreach($indispoArr as $indisponibilite)
-            <li>{{ $indisponibilite->note }} ({{ $indisponibilite->dateHeureDebut }} - {{ $indisponibilite->dateHeureFin }})</li>
-        @endforeach
-    </ul>
 </div>
 
 
