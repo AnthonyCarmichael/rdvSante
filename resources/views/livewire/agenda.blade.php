@@ -66,12 +66,12 @@
                                 for ($j=0; $j <7; $j++) {
                                     $findIndispo = false;
                                     ?>
-                                    <td class="relative {{ $selectedDateTime <= $now && $now < $selectedDateTime->copy()->addMinutes(30) ? 'border-2 border-blue-700' : '' }}">
+                                    <td class="relative">
                                     @if (!empty($indispoArr))
                                         @foreach ($indispoArr as $indispo)
                                             @if ($indispo->dateHeureDebut <= $selectedDateTime && $indispo->dateHeureFin > $selectedDateTime )
 
-                                                <button class="absolute top-0 left-0 w-full h-full bg-orange-500 border-dotted border-b-2 border-r-2 border-gray-600"
+                                                <button class=" {{ $selectedDateTime <= $now && $now < $selectedDateTime->copy()->addMinutes(30) ? 'border-2 border-blue-700' : 'border-dotted border-b-2 border-r-2 border-gray-600' }} absolute top-0 left-0 w-full h-full bg-orange-500 "
                                                     wire:click="consulterModalIndispo({{$indispo}})"
                                                     value="{{$indispo->id}}"
                                                     onclick="console.log(event.target.value);"
@@ -88,7 +88,7 @@
 
                                     @if ($findIndispo != true)
                                         <button wire:click="openModalIndispo('<?php echo $selectedDateTime ?>')"
-                                                class="absolute top-0 left-0 w-full h-full hover:bg-blue-400 border-dotted border-b-2 border-r-2 border-gray-600">
+                                                class="{{ $selectedDateTime <= $now && $now < $selectedDateTime->copy()->addMinutes(30) ? 'border-2 border-blue-700' : 'border-dotted border-b-2 border-r-2 border-gray-600' }} absolute top-0 left-0 w-full h-full hover:bg-blue-400">
                                         </button>
                                     @endif
                                     </td>
