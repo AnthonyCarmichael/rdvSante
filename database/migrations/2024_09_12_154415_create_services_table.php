@@ -17,18 +17,19 @@ return new class extends Migration
             // "usigned()" nécessaire pour éventuellement pouvoir définir une clé étrangère sur cette colonne.
             $table->string('nom');
             $table->text('description');
+            $table->integer('duree');
             $table->decimal('prix', 5, 2);
             $table->boolean('taxable');
             $table->integer('minutePause');
             $table->integer('nombreHeureLimiteReservation');
             $table->boolean('droitPersonneACharge');
             $table->boolean('actif');
-            $table->bigInteger('idCategorieService')->unsigned();
+            $table->bigInteger('idProfessionService')->unsigned();
             $table->bigInteger('idProfessionnel')->unsigned();
         });
 
         Schema::table('services', function (Blueprint $table) {
-            $table->foreign('idCategorieService')->references('id')->on('categorie_services');
+            $table->foreign('idProfessionService')->references('id')->on('professions');
         });
 
         Schema::table('services', function (Blueprint $table) {

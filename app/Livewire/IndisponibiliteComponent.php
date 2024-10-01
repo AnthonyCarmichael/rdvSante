@@ -89,8 +89,8 @@ class IndisponibiliteComponent extends Component
         $this->id = $indispo->id;
         $this->note = $this->tempNote = $indispo->note;
         
-        $this->dateHeureDebut = Carbon::parse($indispo->dateHeureDebut)->translatedFormat('l \l\e d F Y \à H:i');
-        $this->dateHeureFin = $this->tempDateHeureFin = Carbon::parse($indispo->dateHeureFin)->translatedFormat('l \l\e d F Y \à H:i');
+        $this->dateHeureDebut = Carbon::parse($indispo->dateHeureDebut)->format('Y-m-d H:i');
+        $this->dateHeureFin = $this->tempDateHeureFin = Carbon::parse($indispo->dateHeureFin)->format('Y-m-d H:i');
     
         $this->dispatch('open-modal', name: 'consulterIndisponibilite');
         #dd($this);

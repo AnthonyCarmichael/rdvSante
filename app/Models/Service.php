@@ -12,13 +12,14 @@ class Service extends Model
     protected $fillable = [
         'nom',
         'description',
+        'duree',
         'prix',
         'taxable',
         'minutePause',
         'nombreHeureLimiteReservation',
         'droitPersonneACharge',
         'actif',
-        'idCategorieService',
+        'idProfessionService',
         'idProfessionnel',
     ];
 

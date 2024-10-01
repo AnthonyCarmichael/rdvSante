@@ -9,7 +9,7 @@ class ProfessionProfessionnel extends Pivot
 {
     use HasFactory;
 
-    protected $table = 'professionProfessionnels';
+    protected $table = 'profession_professionnels';
     protected $primaryKey = 'id';
     public $incrementing = true;
     public $timestamps = false;

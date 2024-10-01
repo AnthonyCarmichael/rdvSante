@@ -43,17 +43,17 @@
                     </button>
                 </th>
                 <th class="border-solid border-b-2 border-black bg-mid-green text-left">
-                    <button wire:click="sortBy('prix')" class="font-bold">
-                        Prix
-                        @if($sortField === 'prix')
+                    <button wire:click="sortBy('duree')" class="font-bold">
+                        Durée
+                        @if($sortField === 'duree')
                             @if($sortDirection === 'asc') ↑ @else ↓ @endif
                         @endif
                     </button>
                 </th>
                 <th class="border-solid border-b-2 border-black bg-mid-green text-left">
-                    <button wire:click="sortBy('minutePause')" class="font-bold">
-                        Pause
-                        @if($sortField === 'minutePause')
+                    <button wire:click="sortBy('prix')" class="font-bold">
+                        Prix
+                        @if($sortField === 'prix')
                             @if($sortDirection === 'asc') ↑ @else ↓ @endif
                         @endif
                     </button>
@@ -63,19 +63,19 @@
         </thead>
         <tbody>
             @foreach($services as $service)
-                <tr class="@if($loop->odd) bg-white @else bg-table-green @endif">
-                    <td class="w-2/12 pr-4">{{ $service->nom }}</td>
-                    <td class="w-2/12 pr-4">{{ $service->description }}</td>
-                    <td class="w-2/12 pr-4">{{ $service->prix }} $</td>
-                    <td class="w-2/12 pr-4">{{ $service->minutePause }} {{ $service->minutePause > 1 ? 'minutes' : 'minute'}}</td>
+                <tr class="@if($loop->odd) bg-white @else bg-table-green @endif hover:bg-mid-green">
+                    <td wire:click="consulterService({{ $service->id }})" class="w-2/12 pr-4">{{ $service->nom }}</td>
+                    <td wire:click="consulterService({{ $service->id }})" class="w-2/12 pr-4">{{ $service->description }}</td>
+                    <td wire:click="consulterService({{ $service->id }})" class="w-2/12 pr-4">{{ $service->duree }} {{ $service->duree > 1 ? 'minutes' : 'minute'}}</td>
+                    <td wire:click="consulterService({{ $service->id }})" class="w-2/12 pr-4">{{ $service->prix }} $</td>
                     <td class="w-2/12 pr-4 justify-between">
-                        <button class="w-5/12 bg-selected-green mx-1 my-1 rounded p-0.5"
-                            wire:click="modifierService({{ $service->id }})"
-                            type="button">
+                        <button class="w-5/12 bg-selected-green mx-1 my-1 rounded p-0.5" wire:click="modifierService({{ $service->id }})" type="button">
                             Modifier
                         </button>
 
-                        <button class="w-6/12 bg-selected-green mx-0.5 rounded p-0.5" type="button">Supprimer</button>
+                        <button type="button" wire:click="confirmDelete({{ $service->id }})" class="w-5/12 bg-selected-green mx-1 my-1 rounded p-0.5">
+                            Supprimer
+                        </button>
                     </td>
                 </tr>
             @endforeach
@@ -93,12 +93,12 @@
                     </div>
 
                     <div class="mb-4">
-                        <label for="categorieservice" class="block text-sm font-medium text-gray-700">Catégorie</label>
-                        <select name="categorieservice" id="categorieservice" wire:model="categorieservice"
+                        <label for="professionservice" class="block text-sm font-medium text-gray-700">Profession</label>
+                        <select name="professionservice" id="professionservice" wire:model="professionservice"
                                 class="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                            <option value="">Sélectionner une catégorie</option>
-                            @foreach($categories as $categorie)
-                                <option value="{{ $categorie->id }}">{{ $categorie->nom }}</option>
+                            <option value="">Sélectionner une profession</option>
+                            @foreach($professions as $profession)
+                                <option value="{{ $profession->id }}">{{ $profession->nom }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -109,12 +109,11 @@
                                 class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" rows="4"></textarea>
                     </div>
 
-                    <!--Il n'y a pas de champ dans la table service pour enregistrer cette donnée-->
-                    <!--<div class="mb-4">
+                    <div class="mb-4">
                         <label for="dureeservice" class="block text-sm font-medium text-gray-700">Durée (minutes)</label>
                         <input type="number" name="dureeservice" id="dureeservice" wire:model="dureeservice"
                             class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                    </div>-->
+                    </div>
 
                     <div class="mb-4">
                         <label for="prixservice" class="block text-sm font-medium text-gray-700">Prix</label>
@@ -184,12 +183,12 @@
                     </div>
 
                     <div class="mb-4">
-                        <label for="categorieservice" class="block text-sm font-medium text-gray-700">Catégorie</label>
-                        <select name="categorieservice" id="categorieservice" wire:model="categorieservice"
+                        <label for="professionservice" class="block text-sm font-medium text-gray-700">Profession</label>
+                        <select name="professionservice" id="professionservice" wire:model="professionservice"
                                 class="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                            <option value="">Sélectionner une catégorie</option>
-                            @foreach($categories as $categorie)
-                                <option value="{{ $categorie->id }}">{{ $categorie->nom }}</option>
+                            <option value="">Sélectionner une profession</option>
+                            @foreach($professions as $profession)
+                                <option value="{{ $profession->id }}">{{ $profession->nom }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -200,12 +199,11 @@
                                 class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" rows="4"></textarea>
                     </div>
 
-                    <!--Il n'y a pas de champ dans la table service pour enregistrer cette donnée-->
-                    <!--<div class="mb-4">
+                    <div class="mb-4">
                         <label for="dureeservice" class="block text-sm font-medium text-gray-700">Durée (minutes)</label>
                         <input type="number" name="dureeservice" id="dureeservice" wire:model="dureeservice"
                             class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                    </div>-->
+                    </div>
 
                     <div class="mb-4">
                         <label for="prixservice" class="block text-sm font-medium text-gray-700">Prix</label>
@@ -264,6 +262,53 @@
                 </form>
             </div>
         </x-modal>
+
+        <x-modal title="Informations service" name="consulterService" :show="false">
+            <div class="border-solid border-2 border-black p-4 m-4 rounded">
+                <div class="grid grid-cols-4 gap-y-4">
+                    <p class="text-sm text-right font-bold" for="nomservice">Nom sercice:</p>
+                    <p class="h-8 text-sm ml-2"> {{ $nomservice }}</p>
+
+                    <p class="text-sm text-right font-bold" for="professionservice">Profession:</p>
+                    <p class="h-8 text-sm ml-2"> {{ $professionservice }}</p>
+
+                    <p class="text-sm text-right font-bold" for="descriptionservice">DEscription:</p>
+                    <p class="h-8 text-sm ml-2"> {{ $descriptionservice }}</p>
+
+                    <p class="text-sm text-right font-bold" for="dureeservice">Dur/e du service:</p>
+                    <p class="h-8 text-sm ml-2"> {{ $dureeservice }}</p>
+
+                    <p class="text-sm text-right font-bold" for="prixservice">Prix du service:</p>
+                    <p class="h-8 text-sm ml-2"> {{ $prixservice }}</p>
+
+                    <p class="text-sm text-right font-bold" for="dureepause">Durée de la pause:</p>
+                    <p class="h-8 text-sm ml-2"> {{ $dureepause }}</p>
+                </div>
+            </div>
+
+            <div class="flex justify-center">
+                <button wire:click="getInfoService({{ $service_id }})"
+                    class="w-3/12 bg-selected-green mx-1 my-1 rounded p-0.5" type="submit">Modifier</button>
+            </div>
+        </x-modal>
+
+        @if ($showDeleteModal)
+            <div class="fixed inset-0 z-50 flex items-center justify-center">
+                <div class="bg-white p-6 rounded shadow-lg">
+                    <p>Êtes-vous sûr de vouloir supprimer ce service ?</p>
+                    <div class="flex justify-between mt-4">
+                        <button wire:click="deleteService" class="bg-red-500 text-white px-4 py-2">
+                            Confirmer
+                        </button>
+                        <button wire:click="cancelDelete" class="bg-gray-500 text-white px-4 py-2">
+                            Annuler
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="fixed inset-0 bg-black opacity-50 z-40"></div>
+        @endif
 
         <button class="w-2/12 bg-selected-green mx-1 my-2 rounded p-0.5 hide" wire:click="openModalAjouterService()">
             Ajouter
