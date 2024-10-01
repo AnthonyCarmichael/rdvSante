@@ -9,7 +9,7 @@
         </select>
 
         <div>
-            <input class="mt-6 border-none bg-pale-green" placeholder="Sélectionnez une date" type="date" wire:model="settingDate" wire:change="dateChanged" name="settingDate" style="text-indent: -9999px;"> 
+            <input class="focus:outline-none focus:ring-0 mt-6 border-none bg-pale-green"type="date" wire:model="settingDate" wire:change="dateChanged" name="settingDate" style="text-indent: -9999px;"> 
         </div>
 
     </div>
