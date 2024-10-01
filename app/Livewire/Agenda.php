@@ -19,10 +19,6 @@ class Agenda extends Component
 
     public $indispoArr;
 
-    public $note;
-    public $dateHeureDebut;
-    public $dateHeureFin;
-
     public $settingDate;
 
     protected $listeners = ['refreshAgenda' => 'refreshAgenda'];
@@ -57,8 +53,10 @@ class Agenda extends Component
 
     public function setView($view)
     {
+        Carbon::setLocale('fr_CA');
+        $this->now = Carbon::now('America/Toronto');
         $this->view = $view;
-        $this->fullRefresh($this->now);
+        $this->fullRefresh($this->now->copy());
     }
     public function render()
     {
