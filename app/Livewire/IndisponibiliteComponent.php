@@ -61,13 +61,15 @@ class IndisponibiliteComponent extends Component
 
     public function createIndisponibilite()
     {
+        
         $this->dateHeureDebut = $this->selectedTime;
+        
         $this->validate([
             'note' => 'required|string',
             'dateHeureDebut' => 'required|date',
             'dateHeureFin' => 'required|date|after:dateHeureDebut',
         ]);
-
+        
 
         Indisponibilite::create([
             'note' => $this->note,
