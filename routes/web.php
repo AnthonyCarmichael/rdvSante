@@ -39,13 +39,24 @@ Route::view('profile', 'profile')
 
 Route::view('/welcome', 'welcome');
 
+/*
 Route::get('/profil', function () {
     return view('profil');
 })->middleware('auth')->name('profil');
-
+*/
 Route::post('/logout', function () {
     Auth::logout();
     return redirect('/login');
 })->name('logout');
+
+
+Route::get('/profil/profil', function () {
+    return view('profil/profil');
+})->middleware('auth')->name('profil');
+
+Route::get('/profil/services', function () {
+    return view('profil/services');
+})->middleware('auth')->name('services');
+
 
 require __DIR__.'/auth.php';

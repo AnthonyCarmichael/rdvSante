@@ -72,7 +72,7 @@
                             </a>
                         </li>
 
-                        <li class="block {{ (Route::is('profil')) ? 'text-white bg-green' : ''}} nav-item p4">
+                        <li class="block {{ request()->is('profil/*') ? 'text-white bg-green' : ''}} nav-item p4">
                             <a class="hover:text-white" href="{{ route('profil')}}">
                                 <div class="flex justify-center">
                                     <button class="">
