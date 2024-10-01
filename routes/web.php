@@ -59,4 +59,9 @@ Route::get('/profil/services', function () {
 })->middleware('auth')->name('services');
 
 
+Route::get('/profil/disponibilites', function () {
+    return view('profil/disponibilites');
+})->middleware('auth')->name('disponibilites');
+
+
 require __DIR__.'/auth.php';

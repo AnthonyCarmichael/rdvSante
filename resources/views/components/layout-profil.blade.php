@@ -9,6 +9,10 @@
             <li class="block {{ (Route::is('services')) ? 'text-white bg-green pointer-events-none' : 'hover:bg-blue-400'}} nav-item">
                 <a href="{{ route('services') }}" class="p-4">Services</a>
             </li>
+
+            <li class="block {{ (Route::is('disponibilites')) ? 'text-white bg-green pointer-events-none' : 'hover:bg-blue-400'}} nav-item">
+                <a href="{{ route('disponibilites') }}" class="p-4">Disponibilités</a>
+            </li>
         </ul>
     </nav>
 
