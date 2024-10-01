@@ -42,13 +42,12 @@ class Compte extends Component
         $user = User::find(Auth::user()->id);
 
         if ($user) {
-            $user->update([
-                'nom' => $this->nom,
-                'prenom' => $this->prenom,
-                'email' => $this->email,
-                'telephone' => $this->telephone,
-                'idRole' => $this->idRole,
-            ]);
+            $user->nom = $this->nom;
+            $user->prenom = $this->prenom;
+            $user->email = $this->email;
+            $user->telephone = $this->telephone;
+            
+            $user->save();
 
             ProfessionProfessionnel::where('user_id', $user->id)->delete();
 
@@ -58,7 +57,6 @@ class Compte extends Component
                     'user_id' => $user->id
                 ]);
             }
-
 
             session()->flash('message', 'Profil mis à jour avec succès.');
         }

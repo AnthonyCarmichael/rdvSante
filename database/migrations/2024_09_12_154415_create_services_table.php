@@ -17,6 +17,7 @@ return new class extends Migration
             // "usigned()" nécessaire pour éventuellement pouvoir définir une clé étrangère sur cette colonne.
             $table->string('nom');
             $table->text('description');
+            $table->integer('duree');
             $table->decimal('prix', 5, 2);
             $table->boolean('taxable');
             $table->integer('minutePause');
