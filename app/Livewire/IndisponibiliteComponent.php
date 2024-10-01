@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\Indisponibilite;
+use Illuminate\Support\Facades\Auth;
 
 use Carbon\Carbon;
 
@@ -75,7 +76,7 @@ class IndisponibiliteComponent extends Component
             'note' => $this->note,
             'dateHeureDebut' => $this->dateHeureDebut,
             'dateHeureFin' => $this->dateHeureFin,
-            'idProfessionnel' => 1, # A changer!!
+            'idProfessionnel' =>  Auth::user()->id, # A changer!!
         ]);
 
         $this->reset(['note', 'dateHeureDebut', 'dateHeureFin']);
