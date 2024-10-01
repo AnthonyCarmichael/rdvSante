@@ -39,10 +39,11 @@ Route::view('profile', 'profile')
 
 Route::view('/welcome', 'welcome');
 
+/*
 Route::get('/profil', function () {
     return view('profil');
 })->middleware('auth')->name('profil');
-
+*/
 Route::post('/logout', function () {
     Auth::logout();
     return redirect('/login');
