@@ -12,6 +12,7 @@ class Service extends Model
     protected $fillable = [
         'nom',
         'description',
+        'duree',
         'prix',
         'taxable',
         'minutePause',

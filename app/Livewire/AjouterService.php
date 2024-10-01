@@ -12,6 +12,9 @@ class AjouterService extends Component
     public $services;
     public $professions;
 
+    public $serviceIdToDelete = null;
+    public $showDeleteModal = false;
+
     public $nomservice;
     public $professionservice;
     public $descriptionservice;
@@ -57,7 +60,7 @@ class AjouterService extends Component
                 $query->where('nom', 'like', '%' . $this->search . '%')
                     ->orWhere('description', 'like', '%' . $this->search . '%')
                     ->orWhere('prix', 'like', '%' . $this->search . '%')
-                    ->orWhere('minutePause', 'like', '%' . $this->search . '%');
+                    ->orWhere('duree', 'like', '%' . $this->search . '%');
             })
             ->orderBy($this->sortField, $this->sortDirection)
             ->get();
@@ -85,6 +88,42 @@ class AjouterService extends Component
         $this->services = $this->loadServices();
     }
 
+    public function getInfoService($id)
+    {
+        $service = Service::findOrFail($id);
+        $this->service_id = $service->id;
+        $this->nomservice = $service->nom;
+        $this->professionservice = $service->idProfessionService;
+        $this->descriptionservice = $service->description;
+        $this->dureeservice = $service->duree;
+        $this->prixservice = $service->prix;
+        $this->taxableservice = $service->taxable;
+        $this->dureepause = $service->minutePause;
+        $this->rdvderniereminute = $service->nombreHeureLimiteReservation > 0;
+        $this->tempsavantrdv = $service->nombreHeureLimiteReservation;
+        $this->personneacharge = $service->droitPersonneACharge;
+
+        $this->dispatch('open-modal', name: 'modifierService');
+    }
+
+    public function consulterService($id)
+    {
+        $service = Service::findOrFail($id);
+        $this->service_id = $service->id;
+        $this->nomservice = $service->nom;
+        $this->professionservice = $service->idProfessionService;
+        $this->descriptionservice = $service->description;
+        $this->dureeservice = $service->duree;
+        $this->prixservice = $service->prix;
+        $this->taxableservice = $service->taxable;
+        $this->dureepause = $service->minutePause;
+        $this->rdvderniereminute = $service->nombreHeureLimiteReservation > 0;
+        $this->tempsavantrdv = $service->nombreHeureLimiteReservation;
+        $this->personneacharge = $service->droitPersonneACharge;
+
+        $this->dispatch('open-modal', name: 'consulterService');
+    }
+
     public function resetFilters()
     {
         $this->mount();
@@ -98,6 +137,7 @@ class AjouterService extends Component
             'professionservice' => 'required|exists:professions,id',
             'descriptionservice' => 'nullable|string',
             'prixservice' => 'required|numeric|min:0',
+            'dureeservice' => 'nullable|integer|min:0',
             'taxableservice' => 'nullable|boolean',
             'dureepause' => 'nullable|integer|min:0',
             'rdvderniereminute' => 'nullable|boolean',
@@ -108,6 +148,7 @@ class AjouterService extends Component
         Service::create([
             'nom' => $validatedData['nomservice'],
             'description' => $validatedData['descriptionservice'],
+            'duree' => $validatedData['dureeservice'] ?? 0,
             'prix' => $validatedData['prixservice'],
             'taxable' => $validatedData['taxableservice'] ?? false,
             'minutePause' => $validatedData['dureepause'] ?? 0,
@@ -131,7 +172,7 @@ class AjouterService extends Component
         $this->nomservice = $service->nom;
         $this->professionservice = $service->idProfessionService;
         $this->descriptionservice = $service->description;
-        $this->dureeservice = $service->dureeservice;
+        $this->dureeservice = $service->duree;
         $this->prixservice = $service->prix;
         $this->taxableservice = $service->taxable;
         $this->dureepause = $service->minutePause;
@@ -142,6 +183,27 @@ class AjouterService extends Component
         $this->dispatch('open-modal', name: 'modifierService');
     }
 
+    public function confirmDelete($id)
+    {
+        $this->serviceIdToDelete = $id;
+        $this->showDeleteModal = true;
+    }
+
+    public function deleteService()
+    {
+        if ($this->serviceIdToDelete) {
+            Service::find($this->serviceIdToDelete)->delete();;
+        }
+
+        $this->mount();
+        $this->reset('serviceIdToDelete', 'showDeleteModal');
+    }
+
+    public function cancelDelete()
+    {
+        $this->reset('serviceIdToDelete', 'showDeleteModal');
+    }
+
     public function updateService()
     {
         $validatedData = $this->validate([
@@ -149,6 +211,7 @@ class AjouterService extends Component
             'professionservice' => 'required|exists:professions,id',
             'descriptionservice' => 'nullable|string',
             'prixservice' => 'required|numeric|min:0',
+            'dureeservice' => 'nullable|integer|min:0',
             'taxableservice' => 'nullable|boolean',
             'dureepause' => 'nullable|integer|min:0',
             'rdvderniereminute' => 'nullable|boolean',
@@ -162,6 +225,7 @@ class AjouterService extends Component
             $service->update([
                 'nom' => $validatedData['nomservice'],
                 'description' => $validatedData['descriptionservice'],
+                'duree' => $validatedData['dureeservice'] ?? 0,
                 'prix' => $validatedData['prixservice'],
                 'taxable' => $validatedData['taxableservice'] ?? false,
                 'minutePause' => $validatedData['dureepause'] ?? 0,
