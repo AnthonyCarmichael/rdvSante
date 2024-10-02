@@ -22,8 +22,8 @@ class AjouterService extends Component
     public $prixservice;
     public $taxableservice = false;
     public $dureepause;
-    public $checkboxpause =false;
-    public $checkboxrdv =false;
+    public $checkboxpause = false;
+    public $checkboxrdv = false;
     public $rdvderniereminute = false;
     public $tempsavantrdv;
     public $personneacharge = false;
@@ -148,6 +148,10 @@ class AjouterService extends Component
 
         if ($this->checkboxpause) {
             $rules['dureepause'] = 'required|integer|min:0';
+        }
+
+        if ($this->checkboxrdv) {
+            $rules['rdvderniereminute'] = 'required|boolean';
         }
 
         return $rules;
