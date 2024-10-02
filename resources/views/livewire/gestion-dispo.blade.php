@@ -3,7 +3,7 @@
     <table class="w-full border-solid border border-black mb-4">
         <thead class="sticky top-0">
             <tr>
-                <th class="border-solid border-b-2 border-black bg-mid-green text-left w-3/8">Jour</th>
+                <th class="border-solid border-b-2 border-black bg-mid-green text-left w-3/8 pl-2">Jour</th>
                 <th class="border-solid border-b-2 border-black bg-mid-green text-left w-2/8">Heure de début</th>
                 <th class="border-solid border-b-2 border-black bg-mid-green text-left w-2-8">Heure de fin</th>
                 <th class="border-solid border-b-2 border-black bg-mid-green text-left w-1/8">Action</th>
@@ -15,8 +15,8 @@
 
         @foreach ($jours as $j)
             <?php if ($cpt%2 == 0){ ?>
-            <tr>
-                <td class="bg-white align-top">
+            <tr class="">
+                <td class="bg-white align-top pl-2">
                     {{ $j->nom }}</td>
                 <td class="bg-white align-center">
                     @foreach ($dispos as $d)
@@ -45,7 +45,7 @@
             </tr>
             <?php } else { ?>
             <tr>
-                <td class="bg-table-green align-top">
+                <td class="bg-table-green align-top pl-2">
                     {{ $j->nom }}</td>
                 <td class="bg-table-green">
                     @foreach ($dispos as $d)
