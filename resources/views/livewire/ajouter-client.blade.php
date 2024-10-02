@@ -32,7 +32,7 @@
 
             @foreach ($clients as $c)
                 <?php if ($cpt%2 == 0){ ?>
-                <tr class="cursor-pointer bg-white hover:bg-mid-green">
+                <tr class="cursor-pointer bg-white hover:bg-blue-300">
                     <td wire:click="consulterClient({{ $c->id }})" class="w-2/12 pr-4">
                         {{ $c->prenom }}</td>
                     <td wire:click="consulterClient({{ $c->id }})" class="w-2/12 pr-4">
@@ -50,7 +50,7 @@
                     </td>
                 </tr>
                 <?php } else { ?>
-                <tr class="cursor-pointer bg-table-green hover:bg-mid-green">
+                <tr class="cursor-pointer bg-table-green hover:bg-blue-300">
                     <td wire:click="consulterClient({{ $c->id }})" class="w-2/12 pr-4">
                         {{ $c->prenom }}</td>
                     <td wire:click="consulterClient({{ $c->id }})" class="w-2/1 pr-4">
