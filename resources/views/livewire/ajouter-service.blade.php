@@ -63,7 +63,7 @@
             </thead>
             <tbody>
                 @foreach($services as $service)
-                    <tr class="@if($loop->odd) bg-white @else bg-table-green @endif hover:bg-mid-green">
+                    <tr class="@if($loop->odd) bg-white @else bg-table-green @endif hover:bg-blue-300 cursor-pointer">
                         <td wire:click="consulterService({{ $service->id }})" class="w-2/12 pr-4">{{ $service->nom }}</td>
                         <td wire:click="consulterService({{ $service->id }})" class="w-2/12 pr-4">{{ $service->description }}</td>
                         <td wire:click="consulterService({{ $service->id }})" class="w-2/12 pr-4">{{ $service->duree }} {{ $service->duree > 1 ? 'minutes' : 'minute'}}</td>
@@ -81,6 +81,12 @@
                 @endforeach
             </tbody>
         </table>
+        <div class="flex justify-end">
+            <button class="w-2/12 bg-selected-green mx-1 my-2 rounded p-0.5" wire:click="openModalAjouterService()">
+                Ajouter
+            </button>
+        </div>
+
     </div>
 
 
@@ -313,8 +319,5 @@
             <div class="fixed inset-0 bg-black opacity-50 z-40"></div>
         @endif
 
-        <button class="w-2/12 bg-selected-green mx-1 my-2 rounded p-0.5 hide" wire:click="openModalAjouterService()">
-            Ajouter
-        </button>
     </div>
 </div>
