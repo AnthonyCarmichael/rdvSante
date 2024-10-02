@@ -88,7 +88,7 @@ class GestionDispo extends Component
         $empietement = false;
 
         foreach ($this->dispos as $d) {
-            if ($d->idJour == $this->jour) {
+            if ($d->idJour == $this->jour && $d->id != $this->dispo->id) {
                 if ((($this->heureDebut >= $d->heureDebut && $this->heureDebut <= $d->heureFin) || ($this->heureFin >= $d->heureDebut && $this->heureFin <= $d->heureFin)) || (($d->heureDebut >= $this->heureDebut && $d->heureFin <= $this->heureDebut) || ($d->heureDebut >= $this->heureFin && $d->heureFin <= $this->heureFin))) {
                     $empietement = true;
                     break;
