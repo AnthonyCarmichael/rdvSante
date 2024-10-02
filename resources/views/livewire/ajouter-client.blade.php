@@ -32,36 +32,36 @@
 
             @foreach ($clients as $c)
                 <?php if ($cpt%2 == 0){ ?>
-                <tr>
-                    <td wire:click="consulterClient({{ $c->id }})" class="w-2/12 bg-white pr-4">
+                <tr class="cursor-pointer bg-white hover:bg-mid-green">
+                    <td wire:click="consulterClient({{ $c->id }})" class="w-2/12 pr-4">
                         {{ $c->prenom }}</td>
-                    <td wire:click="consulterClient({{ $c->id }})" class="w-2/12 bg-white pr-4">
+                    <td wire:click="consulterClient({{ $c->id }})" class="w-2/12 pr-4">
                         {{ $c->nom }}</td>
-                    <td wire:click="consulterClient({{ $c->id }})" class="w-2/12 bg-white pr-4">
+                    <td wire:click="consulterClient({{ $c->id }})" class="w-2/12 pr-4">
                         {{ $c->courriel }}</td>
-                    <td wire:click="consulterClient({{ $c->id }})" class="w-2/12 bg-white pr-4">
+                    <td wire:click="consulterClient({{ $c->id }})" class="w-2/12 pr-4">
                         {{ $c->telephone }}</td>
-                    <td wire:click="consulterClient({{ $c->id }})" class="w-2/12 bg-white pr-4">
+                    <td wire:click="consulterClient({{ $c->id }})" class="w-2/12 pr-4">
                         {{ $c->ddn }}</td>
-                    <td class="w-2/12 bg-white pr-4 justify-between"><button
+                    <td class="w-2/12 pr-4 justify-between"><button
                             class="w-5/12 bg-selected-green mx-1 my-1 rounded p-0.5" type="button"
                             wire:click="getInfoClient({{ $c->id }})">Modifier</button><button
                             class="w-6/12 bg-selected-green mx-0.5 rounded p-0.5" type="button">Supprimer</button>
                     </td>
                 </tr>
                 <?php } else { ?>
-                <tr>
-                    <td wire:click="consulterClient({{ $c->id }})" class="w-2/12 bg-table-green pr-4">
+                <tr class="cursor-pointer bg-table-green hover:bg-mid-green">
+                    <td wire:click="consulterClient({{ $c->id }})" class="w-2/12 pr-4">
                         {{ $c->prenom }}</td>
-                    <td wire:click="consulterClient({{ $c->id }})" class="w-2/12 bg-table-green pr-4">
+                    <td wire:click="consulterClient({{ $c->id }})" class="w-2/1 pr-4">
                         {{ $c->nom }}</td>
-                    <td wire:click="consulterClient({{ $c->id }})" class="w-2/12 bg-table-green pr-4">
+                    <td wire:click="consulterClient({{ $c->id }})" class="w-2/12 pr-4">
                         {{ $c->courriel }}</td>
-                    <td wire:click="consulterClient({{ $c->id }})" class="w-2/12 bg-table-green pr-4">
+                    <td wire:click="consulterClient({{ $c->id }})" class="w-2/12 pr-4">
                         {{ $c->telephone }}</td>
-                    <td wire:click="consulterClient({{ $c->id }})" class="w-2/12 bg-table-green pr-4">
+                    <td wire:click="consulterClient({{ $c->id }})" class="w-2/12 pr-4">
                         {{ $c->ddn }}</td>
-                    <td class="w-2/12 bg-table-green pr-4 justify-between"><button
+                    <td class="w-2/12 pr-4 justify-between"><button
                             class="w-5/12 bg-selected-green mx-1 my-1 rounded p-0.5" type="button"
                             wire:click="getInfoClient({{ $c->id }})">Modifier</button><button
                             class="w-6/12 bg-selected-green mx-0.5 rounded p-0.5" type="button">Supprimer</button>
