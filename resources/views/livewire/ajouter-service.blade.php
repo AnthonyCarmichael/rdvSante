@@ -11,76 +11,79 @@
 @endif
 
 <div>
-    <div class="flex items-center mb-4">
-        <input wire:model="search" type="text" placeholder="Rechercher..." class="form-input rounded-md shadow-sm mr-2">
-        <button wire:click="searchServices" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">
-            Rechercher
-        </button>
 
-        <button wire:click="resetFilters" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded ml-auto">
-            Réinitialiser les filtres
-        </button>
+    <div class=" m-16">
+        <div class="flex items-center mb-4">
+            <input wire:model="search" type="text" placeholder="Rechercher..." class="form-input rounded-md shadow-sm mr-2">
+            <button wire:click="searchServices" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">
+                Rechercher
+            </button>
+
+            <button wire:click="resetFilters" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded ml-auto">
+                Réinitialiser les filtres
+            </button>
+        </div>
+        <table class="table-auto w-full border-solid border-2 border-gray-400">
+            <thead>
+                <tr>
+                    <th class="border-solid border-b-2 border-black bg-mid-green text-left">
+                        <button wire:click="sortBy('nom')" class="font-bold">
+                            Nom
+                            @if($sortField === 'nom')
+                                @if($sortDirection === 'asc') ↑ @else ↓ @endif
+                            @endif
+                        </button>
+                    </th>
+                    <th class="border-solid border-b-2 border-black bg-mid-green text-left">
+                        <button wire:click="sortBy('description')" class="font-bold">
+                            Description
+                            @if($sortField === 'description')
+                                @if($sortDirection === 'asc') ↑ @else ↓ @endif
+                            @endif
+                        </button>
+                    </th>
+                    <th class="border-solid border-b-2 border-black bg-mid-green text-left">
+                        <button wire:click="sortBy('duree')" class="font-bold">
+                            Durée
+                            @if($sortField === 'duree')
+                                @if($sortDirection === 'asc') ↑ @else ↓ @endif
+                            @endif
+                        </button>
+                    </th>
+                    <th class="border-solid border-b-2 border-black bg-mid-green text-left">
+                        <button wire:click="sortBy('prix')" class="font-bold">
+                            Prix
+                            @if($sortField === 'prix')
+                                @if($sortDirection === 'asc') ↑ @else ↓ @endif
+                            @endif
+                        </button>
+                    </th>
+                    <th class="border-solid border-b-2 border-black bg-mid-green text-left">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($services as $service)
+                    <tr class="@if($loop->odd) bg-white @else bg-table-green @endif hover:bg-mid-green">
+                        <td wire:click="consulterService({{ $service->id }})" class="w-2/12 pr-4">{{ $service->nom }}</td>
+                        <td wire:click="consulterService({{ $service->id }})" class="w-2/12 pr-4">{{ $service->description }}</td>
+                        <td wire:click="consulterService({{ $service->id }})" class="w-2/12 pr-4">{{ $service->duree }} {{ $service->duree > 1 ? 'minutes' : 'minute'}}</td>
+                        <td wire:click="consulterService({{ $service->id }})" class="w-2/12 pr-4">{{ $service->prix }} $</td>
+                        <td class="w-2/12 pr-4 justify-between">
+                            <button class="w-5/12 bg-selected-green mx-1 my-1 rounded p-0.5" wire:click="modifierService({{ $service->id }})" type="button">
+                                Modifier
+                            </button>
+
+                            <button type="button" wire:click="confirmDelete({{ $service->id }})" class="w-5/12 bg-selected-green mx-1 my-1 rounded p-0.5">
+                                Supprimer
+                            </button>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
     </div>
 
 
-    <table class="table-auto z-0">
-        <thead>
-            <tr>
-                <th class="border-solid border-b-2 border-black bg-mid-green text-left">
-                    <button wire:click="sortBy('nom')" class="font-bold">
-                        Nom
-                        @if($sortField === 'nom')
-                            @if($sortDirection === 'asc') ↑ @else ↓ @endif
-                        @endif
-                    </button>
-                </th>
-                <th class="border-solid border-b-2 border-black bg-mid-green text-left">
-                    <button wire:click="sortBy('description')" class="font-bold">
-                        Description
-                        @if($sortField === 'description')
-                            @if($sortDirection === 'asc') ↑ @else ↓ @endif
-                        @endif
-                    </button>
-                </th>
-                <th class="border-solid border-b-2 border-black bg-mid-green text-left">
-                    <button wire:click="sortBy('duree')" class="font-bold">
-                        Durée
-                        @if($sortField === 'duree')
-                            @if($sortDirection === 'asc') ↑ @else ↓ @endif
-                        @endif
-                    </button>
-                </th>
-                <th class="border-solid border-b-2 border-black bg-mid-green text-left">
-                    <button wire:click="sortBy('prix')" class="font-bold">
-                        Prix
-                        @if($sortField === 'prix')
-                            @if($sortDirection === 'asc') ↑ @else ↓ @endif
-                        @endif
-                    </button>
-                </th>
-                <th class="border-solid border-b-2 border-black bg-mid-green text-left">Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($services as $service)
-                <tr class="@if($loop->odd) bg-white @else bg-table-green @endif hover:bg-mid-green">
-                    <td wire:click="consulterService({{ $service->id }})" class="w-2/12 pr-4">{{ $service->nom }}</td>
-                    <td wire:click="consulterService({{ $service->id }})" class="w-2/12 pr-4">{{ $service->description }}</td>
-                    <td wire:click="consulterService({{ $service->id }})" class="w-2/12 pr-4">{{ $service->duree }} {{ $service->duree > 1 ? 'minutes' : 'minute'}}</td>
-                    <td wire:click="consulterService({{ $service->id }})" class="w-2/12 pr-4">{{ $service->prix }} $</td>
-                    <td class="w-2/12 pr-4 justify-between">
-                        <button class="w-5/12 bg-selected-green mx-1 my-1 rounded p-0.5" wire:click="modifierService({{ $service->id }})" type="button">
-                            Modifier
-                        </button>
-
-                        <button type="button" wire:click="confirmDelete({{ $service->id }})" class="w-5/12 bg-selected-green mx-1 my-1 rounded p-0.5">
-                            Supprimer
-                        </button>
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
 
     <div class="flex justify-end z-0">
         <x-modal title="Ajouter un service" name="ajouterService" :show="false">
@@ -131,13 +134,13 @@
 
                     <div class="mb-4">
                         <label class="inline-flex items-center">
-                            <input type="checkbox" name="dureepause" id="dureepause" wire:model="dureepause"
+                            <input type="checkbox" name="checkboxpause" id="checkboxpause" wire:model.live="checkboxpause"
                                 class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
                             <span class="ml-2 text-gray-700">Je veux une pause après les rendez-vous</span>
                         </label>
-                        <div class="mt-2" x-show="dureepause">
+                        <div class="{{ $checkboxpause == true ? 'visible' : 'hidden' }} mt-2" x-show="dureepause">
                             <label for="dureepause" class="block text-sm font-medium text-gray-700">Durée de la pause (minutes)</label>
-                            <input required min="0" type="number" name="dureepause" id="dureepause" wire:model="dureepause"
+                            <input min="0" type="number" name="dureepause" id="dureepause" wire:model="dureepause"
                                 class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                         </div>
                     </div>
