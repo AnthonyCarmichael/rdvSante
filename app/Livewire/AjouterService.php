@@ -23,6 +23,7 @@ class AjouterService extends Component
     public $taxableservice = false;
     public $dureepause;
     public $checkboxpause =false;
+    public $checkboxrdv =false;
     public $rdvderniereminute = false;
     public $tempsavantrdv;
     public $personneacharge = false;
