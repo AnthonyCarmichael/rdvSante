@@ -21,14 +21,14 @@
                 <td class="bg-white align-center">
                     @foreach ($dispos as $d)
                         @if ($d->idJour == $j->id)
-                            <div class="my-2">{{ $d->heureDebut }}</div>
+                            <div class="my-2">{{ Carbon\Carbon::createFromFormat('H:i:s', $d->heureDebut)->format('H:i') }}</div>
                         @endif
                     @endforeach
                 </td>
                 <td class="bg-white">
                     @foreach ($dispos as $d)
                         @if ($d->idJour == $j->id)
-                            <div class="my-2">{{ $d->heureFin }}</div>
+                            <div class="my-2">{{ Carbon\Carbon::createFromFormat('H:i:s', $d->heureFin)->format('H:i') }}</div>
                         @endif
                     @endforeach
                 </td>
@@ -50,14 +50,14 @@
                 <td class="bg-table-green">
                     @foreach ($dispos as $d)
                         @if ($d->idJour == $j->id)
-                            <div class="my-2">{{ $d->heureDebut }}</div>
+                            <div class="my-2">{{ Carbon\Carbon::createFromFormat('H:i:s', $d->heureDebut)->format('H:i') }}</div>
                         @endif
                     @endforeach
                 </td>
                 <td class="bg-table-green pr-4">
                     @foreach ($dispos as $d)
                         @if ($d->idJour == $j->id)
-                            <div class="my-2">{{ $d->heureFin }}</div>
+                            <div class="my-2">{{ Carbon\Carbon::createFromFormat('H:i:s', $d->heureFin)->format('H:i') }}</div>
                         @endif
                     @endforeach
                 </td>
