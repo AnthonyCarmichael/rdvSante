@@ -1,4 +1,4 @@
-<div>
+<div class="m-16">
 
     <table class="w-full border-solid border border-black mb-4">
         <thead class="sticky top-0">
