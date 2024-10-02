@@ -22,6 +22,7 @@ class AjouterService extends Component
     public $prixservice;
     public $taxableservice = false;
     public $dureepause;
+    public $checkboxpause =false;
     public $rdvderniereminute = false;
     public $tempsavantrdv;
     public $personneacharge = false;
@@ -130,10 +131,9 @@ class AjouterService extends Component
         $this->reset('sortDirection');
     }
 
-    public function ajouterService()
+    public function rules()
     {
-        $validatedData = $this->validate([
-            'nomservice' => 'required|string|max:255',
+        $rules=['nomservice' => 'required|string|max:255',
             'professionservice' => 'required|exists:professions,id',
             'descriptionservice' => 'nullable|string',
             'prixservice' => 'required|numeric|min:0',
@@ -142,20 +142,31 @@ class AjouterService extends Component
             'dureepause' => 'nullable|integer|min:0',
             'rdvderniereminute' => 'nullable|boolean',
             'tempsavantrdv' => 'nullable|integer|min:0',
-            'personneacharge' => 'nullable|boolean',
-        ]);
+            'personneacharge' => 'nullable|boolean'
+        ];
+
+        if ($this->checkboxpause) {
+            $rules['dureepause'] = 'required|integer|min:0';
+        }
+
+        return $rules;
+    }
+
+    public function ajouterService()
+    {
+        $this->validate();
 
         Service::create([
-            'nom' => $validatedData['nomservice'],
-            'description' => $validatedData['descriptionservice'],
-            'duree' => $validatedData['dureeservice'] ?? 0,
-            'prix' => $validatedData['prixservice'],
-            'taxable' => $validatedData['taxableservice'] ?? false,
-            'minutePause' => $validatedData['dureepause'] ?? 0,
-            'nombreHeureLimiteReservation' => $validatedData['tempsavantrdv'] ?? 0,
-            'droitPersonneACharge' => $validatedData['personneacharge'] ?? false,
+            'nom' => $this->nomservice,
+            'description' => $this->descriptionservice,
+            'duree' => $this->dureeservice ?? 0,
+            'prix' => $this->prixservice,
+            'taxable' => $this->taxableservice ?? false,
+            'minutePause' => $this->dureepause ?? 0,
+            'nombreHeureLimiteReservation' => $this->tempsavantrdv ?? 0,
+            'droitPersonneACharge' => $this->personneacharge ?? false,
             'actif' => true, #Désactivaion du service possible?
-            'idProfessionService' => $validatedData['professionservice'],
+            'idProfessionService' => $this->professionservice,
             'idProfessionnel' => Auth::user()->id,
         ]);
 
@@ -206,33 +217,22 @@ class AjouterService extends Component
 
     public function updateService()
     {
-        $validatedData = $this->validate([
-            'nomservice' => 'required|string|max:255',
-            'professionservice' => 'required|exists:professions,id',
-            'descriptionservice' => 'nullable|string',
-            'prixservice' => 'required|numeric|min:0',
-            'dureeservice' => 'nullable|integer|min:0',
-            'taxableservice' => 'nullable|boolean',
-            'dureepause' => 'nullable|integer|min:0',
-            'rdvderniereminute' => 'nullable|boolean',
-            'tempsavantrdv' => 'nullable|integer|min:0',
-            'personneacharge' => 'nullable|boolean',
-        ]);
+        $this->validate();
 
         $service = Service::find($this->service_id);
 
         if ($service) {
             $service->update([
-                'nom' => $validatedData['nomservice'],
-                'description' => $validatedData['descriptionservice'],
-                'duree' => $validatedData['dureeservice'] ?? 0,
-                'prix' => $validatedData['prixservice'],
-                'taxable' => $validatedData['taxableservice'] ?? false,
-                'minutePause' => $validatedData['dureepause'] ?? 0,
-                'nombreHeureLimiteReservation' => $validatedData['tempsavantrdv'] ?? 0,
-                'droitPersonneACharge' => $validatedData['personneacharge'] ?? false,
+                'nom' => $this->nomservice,
+                'description' => $this->descriptionservice,
+                'duree' => $this->dureeservice ?? 0,
+                'prix' => $this->prixservice,
+                'taxable' => $this->taxableservice ?? false,
+                'minutePause' => $this->dureepause ?? 0,
+                'nombreHeureLimiteReservation' => $this->tempsavantrdv ?? 0,
+                'droitPersonneACharge' => $this->personneacharge ?? false,
                 'actif' => true,
-                'idProfessionService' => $validatedData['professionservice'],
+                'idProfessionService' => $this->professionservice,
                 'idProfessionnel' => 1,
             ]);
 
