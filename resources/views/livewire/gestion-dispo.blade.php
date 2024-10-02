@@ -89,10 +89,10 @@
             <div class="grid grid-cols-4 gap-y-4">
 
                 <label class="text-right" for="heureDebut">Heure de début:*</label>
-                <input wire:model="heureDebut" class="ml-2" type="time" id="heureDebut" name="heureDebut" />
+                <input wire:model="heureDebut" class="ml-2" type="time" min="07:00" max="22:00" id="heureDebut" name="heureDebut" />
 
                 <label class="text-right" for="heureFin">Heure de fin:*</label>
-                <input wire:model="heureFin" class="ml-2" type="time" id="heureFin" name="heureFin" />
+                <input wire:model="heureFin" class="ml-2" type="time" min="07:00" max="22:00" id="heureFin" name="heureFin" />
 
 
                 <label class="text-right" for="jour">Jour:*</label>
@@ -116,10 +116,10 @@
             <div class="grid grid-cols-4 gap-y-4">
 
                 <label class="text-right" for="heureDebut">Heure de début:*</label>
-                <input wire:model="heureDebut" class="ml-2" type="time" id="heureDebut" name="heureDebut" />
+                <input wire:model="heureDebut" class="ml-2" type="time" min="07:00" max="22:00" id="heureDebut" name="heureDebut" />
 
                 <label class="text-right" for="heureFin">Heure de fin:*</label>
-                <input wire:model="heureFin" class="ml-2" type="time" id="heureFin" name="heureFin" />
+                <input wire:model="heureFin" class="ml-2" type="time" min="07:00" max="22:00" id="heureFin" name="heureFin" />
 
 
                 <label class="text-right" for="jour">Jour:*</label>

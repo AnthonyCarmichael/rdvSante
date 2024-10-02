@@ -2,6 +2,8 @@
 
 namespace App\Livewire;
 
+use Carbon\Carbon;
+
 use Auth;
 use Livewire\Component;
 
@@ -115,8 +117,10 @@ class GestionDispo extends Component
     public function getInfoDispo($id)
     {
         $this->dispo = Disponibilite::find($id);
-        $this->heureDebut = $this->dispo->heureDebut;
-        $this->heureFin = $this->dispo->heureFin;
+        #$this->heureDebut = $this->dispo->heureDebut;
+        $this->heureDebut = Carbon::createFromFormat('H:i:s', $this->dispo->heureDebut)->format('H:i');
+        $this->heureFin = Carbon::createFromFormat('H:i:s', $this->dispo->heureFin)->format('H:i');
+        #$this->heureFin = $this->dispo->heureFin;
         $this->jour = $this->dispo->idJour;
         $this->dispatch('open-modal', name: 'modifierDispo');
 
