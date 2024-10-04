@@ -84,11 +84,11 @@
                 <legend class="font-bold">Informations du client</legend>
                 <div class="grid grid-cols-4 gap-y-4">
 
-                    <label class="text-sm text-right" for="nom">Nom:*</label>
-                    <input wire:model="nom" class="h-8 text-xs ml-2" type="text" id="nom" name="nom" />
-
                     <label class="text-sm text-right" for="prenom">Prénom:*</label>
                     <input wire:model="prenom" class="h-8 text-xs ml-2" type="text" id="prenom" name="prenom" />
+
+                    <label class="text-sm text-right" for="nom">Nom:*</label>
+                    <input wire:model="nom" class="h-8 text-xs ml-2" type="text" id="nom" name="nom" />
 
                     <label class="text-sm text-right" for="courriel">Courriel:*</label>
                     <input wire:model="courriel" class="h-8 text-xs ml-2" type="email" id="courriel"
@@ -170,13 +170,13 @@
                 <legend class="font-bold">Informations du client</legend>
                 <div class="grid grid-cols-4 gap-y-4">
 
-                    <label class="text-sm text-right" for="nom">Nom:*</label>
-                    <input wire:model="nom" class="h-8 text-xs ml-2" type="text" id="nom"
-                        name="nom" />
-
                     <label class="text-sm text-right" for="prenom">Prénom:*</label>
                     <input wire:model="prenom" class="h-8 text-xs ml-2" type="text" id="prenom"
                         name="prenom" />
+
+                    <label class="text-sm text-right" for="nom">Nom:*</label>
+                    <input wire:model="nom" class="h-8 text-xs ml-2" type="text" id="nom"
+                        name="nom" />
 
                     <label class="text-sm text-right" for="courriel">Courriel:*</label>
                     <input wire:model="courriel" class="h-8 text-xs ml-2" type="email" id="courriel"
