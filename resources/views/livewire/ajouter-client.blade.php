@@ -76,6 +76,51 @@
             type="button">Ajouter</button>
     </div>
     <x-modal title="Ajouter un client" name="ajouterClient" :show="false">
+        <ul class="ml-8">
+            @error('nom')
+                <li class="list-disc text-red-400">
+
+                    <span class="error text-red-400">{{ $message }}</span>
+
+                </li>
+            @enderror
+            @error('prenom')
+                <li class="list-disc text-red-400">
+
+                    <span class="error text-red-400">{{ $message }}</span>
+
+                </li>
+            @enderror
+            @error('courriel')
+                <li class="list-disc text-red-400">
+
+                    <span class="error text-red-400">{{ $message }}</span>
+
+                </li>
+            @enderror
+            @error('telephone')
+                <li class="list-disc text-red-400">
+
+                    <span class="error text-red-400">{{ $message }}</span>
+
+                </li>
+            @enderror
+            @error('genre')
+                <li class="list-disc text-red-400">
+
+                    <span class="error text-red-400">{{ $message }}</span>
+
+                </li>
+            @enderror
+            @error('codePostal')
+                <li class="list-disc text-red-400">
+
+                    <span class="error text-red-400">{{ $message }}</span>
+
+                </li>
+            @enderror
+        </ul>
+
         <form wire:submit.prevent="ajoutClient" class="bg-white p-4 rounded-lg">
             <fieldset class="border-solid border-2 border-black p-4 m-4 rounded">
                 <legend class="font-bold">Informations du client</legend>
@@ -84,8 +129,9 @@
                     <label class="text-sm text-right" for="prenom">Prénom:*</label>
                     <input wire:model="prenom" class="h-8 text-xs ml-2" type="text" id="prenom" name="prenom" />
 
-                    <label class="text-sm text-right" for="nom">Nom:*</label>
+                    <label class="text-sm text-right" for="nom"> Nom:*</label>
                     <input wire:model="nom" class="h-8 text-xs ml-2" type="text" id="nom" name="nom" />
+
 
                     <label class="text-sm text-right" for="courriel">Courriel:*</label>
                     <input wire:model="courriel" class="h-8 text-xs ml-2" type="email" id="courriel"
@@ -94,8 +140,8 @@
                     <label class="text-sm text-right" for="telephone">Téléphone:* <br> <span
                             class="text-xs text-slate-400">Format:(123)
                             456-7890</span></label>
-                    <input placeholder="(123) 456-7890" wire:model="telephone" class="h-8 text-xs ml-2" type="tel"
-                        id="telephone" name="telephone" />
+                    <input placeholder="(123) 456-7890" wire:model="telephone" class="h-8 text-xs ml-2"
+                        type="tel" id="telephone" name="telephone" />
 
                     <label class="text-sm text-right" for="ddn">Date de naissance:</label>
                     <input wire:model="ddn" class="h-8 text-xs ml-2" type="date" id="ddn"
@@ -165,6 +211,50 @@
     </x-modal>
 
     <x-modal title="Modifier un client" name="modifierClient" :show="false">
+        <ul class="ml-8">
+            @error('nom')
+                <li class="list-disc text-red-400">
+
+                    <span class="error text-red-400">{{ $message }}</span>
+
+                </li>
+            @enderror
+            @error('prenom')
+                <li class="list-disc text-red-400">
+
+                    <span class="error text-red-400">{{ $message }}</span>
+
+                </li>
+            @enderror
+            @error('courriel')
+                <li class="list-disc text-red-400">
+
+                    <span class="error text-red-400">{{ $message }}</span>
+
+                </li>
+            @enderror
+            @error('telephone')
+                <li class="list-disc text-red-400">
+
+                    <span class="error text-red-400">{{ $message }}</span>
+
+                </li>
+            @enderror
+            @error('genre')
+                <li class="list-disc text-red-400">
+
+                    <span class="error text-red-400">{{ $message }}</span>
+
+                </li>
+            @enderror
+            @error('codePostal')
+                <li class="list-disc text-red-400">
+
+                    <span class="error text-red-400">{{ $message }}</span>
+
+                </li>
+            @enderror
+        </ul>
         <form wire:submit.prevent="modifClient" class="bg-white p-4 rounded-lg">
             <fieldset class="border-solid border-2 border-black p-4 m-4 rounded">
                 <legend class="font-bold">Informations du client</legend>

@@ -80,7 +80,7 @@ class AjouterClient extends Component
             'nom' => 'required|string',
             'prenom' => 'required|string',
             'courriel' => 'required|email',
-            'telephone' => 'required',
+            'telephone' => 'required|regex:^\(\d{3}\)\s\d{3}-\d{4}^',
             'ddn' => 'nullable',
             'genre' => 'required',
             'nomResponsable' => 'string|nullable',
@@ -91,6 +91,17 @@ class AjouterClient extends Component
             'codePostal' => 'string|nullable|regex:/^[A-Z]\d[A-Z][ ]\d[A-Z]\d$/'
         ];
     }
+
+    protected $messages = [
+        'nom.required' => 'Veuillez entrer un nom.',
+        'prenom.required' => 'Veuillez entrer un prénom.',
+        'courriel.required' => 'Veuillez entrer une adresse courriel.',
+        'courriel.email' => 'Veuillez entrer une adresse courriel valide.',
+        'telephone.required' => 'Veuillez entrer un numéro de téléphone.',
+        'telephone.regex' => 'Veuillez respecter le format de numéro de téléphone demandé.',
+        'genre.required' => 'Veuillez sélectionner un genre.',
+        'codePostal.regex' => 'Veuillez respecter le format de code postal demandé.',
+    ];
 
     public function ajoutClient()
     {
