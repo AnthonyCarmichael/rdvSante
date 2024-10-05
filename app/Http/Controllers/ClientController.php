@@ -16,7 +16,7 @@ class ClientController extends Controller
     {
         return view('client/clients', [
             // D’autres paramètres peuvent être passés à la vue en les séparant par une virgule.
-            'clients' => Client::orderBy('nom', 'asc')->get(), 'genres' => Genre::All(), 'villes' => Ville::orderBy('nom', 'asc')->get()
+            'clients' => Client::where('actif', '=', '1')->orderBy('nom', 'asc')->get(), 'genres' => Genre::All(), 'villes' => Ville::orderBy('nom', 'asc')->get()
             ]);
 
     }

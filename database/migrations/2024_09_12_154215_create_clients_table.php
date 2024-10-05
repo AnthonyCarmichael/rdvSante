@@ -19,13 +19,14 @@ return new class extends Migration
             $table->string('prenom');
             $table->string('courriel');
             $table->string('telephone');
-            $table->date('ddn');
+            $table->date('ddn')->nullable();
             $table->string('nomResponsable')->nullable();
             $table->string('prenomResponsable')->nullable();
             $table->string('lienResponsable')->nullable();
             $table->string('rue')->nullable();
             $table->integer('noCivique')->nullable();
             $table->string('codePostal')->nullable();
+            $table->boolean('actif');
             $table->bigInteger('idGenre')->unsigned();
             $table->bigInteger('idVille')->nullable()->unsigned();
         });

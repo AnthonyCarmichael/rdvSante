@@ -80,8 +80,8 @@ class AjouterClient extends Component
             'nom' => 'required|string',
             'prenom' => 'required|string',
             'courriel' => 'required|email',
-            'telephone' => 'required|regex:^[\][(][0-9]{3}[)][ ][0-9]{3}[-][0-9]{4}$^',
-            'ddn' => 'required',
+            'telephone' => 'required',
+            'ddn' => 'nullable',
             'genre' => 'required',
             'nomResponsable' => 'string|nullable',
             'prenomResponsable' => 'string|nullable',
@@ -128,11 +128,12 @@ class AjouterClient extends Component
             'rue' => $this->rue,
             'noCivique' => $this->noCivique,
             'codePostal' => $this->codePostal,
+            'actif' => 1,
             'idVille' => $this->idVille
         ]);
 
         $this->reset(['nom', 'prenom', 'courriel', 'telephone', 'ddn', 'genre', 'nomResponsable', 'prenomResponsable', 'lienResponsable', 'rue', 'noCivique', 'codePostal', 'ville']);
-        $this->clients = Client::orderBy('nom', 'asc')->get();
+        $this->clients = Client::where('actif', '=', '1')->orderBy('nom', 'asc')->get();
         $this->villes = Ville::orderBy('nom', 'asc')->get();
         $this->dispatch('close-modal');
         #exemple open modal dispatch
@@ -179,7 +180,7 @@ class AjouterClient extends Component
         ]);
 
         $this->reset(['nom', 'prenom', 'courriel', 'telephone', 'ddn', 'genre', 'nomResponsable', 'prenomResponsable', 'lienResponsable', 'rue', 'noCivique', 'codePostal', 'ville']);
-        $this->clients = Client::orderBy('nom', 'asc')->get();
+        $this->clients = Client::where('actif', '=', '1')->orderBy('nom', 'asc')->get();
         $this->villes = Ville::orderBy('nom', 'asc')->get();
         $this->dispatch('close-modal');
         #exemple open modal dispatch
@@ -208,6 +209,46 @@ class AjouterClient extends Component
             $this->idVille = $v->id;
         }
         $this->dispatch('open-modal', name: 'modifierClient');
+
+    }
+
+    public function desactiverClient($id)
+    {
+        $this->client = Client::find($id);
+        $this->nom = $this->client->nom;
+        $this->prenom = $this->client->prenom;
+        $this->courriel = $this->client->courriel;
+        $this->telephone = $this->client->telephone;
+        $this->ddn = $this->client->ddn;
+        $this->genre = $this->client->idGenre;
+        $this->nomResponsable = $this->client->nomResponsable;
+        $this->prenomResponsable = $this->client->prenomResponsable;
+        $this->lienResponsable = $this->client->lienResponsable;
+        $this->rue = $this->client->rue;
+        $this->noCivique = $this->client->noCivique;
+        $this->codePostal = $this->client->codePostal;
+        $v = Ville::find($this->client->idVille);
+        if ($v != null) {
+            $this->ville = $v->nom;
+            $this->idVille = $v->id;
+        }
+        $this->dispatch('open-modal', name: 'desactiverClient');
+
+    }
+
+    public function desacClient()
+    {
+
+        Client::find($this->client->id)->update([
+            'actif' => 0
+        ]);
+
+        $this->reset(['nom', 'prenom', 'courriel', 'telephone', 'ddn', 'genre', 'nomResponsable', 'prenomResponsable', 'lienResponsable', 'rue', 'noCivique', 'codePostal', 'ville']);
+        $this->clients = Client::where('actif', '=', '1')->orderBy('nom', 'asc')->get();
+        $this->villes = Ville::orderBy('nom', 'asc')->get();
+        $this->dispatch('close-modal');
+        #exemple open modal dispatch
+        #$this->dispatch('open-modal', name: 'modal-name');
 
     }
 

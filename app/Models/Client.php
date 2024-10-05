@@ -9,7 +9,7 @@ class Client extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['nom', 'prenom', 'courriel', 'telephone', 'ddn', 'idGenre', 'nomResponsable', 'prenomResponsable', 'lienResponsable', 'rue', 'noCivique', 'codePostal', 'idVille'];
+    protected $fillable = ['nom', 'prenom', 'courriel', 'telephone', 'ddn', 'idGenre', 'nomResponsable', 'prenomResponsable', 'lienResponsable', 'rue', 'noCivique', 'codePostal', 'actif', 'idVille'];
 
     public $timestamps = false;
 }

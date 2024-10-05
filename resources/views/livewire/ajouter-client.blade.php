@@ -22,7 +22,6 @@
                     <th class="border-solid border-b-2 border-black bg-mid-green text-left">Nom</th>
                     <th class="border-solid border-b-2 border-black bg-mid-green text-left">Courriel</th>
                     <th class="border-solid border-b-2 border-black bg-mid-green text-left">Téléphone</th>
-                    <th class="border-solid border-b-2 border-black bg-mid-green text-left">Date de naissance</th>
                     <th class="border-solid border-b-2 border-black bg-mid-green text-left">Actions</th>
                 </tr>
             </thead>
@@ -41,12 +40,11 @@
                         {{ $c->courriel }}</td>
                     <td wire:click="consulterClient({{ $c->id }})" class="w-2/12 pr-4">
                         {{ $c->telephone }}</td>
-                    <td wire:click="consulterClient({{ $c->id }})" class="w-2/12 pr-4">
-                        {{ $c->ddn }}</td>
                     <td class="w-2/12 pr-4 justify-between"><button
                             class="w-5/12 bg-selected-green mx-1 my-1 rounded p-0.5" type="button"
                             wire:click="getInfoClient({{ $c->id }})">Modifier</button><button
-                            class="w-6/12 bg-selected-green mx-0.5 rounded p-0.5" type="button">Supprimer</button>
+                            class="w-6/12 bg-selected-green mx-0.5 rounded p-0.5" type="button"
+                            wire:click="desactiverClient({{ $c->id }})">Désactiver</button>
                     </td>
                 </tr>
                 <?php } else { ?>
@@ -59,12 +57,11 @@
                         {{ $c->courriel }}</td>
                     <td wire:click="consulterClient({{ $c->id }})" class="w-2/12 pr-4">
                         {{ $c->telephone }}</td>
-                    <td wire:click="consulterClient({{ $c->id }})" class="w-2/12 pr-4">
-                        {{ $c->ddn }}</td>
                     <td class="w-2/12 pr-4 justify-between"><button
                             class="w-5/12 bg-selected-green mx-1 my-1 rounded p-0.5" type="button"
                             wire:click="getInfoClient({{ $c->id }})">Modifier</button><button
-                            class="w-6/12 bg-selected-green mx-0.5 rounded p-0.5" type="button">Supprimer</button>
+                            class="w-6/12 bg-selected-green mx-0.5 rounded p-0.5" type="button"
+                            wire:click="desactiverClient({{ $c->id }})">Désactiver</button>
                     </td>
                 </tr>
                 <?php } ?>
@@ -98,7 +95,7 @@
                     <input placeholder="(123) 456-7890" wire:model="telephone" class="h-8 text-xs ml-2" type="tel"
                         id="telephone" name="telephone" />
 
-                    <label class="text-sm text-right" for="ddn">Date de naissance:*</label>
+                    <label class="text-sm text-right" for="ddn">Date de naissance:</label>
                     <input wire:model="ddn" class="h-8 text-xs ml-2" type="date" id="ddn"
                         name="ddn" />
 
@@ -183,10 +180,10 @@
                         name="courriel" />
 
                     <label class="text-sm text-right" for="telephone">Téléphone:*</label>
-                    <input placeholder="(123) 456-7890" wire:model="telephone" class="h-8 text-xs ml-2"
-                        type="tel" id="telephone" name="telephone" />
+                    <input wire:model="telephone" class="h-8 text-xs ml-2" type="tel" pattern="\d{10}"
+                        id="telephone" name="telephone" />
 
-                    <label class="text-sm text-right" for="ddn">Date de naissance:*</label>
+                    <label class="text-sm text-right" for="ddn">Date de naissance:</label>
                     <input wire:model="ddn" class="h-8 text-xs ml-2" type="date" id="ddn"
                         name="ddn" />
 
@@ -250,15 +247,15 @@
         </form>
     </x-modal>
 
-    <x-modal title="Informations du client" name="consulterClient" :show="false">
+    <x-modal title="Informations du client" name="consulterClient" :show="false" maxWidth="4xl">
         <div class="border-solid border-2 border-black p-4 m-4 rounded">
             <div class="grid grid-cols-4 gap-y-4">
 
-                <p class="text-sm text-right font-bold" for="nom">Nom:</p>
-                <p class="h-8 text-sm ml-2"> {{ $nom }}</p>
-
                 <p class="text-sm text-right font-bold" for="nom">Prénom:</p>
                 <p class="h-8 text-sm ml-2"> {{ $prenom }}</p>
+
+                <p class="text-sm text-right font-bold" for="nom">Nom:</p>
+                <p class="h-8 text-sm ml-2 "> {{ $nom }}</p>
 
                 <p class="text-sm text-right font-bold" for="nom">Courriel:</p>
                 <p class="h-8 text-sm ml-2"> {{ $courriel }}</p>
@@ -309,5 +306,19 @@
             <button wire:click="getInfoClient({{ $idClient }})"
                 class="w-3/12 bg-selected-green mx-1 my-1 rounded p-0.5" type="submit">Modifier</button>
         </div>
+    </x-modal>
+
+    <x-modal title="Désactiver un client" name="desactiverClient" :show="false">
+        <form wire:submit.prevent="desacClient" class="bg-white p-4 rounded-lg">
+            <div class="">
+                <p>Êtes vous sûr de vouloir désactiver ce client</p><br>
+                <p>{{ $prenom }} {{ $nom }} </p>
+
+            </div>
+            <div class="flex justify-center mt-4">
+                <button class="w-3/12 bg-selected-green mx-1 my-1 rounded p-0.5" type="submit">Confirmer</button>
+            </div>
+
+        </form>
     </x-modal>
 </div>
