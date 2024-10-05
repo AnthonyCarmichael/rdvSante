@@ -203,8 +203,8 @@
                     </div>
 
                     <div class="mb-4">
-                        <label required for="descriptionservice" class="block text-sm font-medium text-gray-700">Description</label>
-                        <textarea required name="descriptionservice" id="descriptionservice" wire:model="descriptionservice"
+                        <label for="descriptionservice" class="block text-sm font-medium text-gray-700">Description</label>
+                        <textarea name="descriptionservice" id="descriptionservice" wire:model="descriptionservice"
                                 class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" rows="4"></textarea>
                     </div>
 
@@ -234,9 +234,10 @@
                                 class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
                             <span class="ml-2 text-gray-700">Je veux une pause après les rendez-vous</span>
                         </label>
-                        <div class="mt-2 {{ $checkboxpause == true ? 'visible' : 'hidden' }}">
+
+                        <div class="mt-2 {{ $checkboxpause ? 'visible' : 'hidden' }}">
                             <label for="dureepause" class="block text-sm font-medium text-gray-700">Durée de la pause (minutes)</label>
-                            <input {$checkboxpause ? required} min="0" type="number" name="dureepause" id="dureepause" wire:model="dureepause"
+                            <input {{$checkboxpause ? 'required' : ''}} min="0" type="number" name="dureepause" id="dureepause" wire:model="dureepause"
                                 class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                         </div>
                     </div>
@@ -249,7 +250,7 @@
                         </label>
                         <div class="{{ $checkboxrdv == true ? 'visible' : 'hidden' }} mt-2">
                             <label for="tempsavantrdv" class="block text-sm font-medium text-gray-700">Temps minimum avant rendez-vous (heures)</label>
-                            <input { $checkboxrdv ? required } type="number" name="tempsavantrdv" min="0" id="tempsavantrdv" wire:model="tempsavantrdv"
+                            <input {{ $checkboxrdv ? 'required' : '' }} type="number" name="tempsavantrdv" min="0" id="tempsavantrdv" wire:model="tempsavantrdv"
                                 class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                         </div>
                     </div>
@@ -275,22 +276,22 @@
         <x-modal title="Informations service" name="consulterService" :show="false">
             <div class="border-solid border-2 border-black p-4 m-4 rounded">
                 <div class="grid grid-cols-4 gap-y-4">
-                    <p class="text-sm text-right font-bold" for="nomservice">Nom service:</p>
+                    <p class="text-sm text-right font-bold" for="nomservice">Nom service</p>
                     <p class="h-8 text-sm ml-2"> {{ $nomservice }}</p>
 
-                    <p class="text-sm text-right font-bold" for="professionservice">Profession:</p>
+                    <p class="text-sm text-right font-bold" for="professionservice">Profession</p>
                     <p class="h-8 text-sm ml-2"> {{ $professionservice }}</p>
 
-                    <p class="text-sm text-right font-bold" for="descriptionservice">Description:</p>
+                    <p class="text-sm text-right font-bold" for="descriptionservice">Description</p>
                     <p class="h-8 text-sm ml-2"> {{ $descriptionservice }}</p>
 
-                    <p class="text-sm text-right font-bold" for="dureeservice">Durée du service:</p>
+                    <p class="text-sm text-right font-bold" for="dureeservice">Durée du service</p>
                     <p class="h-8 text-sm ml-2"> {{ $dureeservice }}</p>
 
-                    <p class="text-sm text-right font-bold" for="prixservice">Prix du service:</p>
+                    <p class="text-sm text-right font-bold" for="prixservice">Prix du service</p>
                     <p class="h-8 text-sm ml-2"> {{ $prixservice }}</p>
 
-                    <p class="text-sm text-right font-bold" for="dureepause">Durée de la pause:</p>
+                    <p class="text-sm text-right font-bold" for="dureepause">Durée de la pause</p>
                     <p class="h-8 text-sm ml-2"> {{ $dureepause }}</p>
                 </div>
             </div>
