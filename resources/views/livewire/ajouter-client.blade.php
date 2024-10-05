@@ -91,7 +91,9 @@
                     <input wire:model="courriel" class="h-8 text-xs ml-2" type="email" id="courriel"
                         name="courriel" />
 
-                    <label class="text-sm text-right" for="telephone">Téléphone:*</label>
+                    <label class="text-sm text-right" for="telephone">Téléphone:* <br> <span
+                            class="text-xs text-slate-400">Format:(123)
+                            456-7890</span></label>
                     <input placeholder="(123) 456-7890" wire:model="telephone" class="h-8 text-xs ml-2" type="tel"
                         id="telephone" name="telephone" />
 
@@ -140,7 +142,8 @@
                     <input wire:model="noCivique" class="h-8 text-xs ml-2" type="text" id="noCivique"
                         name="noCivique" />
 
-                    <label class="text-sm text-right" for="codePostal">Code postal:</label>
+                    <label class="text-sm text-right" for="codePostal">Code postal: <br> <span
+                            class="text-xs text-slate-400">Format:A0A 0A0</span></label>
                     <input placeholder="ex: A0A 0A0" wire:model="codePostal" class="h-8 text-xs ml-2" type="text"
                         id="codePostal" name="codePostal" />
 
@@ -179,9 +182,11 @@
                     <input wire:model="courriel" class="h-8 text-xs ml-2" type="email" id="courriel"
                         name="courriel" />
 
-                    <label class="text-sm text-right" for="telephone">Téléphone:*</label>
-                    <input wire:model="telephone" class="h-8 text-xs ml-2" type="tel" pattern="\d{10}"
-                        id="telephone" name="telephone" />
+                    <label class="text-sm text-right" for="telephone">Téléphone:* <br> <span
+                            class="text-xs text-slate-400">Format:(123)
+                            456-7890</span></label>
+                    <input wire:model="telephone" class="h-8 text-xs ml-2" type="tel" id="telephone"
+                        name="telephone" />
 
                     <label class="text-sm text-right" for="ddn">Date de naissance:</label>
                     <input wire:model="ddn" class="h-8 text-xs ml-2" type="date" id="ddn"
@@ -227,7 +232,8 @@
                     <input wire:model="noCivique" class="h-8 text-xs ml-2" type="text" id="noCivique"
                         name="noCivique" />
 
-                    <label class="text-sm text-right" for="codePostal">Code postal:</label>
+                    <label class="text-sm text-right" for="codePostal">Code postal: <br> <span
+                            class="text-xs text-slate-400">Format:A0A 0A0</span></label>
                     <input placeholder="ex: A0A 0A0" wire:model="codePostal" class="h-8 text-xs ml-2" type="text"
                         id="codePostal" name="codePostal" />
 
