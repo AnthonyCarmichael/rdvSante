@@ -22,6 +22,7 @@ class GestionDispo extends Component
     public $nomJour;
     public $heureDebut;
     public $heureFin;
+    public $empietement = false;
     public function render()
     {
         return view('livewire.gestion-dispo');
@@ -35,6 +36,13 @@ class GestionDispo extends Component
             'jour' => 'required'
         ];
     }
+
+    protected $messages = [
+        'heureFin.required' => 'Veuillez entrer une heure de fin.',
+        'heureFin.after' => 'Veuillez entrer une heure de fin qui est après l\'heure de début.',
+        'heureDebut.required' => 'Veuillez entrer une heure de début.',
+        'jour.required' => 'Veuillez entrer un jour.',
+    ];
 
     public function mount()
     {
@@ -52,18 +60,18 @@ class GestionDispo extends Component
     {
         $this->validate();
 
-        $empietement = false;
+        $this->empietement = false;
 
         foreach ($this->dispos as $d) {
             if ($d->idJour == $this->jour) {
                 if ((($this->heureDebut >= $d->heureDebut && $this->heureDebut <= $d->heureFin) || ($this->heureFin >= $d->heureDebut && $this->heureFin <= $d->heureFin)) || (($d->heureDebut >= $this->heureDebut && $d->heureFin <= $this->heureDebut) || ($d->heureDebut >= $this->heureFin && $d->heureFin <= $this->heureFin))) {
-                    $empietement = true;
+                    $this->empietement = true;
                     break;
                 }
             }
         }
 
-        if (!$empietement) {
+        if (!$this->empietement) {
             $this->idDispo = Disponibilite::insertGetId([
                 'heureDebut' => $this->heureDebut,
                 'heureFin' => $this->heureFin,
@@ -87,18 +95,18 @@ class GestionDispo extends Component
     {
         $this->validate();
 
-        $empietement = false;
+        $this->empietement = false;
 
         foreach ($this->dispos as $d) {
             if ($d->idJour == $this->jour && $d->id != $this->dispo->id) {
                 if ((($this->heureDebut >= $d->heureDebut && $this->heureDebut <= $d->heureFin) || ($this->heureFin >= $d->heureDebut && $this->heureFin <= $d->heureFin)) || (($d->heureDebut >= $this->heureDebut && $d->heureFin <= $this->heureDebut) || ($d->heureDebut >= $this->heureFin && $d->heureFin <= $this->heureFin))) {
-                    $empietement = true;
+                    $this->empietement = true;
                     break;
                 }
             }
         }
 
-        if (!$empietement) {
+        if (!$this->empietement) {
             Disponibilite::find($this->dispo->id)->update([
                 'heureDebut' => $this->heureDebut,
                 'heureFin' => $this->heureFin,
