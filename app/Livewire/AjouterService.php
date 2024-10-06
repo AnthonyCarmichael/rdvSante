@@ -167,8 +167,8 @@ class AjouterService extends Component
             'duree' => $this->dureeservice ?? 0,
             'prix' => $this->prixservice,
             'taxable' => $this->taxableservice ?? false,
-            'minutePause' => $this->dureepause ?? 0,
-            'nombreHeureLimiteReservation' => $this->tempsavantrdv ?? 0,
+            'minutePause' => $this->checkboxpause ? $this->dureepause : 0,
+            'nombreHeureLimiteReservation' => $this->checkboxrdv ? $this->tempsavantrdv : 0,
             'droitPersonneACharge' => $this->personneacharge ?? false,
             'actif' => true, #Désactivaion du service possible?
             'idProfessionService' => $this->professionservice,
@@ -195,6 +195,36 @@ class AjouterService extends Component
         $this->rdvderniereminute = $service->nombreHeureLimiteReservation > 0;
         $this->tempsavantrdv = $service->nombreHeureLimiteReservation;
         $this->personneacharge = $service->droitPersonneACharge;
+
+        if ($this->tempsavantrdv > 0) {
+            $this->checkboxrdv = true;
+        }
+        else {
+            $this->checkboxrdv = false;
+            $this->tempsavantrdv = 0;
+        }
+
+        if ($this->dureepause > 0) {
+            $this->checkboxpause = true;
+        }
+        else {
+            $this->checkboxpause = false;
+            $this->dureepause = 0;
+        }
+
+        if ($this->taxableservice == 1) {
+            $this->taxableservice = true;
+        }
+        else {
+            $this->taxableservice = false;
+        }
+
+        if ($this->personneacharge == 1) {
+            $this->personneacharge = true;
+        }
+        else {
+            $this->personneacharge = false;
+        }
 
         $this->dispatch('open-modal', name: 'modifierService');
     }
@@ -238,7 +268,7 @@ class AjouterService extends Component
                 'droitPersonneACharge' => $this->personneacharge ?? false,
                 'actif' => true,
                 'idProfessionService' => $this->professionservice,
-                'idProfessionnel' => 1,
+                'idProfessionnel' => Auth::user()->id,
             ]);
 
             $this->resetExcept('services', 'professions');
