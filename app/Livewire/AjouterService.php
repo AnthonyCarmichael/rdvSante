@@ -196,37 +196,6 @@ class AjouterService extends Component
         $this->tempsavantrdv = $service->nombreHeureLimiteReservation;
         $this->personneacharge = $service->droitPersonneACharge == 1;
 
-        /*
-        if ($this->tempsavantrdv > 0) {
-            $this->checkboxrdv = true;
-        }
-        else {
-            $this->checkboxrdv = false;
-            $this->tempsavantrdv = 0;
-        }
-
-        if ($this->dureepause > 0) {
-            $this->checkboxpause = true;
-        }
-        else {
-            $this->checkboxpause = false;
-            $this->dureepause = 0;
-        }
-
-        if ($this->taxableservice == 1) {
-            $this->taxableservice = true;
-        }
-        else {
-            $this->taxableservice = false;
-        }
-
-        if ($this->personneacharge == 1) {
-            $this->personneacharge = true;
-        }
-        else {
-            $this->personneacharge = false;
-        }*/
-
         $this->dispatch('open-modal', name: 'modifierService');
     }
 
