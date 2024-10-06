@@ -113,8 +113,8 @@
                     </div>
 
                     <div class="mb-4">
-                        <label required for="descriptionservice" class="block text-sm font-medium text-gray-700">Description</label>
-                        <textarea required name="descriptionservice" id="descriptionservice" wire:model="descriptionservice"
+                        <label for="descriptionservice" class="block text-sm font-medium text-gray-700">Description</label>
+                        <textarea name="descriptionservice" id="descriptionservice" wire:model="descriptionservice"
                                 class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" rows="4"></textarea>
                     </div>
 
