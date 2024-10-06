@@ -189,11 +189,43 @@ class AjouterService extends Component
         $this->descriptionservice = $service->description;
         $this->dureeservice = $service->duree;
         $this->prixservice = $service->prix;
-        $this->taxableservice = $service->taxable;
+        $this->taxableservice = $service->taxable == 1;
         $this->dureepause = $service->minutePause;
+        $this->checkboxpause = $service->minutePause > 0;
         $this->checkboxrdv = $service->nombreHeureLimiteReservation > 0;
         $this->tempsavantrdv = $service->nombreHeureLimiteReservation;
-        $this->personneacharge = $service->droitPersonneACharge;
+        $this->personneacharge = $service->droitPersonneACharge == 1;
+
+        /*
+        if ($this->tempsavantrdv > 0) {
+            $this->checkboxrdv = true;
+        }
+        else {
+            $this->checkboxrdv = false;
+            $this->tempsavantrdv = 0;
+        }
+
+        if ($this->dureepause > 0) {
+            $this->checkboxpause = true;
+        }
+        else {
+            $this->checkboxpause = false;
+            $this->dureepause = 0;
+        }
+
+        if ($this->taxableservice == 1) {
+            $this->taxableservice = true;
+        }
+        else {
+            $this->taxableservice = false;
+        }
+
+        if ($this->personneacharge == 1) {
+            $this->personneacharge = true;
+        }
+        else {
+            $this->personneacharge = false;
+        }*/
 
         $this->dispatch('open-modal', name: 'modifierService');
     }
@@ -229,12 +261,12 @@ class AjouterService extends Component
             $service->update([
                 'nom' => $this->nomservice,
                 'description' => $this->descriptionservice,
-                'duree' => $this->dureeservice ?? 0,
+                'duree' => $this->dureeservice,
                 'prix' => $this->prixservice,
-                'taxable' => $this->taxableservice ?? false,
-                'minutePause' => $this->dureepause ?? 0,
-                'nombreHeureLimiteReservation' => $this->tempsavantrdv ?? 0,
-                'droitPersonneACharge' => $this->personneacharge ?? false,
+                'taxable' => $this->taxableservice,
+                'minutePause' => $this->dureepause,
+                'nombreHeureLimiteReservation' => $this->tempsavantrdv,
+                'droitPersonneACharge' => $this->personneacharge,
                 'actif' => true,
                 'idProfessionService' => $this->professionservice,
                 'idProfessionnel' => Auth::user()->id,
