@@ -96,13 +96,13 @@
             <div class="bg-white p-6 rounded-lg shadow-md">
                 <form wire:submit.prevent="ajouterService">
                     <div class="mb-4">
-                        <label for="nomservice" class="block text-sm font-medium text-gray-700">Nom du service</label>
+                        <label for="nomservice" class="block text-sm font-medium text-gray-700">Nom du service *</label>
                         <input required minlength="3" type="text" name="nomservice" id="nomservice" wire:model="nomservice"
                             class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                     </div>
 
                     <div class="mb-4">
-                        <label for="professionservice" class="block text-sm font-medium text-gray-700">Profession</label>
+                        <label for="professionservice" class="block text-sm font-medium text-gray-700">Profession *</label>
                         <select required name="professionservice" id="professionservice" wire:model="professionservice"
                                 class="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                             <option value="">Sélectionner une profession</option>
@@ -119,13 +119,13 @@
                     </div>
 
                     <div class="mb-4">
-                        <label for="dureeservice" class="block text-sm font-medium text-gray-700">Durée (minutes)</label>
+                        <label for="dureeservice" class="block text-sm font-medium text-gray-700">Durée (minutes) *</label>
                         <input required min="1" type="number" name="dureeservice" id="dureeservice" wire:model="dureeservice"
                             class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                     </div>
 
                     <div class="mb-4">
-                        <label for="prixservice" class="block text-sm font-medium text-gray-700">Prix</label>
+                        <label for="prixservice" class="block text-sm font-medium text-gray-700">Prix *</label>
                         <input required min="0" step="0.01" type="number" name="prixservice" id="prixservice" wire:model="prixservice"
                             class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                     </div>
@@ -145,7 +145,7 @@
                             <span class="ml-2 text-gray-700">Je veux une pause après les rendez-vous</span>
                         </label>
                         <div class="{{ $checkboxpause == true ? 'visible' : 'hidden' }} mt-2">
-                            <label for="dureepause" class="block text-sm font-medium text-gray-700">Durée de la pause (minutes)</label>
+                            <label for="dureepause" class="block text-sm font-medium text-gray-700">Durée de la pause (minutes) *</label>
                             <input {$checkboxpause ? required} min="0" type="number" name="dureepause" id="dureepause" wire:model="dureepause"
                                 class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                         </div>
@@ -158,7 +158,7 @@
                             <span class="ml-2 text-gray-700">Empêcher les rendez-vous de dernière minute</span>
                         </label>
                         <div class="mt-2 {{ $checkboxrdv == true ? 'visible' : 'hidden' }}">
-                            <label for="tempsavantrdv" class="block text-sm font-medium text-gray-700">Temps minimum avant rendez-vous (heures)</label>
+                            <label for="tempsavantrdv" class="block text-sm font-medium text-gray-700">Temps minimum avant rendez-vous (heures) *</label>
                             <input {$checkboxrdv ? required} type="number" name="tempsavantrdv" min="0" id="tempsavantrdv" wire:model="tempsavantrdv"
                                 class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                         </div>
