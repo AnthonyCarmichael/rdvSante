@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Profession;
 use App\Models\ProfessionProfessionnel;
 use App\Models\User;
 
@@ -16,6 +17,7 @@ class Compte extends Component
     public $email;
     public $telephone;
     public $idProfession;
+    public $professionsSelectionnees = '';
     public $idRole;
 
     public function mount()
@@ -26,8 +28,11 @@ class Compte extends Component
         $this->prenom = $user->prenom;
         $this->email = $user->email;
         $this->telephone = $user->telephone;
-        $this->idProfession = [$user->idProfession];
+        $this->idProfession = ProfessionProfessionnel::where('user_id', $user->id)->get();
         $this->idRole = $user->idRole;
+
+        $professions = Profession::whereIn('id', $this->idProfession)->pluck('nom')->toArray();
+        $this->professionsSelectionnees = implode(', ', $professions);
     }
 
     public function save()
@@ -46,7 +51,7 @@ class Compte extends Component
             $user->prenom = $this->prenom;
             $user->email = $this->email;
             $user->telephone = $this->telephone;
-            
+
             $user->save();
 
             ProfessionProfessionnel::where('user_id', $user->id)->delete();

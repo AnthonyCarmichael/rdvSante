@@ -40,6 +40,11 @@
                 </select>
             </div>
 
+            <div class="mb-4">
+                <label for="professionsSelectionnees" class="block text-sm font-medium">Professions sélectionnées</label>
+                <input type="text" id="professionsSelectionnees" readonly class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+            </div>
+
             <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 focus:ring-4 focus:ring-blue-300">
                 Mettre à jour
             </button>
@@ -50,6 +55,6 @@
 <script>
     document.getElementById('idProfession').addEventListener('change', function() {
         let selectedOptions = Array.from(this.selectedOptions).map(option => option.text).join(', ');
-        console.log('Professions sélectionnées:', selectedOptions);
+        document.getElementById('professionsSelectionnees').value = selectedOptions;
     });
 </script>
