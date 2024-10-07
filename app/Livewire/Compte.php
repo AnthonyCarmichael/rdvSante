@@ -2,8 +2,8 @@
 
 namespace App\Livewire;
 
-use App\Models\Profession;
 use App\Models\ProfessionProfessionnel;
+use App\Models\Profession;
 use App\Models\User;
 
 use Illuminate\Support\Facades\Auth;
@@ -17,8 +17,9 @@ class Compte extends Component
     public $email;
     public $telephone;
     public $idProfession;
-    public $professionsSelectionnees = '';
     public $idRole;
+    public $stringProfession;
+    public $selectedIdProfession;
 
     public function mount()
     {
@@ -28,11 +29,9 @@ class Compte extends Component
         $this->prenom = $user->prenom;
         $this->email = $user->email;
         $this->telephone = $user->telephone;
-        $this->idProfession = ProfessionProfessionnel::where('user_id', $user->id)->get();
+        $this->idProfession = $user->professions()->get();
         $this->idRole = $user->idRole;
-
-        $professions = Profession::whereIn('id', $this->idProfession)->pluck('nom')->toArray();
-        $this->professionsSelectionnees = implode(', ', $professions);
+        
     }
 
     public function save()
@@ -51,17 +50,12 @@ class Compte extends Component
             $user->prenom = $this->prenom;
             $user->email = $this->email;
             $user->telephone = $this->telephone;
-
-            $user->save();
-
             ProfessionProfessionnel::where('user_id', $user->id)->delete();
-
-            foreach ($this->idProfession as $id) {
-                ProfessionProfessionnel::create([
-                    'idProfession' =>$id,
-                    'user_id' => $user->id
-                ]);
+            foreach ($this->selectedIdProfession as $profession) {
+                $user->professions()->attach($profession);
             }
+            $user->save();
+            $this->idProfession = $user->professions()->get();
 
             session()->flash('message', 'Profil mis à jour avec succès.');
         }
