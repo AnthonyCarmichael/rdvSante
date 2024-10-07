@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+
 class Disponibilite extends Model
 {
     use HasFactory;
@@ -14,5 +16,10 @@ class Disponibilite extends Model
 
     protected $fillable = ['heureDebut', 'heureFin', 'idJour'];
     public $timestamps = false;
+
+    public function professionnels(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'diponibilite_professionnels','idDisponibilite','user_id');
+    }
 
 }

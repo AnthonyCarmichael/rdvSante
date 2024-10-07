@@ -14,17 +14,17 @@ class User extends Authenticatable
 
     public function disponibilites(): BelongsToMany
     {
-        return $this->belongsToMany(Disponibilite::class);
+        return $this->belongsToMany(Disponibilite::class, 'disponibilite_professionnels','user_id','idDisponibilite');
     }
 
     public function dossiers(): BelongsToMany
     {
-        return $this->belongsToMany(Dossier::class);
+        return $this->belongsToMany(Dossier::class, 'dossier_professionnels','user_id','idDossier');
     }
 
     public function cliniques(): BelongsToMany
     {
-        return $this->belongsToMany(Clinique::class);
+        return $this->belongsToMany(Clinique::class, 'clinique_professionnels','user_id','idClinique');
     }
 
     public function professions()
