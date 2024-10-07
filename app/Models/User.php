@@ -29,7 +29,7 @@ class User extends Authenticatable
 
     public function professions()
     {
-        return $this->belongsToMany(Profession::class, 'profession_professionnels');
+        return $this->belongsToMany(Profession::class, 'profession_professionnels','user_id','idProfession');
     }
 
 

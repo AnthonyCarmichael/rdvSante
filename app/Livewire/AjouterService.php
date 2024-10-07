@@ -24,7 +24,6 @@ class AjouterService extends Component
     public $dureepause;
     public $checkboxpause = false;
     public $checkboxrdv = false;
-    public $rdvderniereminute = false;
     public $tempsavantrdv;
     public $personneacharge = false;
 
@@ -101,7 +100,7 @@ class AjouterService extends Component
         $this->prixservice = $service->prix;
         $this->taxableservice = $service->taxable;
         $this->dureepause = $service->minutePause;
-        $this->rdvderniereminute = $service->nombreHeureLimiteReservation > 0;
+        $this->checkboxrdv = $service->nombreHeureLimiteReservation > 0;
         $this->tempsavantrdv = $service->nombreHeureLimiteReservation;
         $this->personneacharge = $service->droitPersonneACharge;
 
@@ -119,7 +118,7 @@ class AjouterService extends Component
         $this->prixservice = $service->prix;
         $this->taxableservice = $service->taxable;
         $this->dureepause = $service->minutePause;
-        $this->rdvderniereminute = $service->nombreHeureLimiteReservation > 0;
+        $this->checkboxrdv = $service->nombreHeureLimiteReservation > 0;
         $this->tempsavantrdv = $service->nombreHeureLimiteReservation;
         $this->personneacharge = $service->droitPersonneACharge;
 
@@ -138,21 +137,21 @@ class AjouterService extends Component
             'professionservice' => 'required|exists:professions,id',
             'descriptionservice' => 'nullable|string',
             'prixservice' => 'required|numeric|min:0',
-            'dureeservice' => 'nullable|integer|min:0',
+            'dureeservice' => 'nullable|integer|min:1',
             'taxableservice' => 'nullable|boolean',
-            'dureepause' => 'nullable|integer|min:0',
-            'rdvderniereminute' => 'nullable|boolean',
-            'tempsavantrdv' => 'nullable|integer|min:0',
+            'checkboxrdv' => 'nullable|boolean',
             'personneacharge' => 'nullable|boolean'
         ];
 
-        if ($this->checkboxpause) {
-            $rules['dureepause'] = 'required|integer|min:0';
-        }
+        if ($this->checkboxpause) 
+            $rules['dureepause'] = 'required|integer|min:1';
+        else
+            $this->dureepause = 0;
 
-        if ($this->checkboxrdv) {
-            $rules['rdvderniereminute'] = 'required|boolean';
-        }
+        if ($this->checkboxrdv)
+            $rules['tempsavantrdv'] = 'required|integer|min:1';
+        else
+            $this->tempsavantrdv = 0;
 
         return $rules;
     }
@@ -164,12 +163,12 @@ class AjouterService extends Component
         Service::create([
             'nom' => $this->nomservice,
             'description' => $this->descriptionservice,
-            'duree' => $this->dureeservice ?? 0,
+            'duree' => $this->dureeservice,
             'prix' => $this->prixservice,
-            'taxable' => $this->taxableservice ?? false,
-            'minutePause' => $this->checkboxpause ? $this->dureepause : 0,
-            'nombreHeureLimiteReservation' => $this->checkboxrdv ? $this->tempsavantrdv : 0,
-            'droitPersonneACharge' => $this->personneacharge ?? false,
+            'taxable' => $this->taxableservice,
+            'minutePause' => $this->dureepause,
+            'nombreHeureLimiteReservation' => $this->tempsavantrdv,
+            'droitPersonneACharge' => $this->personneacharge,
             'actif' => true, #Désactivaion du service possible?
             'idProfessionService' => $this->professionservice,
             'idProfessionnel' => Auth::user()->id,
@@ -190,41 +189,12 @@ class AjouterService extends Component
         $this->descriptionservice = $service->description;
         $this->dureeservice = $service->duree;
         $this->prixservice = $service->prix;
-        $this->taxableservice = $service->taxable;
+        $this->taxableservice = $service->taxable == 1;
         $this->dureepause = $service->minutePause;
-        $this->rdvderniereminute = $service->nombreHeureLimiteReservation > 0;
+        $this->checkboxpause = $service->minutePause > 0;
+        $this->checkboxrdv = $service->nombreHeureLimiteReservation > 0;
         $this->tempsavantrdv = $service->nombreHeureLimiteReservation;
-        $this->personneacharge = $service->droitPersonneACharge;
-
-        if ($this->tempsavantrdv > 0) {
-            $this->checkboxrdv = true;
-        }
-        else {
-            $this->checkboxrdv = false;
-            $this->tempsavantrdv = 0;
-        }
-
-        if ($this->dureepause > 0) {
-            $this->checkboxpause = true;
-        }
-        else {
-            $this->checkboxpause = false;
-            $this->dureepause = 0;
-        }
-
-        if ($this->taxableservice == 1) {
-            $this->taxableservice = true;
-        }
-        else {
-            $this->taxableservice = false;
-        }
-
-        if ($this->personneacharge == 1) {
-            $this->personneacharge = true;
-        }
-        else {
-            $this->personneacharge = false;
-        }
+        $this->personneacharge = $service->droitPersonneACharge == 1;
 
         $this->dispatch('open-modal', name: 'modifierService');
     }
@@ -260,12 +230,12 @@ class AjouterService extends Component
             $service->update([
                 'nom' => $this->nomservice,
                 'description' => $this->descriptionservice,
-                'duree' => $this->dureeservice ?? 0,
+                'duree' => $this->dureeservice,
                 'prix' => $this->prixservice,
-                'taxable' => $this->taxableservice ?? false,
-                'minutePause' => $this->dureepause ?? 0,
-                'nombreHeureLimiteReservation' => $this->tempsavantrdv ?? 0,
-                'droitPersonneACharge' => $this->personneacharge ?? false,
+                'taxable' => $this->taxableservice,
+                'minutePause' => $this->dureepause,
+                'nombreHeureLimiteReservation' => $this->tempsavantrdv,
+                'droitPersonneACharge' => $this->personneacharge,
                 'actif' => true,
                 'idProfessionService' => $this->professionservice,
                 'idProfessionnel' => Auth::user()->id,

@@ -11,6 +11,6 @@ class Profession extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'profession_professionnels');
+        return $this->belongsToMany(User::class, 'profession_professionnels','idProfession','user_id');
     }
 }

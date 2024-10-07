@@ -113,8 +113,8 @@
                     </div>
 
                     <div class="mb-4">
-                        <label required for="descriptionservice" class="block text-sm font-medium text-gray-700">Description</label>
-                        <textarea required name="descriptionservice" id="descriptionservice" wire:model="descriptionservice"
+                        <label for="descriptionservice" class="block text-sm font-medium text-gray-700">Description</label>
+                        <textarea name="descriptionservice" id="descriptionservice" wire:model="descriptionservice"
                                 class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" rows="4"></textarea>
                     </div>
 
@@ -280,7 +280,13 @@
                     <p class="h-8 text-sm ml-2"> {{ $nomservice }}</p>
 
                     <p class="text-sm text-right font-bold" for="professionservice">Profession</p>
-                    <p class="h-8 text-sm ml-2"> {{ $professionservice }}</p>
+                    <p class="h-8 text-sm ml-2">
+                        @foreach ($professions as $profession )
+                            @if ($profession->id == $professionservice )
+                                <?= $profession->nom; ?>
+                            @endif
+                        @endforeach
+                    </p>
 
                     <p class="text-sm text-right font-bold" for="descriptionservice">Description</p>
                     <p class="h-8 text-sm ml-2"> {{ $descriptionservice }}</p>
@@ -291,8 +297,23 @@
                     <p class="text-sm text-right font-bold" for="prixservice">Prix du service</p>
                     <p class="h-8 text-sm ml-2"> {{ $prixservice }}</p>
 
+                    <p class="text-sm text-right font-bold" for="taxable">Prix du service</p>
+                    <p class="h-8 text-sm ml-2"> {{ $taxableservice }}</p>
+
                     <p class="text-sm text-right font-bold" for="dureepause">Durée de la pause</p>
                     <p class="h-8 text-sm ml-2"> {{ $dureepause }}</p>
+
+                    <p class="text-sm text-right font-bold" for="dureepause">Nombre d'heure limite reservation</p>
+                    <p class="h-8 text-sm ml-2"> {{ $tempsavantrdv }}</p>
+
+                    <p class="text-sm text-right font-bold" for="dureepause">Personne à charge</p>
+                    <p class="h-8 text-sm ml-2">
+                        @if ($personneacharge == 0)
+                            <?= "Non"; ?>
+                        @else
+                            <?= "Oui"; ?>
+                        @endif
+                    </p>
                 </div>
             </div>
 
