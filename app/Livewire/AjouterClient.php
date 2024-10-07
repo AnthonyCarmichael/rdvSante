@@ -101,6 +101,7 @@ class AjouterClient extends Component
         'telephone.regex' => 'Veuillez respecter le format de numéro de téléphone demandé.',
         'genre.required' => 'Veuillez sélectionner un genre.',
         'codePostal.regex' => 'Veuillez respecter le format de code postal demandé.',
+        'noCivique.numeric' => 'Veuillez entrer un nombre comme numéro civique.',
     ];
 
     public function ajoutClient()

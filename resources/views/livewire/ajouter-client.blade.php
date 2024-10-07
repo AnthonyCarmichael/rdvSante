@@ -119,6 +119,13 @@
 
                 </li>
             @enderror
+            @error('noCivique')
+                <li class="list-disc text-red-400">
+
+                    <span class="error text-red-400">{{ $message }}</span>
+
+                </li>
+            @enderror
         </ul>
 
         <form wire:submit.prevent="ajoutClient" class="bg-white p-4 rounded-lg">
@@ -180,13 +187,14 @@
                 <legend class="font-bold">Adresse</legend>
 
                 <div class="grid grid-cols-4 gap-y-4">
-                    <label class="text-sm text-right" for="rue">Rue:</label>
-                    <input wire:model="rue" class="h-8 text-xs ml-2" type="text" id="rue"
-                        name="rue" />
 
                     <label class="text-sm text-right" for="noCivique">Numéro civique:</label>
                     <input wire:model="noCivique" class="h-8 text-xs ml-2" type="text" id="noCivique"
                         name="noCivique" />
+
+                    <label class="text-sm text-right" for="rue">Rue:</label>
+                    <input wire:model="rue" class="h-8 text-xs ml-2" type="text" id="rue"
+                        name="rue" />
 
                     <label class="text-sm text-right" for="codePostal">Code postal: <br> <span
                             class="text-xs text-slate-400">Format:A0A 0A0</span></label>
@@ -254,6 +262,13 @@
 
                 </li>
             @enderror
+            @error('noCivique')
+                <li class="list-disc text-red-400">
+
+                    <span class="error text-red-400">{{ $message }}</span>
+
+                </li>
+            @enderror
         </ul>
         <form wire:submit.prevent="modifClient" class="bg-white p-4 rounded-lg">
             <fieldset class="border-solid border-2 border-black p-4 m-4 rounded">
@@ -314,13 +329,13 @@
                 <legend class="font-bold">Adresse</legend>
 
                 <div class="grid grid-cols-4 gap-y-4">
-                    <label class="text-sm text-right" for="rue">Rue:</label>
-                    <input wire:model="rue" class="h-8 text-xs ml-2" type="text" id="rue"
-                        name="rue" />
-
                     <label class="text-sm text-right" for="noCivique">Numéro civique:</label>
                     <input wire:model="noCivique" class="h-8 text-xs ml-2" type="text" id="noCivique"
                         name="noCivique" />
+
+                    <label class="text-sm text-right" for="rue">Rue:</label>
+                    <input wire:model="rue" class="h-8 text-xs ml-2" type="text" id="rue"
+                        name="rue" />
 
                     <label class="text-sm text-right" for="codePostal">Code postal: <br> <span
                             class="text-xs text-slate-400">Format:A0A 0A0</span></label>
