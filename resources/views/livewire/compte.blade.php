@@ -27,8 +27,8 @@
 
             <div class="mb-4">
                 <label for="telephone" class="block text-sm font-medium">Téléphone</label>
-                <input type="text" id="telephone" wire:model="telephone" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                @error('telephone') <span class="error text-red-600">{{ $message }}</span> @enderror
+                <input placeholder="(123) 456-7890" type="text" id="telephone" wire:model="telephone" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                @error('telephone') <span class="error text-red-600">{{ "Entrez un format valide" }}</span> @enderror
             </div>
 
             <div class="mb-4">
@@ -46,7 +46,7 @@
                     @foreach ($idProfession as $profession )
                         <li>-{{$profession->nom}}</li>
                     @endforeach
-                    
+
                 </ul>
             </div>
 

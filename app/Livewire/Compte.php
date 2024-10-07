@@ -31,7 +31,7 @@ class Compte extends Component
         $this->telephone = $user->telephone;
         $this->idProfession = $user->professions()->get();
         $this->idRole = $user->idRole;
-        
+
     }
 
     public function save()
@@ -40,7 +40,7 @@ class Compte extends Component
             'nom' => 'required|string|max:255',
             'prenom' => 'required|string|max:255',
             'email' => 'required|email|max:255',
-            'telephone' => 'required|string|max:15',
+            'telephone' => 'required|regex:^\(\d{3}\)\s\d{3}-\d{4}^',
         ]);
 
         $user = User::find(Auth::user()->id);
