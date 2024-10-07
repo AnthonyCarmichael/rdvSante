@@ -143,7 +143,7 @@ class AjouterService extends Component
             'personneacharge' => 'nullable|boolean'
         ];
 
-        if ($this->checkboxpause) 
+        if ($this->checkboxpause)
             $rules['dureepause'] = 'required|integer|min:1';
         else
             $this->dureepause = 0;
