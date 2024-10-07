@@ -52,6 +52,7 @@ class GestionDispo extends Component
 
     public function formAjout()
     {
+        $this->resetValidation();
         $this->reset(['jour', 'heureDebut', 'heureFin']);
         $this->dispatch('open-modal', name: 'ajouterDispo');
 
@@ -64,7 +65,7 @@ class GestionDispo extends Component
 
         foreach ($this->dispos as $d) {
             if ($d->idJour == $this->jour) {
-                if ((($this->heureDebut >= $d->heureDebut && $this->heureDebut <= $d->heureFin) || ($this->heureFin >= $d->heureDebut && $this->heureFin <= $d->heureFin)) || (($d->heureDebut >= $this->heureDebut && $d->heureFin <= $this->heureDebut) || ($d->heureDebut >= $this->heureFin && $d->heureFin <= $this->heureFin))) {
+                if ((($this->heureDebut >= $d->heureDebut && $this->heureDebut <= $d->heureFin) || ($this->heureDebut <= $d->heureDebut && $this->heureFin >= $d->heureFin) || ($this->heureFin >= $d->heureDebut && $this->heureFin <= $d->heureFin)) || (($d->heureDebut >= $this->heureDebut && $d->heureFin <= $this->heureDebut) || ($d->heureDebut >= $this->heureFin && $d->heureFin <= $this->heureFin))) {
                     $this->empietement = true;
                     break;
                 }
@@ -114,6 +115,7 @@ class GestionDispo extends Component
             ]);
         }
 
+        $this->resetValidation();
         $this->reset(['jour', 'heureDebut', 'heureFin']);
         $this->dispos = Disponibilite::orderBy('heureDebut', 'asc')->findMany(DiponibiliteProfessionnel::where('id_user', '=', Auth::user()->id)->get());
         $this->dispatch('close-modal');
@@ -130,6 +132,7 @@ class GestionDispo extends Component
         $this->heureFin = Carbon::createFromFormat('H:i:s', $this->dispo->heureFin)->format('H:i');
         #$this->heureFin = $this->dispo->heureFin;
         $this->jour = $this->dispo->idJour;
+        $this->resetValidation();
         $this->dispatch('open-modal', name: 'modifierDispo');
 
     }
@@ -149,7 +152,7 @@ class GestionDispo extends Component
         DiponibiliteProfessionnel::where('idDisponibilite', '=', $this->dispo->id)->delete();
         Disponibilite::where('id', '=', $this->dispo->id)->delete();
 
-        $this->reset(['dispo', 'jour', 'heureDebut', 'heureFin']);
+        $this->reset(['dispo', 'jour', 'heureDebut', 'heureFin', 'messages']);
         $this->dispos = Disponibilite::orderBy('heureDebut', 'asc')->findMany(DiponibiliteProfessionnel::where('id_user', '=', Auth::user()->id)->get());
         $this->dispatch('close-modal');
         #exemple open modal dispatch

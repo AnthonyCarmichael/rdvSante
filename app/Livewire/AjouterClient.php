@@ -219,6 +219,7 @@ class AjouterClient extends Component
             $this->ville = $v->nom;
             $this->idVille = $v->id;
         }
+        $this->resetValidation();
         $this->dispatch('open-modal', name: 'modifierClient');
 
     }
@@ -265,7 +266,7 @@ class AjouterClient extends Component
 
     public function formAjout()
     {
-
+        $this->resetValidation();
         $this->dispatch('open-modal', name: 'ajouterClient');
         $this->reset(['nom', 'prenom', 'courriel', 'telephone', 'ddn', 'genre', 'nomResponsable', 'prenomResponsable', 'lienResponsable', 'rue', 'noCivique', 'codePostal', 'ville']);
 
