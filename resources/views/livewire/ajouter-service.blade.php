@@ -372,8 +372,14 @@
                     <p class="text-sm text-right font-bold" for="prixservice">Prix du service</p>
                     <p class="h-8 text-sm ml-2"> {{ $prixservice }}</p>
 
-                    <p class="text-sm text-right font-bold" for="taxable">Prix du service</p>
-                    <p class="h-8 text-sm ml-2"> {{ $taxableservice }}</p>
+                    <p class="text-sm text-right font-bold" for="taxable">Taxable</p>
+                    <p class="h-8 text-sm ml-2">
+                        @if ($taxableservice == 0)
+                            <?= 'Non' ?>
+                        @else
+                            <?= 'Oui' ?>
+                        @endif
+                    </p>
 
                     <p class="text-sm text-right font-bold" for="dureepause">Durée de la pause</p>
                     <p class="h-8 text-sm ml-2"> {{ $dureepause }}</p>
