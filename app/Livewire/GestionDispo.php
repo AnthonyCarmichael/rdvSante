@@ -152,7 +152,7 @@ class GestionDispo extends Component
         DiponibiliteProfessionnel::where('idDisponibilite', '=', $this->dispo->id)->delete();
         Disponibilite::where('id', '=', $this->dispo->id)->delete();
 
-        $this->reset(['dispo', 'jour', 'heureDebut', 'heureFin', 'messages']);
+        $this->reset(['dispo', 'jour', 'heureDebut', 'heureFin']);
         $this->dispos = Disponibilite::orderBy('heureDebut', 'asc')->findMany(DiponibiliteProfessionnel::where('id_user', '=', Auth::user()->id)->get());
         $this->dispatch('close-modal');
         #exemple open modal dispatch
