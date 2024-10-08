@@ -69,6 +69,11 @@ class Agenda extends Component
 
     }
 
+    public function openModalRdv($selectedTime){
+        $date = Carbon::parse($selectedTime);
+        $this->dispatch('createRdvModal', $date->format('Y-m-d H:i'));
+    }
+
 
     public function updateSelectedTime($newTime)
     {
