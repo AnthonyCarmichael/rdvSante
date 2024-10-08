@@ -89,7 +89,7 @@
 
 
                                     @if ($findIndispo != true)
-                                        <button @click="$dispatch('open-modal', { name: 'choixRdvIndispo' });"
+                                        <button type="button" wire:click="consulterModalChoixRdvIndispo('<?php echo $selectedDateTime ?>')"
                                                 class="{{ $selectedDateTime <= $now && $now < $selectedDateTime->copy()->addMinutes(30) ? 'border-2 border-blue-700' : 'border-dotted border-b-2 border-r-2 border-gray-600' }} absolute top-0 left-0 w-full h-full hover:bg-blue-400">
                                         </button>
                                     @endif
@@ -123,8 +123,8 @@
     <x-modal title="Choisir" name="choixRdvIndispo" :show="false">
         <p>Voulez-vous ajouter un rendez-vous ou une indisponibilité ?</p>
         <div class="flex mt-8">
-            <button wire:click="openModalRdv('<?php echo $selectedDateTime ?>')" class="mr-4 px-4 py-2 bg-red-500 hover:bg-red-700 text-white rounded">Rendez-vous</button>
-            <button wire:click="openModalIndispo('<?php echo $selectedDateTime ?>')" class="px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white rounded">Indisponibilite</button>
+            <button wire:click="openModalRdv()" class="mr-4 px-4 py-2 bg-green hover:bg-darker-green text-white rounded">Rendez-vous</button>
+            <button wire:click="openModalIndispo()" class="px-4 py-2 bg-orange-500 hover:bg-orange-700 text-white rounded">Indisponibilite</button>
         </div>
     </x-modal>
 

@@ -11,7 +11,8 @@ class RendezVous extends Component
     public $selectedTime;
     public $clients;
 
-    protected $listeners = ['createRdvModal' => 'createRdvModal'];
+    protected $listeners = ['createRdvModal' => 'createRdvModal',
+                            'timeUpdated' => 'updateTime'];
 
 
     public function mount()

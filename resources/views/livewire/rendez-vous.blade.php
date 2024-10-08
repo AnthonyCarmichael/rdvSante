@@ -3,19 +3,19 @@
         <form wire:submit.prevent="createRdv">
             <p class="font-bold">Date et heure sélectionnées:</p>  
             <p class="mb-5">{{$selectedTime}}</p>
-    
-
-            @if (!is_null($clients))
-                <div>
+          
+            <div>
                 <label class="block" for="client">Choisir un client :</label>
-                    <select id="item">
-                        <option value="">Sélectionnez un item</option>
+                <select id="item">
+                    <option value="">Sélectionnez un item</option>
+                    @if (!is_null($clients))
                         @foreach($clients as $client)
                             <option value="{{ $client->id }}">{{ $client->nom }}</option>
                         @endforeach
-                    </select>
-                </div>
-            @endif
+                    @endif
+                </select>
+            </div>
+            
 
             <div class="my-4">
                 <label class="block" for="dateFin">Date et heure de la fin de l'indisponibilité :</label>

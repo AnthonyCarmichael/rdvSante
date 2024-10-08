@@ -63,16 +63,21 @@ class Agenda extends Component
         return view('livewire.agenda');
     }
 
-    public function openModalIndispo($selectedTime) {
-        $date = Carbon::parse($selectedTime);
-        $this->dispatch('createIndispoModal', $date->format('Y-m-d H:i'));
-
+    public function openModalIndispo() {
+        $this->dispatch('createIndispoModal', $this->selectedTime->format('Y-m-d H:i'));
     }
 
-    public function openModalRdv($selectedTime){
-        $date = Carbon::parse($selectedTime);
-        $this->dispatch('createRdvModal', $date->format('Y-m-d H:i'));
+    public function openModalRdv(){
+        $this->dispatch('createRdvModal', $this->selectedTime->format('Y-m-d H:i'));
     }
+
+    public function consulterModalChoixRdvIndispo($selectedTime){
+
+        $this->selectedTime = Carbon::parse($selectedTime);
+        $this->dispatch('open-modal', name: 'choixRdvIndispo');
+    }
+
+    
 
 
     public function updateSelectedTime($newTime)
