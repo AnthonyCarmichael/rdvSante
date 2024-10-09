@@ -4,6 +4,8 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\Client;
+use App\Models\Service;
+use Illuminate\Support\Facades\Auth;
 
 class RendezVous extends Component
 {
@@ -11,6 +13,7 @@ class RendezVous extends Component
     public $selectedTime;
     public $clients;
     public $filter;
+    public $service;
 
     protected $listeners = ['createRdvModal' => 'createRdvModal',
                             'timeUpdated' => 'updateTime'];
@@ -74,9 +77,17 @@ class RendezVous extends Component
         */
     }
 
+    public function fetchServices() {
+
+        $services = Service::where('idProfessionnel',Auth::user()->id )->
+                                    orderBy('nom')->get();
+        return $services;
+    }
+
 
     public function render()
     {
-        return view('livewire.rendez-vous');
+        $services = $this->fetchServices();
+        return view('livewire.rendez-vous',compact('services'));
     }
 }
