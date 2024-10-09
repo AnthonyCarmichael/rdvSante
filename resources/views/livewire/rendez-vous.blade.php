@@ -5,12 +5,13 @@
             <p class="mb-5">{{$selectedTime}}</p>
           
             <div>
-                <label class="block" for="client">Choisir un client :</label>
-                <select id="item">
-                    <option value="">Sélectionnez un item</option>
+                <label class="block font-bold" for="client">Choisir un client :</label>
+                <input type="text" wire:model.live="filter" name="recherche" id="recherche" placeholder="Recherche" class="text-grey-400">
+                <select required id="client" class="block w-full mt-2 border rounded" size="5">
+                    <option class="font-bold" value="" disabled>Sélectionnez un client</option>
                     @if (!is_null($clients))
                         @foreach($clients as $client)
-                            <option value="{{ $client->id }}">{{ $client->nom }}</option>
+                            <option value="{{ $client->id }}">{{ $client->prenom." ".$client->nom }}</option>
                         @endforeach
                     @endif
                 </select>

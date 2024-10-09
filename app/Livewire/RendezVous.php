@@ -10,6 +10,7 @@ class RendezVous extends Component
     public $rdv;
     public $selectedTime;
     public $clients;
+    public $filter;
 
     protected $listeners = ['createRdvModal' => 'createRdvModal',
                             'timeUpdated' => 'updateTime'];
@@ -22,10 +23,18 @@ class RendezVous extends Component
 
 
     public function createRdvModal($selectedTime) {
-        $this->reset();
+        $this->resetExcept('clients');
         $this->selectedTime = $selectedTime;
         $this->dispatch('open-modal', name: 'ajouterRdv');
     }
+
+    // Pour le filtre de recherche. Cette méthode est appelé à chaque fois que filter change. On peut costume la méthode pour par l'adapter aux besoins
+    public function updatedFilter($value)
+    {
+        $this->clients = Client::where('nom', 'like', '%' . $this->filter . '%')
+        ->orWhere('prenom', 'like', '%' . $this->filter . '%')->get();
+    }
+
 
     public function createRdv()
     {
