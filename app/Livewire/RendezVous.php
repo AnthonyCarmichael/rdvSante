@@ -18,7 +18,8 @@ class RendezVous extends Component
 
     public function mount()
     {
-        $this->clients = Client::all();
+        $this->clients = Client::where('actif', '1')->
+                                    orderBy('prenom')->get();
     }
 
 
@@ -31,8 +32,15 @@ class RendezVous extends Component
     // Pour le filtre de recherche. Cette méthode est appelé à chaque fois que filter change. On peut costume la méthode pour par l'adapter aux besoins
     public function updatedFilter($value)
     {
-        $this->clients = Client::where('nom', 'like', '%' . $this->filter . '%')
-        ->orWhere('prenom', 'like', '%' . $this->filter . '%')->get();
+
+        $this->clients = Client::where(function ($query) {
+            $query->where('actif', '1')
+                ->where('nom', 'like', '%' . $this->filter . '%');
+            })->orWhere(function($query) {
+                $query->where('actif', '1')
+                    ->where('prenom', 'like', '%' . $this->filter . '%');
+            })->
+            orderBy('prenom')->get();
     }
 
 
@@ -42,13 +50,13 @@ class RendezVous extends Component
         /*
 
         $this->dateHeureDebut = $this->selectedTime;
-        
+
         $this->validate([
             'note' => 'required|string',
             'dateHeureDebut' => 'required|date',
             'dateHeureFin' => 'required|date|after:dateHeureDebut',
         ]);
-        
+
 
         Indisponibilite::create([
             'note' => $this->note,
@@ -62,7 +70,7 @@ class RendezVous extends Component
         #exemple open modal dispatch
         #$this->dispatch('open-modal', name: 'modal-name');
         $this->dispatch('refreshAgenda');
-        
+
         */
     }
 
