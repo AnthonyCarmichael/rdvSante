@@ -9,7 +9,7 @@ class DossierProfessionnel extends Pivot
 {
     use HasFactory;
 
-    protected $table = 'dossierProfessionnels';
+    protected $table = 'dossier_professionnels';
     protected $primaryKey = 'id';
     public $incrementing = true;
     public $timestamps = false;

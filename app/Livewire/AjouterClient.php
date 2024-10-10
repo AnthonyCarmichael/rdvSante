@@ -8,6 +8,10 @@ use App\Models\Client;
 
 use App\Models\Ville;
 use App\Models\Genre;
+use App\Models\Dossier;
+use App\Models\DossierProfessionnel;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class AjouterClient extends Component
 {
@@ -16,6 +20,7 @@ class AjouterClient extends Component
     public $nomFiltre = [];
     public $filtreNom;
     public $filtrePrenom;
+    public $filtreActif;
     public $genres;
     public $villes;
     public $action;
@@ -127,7 +132,7 @@ class AjouterClient extends Component
         }
 
 
-        Client::create([
+        $idClient = Client::insertGetId([
             'nom' => $this->nom,
             'prenom' => $this->prenom,
             'courriel' => $this->courriel,
@@ -144,8 +149,25 @@ class AjouterClient extends Component
             'idVille' => $this->idVille
         ]);
 
+        Carbon::setLocale('fr_CA');
+
+        // Obtenir l'heure actuelle en UTC
+        $Date = Carbon::now('America/Toronto');
+
+        $idDossier = Dossier::insertGetId([
+            'dateCreation' => $Date,
+            'permissionPartage' => 0,
+            'idClient' => $idClient
+        ]);
+
+        DossierProfessionnel::create([
+            'principal' => 1,
+            'idDossier' => $idDossier,
+            'idProfessionnel' => Auth::user()->id
+        ]);
+
         $this->reset(['nom', 'prenom', 'courriel', 'telephone', 'ddn', 'genre', 'nomResponsable', 'prenomResponsable', 'lienResponsable', 'rue', 'noCivique', 'codePostal', 'ville']);
-        $this->clients = Client::where('actif', '=', '1')->orderBy('nom', 'asc')->get();
+        $this->filtreClient();
         $this->villes = Ville::orderBy('nom', 'asc')->get();
         $this->dispatch('close-modal');
         #exemple open modal dispatch
@@ -192,7 +214,7 @@ class AjouterClient extends Component
         ]);
 
         $this->reset(['nom', 'prenom', 'courriel', 'telephone', 'ddn', 'genre', 'nomResponsable', 'prenomResponsable', 'lienResponsable', 'rue', 'noCivique', 'codePostal', 'ville']);
-        $this->clients = Client::where('actif', '=', '1')->orderBy('nom', 'asc')->get();
+        $this->filtreClient();
         $this->villes = Ville::orderBy('nom', 'asc')->get();
         $this->dispatch('close-modal');
         #exemple open modal dispatch
@@ -249,6 +271,30 @@ class AjouterClient extends Component
 
     }
 
+    public function activerClient($id)
+    {
+        $this->client = Client::find($id);
+        $this->nom = $this->client->nom;
+        $this->prenom = $this->client->prenom;
+        $this->courriel = $this->client->courriel;
+        $this->telephone = $this->client->telephone;
+        $this->ddn = $this->client->ddn;
+        $this->genre = $this->client->idGenre;
+        $this->nomResponsable = $this->client->nomResponsable;
+        $this->prenomResponsable = $this->client->prenomResponsable;
+        $this->lienResponsable = $this->client->lienResponsable;
+        $this->rue = $this->client->rue;
+        $this->noCivique = $this->client->noCivique;
+        $this->codePostal = $this->client->codePostal;
+        $v = Ville::find($this->client->idVille);
+        if ($v != null) {
+            $this->ville = $v->nom;
+            $this->idVille = $v->id;
+        }
+        $this->dispatch('open-modal', name: 'activerClient');
+
+    }
+
     public function desacClient()
     {
 
@@ -257,7 +303,22 @@ class AjouterClient extends Component
         ]);
 
         $this->reset(['nom', 'prenom', 'courriel', 'telephone', 'ddn', 'genre', 'nomResponsable', 'prenomResponsable', 'lienResponsable', 'rue', 'noCivique', 'codePostal', 'ville']);
-        $this->clients = Client::where('actif', '=', '1')->orderBy('nom', 'asc')->get();
+        $this->filtreClient();
+        $this->villes = Ville::orderBy('nom', 'asc')->get();
+        $this->dispatch('close-modal');
+        #exemple open modal dispatch
+        #$this->dispatch('open-modal', name: 'modal-name');
+
+    }
+    public function actClient()
+    {
+
+        Client::find($this->client->id)->update([
+            'actif' => 1
+        ]);
+
+        $this->reset(['nom', 'prenom', 'courriel', 'telephone', 'ddn', 'genre', 'nomResponsable', 'prenomResponsable', 'lienResponsable', 'rue', 'noCivique', 'codePostal', 'ville']);
+        $this->filtreClient();
         $this->villes = Ville::orderBy('nom', 'asc')->get();
         $this->dispatch('close-modal');
         #exemple open modal dispatch
@@ -302,7 +363,11 @@ class AjouterClient extends Component
 
     public function filtreClient()
     {
-        $this->clients = Client::where('nom','like', '%'.$this->filtreNom.'%' )->where('prenom', 'like', '%'.$this->filtrePrenom.'%')->orderBy('nom', 'asc')->get();
+        if ($this->filtreActif == 2) {
+            $this->clients = Client::where('nom', 'like', '%' . $this->filtreNom . '%')->where('prenom', 'like', '%' . $this->filtrePrenom . '%')->orderBy('nom', 'asc')->get();
+        } else {
+            $this->clients = Client::where('nom', 'like', '%' . $this->filtreNom . '%')->where('prenom', 'like', '%' . $this->filtrePrenom . '%')->where('actif', 'like', '%' . $this->filtreActif . '%')->orderBy('nom', 'asc')->get();
+        }
     }
 
 }

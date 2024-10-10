@@ -14,6 +14,15 @@
             <option value={{ $n }}> {{ $n }}</option>
         @endforeach
     </datalist>
+
+    <label class="ml-4 text-m text-right font-bold" for="actif">Statut:</label>
+    <select wire:change="filtreClient" wire:model="filtreActif" id="filtreActif" name="filtreActif"
+        class="h-8 text-m ml-2 mb-4 py-0">
+        <option value='1' selected>Actif</option>
+        <option value='0'>Inactif</option>
+        <option value='2'>Tous</option>
+    </select>
+
     <div class="overflow-auto max-h-96">
         <table class="table-auto w-full">
             <thead class="sticky top-0">
@@ -32,36 +41,68 @@
             @foreach ($clients as $c)
                 <?php if ($cpt%2 == 0){ ?>
                 <tr class="cursor-pointer bg-white hover:bg-blue-300">
-                    <td wire:click="consulterClient({{ $c->id }})" class="w-2/12 pr-4">
-                        {{ $c->prenom }}</td>
-                    <td wire:click="consulterClient({{ $c->id }})" class="w-2/12 pr-4">
-                        {{ $c->nom }}</td>
-                    <td wire:click="consulterClient({{ $c->id }})" class="w-2/12 pr-4">
-                        {{ $c->courriel }}</td>
-                    <td wire:click="consulterClient({{ $c->id }})" class="w-2/12 pr-4">
-                        {{ $c->telephone }}</td>
-                    <td class="w-2/12 pr-4 justify-between"><button
-                            class="w-5/12 bg-selected-green mx-1 my-1 rounded p-0.5" type="button"
-                            wire:click="getInfoClient({{ $c->id }})">Modifier</button><button
-                            class="w-6/12 bg-selected-green mx-0.5 rounded p-0.5" type="button"
-                            wire:click="desactiverClient({{ $c->id }})">Désactiver</button>
+                    @if ($c->actif == 1)
+                        <td wire:click="consulterClient({{ $c->id }})" class="w-2/12 pr-4">
+                            {{ $c->prenom }}</td>
+                        <td wire:click="consulterClient({{ $c->id }})" class="w-2/12 pr-4">
+                            {{ $c->nom }}</td>
+                        <td wire:click="consulterClient({{ $c->id }})" class="w-2/12 pr-4">
+                            {{ $c->courriel }}</td>
+                        <td wire:click="consulterClient({{ $c->id }})" class="w-2/12 pr-4">
+                            {{ $c->telephone }}</td>
+                        <td class="w-2/12 pr-4 justify-between"><button
+                                class="w-5/12 bg-selected-green mx-1 my-1 rounded p-0.5" type="button"
+                                wire:click="getInfoClient({{ $c->id }})">Modifier</button>
+                            <button class="w-6/12 bg-selected-green mx-0.5 rounded p-0.5" type="button"
+                                wire:click="desactiverClient({{ $c->id }})">Désactiver</button>
+                        @elseif ($c->actif == 0)
+                        <td wire:click="consulterClient({{ $c->id }})" class="text-red-600 w-2/12 pr-4">
+                            {{ $c->prenom }}</td>
+                        <td wire:click="consulterClient({{ $c->id }})" class="text-red-600 w-2/12 pr-4">
+                            {{ $c->nom }}</td>
+                        <td wire:click="consulterClient({{ $c->id }})" class="text-red-600 w-2/12 pr-4">
+                            {{ $c->courriel }}</td>
+                        <td wire:click="consulterClient({{ $c->id }})" class="text-red-600 w-2/12 pr-4">
+                            {{ $c->telephone }}</td>
+                        <td class="w-2/12 pr-4 justify-between"><button
+                                class="w-5/12 bg-selected-green mx-1 my-1 rounded p-0.5" type="button"
+                                wire:click="getInfoClient({{ $c->id }})">Modifier</button>
+                            <button class="w-6/12 bg-selected-green mx-0.5 rounded p-0.5" type="button"
+                                wire:click="activerClient({{ $c->id }})">Activer</button>
+                    @endif
                     </td>
                 </tr>
                 <?php } else { ?>
                 <tr class="cursor-pointer bg-table-green hover:bg-blue-300">
-                    <td wire:click="consulterClient({{ $c->id }})" class="w-2/12 pr-4">
-                        {{ $c->prenom }}</td>
-                    <td wire:click="consulterClient({{ $c->id }})" class="w-2/1 pr-4">
-                        {{ $c->nom }}</td>
-                    <td wire:click="consulterClient({{ $c->id }})" class="w-2/12 pr-4">
-                        {{ $c->courriel }}</td>
-                    <td wire:click="consulterClient({{ $c->id }})" class="w-2/12 pr-4">
-                        {{ $c->telephone }}</td>
-                    <td class="w-2/12 pr-4 justify-between"><button
-                            class="w-5/12 bg-selected-green mx-1 my-1 rounded p-0.5" type="button"
-                            wire:click="getInfoClient({{ $c->id }})">Modifier</button><button
-                            class="w-6/12 bg-selected-green mx-0.5 rounded p-0.5" type="button"
-                            wire:click="desactiverClient({{ $c->id }})">Désactiver</button>
+                    @if ($c->actif == 1)
+                        <td wire:click="consulterClient({{ $c->id }})" class="w-2/12 pr-4">
+                            {{ $c->prenom }}</td>
+                        <td wire:click="consulterClient({{ $c->id }})" class="w-2/1 pr-4">
+                            {{ $c->nom }}</td>
+                        <td wire:click="consulterClient({{ $c->id }})" class="w-2/12 pr-4">
+                            {{ $c->courriel }}</td>
+                        <td wire:click="consulterClient({{ $c->id }})" class="w-2/12 pr-4">
+                            {{ $c->telephone }}</td>
+                        <td class="w-2/12 pr-4 justify-between"><button
+                                class="w-5/12 bg-selected-green mx-1 my-1 rounded p-0.5" type="button"
+                                wire:click="getInfoClient({{ $c->id }})">Modifier</button>
+                            <button class="w-6/12 bg-selected-green mx-0.5 rounded p-0.5" type="button"
+                                wire:click="desactiverClient({{ $c->id }})">Désactiver</button>
+                        @elseif ($c->actif == 0)
+                        <td wire:click="consulterClient({{ $c->id }})" class="text-red-600 w-2/12 pr-4">
+                            {{ $c->prenom }}</td>
+                        <td wire:click="consulterClient({{ $c->id }})" class="text-red-600 w-2/1 pr-4">
+                            {{ $c->nom }}</td>
+                        <td wire:click="consulterClient({{ $c->id }})" class="text-red-600 w-2/12 pr-4">
+                            {{ $c->courriel }}</td>
+                        <td wire:click="consulterClient({{ $c->id }})" class="text-red-600 w-2/12 pr-4">
+                            {{ $c->telephone }}</td>
+                        <td class="w-2/12 pr-4 justify-between"><button
+                                class="w-5/12 bg-selected-green mx-1 my-1 rounded p-0.5" type="button"
+                                wire:click="getInfoClient({{ $c->id }})">Modifier</button>
+                            <button class="w-6/12 bg-selected-green mx-0.5 rounded p-0.5" type="button"
+                                wire:click="activerClient({{ $c->id }})">Activer</button>
+                    @endif
                     </td>
                 </tr>
                 <?php } ?>
@@ -134,10 +175,12 @@
                 <div class="grid grid-cols-4 gap-y-4">
 
                     <label class="text-sm text-right" for="prenom">Prénom:*</label>
-                    <input wire:model="prenom" class="h-8 text-xs ml-2" type="text" id="prenom" name="prenom" />
+                    <input wire:model="prenom" class="h-8 text-xs ml-2" type="text" id="prenom"
+                        name="prenom" />
 
                     <label class="text-sm text-right" for="nom"> Nom:*</label>
-                    <input wire:model="nom" class="h-8 text-xs ml-2" type="text" id="nom" name="nom" />
+                    <input wire:model="nom" class="h-8 text-xs ml-2" type="text" id="nom"
+                        name="nom" />
 
 
                     <label class="text-sm text-right" for="courriel">Courriel:*</label>
@@ -423,6 +466,19 @@
         <form wire:submit.prevent="desacClient" class="bg-white p-4 rounded-lg">
             <div class="">
                 <p>Êtes vous sûr de vouloir désactiver ce client</p><br>
+                <p>{{ $prenom }} {{ $nom }} </p>
+
+            </div>
+            <div class="flex justify-center mt-4">
+                <button class="w-3/12 bg-selected-green mx-1 my-1 rounded p-0.5" type="submit">Confirmer</button>
+            </div>
+
+        </form>
+    </x-modal>
+    <x-modal title="Activer un client" name="activerClient" :show="false">
+        <form wire:submit.prevent="actClient" class="bg-white p-4 rounded-lg">
+            <div class="">
+                <p>Êtes vous sûr de vouloir activer ce client</p><br>
                 <p>{{ $prenom }} {{ $nom }} </p>
 
             </div>
