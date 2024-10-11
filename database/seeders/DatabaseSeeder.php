@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
             ProvinceSeeder::class,
             VilleSeeder::class,
             CliniqueSeeder::class,
+            CliniqueProfessionnelSeeder::class,
             ]);
     }
 }

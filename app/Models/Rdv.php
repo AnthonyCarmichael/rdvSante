@@ -8,4 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class Rdv extends Model
 {
     use HasFactory;
+
+    // Ajoute 'idDossier' à la propriété fillable
+    protected $fillable = [
+        'dateHeureDebut',
+        'idDossier',
+        'idService',
+        'idClinique',
+        'raison'
+    ];
+
+    public $timestamps = false;
 }
