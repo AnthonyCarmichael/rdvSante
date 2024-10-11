@@ -38,14 +38,14 @@ class AjouterService extends Component
 
     public function mount()
     {
-        $this->services = Service::where('idProfessionnel', 1)->get();
+        $this->services = Service::where('idProfessionnel', Auth::user()->id)->get();
         $this->professions = Profession::all();
         #dd($this->professions);
     }
 
     public function refreshTable()
     {
-        $this->services = Service::where('idProfessionnel', 1)->get();
+        $this->services = Service::where('idProfessionnel', Auth::user()->id)->get();
     }
 
     public function openModalAjouterService()
