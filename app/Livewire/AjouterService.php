@@ -56,7 +56,7 @@ class AjouterService extends Component
 
     public function loadServices()
     {
-        return Service::where('idProfessionnel', 1)
+        return Service::where('idProfessionnel', Auth::user()->id)
             ->where(function($query) {
                 $query->where('nom', 'like', '%' . $this->search . '%')
                     ->orWhere('description', 'like', '%' . $this->search . '%')

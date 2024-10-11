@@ -12,7 +12,7 @@
 
 <div>
 
-    <div class=" m-16">
+    <div class="m-16">
         <div class="flex items-center mb-4">
             <input wire:model="search" type="text" placeholder="Rechercher..."
                 class="form-input rounded-md shadow-sm mr-2">
