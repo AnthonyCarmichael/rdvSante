@@ -19,6 +19,7 @@ return new class extends Migration
             $table->bigInteger('idDossier')->unsigned();
             $table->bigInteger('idService')->unsigned();
             $table->bigInteger('idClinique')->unsigned();
+            $table->text('raison')->nullable();
         });
 
         Schema::table('rdvs', function (Blueprint $table) {
