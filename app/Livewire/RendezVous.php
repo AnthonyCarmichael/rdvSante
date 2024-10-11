@@ -5,10 +5,12 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\Client;
 use App\Models\Service;
+use App\Models\Clinique;
 use Illuminate\Support\Facades\Auth;
 
 class RendezVous extends Component
 {
+    public $user;
     public $rdv;
     public $selectedTime;
     public $clients;
@@ -21,6 +23,8 @@ class RendezVous extends Component
 
     public function mount()
     {
+        
+        $this->user = Auth::user();
         $this->clients = Client::where('actif', '1')->
                                     orderBy('prenom')->get();
     }
@@ -78,10 +82,18 @@ class RendezVous extends Component
     }
 
     public function fetchServices() {
-
         $services = Service::where('idProfessionnel',Auth::user()->id )->
                                     orderBy('nom')->get();
         return $services;
+    }
+
+    public function fetchCliniques() {
+
+        dd($this->user->cliniques());
+
+        $cliniques = Clinique::where('idProfessionnel',Auth::user()->id )->
+                                    orderBy('nom')->get();
+        return $cliniques;
     }
 
 
