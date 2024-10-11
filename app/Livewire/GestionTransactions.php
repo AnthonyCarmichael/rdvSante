@@ -20,6 +20,7 @@ use Carbon\Carbon;
 class GestionTransactions extends Component
 {
     public $transactions;
+    public $remboursements;
     public $clients;
     public $typeTransactions;
     public $moyenPaiements;
@@ -33,8 +34,10 @@ class GestionTransactions extends Component
         return view('livewire.gestion-transactions');
     }
 
-    public function mount($transactions){
+    public function mount($transactions)
+    {
         $this->transactions = $transactions;
+        $this->remboursements = Transaction::where('idTypeTransaction', '=', '2')->get();
         $this->clients = Client::all();
         $this->typeTransactions = TypeTransaction::all();
         $this->moyenPaiements = MoyenPaiement::all();
@@ -53,16 +56,14 @@ class GestionTransactions extends Component
             'montant' => $this->transactionRembourse->montant,
             'dateHeure' => $Date,
             'idRdv' => $this->transactionRembourse->idRdv,
-            'typeTransaction' => 2,
+            'idTypeTransaction' => 2,
             'idMoyenPaiement' => $this->moyenPaiement,
             'idTransaction' => $this->transactionRembourse->id,
         ]);
 
 
-
+        $this->transactions = Transaction::all();
         $this->dispatch('close-modal');
-        #exemple open modal dispatch
-        #$this->dispatch('open-modal', name: 'modal-name');
 
     }
 

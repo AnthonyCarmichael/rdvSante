@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Transaction extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['montant', 'dateHeure', 'idRdv', 'idTypeTransaction', 'idMoyenPaiement', 'idTransaction'];
+
+    public $timestamps = false;
 }

@@ -78,7 +78,7 @@
                         @foreach ($typeTransactions as $tt)
                             @if ($tt->id == $t->idTypeTransaction)
                                 <td class="w-2/12 pr-4">
-                                    {{ $tp->nom }}</td>
+                                    {{ $tt->nom }}</td>
                             @endif
                         @endforeach
                         @foreach ($moyenPaiements as $m)
