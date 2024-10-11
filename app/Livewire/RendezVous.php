@@ -99,7 +99,8 @@ class RendezVous extends Component
 
     public function render()
     {
+        $cliniques = $this->user->cliniques;
         $services = $this->fetchServices();
-        return view('livewire.rendez-vous',compact('services'));
+        return view('livewire.rendez-vous',compact('services','cliniques'));
     }
 }

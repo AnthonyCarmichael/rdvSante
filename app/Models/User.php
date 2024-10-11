@@ -24,7 +24,7 @@ class User extends Authenticatable
 
     public function cliniques(): BelongsToMany
     {
-        return $this->belongsToMany(Clinique::class, 'clinique_professionnels','user_id','idClinique');
+        return $this->belongsToMany(Clinique::class, 'clinique_professionnels','idProfessionnel','idClinique');
     }
 
     public function professions()
