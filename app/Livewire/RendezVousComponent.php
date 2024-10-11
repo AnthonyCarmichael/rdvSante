@@ -71,6 +71,7 @@ class RendezVousComponent extends Component
 
     public function createRdv()
     {
+
         $this->validate([
             'clientSelected' => 'required|exists:clients,id',
             'serviceSelected' => 'required|exists:services,id',
@@ -82,6 +83,8 @@ class RendezVousComponent extends Component
             $query->where('idProfessionnel', Auth::user()->id);})
             ->where('idClient', $this->clientSelected)
         ->first();
+
+        dd($dossier->client->nom);
 
         $clients = Client::where('actif', '1')
             ->orderBy('prenom')
