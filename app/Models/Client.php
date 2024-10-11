@@ -12,4 +12,9 @@ class Client extends Model
     protected $fillable = ['nom', 'prenom', 'courriel', 'telephone', 'ddn', 'idGenre', 'nomResponsable', 'prenomResponsable', 'lienResponsable', 'rue', 'noCivique', 'codePostal', 'actif', 'idVille'];
 
     public $timestamps = false;
+
+    public function dossier()
+    {
+        return $this->hasOne(Dossier::class, 'idClient');
+    }
 }
