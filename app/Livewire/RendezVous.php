@@ -11,12 +11,12 @@ use Carbon\Carbon;
 
 class RendezVous extends Component
 {
-    public $user;
     public $rdv;
     public $selectedTime;
-    public $clients;
+    public $clientSelected;
     public $filter;
-    public $service;
+    public $serviceSelected;
+    public $cliniqueSelected;
     public $raison;
 
     protected $listeners = ['createRdvModal' => 'createRdvModal',
@@ -25,8 +25,12 @@ class RendezVous extends Component
 
     public function mount()
     {
-        $this->clients = Client::where('actif', '1')->
-                                    orderBy('prenom')->get();
+        $this->filter = '';
+        $this->selectedTime = null;
+        $this->clientSelected = null;
+        $this->serviceSelected = null;
+        $this->cliniqueSelected = null;
+        $this->raison = '';
     }
 
 
@@ -56,30 +60,28 @@ class RendezVous extends Component
 
     public function createRdv()
     {
-        dd();
+        dd($this);
         /*
+            $this->validate([
+                'clientSelected' => 'required|exists:clients,id',
+                'serviceSelected' => 'required|exists:services,id',
+                'cliniqueSelected' => 'required|exists:cliniques,id',
+                'raison' => 'nullable|string|max:255',
+            ]);
 
-        $this->dateHeureDebut = $this->selectedTime;
+            RendezVous::create([
+                'client_id' => $this->clientSelected,
+                'service_id' => $this->serviceSelected,
+                'clinique_id' => $this->cliniqueSelected,
+                'date_heure' => $this->selectedTime,
+                'raison' => $this->raison,
+            ]);
 
-        $this->validate([
-            'note' => 'required|string',
-            'dateHeureDebut' => 'required|date',
-            'dateHeureFin' => 'required|date|after:dateHeureDebut',
-        ]);
+            $this->reset(['clientSelected', 'serviceSelected', 'cliniqueSelected', 'raison']);
 
+            $this->dispatch('close-modal');
 
-        Indisponibilite::create([
-            'note' => $this->note,
-            'dateHeureDebut' => $this->dateHeureDebut,
-            'dateHeureFin' => $this->dateHeureFin,
-            'idProfessionnel' =>  Auth::user()->id, # A changer!!
-        ]);
-
-        $this->reset(['note', 'dateHeureDebut', 'dateHeureFin']);
-        $this->dispatch('close-modal');
-        #exemple open modal dispatch
-        #$this->dispatch('open-modal', name: 'modal-name');
-        $this->dispatch('refreshAgenda');
+            $this->dispatch('refreshAgenda');
 
         */
     }
@@ -90,24 +92,18 @@ class RendezVous extends Component
         return $services;
     }
 
-    public function fetchCliniques() {
-
-        dd($this->user->cliniques());
-
-        $cliniques = Clinique::where('idProfessionnel',Auth::user()->id )->
-                                    orderBy('nom')->get();
-        return $cliniques;
-    }
-
-
     public function render()
     {
+        $clients = Client::where('actif', '1')
+            ->orderBy('prenom')
+            ->get();
         $cliniques = Auth::user()->cliniques;
         #dd($cliniques);
         $services = $this->fetchServices();
         return view('livewire.rendez-vous', [
             'services' => $services,
             'cliniques' => $cliniques,
+            'clients' => $clients
         ]);
     }
 }
