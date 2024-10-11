@@ -19,7 +19,7 @@ class User extends Authenticatable
 
     public function dossiers(): BelongsToMany
     {
-        return $this->belongsToMany(Dossier::class, 'dossier_professionnels','user_id','idDossier');
+        return $this->belongsToMany(Dossier::class, 'dossier_professionnels','idProfessionnel','idDossier');
     }
 
     public function cliniques(): BelongsToMany

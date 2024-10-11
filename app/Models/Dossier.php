@@ -12,6 +12,6 @@ class Dossier extends Model
 
     public function professionnels(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'dossier_professionnels','idDossier','user_id');
+        return $this->belongsToMany(User::class, 'dossier_professionnels','idDossier','idProfessionnel');
     }
 }

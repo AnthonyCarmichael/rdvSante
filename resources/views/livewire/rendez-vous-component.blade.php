@@ -3,7 +3,7 @@
         <div class="bg-white p-6 rounded-lg shadow-md">
             <form wire:submit.prevent="createRdv">
                 <p class="block text-sm font-medium text-gray-700">Date et heure sélectionnées:</p>
-                <p class="mb-5">{{$selectedTime}}</p>
+                <p class="mb-5">{{$formattedDate}}</p>
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700" for="client">Choisir un client :</label>

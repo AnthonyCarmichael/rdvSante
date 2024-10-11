@@ -2,14 +2,15 @@
 
 namespace App\Livewire;
 
+use App\Models\Rdv;
 use Livewire\Component;
 use App\Models\Client;
 use App\Models\Service;
-use App\Models\Clinique;
+use App\Models\Dossier;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
-class RendezVous extends Component
+class RendezVousComponent extends Component
 {
     public $rdv;
     public $selectedTime;
@@ -17,6 +18,7 @@ class RendezVous extends Component
     public $filter;
     public $serviceSelected;
     public $cliniqueSelected;
+    public $formattedDate;
     public $raison;
 
     protected $listeners = ['createRdvModal' => 'createRdvModal',
@@ -35,12 +37,17 @@ class RendezVous extends Component
 
 
     public function createRdvModal($selectedTime) {
-        $this->resetExcept('clients');
+
+        $this->reset();
+        $this->selectedTime = $selectedTime;
+
         Carbon::setLocale('fr');
-        $this->selectedTime = Carbon::parse($selectedTime);
+        $this->formattedDate = Carbon::parse($selectedTime);
         
-        $this->selectedTime = $this->selectedTime->translatedFormat('l \l\e d F Y');
+        $this->formattedDate = $this->formattedDate->translatedFormat('l \l\e d F Y');
+
         $this->dispatch('open-modal', name: 'ajouterRdv');
+
     }
 
     // Pour le filtre de recherche. Cette méthode est appelé à chaque fois que filter change. On peut costume la méthode pour par l'adapter aux besoins
@@ -60,30 +67,33 @@ class RendezVous extends Component
 
     public function createRdv()
     {
-        dd($this);
-        /*
-            $this->validate([
-                'clientSelected' => 'required|exists:clients,id',
-                'serviceSelected' => 'required|exists:services,id',
-                'cliniqueSelected' => 'required|exists:cliniques,id',
-                'raison' => 'nullable|string|max:255',
-            ]);
+        $this->validate([
+            'clientSelected' => 'required|exists:clients,id',
+            'serviceSelected' => 'required|exists:services,id',
+            'cliniqueSelected' => 'required|exists:cliniques,id',
+            'raison' => 'nullable|string|max:255',
+        ]);
 
-            RendezVous::create([
-                'client_id' => $this->clientSelected,
-                'service_id' => $this->serviceSelected,
-                'clinique_id' => $this->cliniqueSelected,
-                'date_heure' => $this->selectedTime,
-                'raison' => $this->raison,
-            ]);
+        $dossier = Dossier::whereHas('professionnels', function ($query) {
+            $query->where('idProfessionnel', Auth::user()->id);})
+            ->where('idClient', $this->clientSelected)
+        ->first();
+        #dd($dossier->id);
 
-            $this->reset(['clientSelected', 'serviceSelected', 'cliniqueSelected', 'raison']);
+        Rdv::create([
+            'dateHeureDebut' => $this->selectedTime,
+            'idDossier' => $dossier->id,
+            'idService' => $this->serviceSelected,
+            'idClinique' => $this->cliniqueSelected,
+            'raison' => $this->raison,
+        ]);
 
-            $this->dispatch('close-modal');
+        $this->reset();
 
-            $this->dispatch('refreshAgenda');
+        $this->dispatch('close-modal');
 
-        */
+        $this->dispatch('refreshAgenda');
+
     }
 
     public function fetchServices() {
@@ -100,7 +110,7 @@ class RendezVous extends Component
         $cliniques = Auth::user()->cliniques;
         #dd($cliniques);
         $services = $this->fetchServices();
-        return view('livewire.rendez-vous', [
+        return view('livewire.rendez-vous-component', [
             'services' => $services,
             'cliniques' => $cliniques,
             'clients' => $clients
