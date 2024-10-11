@@ -30,6 +30,18 @@
             </div>
 
 
+            <div class="mt-3">
+                <label class="block font-bold" for="client">Clinique :</label>
+                <select required id="client" class="block mt-2 border rounded">
+                    <option class="font-bold" value="" disabled>Sélectionnez une clinique</option>
+                    @if (!is_null($cliniques))
+                        @foreach($cliniques as $clinique)
+                            <option value="{{ $clinique->id }}">{{ $clinique->nom }}</option>
+                        @endforeach
+                    @endif
+                </select>
+            </div>
+
             <div class="my-4">
                 <label class="block" for="dateFin">Date et heure de la fin de l'indisponibilité :</label>
                 <input type="datetime-local" min="{{$selectedTime }}"required>

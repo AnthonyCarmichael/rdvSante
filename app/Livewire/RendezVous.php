@@ -23,8 +23,6 @@ class RendezVous extends Component
 
     public function mount()
     {
-        
-        $this->user = Auth::user();
         $this->clients = Client::where('actif', '1')->
                                     orderBy('prenom')->get();
     }
@@ -99,8 +97,12 @@ class RendezVous extends Component
 
     public function render()
     {
-        $cliniques = $this->user->cliniques;
+        $cliniques = Auth::user()->cliniques;
+        #dd($cliniques);
         $services = $this->fetchServices();
-        return view('livewire.rendez-vous',compact('services','cliniques'));
+        return view('livewire.rendez-vous', [
+            'services' => $services,
+            'cliniques' => $cliniques,
+        ]);
     }
 }
