@@ -20,6 +20,7 @@ return new class extends Migration
             $table->bigInteger('idRdv')->unsigned();
             $table->bigInteger('idTypeTransaction')->unsigned();
             $table->bigInteger('idMoyenPaiement')->unsigned();
+            $table->bigInteger('idTransaction')->nullable()->unsigned();
         });
 
         Schema::table('transactions', function (Blueprint $table) {
@@ -32,6 +33,10 @@ return new class extends Migration
 
         Schema::table('transactions', function (Blueprint $table) {
             $table->foreign('idRdv')->references('id')->on('rdvs');
+        });
+
+        Schema::table('transactions', function (Blueprint $table) {
+            $table->foreign('idTransaction')->references('id')->on('transactions');
         });
     }
 
