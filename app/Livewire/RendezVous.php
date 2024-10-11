@@ -7,6 +7,7 @@ use App\Models\Client;
 use App\Models\Service;
 use App\Models\Clinique;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class RendezVous extends Component
 {
@@ -16,6 +17,7 @@ class RendezVous extends Component
     public $clients;
     public $filter;
     public $service;
+    public $raison;
 
     protected $listeners = ['createRdvModal' => 'createRdvModal',
                             'timeUpdated' => 'updateTime'];
@@ -30,7 +32,10 @@ class RendezVous extends Component
 
     public function createRdvModal($selectedTime) {
         $this->resetExcept('clients');
-        $this->selectedTime = $selectedTime;
+        Carbon::setLocale('fr');
+        $this->selectedTime = Carbon::parse($selectedTime);
+        
+        $this->selectedTime = $this->selectedTime->translatedFormat('l \l\e d F Y');
         $this->dispatch('open-modal', name: 'ajouterRdv');
     }
 
