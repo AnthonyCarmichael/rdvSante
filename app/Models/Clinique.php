@@ -14,4 +14,9 @@ class Clinique extends Model
     {
         return $this->belongsToMany(User::class, 'clinique_professionnels','idClinique','user_id');
     }
+
+    public function ville()
+    {
+        return $this->belongsTo(Ville::class, 'idVille');
+    }
 }

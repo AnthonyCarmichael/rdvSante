@@ -11,5 +11,10 @@ class Ville extends Model
 
     protected $fillable = ['nom', 'idProvince'];
 
+    public function province()
+    {
+        return $this->belongsTo(Province::class, 'idProvince');
+    }
+
     public $timestamps = false;
 }

@@ -33,12 +33,6 @@ class CliniqueComponent extends Component
         $this->loadCliniques($value);
     }
 
-    # À vérifier
-    public function searchCliniques()
-    {
-        $this->searchQuery = $this->search;
-    }
-
     public function resetFilters()
     {
 
@@ -47,16 +41,49 @@ class CliniqueComponent extends Component
 
     public function loadCliniques($nomRecherche)
     {
-        $this->foundCliniques = Clinique::where(function($query) {
-                                $query->where('nom', 'like', '%' . $this->search . '%')
-                                    ->orWhere('rue', 'like', '%' . $this->search . '%')
-                                    ->orWhere('nocivique', 'like', '%' . $this->search . '%')
-                                    ->orWhere('codePostal', 'like', '%' . $this->search . '%');
-                            })
-                            ->orderBy($this->sortField, $this->sortDirection)
-                            ->get();
-    }
+        $this->foundCliniques = Clinique::with(['ville.province.pays'])
+            ->where(function($query) {
+                $query->where('cliniques.nom', 'like', '%' . $this->search . '%')
+                    ->orWhere('cliniques.rue', 'like', '%' . $this->search . '%')
+                    ->orWhere('cliniques.nocivique', 'like', '%' . $this->search . '%')
+                    ->orWhere('cliniques.codePostal', 'like', '%' . $this->search . '%')
+                    ->orWhereHas('ville', function ($query) {
+                        $query->where('nom', 'like', '%' . $this->search . '%');
+                    })
+                    ->orWhereHas('ville.province', function ($query) {
+                        $query->where('nom', 'like', '%' . $this->search . '%');
+                    })
+                    ->orWhereHas('ville.province.pays', function ($query) {
+                        $query->where('nom', 'like', '%' . $this->search . '%');
+                    });
+        });
 
+        if ($this->sortField === 'ville')
+        {
+            $this->foundCliniques = $this->foundCliniques->join('villes', 'cliniques.idVille', '=', 'villes.id')
+                                ->orderBy('villes.nom', $this->sortDirection)
+                                ->get();
+        }
+        elseif ($this->sortField === 'province')
+        {
+            $this->foundCliniques = $this->foundCliniques->join('villes', 'cliniques.idVille', '=', 'villes.id')
+                                ->join('provinces', 'villes.idProvince', '=', 'provinces.id')
+                                ->orderBy('provinces.nom', $this->sortDirection)
+                                ->get();
+        }
+        elseif ($this->sortField === 'pays')
+        {
+            $this->foundCliniques = $this->foundCliniques->join('villes', 'cliniques.idVille', '=', 'villes.id')
+                                ->join('provinces', 'villes.idProvince', '=', 'provinces.id')
+                                ->join('pays', 'provinces.idPays', '=', 'pays.id')
+                                ->orderBy('pays.nom', $this->sortDirection)
+                                ->get();
+        }
+        else
+        {
+            $this->foundCliniques = $this->foundCliniques->orderBy($this->sortField, $this->sortDirection)->get();
+        }
+    }
 
     public function sortBy($field)
     {

@@ -13,7 +13,8 @@ class PaysSeeder extends Seeder
     public function run(): void
     {
         DB::table('pays')->insert([
-            ['nom' => 'Canada']
+            ['nom' => 'Canada'],
+            ['nom' => 'Cameroun']
         ]);
     }
 }

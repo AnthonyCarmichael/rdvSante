@@ -22,22 +22,9 @@
                     </th>
 
                     <th class="border-solid border-b-2 border-black bg-mid-green text-left">
-                        <button wire:click="sortBy('description')" class="font-bold">
-                            Rue
-                            @if ($sortField === 'description')
-                                @if ($sortDirection === 'asc')
-                                    ↑
-                                @else
-                                    ↓
-                                @endif
-                            @endif
-                        </button>
-                    </th>
-
-                    <th class="border-solid border-b-2 border-black bg-mid-green text-left">
-                        <button wire:click="sortBy('duree')" class="font-bold">
+                        <button wire:click="sortBy('nocivique')" class="font-bold">
                             Numéro civique
-                            @if ($sortField === 'duree')
+                            @if ($sortField === 'nocivique')
                                 @if ($sortDirection === 'asc')
                                     ↑
                                 @else
@@ -48,9 +35,61 @@
                     </th>
 
                     <th class="border-solid border-b-2 border-black bg-mid-green text-left">
-                        <button wire:click="sortBy('prix')" class="font-bold">
+                        <button wire:click="sortBy('rue')" class="font-bold">
+                            Rue
+                            @if ($sortField === 'rue')
+                                @if ($sortDirection === 'asc')
+                                    ↑
+                                @else
+                                    ↓
+                                @endif
+                            @endif
+                        </button>
+                    </th>
+
+                    <th class="border-solid border-b-2 border-black bg-mid-green text-left">
+                        <button wire:click="sortBy('codePostal')" class="font-bold">
                             Code postal
-                            @if ($sortField === 'prix')
+                            @if ($sortField === 'codePostal')
+                                @if ($sortDirection === 'asc')
+                                    ↑
+                                @else
+                                    ↓
+                                @endif
+                            @endif
+                        </button>
+                    </th>
+
+                    <th class="border-solid border-b-2 border-black bg-mid-green text-left">
+                        <button wire:click="sortBy('ville')" class="font-bold">
+                            Ville
+                            @if ($sortField === 'ville')
+                                @if ($sortDirection === 'asc')
+                                    ↑
+                                @else
+                                    ↓
+                                @endif
+                            @endif
+                        </button>
+                    </th>
+
+                    <th class="border-solid border-b-2 border-black bg-mid-green text-left">
+                        <button wire:click="sortBy('province')" class="font-bold">
+                            Province
+                            @if ($sortField === 'province')
+                                @if ($sortDirection === 'asc')
+                                    ↑
+                                @else
+                                    ↓
+                                @endif
+                            @endif
+                        </button>
+                    </th>
+
+                    <th class="border-solid border-b-2 border-black bg-mid-green text-left">
+                        <button wire:click="sortBy('pays')" class="font-bold">
+                            Pays
+                            @if ($sortField === 'pays')
                                 @if ($sortDirection === 'asc')
                                     ↑
                                 @else
@@ -69,9 +108,12 @@
                     <tr
                         class="@if ($loop->odd) bg-white @else bg-table-green @endif hover:bg-blue-300 cursor-pointer">
                         <td wire:click="consulterclinique({{ $clinique->id }})" class="w-2/12 pr-4">{{ $clinique->nom }}</td>
-                        <td wire:click="consulterclinique({{ $clinique->id }})" class="w-2/12 pr-4">{{ $clinique->rue }}</td>
                         <td wire:click="consulterclinique({{ $clinique->id }})" class="w-2/12 pr-4">{{ $clinique->noCivique }}</td>
+                        <td wire:click="consulterclinique({{ $clinique->id }})" class="w-2/12 pr-4">{{ $clinique->rue }}</td>
                         <td wire:click="consulterclinique({{ $clinique->id }})" class="w-2/12 pr-4">{{ $clinique->codePostal }}</td>
+                        <td wire:click="consulterclinique({{ $clinique->id }})" class="w-2/12 pr-4">{{ $clinique->ville->nom }}</td>
+                        <td wire:click="consulterclinique({{ $clinique->id }})" class="w-2/12 pr-4">{{ $clinique->ville->province->nom }}</td>
+                        <td wire:click="consulterclinique({{ $clinique->id }})" class="w-2/12 pr-4">{{ $clinique->ville->province->pays->nom }}</td>
                         <td class="w-2/12 pr-4 justify-between">
                             <button class="w-5/12 bg-selected-green mx-1 my-1 rounded p-0.5"
                                 wire:click="modifierclinique({{ $clinique->id }})" type="button">

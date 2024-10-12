@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Province extends Model
 {
     use HasFactory;
+
+    public function pays()
+    {
+        return $this->belongsTo(Pays::class, 'idPays');
+    }
 }

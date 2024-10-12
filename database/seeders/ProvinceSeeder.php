@@ -16,6 +16,14 @@ class ProvinceSeeder extends Seeder
             [
                 'nom' => 'Québec',
                 'idPays' => '1',
+            ],
+            [
+                'nom' => 'Ontario',
+                'idPays' => '1',
+            ],
+            [
+                'nom' => 'Littoral',
+                'idPays' => '2',
             ]
         ]);
     }
