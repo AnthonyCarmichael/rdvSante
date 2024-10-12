@@ -22,7 +22,8 @@ class RendezVousComponent extends Component
     public $raison;
 
     protected $listeners = ['createRdvModal' => 'createRdvModal',
-                            'timeUpdated' => 'updateTime'];
+                            'timeUpdated' => 'updateTime',
+                            'consulterModalRdv' => 'consulterModalRdv'];
 
 
     public function mount()
@@ -44,7 +45,7 @@ class RendezVousComponent extends Component
         Carbon::setLocale('fr');
         $this->formattedDate = Carbon::parse($selectedTime);
         
-        $this->formattedDate = $this->formattedDate->translatedFormat('l \l\e d F Y');
+        $this->formattedDate = $this->formattedDate->translatedFormat('l \l\e d F Y \à H:i');
 
         $this->dispatch('open-modal', name: 'ajouterRdv');
 
@@ -116,4 +117,22 @@ class RendezVousComponent extends Component
             'clients' => $clients
         ]);
     }
+
+
+    public function consulterModalRdv(Rdv $rdv) {
+        $this->reset();
+        $this->rdv = $rdv;
+        dd($this);
+        /*
+        $this->id = $indispo->id;
+        $this->note = $this->tempNote = $indispo->note;
+        
+        $this->dateHeureDebut = Carbon::parse($indispo->dateHeureDebut)->format('Y-m-d H:i');
+        $this->dateHeureFin = $this->tempDateHeureFin = Carbon::parse($indispo->dateHeureFin)->format('Y-m-d H:i');
+    
+        $this->dispatch('open-modal', name: 'consulterIndisponibilite');
+        #dd($this);*/
+
+    }
+
 }

@@ -68,31 +68,55 @@
                                 for ($j=0; $j <7; $j++) {
                                     $findIndispo = false;
                                     ?>
+                                    <!-- Cellule intéractible -->
                                     <td class="relative">
-                                    @if (!empty($indispoArr))
-                                        @foreach ($indispoArr as $indispo)
-                                            @if ($indispo->dateHeureDebut <= $selectedDateTime && $indispo->dateHeureFin > $selectedDateTime )
+                                        <!-- verification cellule indispo -->
+                                        @if (!empty($indispoArr))
+                                            @foreach ($indispoArr as $indispo)
+                                                @if ($indispo->dateHeureDebut <= $selectedDateTime && $indispo->dateHeureFin > $selectedDateTime )
 
-                                                <button class=" {{ $selectedDateTime <= $now && $now < $selectedDateTime->copy()->addMinutes(30) ? 'border-2 border-blue-700' : 'border-dotted border-b-2 border-r-2 border-gray-600' }} absolute top-0 left-0 w-full h-full bg-orange-500 "
-                                                    wire:click="consulterModalIndispo({{$indispo}})"
-                                                    value="{{$indispo->id}}"
-                                                    onclick="console.log(event.target.value);"
-                                                    onmouseover="document.querySelectorAll('button[value=\'{{$indispo->id}}\']').forEach(btn => btn.classList.add('hover-effect'))"
-                                                    onmouseout="document.querySelectorAll('button[value=\'{{$indispo->id}}\']').forEach(btn => btn.classList.remove('hover-effect'))">
-                                                </button>
-                                                <?php $findIndispo = true?>
-                                                @break
-                                            @endif
-                                        @endforeach
+                                                    <button class=" {{ $selectedDateTime <= $now && $now < $selectedDateTime->copy()->addMinutes(30) ? 'border-2 border-blue-700' : 'border-dotted border-b-2 border-r-2 border-gray-600' }} absolute top-0 left-0 w-full h-full bg-orange-500 "
+                                                        wire:click="consulterModalIndispo({{$indispo}})"
+                                                        value="{{$indispo->id}}"
+                                                        onclick="console.log(event.target.value);"
+                                                        onmouseover="document.querySelectorAll('button[value=\'{{$indispo->id}}\']').forEach(btn => btn.classList.add('hover-effect-orange'))"
+                                                        onmouseout="document.querySelectorAll('button[value=\'{{$indispo->id}}\']').forEach(btn => btn.classList.remove('hover-effect-orange'))">
+                                                    </button>
+                                                    <?php $findIndispo = true?>
+                                                    @break
+                                                @endif
+                                            @endforeach
 
-                                    @endif
+                                        @endif
+
+                                        <!-- verification cellule rdv -->
+                                        @if (!empty($rdvArr))
+                                            @foreach ($rdvArr as $rdv)
+
+                                                @php
+                                                    $debut = \Carbon\Carbon::parse($rdv->dateHeureDebut);
+                                                @endphp
+                                                @if ($debut <= $selectedDateTime && $debut->addMinutes($rdv->service->duree) > $selectedDateTime)
+                                                    <button class=" {{ $selectedDateTime <= $now && $now < $selectedDateTime->copy()->addMinutes(30) ? 'border-2 border-blue-700' : 'border-dotted border-b-2 border-r-2 border-gray-600' }} absolute top-0 left-0 w-full h-full bg-blue-500 "
+                                                        wire:click="consulterModalRdv({{$rdv}})"
+                                                        value="{{$rdv->id}}"
+                                                        onclick="console.log(event.target.value);"
+                                                        onmouseover="document.querySelectorAll('button[value=\'{{$rdv->id}}\']').forEach(btn => btn.classList.add('hover-effect-blue'))"
+                                                        onmouseout="document.querySelectorAll('button[value=\'{{$rdv->id}}\']').forEach(btn => btn.classList.remove('hover-effect-blue'))">
+                                                    </button>
+                                                    <?php $findIndispo = true?>
+                                                    @break
+                                                @endif
+                                            @endforeach
+
+                                        @endif
 
 
-                                    @if ($findIndispo != true)
-                                        <button type="button" wire:click="consulterModalChoixRdvIndispo('<?php echo $selectedDateTime ?>')"
-                                                class="{{ $selectedDateTime <= $now && $now < $selectedDateTime->copy()->addMinutes(30) ? 'border-2 border-blue-700' : 'border-dotted border-b-2 border-r-2 border-gray-600' }} absolute top-0 left-0 w-full h-full hover:bg-blue-400">
-                                        </button>
-                                    @endif
+                                        @if ($findIndispo != true)
+                                            <button type="button" wire:click="consulterModalChoixRdvIndispo('<?php echo $selectedDateTime ?>')"
+                                                    class="{{ $selectedDateTime <= $now && $now < $selectedDateTime->copy()->addMinutes(30) ? 'border-2 border-blue-700' : 'border-dotted border-b-2 border-r-2 border-gray-600' }} absolute top-0 left-0 w-full h-full hover:bg-blue-400">
+                                            </button>
+                                        @endif
                                     </td>
                                     <?php
                                     $selectedDateTime->modify('+1 day');

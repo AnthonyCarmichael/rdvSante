@@ -19,4 +19,9 @@ class Rdv extends Model
     ];
 
     public $timestamps = false;
+
+    public function service()
+    {
+        return $this->belongsTo(Service::class, 'idService');
+    }
 }
