@@ -15,11 +15,13 @@ class RendezVousComponent extends Component
     public $rdv;
     public $selectedTime;
     public $clientSelected;
+    public $clients;
     public $filter;
     public $serviceSelected;
     public $cliniqueSelected;
     public $formattedDate;
     public $raison;
+
 
     protected $listeners = ['createRdvModal' => 'createRdvModal',
                             'timeUpdated' => 'updateTime',
@@ -34,12 +36,14 @@ class RendezVousComponent extends Component
         $this->serviceSelected = null;
         $this->cliniqueSelected = null;
         $this->raison = '';
+
+        $this->updatedFilter("");
     }
 
 
     public function createRdvModal($selectedTime) {
 
-        $this->reset();
+        $this->resetExcept("clients");
         $this->selectedTime = $selectedTime;
 
         Carbon::setLocale('fr');
@@ -68,6 +72,7 @@ class RendezVousComponent extends Component
 
     public function createRdv()
     {
+
         $this->validate([
             'clientSelected' => 'required|exists:clients,id',
             'serviceSelected' => 'required|exists:services,id',
@@ -79,7 +84,14 @@ class RendezVousComponent extends Component
             $query->where('idProfessionnel', Auth::user()->id);})
             ->where('idClient', $this->clientSelected)
         ->first();
-        #dd($dossier->id);
+
+        dd($dossier->client->nom);
+
+        $clients = Client::where('actif', '1')
+            ->orderBy('prenom')
+            ->first();
+
+        dd($clients->dossier->dateCreation);
 
         Rdv::create([
             'dateHeureDebut' => $this->selectedTime,
@@ -114,7 +126,6 @@ class RendezVousComponent extends Component
         return view('livewire.rendez-vous-component', [
             'services' => $services,
             'cliniques' => $cliniques,
-            'clients' => $clients
         ]);
     }
 

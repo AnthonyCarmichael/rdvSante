@@ -12,7 +12,10 @@ class TransactionController extends Controller
      */
     public function index()
     {
-        //
+        return view('transaction/transactions', [
+            // D’autres paramètres peuvent être passés à la vue en les séparant par une virgule.
+            'transactions' => Transaction::all()
+            ]);
     }
 
     /**

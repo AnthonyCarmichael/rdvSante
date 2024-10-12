@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\ProfileController;
 use App\Livewire\Agenda;
 use App\Http\Controllers\ServiceController;
@@ -26,6 +27,10 @@ Route::middleware('auth')->group(function () {
 
 Route::controller(ClientController::class)->group(function() {
     Route::get('/Clients', 'index')->middleware('auth')->name('clients');
+});
+
+Route::controller(TransactionController::class)->group(function() {
+    Route::get('/Transactions', 'index')->middleware('auth')->name('transactions');
 });
 
 
@@ -62,6 +67,7 @@ Route::get('/profil/services', function () {
 Route::get('/profil/disponibilites', function () {
     return view('profil/disponibilites');
 })->middleware('auth')->name('disponibilites');
+
 
 
 require __DIR__.'/auth.php';
