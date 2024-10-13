@@ -24,4 +24,16 @@ class Rdv extends Model
     {
         return $this->belongsTo(Service::class, 'idService');
     }
+    public function dossier()
+    {
+        return $this->belongsTo(Dossier::class, 'idDossier');
+    }
+    public function client()
+    {
+        return $this->hasOneThrough(Client::class, Dossier::class, 'id', 'id', 'idDossier', 'idClient');
+    }
+    public function clinique()
+    {
+        return $this->belongsTo(Clinique::class, 'idClinique');
+    }
 }

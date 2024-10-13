@@ -20,6 +20,8 @@ class RendezVousComponent extends Component
     public $serviceSelected;
     public $cliniqueSelected;
     public $formattedDate;
+    public $formattedDateDebut;
+    public $formattedDateFin;
     public $raison;
 
 
@@ -35,7 +37,10 @@ class RendezVousComponent extends Component
         $this->clientSelected = null;
         $this->serviceSelected = null;
         $this->cliniqueSelected = null;
-        $this->raison = '';
+        $this->formattedDate = null;
+        $this->formattedDateDebut = null;
+        $this->formattedDateFin = null;
+        $this->raison = null;
 
         $this->updatedFilter("");
     }
@@ -124,19 +129,40 @@ class RendezVousComponent extends Component
 
 
     public function consulterModalRdv(Rdv $rdv) {
-        $this->reset();
+        $this->resetExcept('clients');
         $this->rdv = $rdv;
-        dd($this);
-        /*
-        $this->id = $indispo->id;
-        $this->note = $this->tempNote = $indispo->note;
         
-        $this->dateHeureDebut = Carbon::parse($indispo->dateHeureDebut)->format('Y-m-d H:i');
-        $this->dateHeureFin = $this->tempDateHeureFin = Carbon::parse($indispo->dateHeureFin)->format('Y-m-d H:i');
+
+        #$this->selectedTime = null;
+        $this->clientSelected = $rdv->client;
+        $this->serviceSelected =  $rdv->service;
+        $this->cliniqueSelected = $rdv->clinique;
+        $this->raison = $rdv->raison;
+        
+        Carbon::setLocale('fr');
+        $this->formattedDate = Carbon::parse($rdv->dateHeureDebut);
+        $this->formattedDate = $this->formattedDate->translatedFormat('l \l\e d F Y');
+
+        $this->formattedDateDebut = Carbon::parse($rdv->dateHeureDebut);
+        $this->formattedDateDebut = $this->formattedDateDebut->translatedFormat('H:i');
+
+        $this->formattedDateFin = Carbon::parse($rdv->dateHeureDebut)->addMinutes($rdv->service->duree);
+        $this->formattedDateFin = $this->formattedDateFin->translatedFormat('H:i');
     
-        $this->dispatch('open-modal', name: 'consulterIndisponibilite');
-        #dd($this);*/
+        $this->dispatch('open-modal', name: 'consulterRdv');
+        #dd($this);
 
     }
+
+    public function annuler()
+    {
+
+        #$this->selectedTime = null;
+        $this->clientSelected = $this->rdv->client;
+        $this->serviceSelected =  $this->rdv->service;
+        $this->cliniqueSelected = $this->rdv->clinique;
+        $this->raison = $this->rdv->raison;
+    }
+
 
 }
