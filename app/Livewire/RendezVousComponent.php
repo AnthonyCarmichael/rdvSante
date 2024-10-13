@@ -98,6 +98,7 @@ class RendezVousComponent extends Component
             'idService' => $this->serviceSelected,
             'idClinique' => $this->cliniqueSelected,
             'raison' => $this->raison,
+            'actif' => true,
         ]);
 
         $this->reset();

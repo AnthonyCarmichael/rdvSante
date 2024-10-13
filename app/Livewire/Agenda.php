@@ -93,7 +93,8 @@ class Agenda extends Component
         $this->indispoArr = [];
         $this->indispoArr = Indisponibilite::where('dateHeureFin', '>=', $this->startingDate)->get();
         $this->rdvArr = [];
-        $this->rdvArr = Rdv::where('dateHeureDebut', '>=', $this->startingDate)->get();
+        $this->rdvArr = Rdv::where('dateHeureDebut', '>=', $this->startingDate)->
+            where('actif', true)->get();
         #dd($this);
     }
 

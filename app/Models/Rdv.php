@@ -15,7 +15,8 @@ class Rdv extends Model
         'idDossier',
         'idService',
         'idClinique',
-        'raison'
+        'raison',
+        'actif'
     ];
 
     public $timestamps = false;
