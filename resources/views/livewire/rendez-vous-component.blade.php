@@ -225,5 +225,4 @@
             <button @click="$dispatch('open-modal', { name: 'consulterRdv' });" class="px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white rounded">Annuler</button>
         </div>
     </x-modal>
-
 </div>
