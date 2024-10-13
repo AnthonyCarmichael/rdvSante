@@ -25,6 +25,9 @@ class RendezVousComponent extends Component
     public $raison;
 
 
+    
+
+
     protected $listeners = ['createRdvModal' => 'createRdvModal',
                             'timeUpdated' => 'updateTime',
                             'consulterModalRdv' => 'consulterModalRdv'];
@@ -138,9 +141,9 @@ class RendezVousComponent extends Component
         
 
         #$this->selectedTime = null;
-        $this->clientSelected = $rdv->client;
-        $this->serviceSelected =  $rdv->service;
-        $this->cliniqueSelected = $rdv->clinique;
+        $this->clientSelected = $rdv->client->id;
+        $this->serviceSelected =  $rdv->service->id;
+        $this->cliniqueSelected = $rdv->clinique->id;
         $this->raison = $rdv->raison;
         
         Carbon::setLocale('fr');
@@ -166,6 +169,54 @@ class RendezVousComponent extends Component
         $this->serviceSelected =  $this->rdv->service;
         $this->cliniqueSelected = $this->rdv->clinique;
         $this->raison = $this->rdv->raison;
+    }
+
+    public function modifierRdv()
+    {
+        $this->validate([
+            'clientSelected' => 'required|exists:clients,id',
+            'serviceSelected' => 'required|exists:services,id',
+            'cliniqueSelected' => 'required|exists:cliniques,id',
+            'raison' => 'nullable|string|max:255',
+        ],[
+            'clientSelected.required' => 'Le client est requis.',
+            'clientSelected.exists' => 'Le client sélectionné est invalide.',
+            'serviceSelected.required' => 'Le service est requis.',
+            'serviceSelected.exists' => 'Le service sélectionné est invalide.',
+            'cliniqueSelected.required' => 'La clinique est requise.',
+            'cliniqueSelected.exists' => 'La clinique sélectionnée est invalide.',
+            'raison.max' => 'La raison ne peut pas dépasser 255 caractères.',
+        ]);
+        
+        $rdv = Rdv::find($this->rdv->id);
+        
+        if ($rdv) {
+            #$rdv->dateHeureDebut = $this->selectedTime;
+
+            $dossier = Dossier::whereHas('professionnels', function ($query) {
+                $query->where('idProfessionnel', Auth::user()->id);})
+                ->where('idClient', $this->clientSelected)
+            ->first();
+            $rdv->idDossier = $dossier->id;
+
+            $rdv->idService = $this->serviceSelected;
+
+            $rdv->idClinique = $this->cliniqueSelected;
+            $rdv->raison = $this->raison;
+            $rdv->actif = true;
+            
+            $rdv->save();
+        }
+        else {
+            session()->flash('error', 'Rendez-vous non trouvée.');
+        }
+
+
+        $this->reset();
+        $this->dispatch('close-modal');
+        $this->dispatch('refreshAgenda');
+        $this->consulterModalRdv($rdv);
+
     }
 
     public function deleteRdv(){

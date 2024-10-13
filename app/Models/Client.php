@@ -15,6 +15,6 @@ class Client extends Model
 
     public function dossier()
     {
-        return $this->hasOne(Dossier::class, 'idClient');
+        return $this->hasMany(Dossier::class, 'idClient');
     }
 }

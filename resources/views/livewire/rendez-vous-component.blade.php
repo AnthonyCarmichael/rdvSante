@@ -60,7 +60,20 @@
     <!-- Consulter et modifier -->
     <x-modal title="Rendez-vous" name="consulterRdv" :show="false">
         <div class="bg-white p-6 rounded-lg shadow-md" x-data="{ editable: false }" @reset-editable.window="editable = false">
-            <form wire:submit.prevent="modifierIndisponibilite">
+            <form wire:submit.prevent="modifierRdv">
+
+                <div>
+                    @if ($errors->any())
+                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                            <strong class="font-bold">Erreurs :</strong>
+                            <ul class="mt-1 list-disc list-inside">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                </div>
                 <div>
                     <div x-show="!editable">
                         <p class="block text-sm font-medium text-gray-700">Date: <p class="">{{$formattedDate}}</p></p>
@@ -78,8 +91,8 @@
                     <div x-show="!editable">
                         <label class="block mt-3 text-sm font-medium text-gray-700" for="client">Client :</label>
                         <p class="">
-                            @if (isset($clientSelected))
-                                {{$clientSelected->prenom}} {{$clientSelected->nom}}
+                            @if (isset($rdv))
+                                {{$rdv->client->prenom}} {{$rdv->client->nom}}
                             @endif
                         </p>
                     </div>
@@ -93,11 +106,11 @@
                             <option class="font-bold" value="" disabled>Sélectionnez un client</option>
                             @if (!is_null($clients))
                                 @foreach($clients as $client)
-                                @if (isset($clientSelected) && $client->id == $clientSelected->id)
-                                    <option selected value="{{ $client->id }}">{{ $client->prenom." ".$client->nom }}</option>
-                                @else
-                                    <option value="{{ $client->id }}">{{ $client->prenom." ".$client->nom }}</option>
-                                @endif
+                                    @if (isset($rdv) && $client->id == $rdv->client->id)
+                                        <option selected value="{{ $client->id }}">{{ $client->prenom." ".$client->nom }}</option>
+                                    @else
+                                        <option value="{{ $client->id }}">{{ $client->prenom." ".$client->nom }}</option>
+                                    @endif
                                 @endforeach
                             @endif
                         </select>
@@ -110,8 +123,8 @@
                     <div x-show="!editable">
                         <label class="block text-sm font-medium text-gray-700" for="client">Service :</label>
                         <p class="">
-                            @if (isset($serviceSelected))
-                                {{$serviceSelected->nom}}
+                            @if (isset($rdv))
+                                {{$rdv->service->nom}}
                             @endif
                         </p>
                     </div>
@@ -122,7 +135,7 @@
                             <option class="font-bold" value="">Sélectionnez un service</option>
                             @if (!is_null($services))
                                 @foreach($services as $service)
-                                    @if (isset($serviceSelected) && $service->id == $serviceSelected->id)
+                                    @if (isset($rdv) && $service->id == $rdv->service->id)
                                         <option selected value="{{ $service->id }}">{{ $service->nom }}</option>
                                     @else
                                         <option value="{{ $service->id }}">{{ $service->nom }}</option>
@@ -139,8 +152,8 @@
                     <div x-show="!editable">
                         <label class="block text-sm font-medium text-gray-700" for="client">Clinique :</label>
                         <p class="">
-                            @if (isset($cliniqueSelected))
-                                {{$cliniqueSelected->nom}}
+                            @if (isset($rdv))
+                                {{$rdv->clinique->nom}}
                             @endif
                         </p>
                     </div>
@@ -152,7 +165,11 @@
                             <option class="font-bold" value="">Sélectionnez une clinique</option>
                             @if (!is_null($cliniques))
                                 @foreach($cliniques as $clinique)
-                                    <option value="{{ $clinique->id }}">{{ $clinique->nom }}</option>
+                                    @if (isset($rdv) && $clinique->id == $rdv->clinique->id)
+                                        <option selected value="{{ $clinique->id }}">{{ $clinique->nom }}</option>
+                                    @else
+                                        <option value="{{ $clinique->id }}">{{ $clinique->nom }}</option>
+                                    @endif
                                 @endforeach
                             @endif
                         </select>
