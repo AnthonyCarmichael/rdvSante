@@ -69,5 +69,8 @@ Route::get('/profil/disponibilites', function () {
 })->middleware('auth')->name('disponibilites');
 
 
+Route::get('/rendezVous', function () {
+    return view('rendezVous');
+})->middleware('auth')->name('agenda');
 
 require __DIR__.'/auth.php';
