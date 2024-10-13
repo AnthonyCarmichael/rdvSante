@@ -85,13 +85,6 @@ class RendezVousComponent extends Component
             ->where('idClient', $this->clientSelected)
         ->first();
 
-        dd($dossier->client->nom);
-
-        $clients = Client::where('actif', '1')
-            ->orderBy('prenom')
-            ->first();
-
-        dd($clients->dossier->dateCreation);
 
         Rdv::create([
             'dateHeureDebut' => $this->selectedTime,

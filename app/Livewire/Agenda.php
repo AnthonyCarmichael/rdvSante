@@ -92,6 +92,9 @@ class Agenda extends Component
     public function refreshAgenda(){
         $this->indispoArr = [];
         $this->indispoArr = Indisponibilite::where('dateHeureFin', '>=', $this->startingDate)->get();
+        $this->rdvArrArr = [];
+        $this->rdvArrArr = Rdv::where('dateHeureDebut', '>=', $this->startingDate)->get();
+        dd($this->rdvArr);
     }
 
     public function fullRefresh($startingDate){
