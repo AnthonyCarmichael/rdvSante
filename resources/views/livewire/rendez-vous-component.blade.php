@@ -203,9 +203,6 @@
         <p class="block text-sm font-medium text-gray-700">Êtes-vous sûr de vouloir supprimer ce rendez-vous ?</p>
         <p class="block text-sm font-medium text-gray-700">Si des transactions ont été effectuées, le client sera <b>remboursé</b>.</p>
 
-        @error('raison')
-            <span class="text-red-500 text-sm">{{ $message }}</span>
-        @enderror
         <div class="flex mt-8">
             <button wire:click="deleteRdv" class="mr-4 px-4 py-2 bg-red-500 hover:bg-red-700 text-white rounded">Supprimer</button>
             <button @click="$dispatch('open-modal', { name: 'consulterRdv' });" class="px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white rounded">Annuler</button>
