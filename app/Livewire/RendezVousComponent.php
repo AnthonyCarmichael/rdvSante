@@ -48,7 +48,8 @@ class RendezVousComponent extends Component
 
     public function createRdvModal($selectedTime) {
 
-        $this->resetExcept("clients");
+        $this->reset();
+        $this->updatedFilter("");
         $this->selectedTime = $selectedTime;
 
         Carbon::setLocale('fr');
@@ -129,7 +130,9 @@ class RendezVousComponent extends Component
 
 
     public function consulterModalRdv(Rdv $rdv) {
-        $this->resetExcept('clients');
+        $this->reset();
+        $this->updatedFilter("");
+
         $this->rdv = $rdv;
         
 
@@ -162,6 +165,19 @@ class RendezVousComponent extends Component
         $this->serviceSelected =  $this->rdv->service;
         $this->cliniqueSelected = $this->rdv->clinique;
         $this->raison = $this->rdv->raison;
+    }
+
+    public function deleteRdv(){
+        
+        if ($this->rdv->transactions()->exists()) {
+            dd(); // As tester et gèrer
+        } else {
+            $deleted = Rdv::destroy($this->rdv->id);
+            $this->resetExcept('clients');
+        }
+        $this->dispatch('close-modal');
+        $this->dispatch('refreshAgenda');
+
     }
 
 

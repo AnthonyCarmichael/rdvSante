@@ -36,4 +36,9 @@ class Rdv extends Model
     {
         return $this->belongsTo(Clinique::class, 'idClinique');
     }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class, 'idRdv');
+    }
 }
