@@ -12,40 +12,48 @@ class AjouterService extends Component
     public $services;
     public $professions;
 
-    public $serviceIdToDelete = null;
-    public $showDeleteModal = false;
+    public $serviceIdToDelete;
+    public $showDeleteModal;
 
     public $nomservice;
     public $professionservice;
     public $descriptionservice;
     public $dureeservice;
     public $prixservice;
-    public $taxableservice = false;
+    public $taxableservice;
     public $dureepause;
-    public $checkboxpause = false;
-    public $checkboxrdv = false;
+    public $checkboxpause;
+    public $checkboxrdv;
     public $tempsavantrdv;
-    public $personneacharge = false;
+    public $personneacharge;
 
     public $users;
     public $service_id;
 
-    public $search = '';
-    public $sortField = 'nom';
-    public $sortDirection = 'asc';
+    public $search;
+    public $sortField;
+    public $sortDirection;
 
     public $searchQuery;
 
     public function mount()
     {
+        $this->search = '';
+        $this->sortField = 'nom';
+        $this->sortDirection = 'asc';
+
+        $this->taxableservice = false;
+        $this->checkboxpause = false;
+        $this->checkboxrdv = false;
+        $this->personneacharge = false;
+
+        $this->serviceIdToDelete = null;
+        $this->showDeleteModal = false;
+
         $this->services = Service::where('idProfessionnel', Auth::user()->id)->get();
         $this->professions = Profession::all();
+        $this->updatedSearch("");
         #dd($this->professions);
-    }
-
-    public function refreshTable()
-    {
-        $this->services = Service::where('idProfessionnel', Auth::user()->id)->get();
     }
 
     public function openModalAjouterService()
@@ -54,27 +62,18 @@ class AjouterService extends Component
         $this->dispatch('open-modal', name : 'ajouterService');
     }
 
-    public function loadServices()
+    public function updatedSearch($value)
     {
-        return Service::where('idProfessionnel', Auth::user()->id)
+        $query = Service::where('idProfessionnel', Auth::user()->id)
             ->where(function($query) {
                 $query->where('nom', 'like', '%' . $this->search . '%')
                     ->orWhere('description', 'like', '%' . $this->search . '%')
                     ->orWhere('prix', 'like', '%' . $this->search . '%')
                     ->orWhere('duree', 'like', '%' . $this->search . '%');
             })
-            ->orderBy($this->sortField, $this->sortDirection)
-            ->get();
-    }
+            ->orderBy($this->sortField, $this->sortDirection);
 
-    public function searchServices()
-    {
-        $this->searchQuery = $this->search;
-    }
-
-    public function updatedSearch()
-    {
-        $this->services = $this->loadServices();
+        $this->services = $query->get();
     }
 
     public function sortBy($field)
@@ -86,25 +85,7 @@ class AjouterService extends Component
             $this->sortDirection = 'asc';
         }
 
-        $this->services = $this->loadServices();
-    }
-
-    public function getInfoService($id)
-    {
-        $service = Service::findOrFail($id);
-        $this->service_id = $service->id;
-        $this->nomservice = $service->nom;
-        $this->professionservice = $service->idProfessionService;
-        $this->descriptionservice = $service->description;
-        $this->dureeservice = $service->duree;
-        $this->prixservice = $service->prix;
-        $this->taxableservice = $service->taxable;
-        $this->dureepause = $service->minutePause;
-        $this->checkboxrdv = $service->nombreHeureLimiteReservation > 0;
-        $this->tempsavantrdv = $service->nombreHeureLimiteReservation;
-        $this->personneacharge = $service->droitPersonneACharge;
-
-        $this->dispatch('open-modal', name: 'modifierService');
+        $this->services = $this->updatedSearch($this->search);
     }
 
     public function consulterService($id)
@@ -242,7 +223,7 @@ class AjouterService extends Component
             ]);
 
             $this->resetExcept('services', 'professions');
-            $this->refreshTable();
+            $this->services = Service::where('idProfessionnel', Auth::user()->id)->get();
             $this->dispatch('close-modal');
         }
     }

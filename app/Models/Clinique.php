@@ -10,6 +10,16 @@ class Clinique extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'nom',
+        'rue',
+        'noCivique',
+        'codePostal',
+        'idVille'
+    ];
+
+    public $timestamps = false;
+
     public function professionnels(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'clinique_professionnels','idClinique','user_id');
