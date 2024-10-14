@@ -45,7 +45,6 @@
                     <!-- Section 3 -->
                     <div class="p-5 bg-white rounded shadow-md">
                         <h2 class="text-lg font-bold">Résumé</h2>
-                        <p>Envoi</p>
                         <div class="flex justify-between">
                             <button type="button"  wire:click="backStep" class="mt-4 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-700">Précédent</button>
                             <button type="submit" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">Confirmer</button>
