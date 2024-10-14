@@ -22,6 +22,7 @@ export default {
                 'pale-green':'#DDF0E6',
                 'green':'#79AC78',
                 'table-green':'#CAD9CD',
+                'flash-green':'#3cc02b',
               },
         },
     },
