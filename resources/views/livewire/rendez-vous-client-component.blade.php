@@ -35,8 +35,8 @@
                         <h2 class="text-lg font-bold">Sélectionnez un professionnel</h2>
 
                         <div class="flex justify-between">
-                            <button type="button" wire:click="backStep" class="mt-4 px-4 py-2 bg-gray-500 text-white rounded">Précédent</button>
-                            <button type="button" wire:click="nextStep" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded">Suivant</button>
+                            <button type="button" wire:click="backStep" class="mt-4 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-700">Précédent</button>
+                            <button type="button" wire:click="nextStep" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">Suivant</button>
                         </div>
                     </div>
                     @break
@@ -47,8 +47,8 @@
                         <h2 class="text-lg font-bold">Résumé</h2>
                         <p>Merci d'avoir rempli le formulaire. Cliquez sur "Confirmer" pour soumettre.</p>
                         <div class="flex justify-between">
-                            <button type="button"  wire:click="backStep" class="mt-4 px-4 py-2 bg-gray-500 text-white rounded">Précédent</button>
-                            <button type="submit" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded">Confirmer</button>
+                            <button type="button"  wire:click="backStep" class="mt-4 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-700">Précédent</button>
+                            <button type="submit" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">Confirmer</button>
                         </div>
 
                     </div>
