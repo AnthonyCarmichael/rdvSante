@@ -47,9 +47,6 @@ class AjouterService extends Component
         $this->checkboxrdv = false;
         $this->personneacharge = false;
 
-        $this->serviceIdToDelete = null;
-        $this->showDeleteModal = false;
-
         $this->services = Service::where('idProfessionnel', Auth::user()->id)->get();
         $this->professions = Profession::all();
         $this->updatedSearch("");

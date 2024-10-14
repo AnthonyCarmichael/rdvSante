@@ -284,6 +284,24 @@
         </x-modal>
     </div>
 
+    @if ($showDeleteModal)
+        <div class="fixed inset-0 z-50 flex items-center justify-center">
+            <div class="bg-white p-6 rounded shadow-lg">
+                <p>Êtes-vous sûr de vouloir supprimer cette clinique ?</p>
+                <div class="flex justify-between mt-4">
+                    <button wire:click="deleteService" class="bg-red-500 text-white px-4 py-2">
+                        Confirmer
+                    </button>
+                    <button wire:click="cancelDelete" class="bg-gray-500 text-white px-4 py-2">
+                        Annuler
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="fixed inset-0 bg-black opacity-50 z-40"></div>
+    @endif
+
 
 </div>
 

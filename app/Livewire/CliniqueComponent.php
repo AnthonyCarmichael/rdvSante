@@ -17,6 +17,9 @@ class CliniqueComponent extends Component
     public $codePostalClinique;
     public $villeClinique;
 
+    public $cliniqueIdToDelete;
+    public $showDeleteModal;
+
     public $cliniques;
     public $villes;
     public $foundCliniques;
@@ -167,6 +170,27 @@ class CliniqueComponent extends Component
             $this->cliniques = Auth::user()->cliniques;
             $this->dispatch('close-modal');
         }
+    }
+
+    public function confirmDelete($id)
+    {
+        $this->cliniqueIdToDelete = $id;
+        $this->showDeleteModal = true;
+    }
+
+    public function deleteService()
+    {
+        if ($this->cliniqueIdToDelete) {
+            Clinique::find($this->cliniqueIdToDelete)->delete();;
+        }
+
+        $this->mount();
+        $this->reset('cliniqueIdToDelete', 'showDeleteModal');
+    }
+
+    public function cancelDelete()
+    {
+        $this->reset('cliniqueIdToDelete', 'showDeleteModal');
     }
 
     public function sortBy($field)
