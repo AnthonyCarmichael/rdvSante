@@ -20,12 +20,12 @@ class AjouterService extends Component
     public $descriptionservice;
     public $dureeservice;
     public $prixservice;
-    public $taxableservice;
+    public $taxableservice = false;
     public $dureepause;
     public $checkboxpause;
     public $checkboxrdv;
     public $tempsavantrdv;
-    public $personneacharge;
+    public $personneacharge = false;
 
     public $users;
     public $service_id;
@@ -42,10 +42,8 @@ class AjouterService extends Component
         $this->sortField = 'nom';
         $this->sortDirection = 'asc';
 
-        $this->taxableservice = false;
         $this->checkboxpause = false;
         $this->checkboxrdv = false;
-        $this->personneacharge = false;
 
         $this->services = Service::where('idProfessionnel', Auth::user()->id)->get();
         $this->professions = Profession::all();
