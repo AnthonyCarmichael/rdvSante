@@ -22,7 +22,7 @@
 
                         @foreach($users as $user)
                             @if ($user->id==1)
-                                <div class="flex border-y py-6 hover:bg-stone-200 cursor-pointer"  wire:click="getProfessionnelId({{ $user->id }})">
+                                <div class="flex items-center border-y py-6 hover:bg-stone-200 cursor-pointer"  wire:click="getProfessionnelId({{ $user->id }})">
                                     <div>
                                         <img src="{{ asset('img/daph.jpg') }}" alt="imageDaph"
                                             class="mr">
@@ -35,6 +35,10 @@
                                         <p class="text-justify">
                                             Afin de contribuer à l'accessibilité des soins, Daphné offre des tarifs préférentiels pour les artistes de la scène, les étudiant-es et les personnes de 65 ans et plus.
                                         </p>
+                                    </div>
+
+                                    <div>
+                                        <p class="text-stone-300 self-center text-lg mr-4">></p>
                                     </div>
                                 </div>
                             @endif
@@ -50,13 +54,19 @@
                         <h2 class="text-lg font-bold text-center">Sélectionnez un service</h2>
                         <div class="">
                             @foreach($services as $service)
-                                <div class="border-y py-6 hover:bg-stone-200 cursor-pointer"  wire:click="getServiceId({{ $service->id }})">
-                                    <p>Service: {{$service->nom}}</p>
-                                    @if($service->description != null)
-                                        <p>description: {{$service->description}}</p>
-                                    @endif
-                                    <p>Durée: {{$service->duree}}min</p>
-                                    <p>Prix: {{$service->prix}}$</p>
+                                <div class="border-y py-6 hover:bg-stone-200 cursor-pointer flex items-center place-content-between"  wire:click="getServiceId({{ $service->id }})">
+                                    <div>
+                                        <p>Service: {{$service->nom}}</p>
+                                        @if($service->description != null)
+                                            <p>description: {{$service->description}}</p>
+                                        @endif
+                                        <p>Durée: {{$service->duree}}min</p>
+                                        <p>Prix: {{$service->prix}}$</p>
+                                    </div> 
+                                    <div>
+                                        <p class="text-stone-300 self-center text-lg mr-4">></p>
+                                    </div>
+
                                 </div>
                             @endforeach
                         </div>
@@ -74,8 +84,6 @@
                         
                     </div>
                     @break
-
-                  
                 @case(4)
                     <!-- Section 4 -->
                     <div class="p-5 bg-white rounded shadow-md">
