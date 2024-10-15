@@ -5,16 +5,19 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-class PaysSeeder extends Seeder
+class CliniqueProfessionnelSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        DB::table('pays')->insert([
-            ['nom' => 'Canada'],
-            ['nom' => 'Cameroun']
+        DB::table('clinique_professionnels')->insert([
+            [
+                'idClinique' => 1,
+                'idProfessionnel' => 1,
+            ]
+
         ]);
     }
 }

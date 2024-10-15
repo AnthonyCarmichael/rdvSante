@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Indisponibilite;
+use App\Models\Rdv;
 use Livewire\Component;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
@@ -18,6 +19,7 @@ class Agenda extends Component
     public $selectedTime;
 
     public $indispoArr;
+    public $rdvArr;
 
     public $settingDate;
 
@@ -48,7 +50,8 @@ class Agenda extends Component
 
 
         $this->indispoArr = Indisponibilite::where('dateHeureFin', '>=', $this->startingDate)->get();
-        #dd($this->startingDate);
+        $this->rdvArr = Rdv::where('dateHeureDebut', '>=', $this->startingDate)->get();
+        #dd($this->rdvArr);
     }
 
     public function setView($view)
@@ -89,6 +92,10 @@ class Agenda extends Component
     public function refreshAgenda(){
         $this->indispoArr = [];
         $this->indispoArr = Indisponibilite::where('dateHeureFin', '>=', $this->startingDate)->get();
+        $this->rdvArr = [];
+        $this->rdvArr = Rdv::where('dateHeureDebut', '>=', $this->startingDate)->
+            where('actif', true)->get();
+        #dd($this);
     }
 
     public function fullRefresh($startingDate){
@@ -143,6 +150,13 @@ class Agenda extends Component
         $this->dispatch('consulterModalIndispo', $indispo);
     }
 
+    
+    public function consulterModalRdv(Rdv $rdv) {
+
+        #dd($indispo);
+        $this->dispatch('consulterModalRdv', $rdv);
+    }
+
     public function dateChanged()
     {
         Carbon::setLocale('fr_CA');
@@ -152,5 +166,6 @@ class Agenda extends Component
         $this->fullRefresh($this->settingDate->copy());
         $this->now = Carbon::now('America/Toronto');
     }
+
 
 }

@@ -3,6 +3,10 @@
 @tailwind utilities;
 
 
-.hover-effect {
+.hover-effect-orange {
     background-color: #f9a768; /* Change la couleur de fond au survol */
+}
+
+.hover-effect-blue {
+    background-color: #3bb7ff; /* Change la couleur de fond au survol */
 }

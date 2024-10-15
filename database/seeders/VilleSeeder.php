@@ -16,6 +16,18 @@ class VilleSeeder extends Seeder
             [
                 'nom' => 'Montréal',
                 'idProvince' => '1',
+            ],
+            [
+                'nom' => 'Otawa',
+                'idProvince' => '2',
+            ],
+            [
+                'nom' => 'Douala',
+                'idProvince' => '3',
+            ],
+            [
+                'nom' => 'Québec',
+                'idProvince' => '1',
             ]
         ]);
     }

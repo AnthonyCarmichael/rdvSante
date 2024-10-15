@@ -17,7 +17,6 @@ Route::get('/agenda', function () {
     return view('agenda');
 })->middleware('auth')->name('agenda');
 
-//Route::get('/agenda', Agenda::class)->middleware('auth')->name('agenda');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->middleware('auth')->name('profile.edit');
@@ -63,11 +62,17 @@ Route::get('/profil/services', function () {
     return view('profil/services');
 })->middleware('auth')->name('services');
 
+Route::get('/clinique', function () {
+    return view('clinique');
+})->middleware('auth')->name('clinique');
 
 Route::get('/profil/disponibilites', function () {
     return view('profil/disponibilites');
 })->middleware('auth')->name('disponibilites');
 
 
+Route::get('/rendezVous', function () {
+    return view('rendezVous');
+})->middleware('auth')->name('rendezVous');
 
 require __DIR__.'/auth.php';
