@@ -70,6 +70,6 @@ Route::get('/profil/disponibilites', function () {
 
 Route::get('/rendezVous', function () {
     return view('rendezVous');
-})->middleware('auth')->name('rendezVous');
+})->name('rendezVous');
 
 require __DIR__.'/auth.php';
