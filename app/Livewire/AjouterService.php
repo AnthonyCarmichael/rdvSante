@@ -12,8 +12,8 @@ class AjouterService extends Component
     public $services;
     public $professions;
 
-    public $serviceIdToDelete;
-    public $showDeleteModal;
+    public $serviceIdToDelete = null;
+    public $showDeleteModal = false;
 
     public $nomservice;
     public $professionservice;
@@ -22,32 +22,24 @@ class AjouterService extends Component
     public $prixservice;
     public $taxableservice = false;
     public $dureepause;
-    public $checkboxpause;
-    public $checkboxrdv;
+    public $checkboxpause = false;
+    public $checkboxrdv = false;
     public $tempsavantrdv;
     public $personneacharge = false;
 
     public $users;
     public $service_id;
 
-    public $search;
-    public $sortField;
-    public $sortDirection;
+    public $search = '';
+    public $sortField = 'nom';
+    public $sortDirection = 'asc';
 
     public $searchQuery;
 
     public function mount()
     {
-        $this->search = '';
-        $this->sortField = 'nom';
-        $this->sortDirection = 'asc';
-
-        $this->checkboxpause = false;
-        $this->checkboxrdv = false;
-
-        $this->services = Service::where('idProfessionnel', Auth::user()->id)->get();
+        $this->services = Service::where('idProfessionnel', 1)->get();
         $this->professions = Profession::all();
-        $this->updatedSearch("");
         #dd($this->professions);
     }
 
@@ -57,18 +49,27 @@ class AjouterService extends Component
         $this->dispatch('open-modal', name : 'ajouterService');
     }
 
-    public function updatedSearch($value)
+    public function loadServices()
     {
-        $query = Service::where('idProfessionnel', Auth::user()->id)
+        return Service::where('idProfessionnel', 1)
             ->where(function($query) {
                 $query->where('nom', 'like', '%' . $this->search . '%')
                     ->orWhere('description', 'like', '%' . $this->search . '%')
                     ->orWhere('prix', 'like', '%' . $this->search . '%')
                     ->orWhere('duree', 'like', '%' . $this->search . '%');
             })
-            ->orderBy($this->sortField, $this->sortDirection);
+            ->orderBy($this->sortField, $this->sortDirection)
+            ->get();
+    }
 
-        $this->services = $query->get();
+    public function searchServices()
+    {
+        $this->searchQuery = $this->search;
+    }
+
+    public function updatedSearch()
+    {
+        $this->services = $this->loadServices();
     }
 
     public function sortBy($field)
@@ -80,7 +81,25 @@ class AjouterService extends Component
             $this->sortDirection = 'asc';
         }
 
-        $this->services = $this->updatedSearch($this->search);
+        $this->services = $this->loadServices();
+    }
+
+    public function getInfoService($id)
+    {
+        $service = Service::findOrFail($id);
+        $this->service_id = $service->id;
+        $this->nomservice = $service->nom;
+        $this->professionservice = $service->idProfessionService;
+        $this->descriptionservice = $service->description;
+        $this->dureeservice = $service->duree;
+        $this->prixservice = $service->prix;
+        $this->taxableservice = $service->taxable;
+        $this->dureepause = $service->minutePause;
+        $this->checkboxrdv = $service->nombreHeureLimiteReservation > 0;
+        $this->tempsavantrdv = $service->nombreHeureLimiteReservation;
+        $this->personneacharge = $service->droitPersonneACharge;
+
+        $this->dispatch('open-modal', name: 'modifierService');
     }
 
     public function consulterService($id)
@@ -218,7 +237,7 @@ class AjouterService extends Component
             ]);
 
             $this->resetExcept('services', 'professions');
-            $this->services = Service::where('idProfessionnel', Auth::user()->id)->get();
+            $this->services = Service::where('idProfessionnel', 1)->get();
             $this->dispatch('close-modal');
         }
     }
