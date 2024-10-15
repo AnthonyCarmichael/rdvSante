@@ -79,7 +79,7 @@
                         <button type="button" wire:click="backStep" class="py-1 px-2 bg-gray-300 text-white rounded hover:bg-gray-500"><</button>
                         <h2 class="text-lg font-bold text-center">Sélectionnez une heure</h2>
                         <div class="border-y py-6 hover:bg-stone-200 cursor-pointer"  wire:click="({{}})">
-
+                            <button type="button" wire:click="fetchDispoDateArr" class="py-1 px-2 bg-gray-300 text-white rounded hover:bg-gray-500">test fetchDispoDateArr</button>
                         </div>
                         
                     </div>
