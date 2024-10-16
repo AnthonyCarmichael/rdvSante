@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Transaction;
+use Codedge\Fpdf\Facades\Fpdf;
 use Livewire\Component;
 
 use App\Models\Client;
@@ -32,6 +33,7 @@ class GestionTransactions extends Component
     public $filtreType = 1;
     public $filtreClient;
     public $filtrePeriode = 1;
+    public $pdf;
     public function render()
     {
         return view('livewire.gestion-transactions');
@@ -82,6 +84,10 @@ class GestionTransactions extends Component
     public function filtrePaiement()
     {
         $Date = Carbon::now('America/Toronto');
+        $DernierMois = Carbon::now('America/Toronto')->startOfMonth();
+        $TroisDernierMois = Carbon::now('America/Toronto')->startOfMonth()->subMonths(2);
+        $SixDernierMois = Carbon::now('America/Toronto')->startOfMonth()->subMonths(5);
+        $DerniereAnnee = Carbon::now('America/Toronto')->startOfYear();
         if ($this->filtrePeriode == 1) {
             if ($this->filtreClient != null) {
                 $client = Client::select('id')->whereRaw("CONCAT(`prenom`, ' ', `nom`) = ?", [$this->filtreClient]);
@@ -109,19 +115,19 @@ class GestionTransactions extends Component
                 $dossier = Dossier::select('id')->where('idClient', '=', $client);
                 $rdvs = Rdv::select('id')->where('idDossier', '=', $dossier);
                 if ($this->filtreType == 1) {
-                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereIn('idRdv', $rdvs)->whereDate('dateHeure', '>=', $Date->subMonth())->get();
+                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereIn('idRdv', $rdvs)->whereDate('dateHeure', '>=', $DernierMois)->get();
                 } elseif ($this->filtreType == 2) {
-                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereIn('idRdv', $rdvs)->whereDate('dateHeure', '>=', $Date->subMonth())->get();
+                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereIn('idRdv', $rdvs)->whereDate('dateHeure', '>=', $DernierMois)->get();
                 } else {
-                    $this->transactions = Transaction::whereIn('idRdv', $rdvs)->whereDate('dateHeure', '>=', $Date)->get();
+                    $this->transactions = Transaction::whereIn('idRdv', $rdvs)->whereDate('dateHeure', '>=', $DernierMois)->get();
                 }
             } else {
                 if ($this->filtreType == 1) {
-                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereDate('dateHeure', '>=', $Date->subMonth())->get();
+                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereDate('dateHeure', '>=', $DernierMois)->get();
                 } elseif ($this->filtreType == 2) {
-                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereDate('dateHeure', '>=', $Date->subMonth())->get();
+                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereDate('dateHeure', '>=', $DernierMois)->get();
                 } else {
-                    $this->transactions = Transaction::whereDate('dateHeure', '>=', $Date->subMonth())->get();
+                    $this->transactions = Transaction::whereDate('dateHeure', '>=', $DernierMois)->get();
                 }
             }
         } else if ($this->filtrePeriode == 3) {
@@ -130,19 +136,19 @@ class GestionTransactions extends Component
                 $dossier = Dossier::select('id')->where('idClient', '=', $client);
                 $rdvs = Rdv::select('id')->where('idDossier', '=', $dossier);
                 if ($this->filtreType == 1) {
-                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereIn('idRdv', $rdvs)->whereDate('dateHeure', '>=', $Date->subMonths(2))->get();
+                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereIn('idRdv', $rdvs)->whereDate('dateHeure', '>=', $TroisDernierMois)->get();
                 } elseif ($this->filtreType == 2) {
-                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereIn('idRdv', $rdvs)->whereDate('dateHeure', '>=', $Date->subMonths(2))->get();
+                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereIn('idRdv', $rdvs)->whereDate('dateHeure', '>=', $TroisDernierMois)->get();
                 } else {
-                    $this->transactions = Transaction::whereIn('idRdv', $rdvs)->whereDate('dateHeure', '>=', $Date->subMonths(2))->get();
+                    $this->transactions = Transaction::whereIn('idRdv', $rdvs)->whereDate('dateHeure', '>=', $TroisDernierMois)->get();
                 }
             } else {
                 if ($this->filtreType == 1) {
-                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereDate('dateHeure', '>=', $Date->subMonths(2))->get();
+                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereDate('dateHeure', '>=', $TroisDernierMois)->get();
                 } elseif ($this->filtreType == 2) {
-                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereDate('dateHeure', '>=', $Date->subMonths(2))->get();
+                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereDate('dateHeure', '>=', $TroisDernierMois)->get();
                 } else {
-                    $this->transactions = Transaction::whereDate('dateHeure', '>=', $Date->subMonths(2))->get();
+                    $this->transactions = Transaction::whereDate('dateHeure', '>=', $TroisDernierMois)->get();
                 }
             }
         } else if ($this->filtrePeriode == 4) {
@@ -151,19 +157,19 @@ class GestionTransactions extends Component
                 $dossier = Dossier::select('id')->where('idClient', '=', $client);
                 $rdvs = Rdv::select('id')->where('idDossier', '=', $dossier);
                 if ($this->filtreType == 1) {
-                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereIn('idRdv', $rdvs)->whereDate('dateHeure', '>=', $Date->subMonths(5))->get();
+                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereIn('idRdv', $rdvs)->whereDate('dateHeure', '>=', $SixDernierMois)->get();
                 } elseif ($this->filtreType == 2) {
-                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereIn('idRdv', $rdvs)->whereDate('dateHeure', '>=', $Date->subMonths(5))->get();
+                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereIn('idRdv', $rdvs)->whereDate('dateHeure', '>=', $SixDernierMois)->get();
                 } else {
-                    $this->transactions = Transaction::whereIn('idRdv', $rdvs)->whereDate('dateHeure', '>=', $Date->subMonths(5))->get();
+                    $this->transactions = Transaction::whereIn('idRdv', $rdvs)->whereDate('dateHeure', '>=', $SixDernierMois)->get();
                 }
             } else {
                 if ($this->filtreType == 1) {
-                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereDate('dateHeure', '>=', $Date->subMonths(5))->get();
+                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereDate('dateHeure', '>=', $SixDernierMois)->get();
                 } elseif ($this->filtreType == 2) {
-                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereDate('dateHeure', '>=', $Date->subMonths(5))->get();
+                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereDate('dateHeure', '>=', $SixDernierMois)->get();
                 } else {
-                    $this->transactions = Transaction::whereDate('dateHeure', '>=', $Date->subMonths(5))->get();
+                    $this->transactions = Transaction::whereDate('dateHeure', '>=', $SixDernierMois)->get();
                 }
             }
         } else if ($this->filtrePeriode == 5) {
@@ -172,19 +178,19 @@ class GestionTransactions extends Component
                 $dossier = Dossier::select('id')->where('idClient', '=', $client);
                 $rdvs = Rdv::select('id')->where('idDossier', '=', $dossier);
                 if ($this->filtreType == 1) {
-                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereIn('idRdv', $rdvs)->whereDate('dateHeure', '>=', $Date->subYear())->get();
+                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereIn('idRdv', $rdvs)->whereDate('dateHeure', '>=', $DerniereAnnee)->get();
                 } elseif ($this->filtreType == 2) {
-                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereIn('idRdv', $rdvs)->whereDate('dateHeure', '>=', $Date->subYear())->get();
+                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereIn('idRdv', $rdvs)->whereDate('dateHeure', '>=', $DerniereAnnee)->get();
                 } else {
-                    $this->transactions = Transaction::whereIn('idRdv', $rdvs)->whereDate('dateHeure', '>=', $Date)->get();
+                    $this->transactions = Transaction::whereIn('idRdv', $rdvs)->whereDate('dateHeure', '>=', $DerniereAnnee)->get();
                 }
             } else {
                 if ($this->filtreType == 1) {
-                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereDate('dateHeure', '>=', $Date->subYear())->get();
+                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereDate('dateHeure', '>=', $DerniereAnnee)->get();
                 } elseif ($this->filtreType == 2) {
-                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereDate('dateHeure', '>=', $Date->subYear())->get();
+                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereDate('dateHeure', '>=', $DerniereAnnee)->get();
                 } else {
-                    $this->transactions = Transaction::whereDate('dateHeure', '>=', $Date->subYear())->get();
+                    $this->transactions = Transaction::whereDate('dateHeure', '>=', $DerniereAnnee)->get();
                 }
             }
         } else if ($this->filtrePeriode == 6) {
@@ -209,5 +215,17 @@ class GestionTransactions extends Component
                 }
             }
         }
+    }
+
+    public function envoyerRecu()
+    {
+        $this->pdf = new Fpdf;
+        $this->pdf::SetFont('Arial', '', 15);
+        $this->pdf::AddPage("L", ['100', '100']);
+        $this->pdf::Text(10, 10, "Hello World!");
+
+        $this->pdf::Output( 'I', 'fichier.pdf');
+
+        exit;
     }
 }
