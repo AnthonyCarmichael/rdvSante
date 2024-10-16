@@ -22,6 +22,7 @@ class RendezVousClientComponent extends Component
     # Section 3
     public $dispoDateArr;
     public $startingWeek;
+    public $heureDebut;
 
     public $datesArr;
 
@@ -262,7 +263,7 @@ class RendezVousClientComponent extends Component
                 $this->startingWeek = $this->startingWeek->addWeek();
             }
         } else if ($value < 0) {
-            if ($now->diffInWeeks($this->startingWeek) >1) {
+            if ($now->diffInWeeks($this->startingWeek) >0) {
                 $this->startingWeek = $this->startingWeek->subWeek();
             }
             
@@ -291,6 +292,11 @@ class RendezVousClientComponent extends Component
 
         $this->fetchDispoDateArr();
         #dd( $this->datesArr,$this->startingWeek);
+    }
+
+    public function choixDate($value){
+        $this->heureDebut = $value;
+        dd($this);
     }
 
 

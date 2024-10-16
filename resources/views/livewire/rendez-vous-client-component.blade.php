@@ -135,7 +135,9 @@
                                                             @foreach ($dispoDateArr as $dispo)
                                                                 @if ($dispo == $selectedDateTime)
                                                                     <button class="w-full h-full bg-blue-500 "
-                                                                        value="{{$dispo}}"
+                                                                        type="button"
+                                                                        wire:click="choixDate('{{ $selectedDateTime }}')"
+                                                                        value="{{$selectedDateTime}}"
                                                                         onclick="console.log(event.target.value);"
                                                                         onmouseover="document.querySelectorAll('button[value=\'{{$dispo}}\']').forEach(btn => btn.classList.add('hover-effect-blue'))"
                                                                         onmouseout="document.querySelectorAll('button[value=\'{{$dispo}}\']').forEach(btn => btn.classList.remove('hover-effect-blue'))">
