@@ -1,6 +1,7 @@
 <div>
     <label class="text-m text-right font-bold" for="name">Nom:</label>
-    <input wire:change="filtrePaiement" wire:model="filtreClient" type="text" list="filtreClient" class="h-8 text-m ml-2 mb-4">
+    <input wire:change="filtrePaiement" wire:model="filtreClient" type="text" list="filtreClient"
+        class="h-8 text-m ml-2 mb-4">
     <datalist wire:model="filtreClient" id="filtreClient" name="filtreClient" class="h-8 text-xs ml-2">
         @foreach ($clients as $c)
             <option data-value={{ $c->id }}>{{ $c->prenom }} {{ $c->nom }}</option>
@@ -79,8 +80,8 @@
                             @endif
                         @endforeach
                         <td class="w-3/12 pr-4 justify-between">
-                            <button class="w-5/12 bg-selected-green mx-0.5 my-1 rounded p-0.5" type="button"
-                                wire:click="desactiverClient({{ $t->id }})">Envoyer le reçu</button>
+                            <button class="w-5/12 bg-selected-green mx-0.5 my-1 rounded p-0.5" type="button"><a
+                                    href="{{ route('pdf') }}">Envoyer le reçu</a></button>
                             {{ $trouve = false }}
                             @foreach ($remboursements as $r)
                                 @if ($r->idTransaction == $t->id)
@@ -126,8 +127,8 @@
                             @endif
                         @endforeach
                         <td class="w-3/12 pr-4 justify-between">
-                            <button class="w-5/12 bg-selected-green mx-0.5 my-1 rounded p-0.5" type="button"
-                                wire:click="desactiverClient({{ $t->id }})">Envoyer le reçu</button>
+                            <button class="w-5/12 bg-selected-green mx-0.5 my-1 rounded p-0.5" type="button"><a
+                                    href="{{ route('pdf') }}">Envoyer le reçu</a></button>
                         </td>
                     @endif
                 </tr>
@@ -165,8 +166,8 @@
                             @endif
                         @endforeach
                         <td class="w-3/12 pr-4 justify-between">
-                            <button class="w-5/12 bg-selected-green mx-0.5 my-1 rounded p-0.5" type="button"
-                                wire:click="desactiverClient({{ $t->id }})">Envoyer le reçu</button>
+                            <button class="w-5/12 bg-selected-green mx-0.5 my-1 rounded p-0.5" type="button"><a
+                                    href="{{ route('pdf') }}">Envoyer le reçu</a></button>
                             {{ $trouve = false }}
                             @foreach ($remboursements as $r)
                                 @if ($r->idTransaction == $t->id)
@@ -212,8 +213,8 @@
                             @endif
                         @endforeach
                         <td class="w-3/12 pr-4 justify-between">
-                            <button class="w-5/12 bg-selected-green mx-0.5 my-1 rounded p-0.5" type="button"
-                                wire:click="desactiverClient({{ $t->id }})">Envoyer le reçu</button>
+                            <button class="w-5/12 bg-selected-green mx-0.5 my-1 rounded p-0.5" type="button"><a
+                                    href="{{ route('pdf') }}">Envoyer le reçu</a></button>
                         </td>
                     @endif
                 </tr>
