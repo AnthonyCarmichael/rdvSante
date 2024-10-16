@@ -45,8 +45,7 @@ class RendezVousClientComponent extends Component
             $this->step++;
         }
         if ($this->step == 3) { 
-            $this->fetchDispoDateArr();
-            
+            $this->changeWeek(0);
         }
     }
     public function backStep()
@@ -82,14 +81,14 @@ class RendezVousClientComponent extends Component
         for ($i = 0; $i < 7; $i++) {
             $date = $this->startingWeek->copy()->addDays($i);
             
-            // Calculer le premier dimanche de mars
-            $firstSundayOfMarch = Carbon::createFromDate($date->year, 3, 1)->next(Carbon::SUNDAY);
+            // Trouver le deuxième dimanche de mars de l'année en cours
+            $secondSundayOfMarch = Carbon::create($now->year, 3, 1)->next(Carbon::SUNDAY)->addWeek();
             
             // Calculer le premier dimanche de novembre
             $firstSundayOfNovember = Carbon::createFromDate($date->year, 11, 1)->next(Carbon::SUNDAY);
         
             // Vérifiez si la date est entre ces deux dates
-            if ($date->greaterThanOrEqualTo($firstSundayOfMarch) && $date->lessThan($firstSundayOfNovember)) {
+            if ($date->greaterThanOrEqualTo($secondSundayOfMarch) && $date->lessThan($firstSundayOfNovember)) {
                 // Heure d'été (UTC - 4)
                 // Pas besoin de changer ici, car nous gérons déjà le fuseau horaire avec 'America/Toronto'
                 $date->setTimezone('America/Toronto'); 
@@ -258,16 +257,27 @@ class RendezVousClientComponent extends Component
             $timezone = 'America/Toronto'; // UTC-4 pour l'heure d'été
         }
 
-        // Mettre à jour la semaine
         if ($value > 0) {
-            $this->startingWeek = $this->startingWeek->addWeek();
-        } else {
-            $this->startingWeek = $this->startingWeek->subWeek();
+            if ($now->diffInMonths($this->startingWeek) <= 3) {
+                $this->startingWeek = $this->startingWeek->addWeek();
+            }
+        } else if ($value < 0) {
+            if ($now->diffInWeeks($this->startingWeek) >1) {
+                $this->startingWeek = $this->startingWeek->subWeek();
+            }
+            
         }
 
         // Appliquer le fuseau horaire pour la semaine de départ
         $this->startingWeek->setTimezone($timezone);
         $this->refresh();
+
+        if(empty($this->dispoDateArr))
+        {
+            $this->changeWeek(1);
+        }
+        
+
 
     }
 
@@ -283,11 +293,6 @@ class RendezVousClientComponent extends Component
         #dd( $this->datesArr,$this->startingWeek);
     }
 
-    public function changementHeure($date){
-
-        return $date;
-    }
-    
 
     public function rdvClient(){
         dd($this);
