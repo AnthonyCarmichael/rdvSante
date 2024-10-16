@@ -120,10 +120,6 @@ class RendezVousClientComponent extends Component
             #var_dump($i);
             foreach ($disponibilites as $dispo) {
                 
-                #DÉCOMMENTER
-                #$dateTemp->setTime(7, 0); 
-
-
                 # Gèrer le timzone ici
                 $dateTemp = $this->datesArr[$i]->copy();
                 $dateTemp->setTime(7, 0); 
@@ -138,7 +134,7 @@ class RendezVousClientComponent extends Component
                 
                 $goodDay = false;
                 # Vérification si le professionnel à mit disponible cette journée
-                if($dateTemp->translatedFormat('l') == strtolower($dispo->jours->nom) &&  $dateTemp->greaterThanOrEqualTo($now->copy()->addWeek())){
+                if($dateTemp->translatedFormat('l') == strtolower($dispo->jours->nom)){
                     
                     $goodDay = true;
                     $goodDispo = $dispo;
@@ -182,8 +178,6 @@ class RendezVousClientComponent extends Component
                                         // Si dateTemp chevauche toute l'indisponibilité
                                         ($dateTemp <= $dateDebut && $dateTempEndAvecService >= $dateFin)
                                     ) {
-                                        if($i ==1 && $j == 6)
-                                            dd($dateTemp,$dateTempEndAvecService,$dateDebut, $dateFin);
                                         $findIndispo = true;
                                         #dd($dateDebut,$dateFin,$dateTemp, $findIndispo);
                                         break;
@@ -213,8 +207,11 @@ class RendezVousClientComponent extends Component
                                 }
             
                                 if (!$findIndispo) {
-                                    $this->dispoDateArr[] = $dateTemp->copy();
-                                    #dd("pas d'indispo ajouter cette date dans le arrDateDispo",$dateTemp);
+                                    if ($now->diffInHours($dateTemp) >= 1) {
+                                        $this->dispoDateArr[] = $dateTemp->copy();
+                                        #dd("pas d'indispo ajouter cette date dans le arrDateDispo",$dateTemp);
+                                    }
+
                                 }
                             }
                             $dateTemp->modify('+30 minutes');
