@@ -136,7 +136,7 @@
                                                                     onclick="console.log(event.target.value);"
                                                                     onmouseover="document.querySelectorAll('button[value=\'{{$dispo}}\']').forEach(btn => btn.classList.add('hover-effect-blue'))"
                                                                     onmouseout="document.querySelectorAll('button[value=\'{{$dispo}}\']').forEach(btn => btn.classList.remove('hover-effect-blue'))">
-                                                                    <span class="invisible">Réserver</span>
+                                                                    <span class="invisible">Disponible</span>
                                                                 </button>
                                                                 @break
                                                             @endif
