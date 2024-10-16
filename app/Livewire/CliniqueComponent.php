@@ -24,21 +24,20 @@ class CliniqueComponent extends Component
     public $villes;
     public $foundCliniques;
 
-    public $search;
-    public $sortField;
-    public $sortDirection;
+    public $search = '';
+    public $sortField = 'nom';
+    public $sortDirection = 'asc';
 
     public $searchQuery;
 
     public function mount() {
-        $this->search = '';
-        $this->sortField = 'nom';
-        $this->sortDirection = 'asc';
 
-        $this->cliniques = Auth::user()->cliniques;
+        $this->foundCliniques = Clinique::all();
         $this->villes = Ville::all();
-        $this->updatedSearch("");
-        #dd($this->cliniques );
+
+        #$this->foundCliniques = Auth::user()->cliniques;
+
+        $this->foundCliniques = Clinique::all();
     }
 
     public function resetFilters()
@@ -101,7 +100,7 @@ class CliniqueComponent extends Component
             'rueClinique' => 'required|string|max:255',
             'noCiviqueClinique' => 'nullable|integer|min:0',
             'codePostalClinique' => 'required|string|max:255|regex:/^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/',
-            'villeClinique' => 'required|exists:professions,id'
+            'villeClinique' => 'required|exists:villes,id'
         ];
 
         return $rules;
@@ -119,7 +118,7 @@ class CliniqueComponent extends Component
             'idVille' => $this->villeClinique
         ]);
 
-        $this->cliniques = Auth::user()->cliniques;
+        $this->foundCliniques = Clinique::all();
 
         $this->resetExcept('foundCliniques','villes');
         $this->dispatch('close-modal');
@@ -167,7 +166,8 @@ class CliniqueComponent extends Component
             ]);
 
             $this->resetExcept('foundCliniques', 'villes');
-            $this->cliniques = Auth::user()->cliniques;
+
+        $this->foundCliniques = Clinique::all();
             $this->dispatch('close-modal');
         }
     }

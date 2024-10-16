@@ -22,4 +22,9 @@ class Disponibilite extends Model
         return $this->belongsToMany(User::class, 'diponibilite_professionnels','idDisponibilite','user_id');
     }
 
+    public function jours()
+    {
+        return $this->belongsTo(Jour::class, 'idJour');
+    }
+
 }

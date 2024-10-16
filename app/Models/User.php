@@ -14,7 +14,7 @@ class User extends Authenticatable
 
     public function disponibilites(): BelongsToMany
     {
-        return $this->belongsToMany(Disponibilite::class, 'disponibilite_professionnels','user_id','idDisponibilite');
+        return $this->belongsToMany(Disponibilite::class, 'diponibilite_professionnels','id_user','idDisponibilite');
     }
 
     public function dossiers(): BelongsToMany
@@ -30,6 +30,11 @@ class User extends Authenticatable
     public function professions()
     {
         return $this->belongsToMany(Profession::class, 'profession_professionnels','user_id','idProfession');
+    }
+
+    public function indisponibilites()
+    {
+        return $this->hasMany(Indisponibilite::class, 'idProfessionnel');
     }
 
 
