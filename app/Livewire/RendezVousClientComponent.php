@@ -130,9 +130,7 @@ class RendezVousClientComponent extends Component
                 $dateToCheck = Carbon::createFromFormat('Y-m-d', '2024-11-03', 'America/Toronto');
 
                 
-                if ($dateTemp->isSameDay($dateToCheck) ) {
-                    dd($this->datesArr,$dateTemp);
-                }
+
                 ############################################################################################
                 
                 $dateTempEndAvecService = $dateTemp->copy();
@@ -154,6 +152,8 @@ class RendezVousClientComponent extends Component
         
                             $heureDebut->setDateFrom($dateTemp);
                             $heureFin->setDateFrom($dateTemp);
+
+
         
                             /*
                             if ($i == 1 && $j == 7) {
@@ -161,6 +161,8 @@ class RendezVousClientComponent extends Component
                             }
                             */
                             if ($dateTemp->between($heureDebut, $heureFin) && $dateTempEndAvecService->between($heureDebut, $heureFin)) {
+
+
                                 #dd($this,$i,$j,$dateTemp,$dateTempEndAvecService,$heureDebut,$heureFin);
                                 foreach ($weekIndisponibilites as $indispo) {
         
@@ -226,7 +228,10 @@ class RendezVousClientComponent extends Component
             $dateTemp->modify('+1 day');
         }
         
-        #dd($this->dispoDateArr);
+        if ($this->startingWeek->isSameDay($dateToCheck) ) {
+            #dd($this);
+        }
+
         #$rdvs;
 
         # verification indispo ($indispo->dateHeureDebut <= $selectedDateTime && $indispo->dateHeureFin > $selectedDateTime )
@@ -235,14 +240,36 @@ class RendezVousClientComponent extends Component
     }
 
     public function changeWeek($value) {
+        // Déterminer la date actuelle
+        $now = Carbon::now('America/Toronto');
+
+        // Déterminer le fuseau horaire approprié
+        $timezone = 'America/Toronto'; // Valeur par défaut
+
+        // Trouver le premier dimanche de novembre de l'année en cours
+        $firstSundayOfNovember = Carbon::create($now->year, 11, 1)->next(Carbon::SUNDAY);
+        
+        // Trouver le deuxième dimanche de mars de l'année en cours
+        $secondSundayOfMarch = Carbon::create($now->year, 3, 1)->next(Carbon::SUNDAY)->addWeek();
+
+        // Vérifier si la date actuelle est entre le premier dimanche de novembre et le deuxième dimanche de mars
+        if ($now->between($firstSundayOfNovember, $secondSundayOfMarch)) {
+            // Appliquer l'heure d'hiver (UTC-5)
+            $timezone = 'America/Toronto'; // UTC-5 pour l'heure d'hiver
+        } else {
+            // Appliquer l'heure d'été (UTC-4)
+            $timezone = 'America/Toronto'; // UTC-4 pour l'heure d'été
+        }
+
+        // Mettre à jour la semaine
         if ($value > 0) {
-            // Avancer d'une semaine
             $this->startingWeek = $this->startingWeek->addWeek();
         } else {
-            // Reculer d'une semaine
             $this->startingWeek = $this->startingWeek->subWeek();
         }
-        #dd( $this->startingWeek);
+
+        // Appliquer le fuseau horaire pour la semaine de départ
+        $this->startingWeek->setTimezone($timezone);
         $this->refresh();
 
     }
