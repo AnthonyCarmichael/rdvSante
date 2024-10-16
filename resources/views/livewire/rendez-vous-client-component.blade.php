@@ -131,11 +131,11 @@
                                                             @if ($dispo == $selectedDateTime)
 
                                                                 
-                                                                <button class="absolute top-0 left-0 w-full h-full bg-orange-500 "
+                                                                <button class="absolute top-0 left-0 w-full h-full bg-blue-500 "
                                                                     value="{{$dispo}}"
                                                                     onclick="console.log(event.target.value);"
-                                                                    onmouseover="document.querySelectorAll('button[value=\'{{$dispo}}\']').forEach(btn => btn.classList.add('hover-effect-orange'))"
-                                                                    onmouseout="document.querySelectorAll('button[value=\'{{$dispo}}\']').forEach(btn => btn.classList.remove('hover-effect-orange'))">
+                                                                    onmouseover="document.querySelectorAll('button[value=\'{{$dispo}}\']').forEach(btn => btn.classList.add('hover-effect-blue'))"
+                                                                    onmouseout="document.querySelectorAll('button[value=\'{{$dispo}}\']').forEach(btn => btn.classList.remove('hover-effect-blue'))">
                                                                 </button>
                                                                 @break
                                                             @endif
