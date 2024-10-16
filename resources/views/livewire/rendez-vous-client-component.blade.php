@@ -79,89 +79,92 @@
                         <button type="button" wire:click="backStep" class="py-1 px-2 bg-gray-300 text-white rounded hover:bg-gray-500"><</button>
                         <h2 class="text-lg font-bold text-center">Sélectionnez une heure</h2>
                         <div class="border-y py-6">
-                            
-                        <table class="table-fixed w-full text-sm text-stone-700 text-xs">
-                            <thead>
-                                <tr class="bg-stone-200">
-                                    <!-- Titre col -->
-                                    <th class="">Heure </th>
+                            <div class="flex justify-between">
+                                <button type="button" wire:click="changeWeek(-1)"><</button>
+                                <h3>{{$startingWeek->translatedFormat('F')}}</h3>
+                                <button type="button" wire:click="changeWeek(1)">></button>
+                            </div>
 
-                                    <?php
-                                    foreach ($datesArr as $date) {?>
-                                        <th class="">{{$date->isoFormat('ddd D')}}</th>
+                            <table class="table-fixed w-full text-sm text-stone-700 text-xs">
+                                <thead>
+                                    <tr class="bg-stone-200">
+                                        <!-- Titre col -->
+                                        <th class="">Heure </th>
+
                                         <?php
-                                    }
-                                    ?>
-                                </tr>
-                            </thead>
-                            <tbody>
-
-                                <?php
-                                $selectedDateTime = $startingWeek->copy();
-                                $selectedDateTime->setTime(7, 0, 0);
-
-                                for ($i=0; $i < 30; $i++) {
-
-                                    ?>
-
-                                    <!-- Gestion de l'aternance des couleurs dans l'agenda -->
-                                    @if(($i %2)==0)
-                                        <tr class="bg-gray-100 text-center">
-
-                                    @else
-                                        <tr class=" bg-gray-200 text-center">
-                                    @endif
-
-                                    <!-- colonne temps -->
-                                    <td class=""><?php echo $selectedDateTime->format('H:i') ?></td>
-
-                                        <!-- colonne interactive de l'agenda -->
-                                        <?php
-
-                                            for ($j=0; $j <7; $j++) {
-                                                ?>
-                                                <!-- Cellule intéractible -->
-                                                <td class="">
-                                                    <!-- verification cellule dispo -->
-                                                    @if (!empty($dispoDateArr))
-
-                                                        @foreach ($dispoDateArr as $dispo)
-
-                                                            
-                                                            @if ($dispo == $selectedDateTime)
-
-                                                                
-                                                                <button class="w-full h-full bg-blue-500 "
-                                                                    value="{{$dispo}}"
-                                                                    onclick="console.log(event.target.value);"
-                                                                    onmouseover="document.querySelectorAll('button[value=\'{{$dispo}}\']').forEach(btn => btn.classList.add('hover-effect-blue'))"
-                                                                    onmouseout="document.querySelectorAll('button[value=\'{{$dispo}}\']').forEach(btn => btn.classList.remove('hover-effect-blue'))">
-                                                                    <span class="invisible">Disponible</span>
-                                                                </button>
-                                                                @break
-                                                            @endif
-                                                        @endforeach
-
-                                                    @endif
-                                                </td>
-                                                <?php
-                                                $selectedDateTime->modify('+1 day');
-                                            }
-                                            $selectedDateTime->modify('-7 day');
+                                        foreach ($datesArr as $date) {?>
+                                            <th class="">{{$date->isoFormat('ddd D')}}</th>
+                                            <?php
+                                        }
                                         ?>
                                     </tr>
+                                </thead>
+                                <tbody>
 
 
-                                <?php
-                                    $selectedDateTime->modify('+30 minutes');
-                                }
-                                ?>
+                                    <?php
+                                    $selectedDateTime = $startingWeek->copy();
+                                    $selectedDateTime->setTime(7, 0, 0);
 
-                            </tbody>
-                            <tfoot>
 
-                            </tfoot>
-                        </table>
+                                    for ($i=0; $i < 30; $i++) {
+
+                                        ?>
+
+                                        <!-- Gestion de l'aternance des couleurs dans l'agenda -->
+                                        @if(($i %2)==0)
+                                            <tr class="bg-gray-100 text-center">
+
+                                        @else
+                                            <tr class=" bg-gray-200 text-center">
+                                        @endif
+
+                                        <!-- colonne temps -->
+                                        <td class=""><?php echo $selectedDateTime->format('H:i') ?></td>
+
+                                            <!-- colonne interactive de l'agenda -->
+                                            <?php
+
+                                                for ($j=0; $j <7; $j++) {
+                                                    ?>
+                                                    <!-- Cellule intéractible -->
+                                                    <td class="">
+                                                        <!-- verification cellule dispo -->
+                                                        @if (!empty($dispoDateArr))
+
+                                                            @foreach ($dispoDateArr as $dispo)
+                                                                @if ($dispo == $selectedDateTime)
+                                                                    <button class="w-full h-full bg-blue-500 "
+                                                                        value="{{$dispo}}"
+                                                                        onclick="console.log(event.target.value);"
+                                                                        onmouseover="document.querySelectorAll('button[value=\'{{$dispo}}\']').forEach(btn => btn.classList.add('hover-effect-blue'))"
+                                                                        onmouseout="document.querySelectorAll('button[value=\'{{$dispo}}\']').forEach(btn => btn.classList.remove('hover-effect-blue'))">
+                                                                        <span class="invisible">Disponible</span>
+                                                                    </button>
+                                                                    @break
+                                                                @endif
+                                                            @endforeach
+
+                                                        @endif
+                                                    </td>
+                                                    <?php
+                                                    $selectedDateTime->modify('+1 day');
+                                                }
+                                                $selectedDateTime->modify('-7 day');
+                                            ?>
+                                        </tr>
+
+
+                                    <?php
+                                        $selectedDateTime->modify('+30 minutes');
+                                    }
+                                    ?>
+
+                                </tbody>
+                                <tfoot>
+
+                                </tfoot>
+                            </table>
                         </div>
                         
                     </div>
