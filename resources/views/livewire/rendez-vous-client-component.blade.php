@@ -107,7 +107,7 @@
                                     $selectedDateTime->setTime(7, 0, 0);
 
 
-                                    for ($i=0; $i < 30; $i++) {
+                                    for ($i=0; $i < 60; $i++) {
 
                                         ?>
 
@@ -158,7 +158,7 @@
 
 
                                     <?php
-                                        $selectedDateTime->modify('+30 minutes');
+                                        $selectedDateTime->modify('+15 minutes');
                                     }
                                     ?>
 

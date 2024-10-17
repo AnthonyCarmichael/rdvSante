@@ -73,7 +73,7 @@
                                             @foreach ($indispoArr as $indispo)
                                                 @if ($indispo->dateHeureDebut <= $selectedDateTime && $indispo->dateHeureFin > $selectedDateTime )
 
-                                                    <button class=" {{ $selectedDateTime <= $now && $now < $selectedDateTime->copy()->addMinutes(30) ? 'border-2 border-blue-700' : ' ' }} absolute top-0 left-0 w-full h-full bg-orange-500 "
+                                                    <button class=" {{ $selectedDateTime <= $now && $now < $selectedDateTime->copy()->addMinutes(5) ? 'border-t-2 border-blue-700' : ' '  }} absolute top-0 left-0 w-full h-full bg-orange-500 "
                                                         wire:click="consulterModalIndispo({{$indispo}})"
                                                         value="{{$indispo->id}}"
                                                         onclick="console.log(event.target.value);"
@@ -95,7 +95,7 @@
                                                     $debut = \Carbon\Carbon::parse($rdv->dateHeureDebut);
                                                 @endphp
                                                 @if ($debut <= $selectedDateTime && $debut->addMinutes($rdv->service->duree) > $selectedDateTime)
-                                                    <button class=" {{ $selectedDateTime <= $now && $now < $selectedDateTime->copy()->addMinutes(30) ? 'border-2 border-blue-700' : ' ' }} absolute top-0 left-0 w-full h-full bg-blue-500 "
+                                                    <button class=" {{ $selectedDateTime <= $now && $now < $selectedDateTime->copy()->addMinutes(5) ? 'border-t-2 border-blue-700' : ' ' }} absolute top-0 left-0 w-full h-full bg-blue-500 "
                                                         wire:click="consulterModalRdv({{$rdv}})"
                                                         value="{{$rdv->id}}"
                                                         onclick="console.log(event.target.value);"

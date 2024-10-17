@@ -146,7 +146,7 @@ class RendezVousClientComponent extends Component
                     if ($goodDay) {
                         # Le professionnel à mit de dispo cette journée
                         # Vérification si il y aurait des blocs possible pour un rdv
-                        for ($j=0; $j < 30 ; $j++) {
+                        for ($j=0; $j < 60 ; $j++) {
                             $findIndispo = false;
                             $heureDebut = Carbon::parse($goodDispo->heureDebut, 'America/Toronto');
                             $heureFin = Carbon::parse($goodDispo->heureFin, 'America/Toronto');
@@ -219,8 +219,8 @@ class RendezVousClientComponent extends Component
 
                                 }
                             }
-                            $dateTemp->modify('+30 minutes');
-                            $dateTempEndAvecService->modify('+30 minutes');
+                            $dateTemp->modify('+15 minutes');
+                            $dateTempEndAvecService->modify('+15 minutes');
                         }
                     }
                 }
@@ -278,10 +278,6 @@ class RendezVousClientComponent extends Component
         // Appliquer le fuseau horaire pour la semaine de départ
         $this->startingWeek->setTimezone($timezone);
         $this->refresh();
-
-
-
-
 
     }
 
