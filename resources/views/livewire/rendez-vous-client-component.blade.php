@@ -31,7 +31,7 @@
                                         <div class="mb-8">
                                             <p class="inline ">Daphné Carmichael</p> @foreach($user->professions as $profession) <p class="inline">, {{$profession->nom}}</p> @endforeach
                                         </div>
-                
+
                                         <p class="text-justify">
                                             Afin de contribuer à l'accessibilité des soins, Daphné offre des tarifs préférentiels pour les artistes de la scène, les étudiant-es et les personnes de 65 ans et plus.
                                         </p>
@@ -62,7 +62,7 @@
                                         @endif
                                         <p>Durée: {{$service->duree}}min</p>
                                         <p>Prix: {{$service->prix}}$</p>
-                                    </div> 
+                                    </div>
                                     <div>
                                         <p class="text-stone-300 self-center text-lg mr-4">></p>
                                     </div>
@@ -79,30 +79,31 @@
                         <button type="button" wire:click="backStep" class="py-1 px-2 bg-gray-300 text-white rounded hover:bg-gray-500"><</button>
                         <h2 class="text-lg font-bold text-center">Sélectionnez une heure</h2>
                         <div class="border-y py-6">
-                            <div class="flex justify-between">
-                                <button type="button" wire:click="changeWeek(-1)"><</button>
-                                <h3>{{$startingWeek->translatedFormat('F')}}</h3>
-                                <button type="button" wire:click="changeWeek(1)">></button>
-                            </div>
 
-                            <table class="table-fixed w-full text-sm text-stone-700 text-xs">
-                                <thead>
-                                    <tr class="bg-stone-200">
-                                        <!-- Titre col -->
-                                        <th class="">Heure </th>
 
-                                        <?php
-                                        foreach ($datesArr as $date) {?>
-                                            <th class="">{{$date->isoFormat('ddd D')}}</th>
+                            @if (!empty($dispoDateArr))
+
+                                <div class="flex justify-between">
+                                    <button type="button" wire:click="changeWeek(-1)"><</button>
+                                    <h3>{{$startingWeek->translatedFormat('F')}}</h3>
+                                    <button type="button" wire:click="changeWeek(1)">></button>
+                                </div>
+
+                                <table class="table-fixed w-full text-sm text-stone-700 text-xs">
+                                    <thead>
+                                        <tr class="bg-stone-200">
+                                            <!-- Titre col -->
                                             <?php
-                                        }
-                                        ?>
-                                    </tr>
-                                </thead>
-                                <tbody>
+                                            foreach ($datesArr as $date) {?>
+                                                <th class="">{{$date->isoFormat('ddd D')}}</th>
+                                                <?php
+                                            }
+                                            ?>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
 
-
-                                    <?php
+                                    <?php dd("pas normal");
                                     $selectedDateTime = $startingWeek->copy();
                                     $selectedDateTime->setTime(7, 0, 0);
 
@@ -119,9 +120,6 @@
                                             <tr class=" bg-gray-200 text-center">
                                         @endif
 
-                                        <!-- colonne temps -->
-                                        <td class=""><?php echo $selectedDateTime->format('H:i') ?></td>
-
                                             <!-- colonne interactive de l'agenda -->
                                             <?php
 
@@ -129,26 +127,28 @@
                                                     ?>
                                                     <!-- Cellule intéractible -->
                                                     <td class="">
-                                                        <!-- verification cellule dispo -->
-                                                        @if (!empty($dispoDateArr))
-
-                                                            @foreach ($dispoDateArr as $dispo)
-                                                                @if ($dispo == $selectedDateTime)
-                                                                    <button class="w-full h-full bg-blue-500 "
-                                                                        type="button"
-                                                                        wire:click="choixDate('{{ $selectedDateTime }}')"
-                                                                        value="{{$selectedDateTime}}"
-                                                                        onclick="console.log(event.target.value);"
-                                                                        onmouseover="document.querySelectorAll('button[value=\'{{$dispo}}\']').forEach(btn => btn.classList.add('hover-effect-blue'))"
-                                                                        onmouseout="document.querySelectorAll('button[value=\'{{$dispo}}\']').forEach(btn => btn.classList.remove('hover-effect-blue'))">
-                                                                        <span class="invisible">Disponible</span>
-                                                                    </button>
-                                                                    @break
-                                                                @endif
-                                                            @endforeach
-
+                                                        <?php $isDispo= false; ?>
+                                                        @foreach ($dispoDateArr as $dispo)
+                                                            @if ($dispo == $selectedDateTime)
+                                                                <button class="w-full h-full bg-blue-500 rounded text-white"
+                                                                    type="button"
+                                                                    wire:click="choixDate('{{ $selectedDateTime }}')"
+                                                                    value="{{$selectedDateTime}}"
+                                                                    onclick="console.log(event.target.value);"
+                                                                    onmouseover="document.querySelectorAll('button[value=\'{{$dispo}}\']').forEach(btn => btn.classList.add('hover-effect-blue'))"
+                                                                    onmouseout="document.querySelectorAll('button[value=\'{{$dispo}}\']').forEach(btn => btn.classList.remove('hover-effect-blue'))">
+                                                                    {{$selectedDateTime->format('H:i')}}
+                                                                </button>
+                                                                <?php $isDispo= true; ?>
+                                                                @break
+                                                            @endif
+                                                        @endforeach
+                                                        @if ($isDispo == false)
+                                                            <span class="invisible">Indispo</span>
                                                         @endif
                                                     </td>
+
+
                                                     <?php
                                                     $selectedDateTime->modify('+1 day');
                                                 }
@@ -156,19 +156,23 @@
                                             ?>
                                         </tr>
 
+                                        <?php
+                                            $selectedDateTime->modify('+30 minutes');
+                                        }
+                                        ?>
 
-                                    <?php
-                                        $selectedDateTime->modify('+30 minutes');
-                                    }
-                                    ?>
+                                    </tbody>
+                                    <tfoot>
+                                    </tfoot>
+                                </table>
 
-                                </tbody>
-                                <tfoot>
-
-                                </tfoot>
-                            </table>
+                            @else
+                            <!-- Pas de dispo dans les trois prochain mois liste d'attente? -->
+                                <p class="mb-4"> Il n'y a pas de disponibilité dans les trois prochains mois avec la personne choisie.</p>
+                                <p> Contactez-nous pour plus d'informations ou pour prendre rendez-vous autrement.</p>
+                            @endif
                         </div>
-                        
+
                     </div>
                     @break
                 @case(4)
@@ -179,13 +183,13 @@
                         <div class="flex justify-between">
                             <button type="submit" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">Confirmer</button>
                         </div>
-                        
+
                     </div>
                     @break
             @endswitch
-        
+
         </form>
     </div>
-                    
+
 </div>
 

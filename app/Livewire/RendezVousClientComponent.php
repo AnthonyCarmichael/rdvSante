@@ -17,7 +17,7 @@ class RendezVousClientComponent extends Component
     # Section 1
     public $professionnelId;
     # Section 2
-    public $services; 
+    public $services;
     public $serviceId;
     # Section 3
     public $dispoDateArr;
@@ -28,7 +28,7 @@ class RendezVousClientComponent extends Component
 
     public function mount(){
         $now = Carbon::now(('America/Toronto'));
-        
+
 
         if ($now->isSunday())
             $this->startingWeek = $now->copy();
@@ -42,16 +42,16 @@ class RendezVousClientComponent extends Component
 
     public function nextStep()
     {
-        if ($this->step < 3) { 
+        if ($this->step < 3) {
             $this->step++;
         }
-        if ($this->step == 3) { 
+        if ($this->step == 3) {
             $this->changeWeek(0);
         }
     }
     public function backStep()
     {
-        if ($this->step > 0) { 
+        if ($this->step > 0) {
             $this->step--;
         }
     }
@@ -74,83 +74,83 @@ class RendezVousClientComponent extends Component
         $this->dispoDateArr = [];
         $profesh = User::find($this->professionnelId);
         $disponibilites = $profesh->disponibilites;
-        
+
 
         $now = Carbon::now('America/Toronto');
-        
+
         $this->datesArr = [];
         for ($i = 0; $i < 7; $i++) {
             $date = $this->startingWeek->copy()->addDays($i);
-            
+
             // Trouver le deuxième dimanche de mars de l'année en cours
             $secondSundayOfMarch = Carbon::create($now->year, 3, 1)->next(Carbon::SUNDAY)->addWeek();
-            
+
             // Calculer le premier dimanche de novembre
             $firstSundayOfNovember = Carbon::createFromDate($date->year, 11, 1)->next(Carbon::SUNDAY);
-        
+
             // Vérifiez si la date est entre ces deux dates
             if ($date->greaterThanOrEqualTo($secondSundayOfMarch) && $date->lessThan($firstSundayOfNovember)) {
                 // Heure d'été (UTC - 4)
                 // Pas besoin de changer ici, car nous gérons déjà le fuseau horaire avec 'America/Toronto'
-                $date->setTimezone('America/Toronto'); 
+                $date->setTimezone('America/Toronto');
             } else {
                 // Heure normale (UTC - 5)
-                $date->setTimezone('America/Toronto'); 
+                $date->setTimezone('America/Toronto');
             }
-            
+
             // Ajoutez la date ajustée au tableau
             $this->datesArr[] = $date;
         }
-        
+
 
         $weekIndisponibilites = $profesh->indisponibilites()
             ->where('dateHeureFin', '>=', $this->startingWeek)
             ->get();
-        
+
 
         $rdvArr = Rdv::where('dateHeureDebut', '>=', $this->startingWeek)->get();
 
         $dateTemp = $this->startingWeek->copy();
-        
+
         $endWeek = $this->startingWeek->copy()->addDays(6)->setTime(22, 0);
-        
+
         $service = Service::find($this->serviceId);
-        
-        for ($i=0; $i < 7 ; $i++) { 
+
+        for ($i=0; $i < 7 ; $i++) {
             #var_dump($i);
             foreach ($disponibilites as $dispo) {
-                
+
                 # Gèrer le timzone ici
                 $dateTemp = $this->datesArr[$i]->copy();
-                $dateTemp->setTime(7, 0); 
-                $dateToCheck = Carbon::createFromFormat('Y-m-d', '2024-11-03', 'America/Toronto');
+                $dateTemp->setTime(7, 0);
+                #$dateToCheck = Carbon::createFromFormat('Y-m-d', '2024-11-03', 'America/Toronto');
 
-                
+
 
                 ############################################################################################
-                
+
                 $dateTempEndAvecService = $dateTemp->copy();
                 $dateTempEndAvecService->addMinutes($service->duree);
-                
+
                 $goodDay = false;
                 # Vérification si le professionnel à mit disponible cette journée
                 if($dateTemp->translatedFormat('l') == strtolower($dispo->jours->nom)){
-                    
+
                     $goodDay = true;
                     $goodDispo = $dispo;
                     if ($goodDay) {
                         # Le professionnel à mit de dispo cette journée
                         # Vérification si il y aurait des blocs possible pour un rdv
-                        for ($j=0; $j < 30 ; $j++) { 
+                        for ($j=0; $j < 30 ; $j++) {
                             $findIndispo = false;
                             $heureDebut = Carbon::parse($goodDispo->heureDebut, 'America/Toronto');
                             $heureFin = Carbon::parse($goodDispo->heureFin, 'America/Toronto');
-        
+
                             $heureDebut->setDateFrom($dateTemp);
                             $heureFin->setDateFrom($dateTemp);
 
 
-        
+
                             /*
                             if ($i == 1 && $j == 7) {
                                 dd($this,$i,$j,$dateTemp,$dateTempEndAvecService,$heureDebut,$heureFin);
@@ -161,20 +161,20 @@ class RendezVousClientComponent extends Component
 
                                 #dd($this,$i,$j,$dateTemp,$dateTempEndAvecService,$heureDebut,$heureFin);
                                 foreach ($weekIndisponibilites as $indispo) {
-        
+
                                     $dateDebut = Carbon::parse($indispo->dateHeureDebut,'America/Toronto');
                                     $dateFin = Carbon::parse($indispo->dateHeureFin,'America/Toronto');
-            
+
                                     #dd("indispo debut: ",$indispo->dateHeureDebut,"indispo fin:",$indispo->dateHeureFin, "dateTemp:",$dateTemp->format('Y-m-d H:i'));
                                     #dd($dateDebut, $dateFin, $dateTemp);
-                                    
+
                                     if (
                                         // Si le début de dateTemp est dans l'indisponibilité
-                                        ($dateDebut <= $dateTemp && $dateFin > $dateTemp) || 
-                                        
+                                        ($dateDebut <= $dateTemp && $dateFin > $dateTemp) ||
+
                                         // Si la fin de dateTemp chevauche une indisponibilité
                                         ($dateDebut < $dateTempEndAvecService && $dateFin >= $dateTempEndAvecService) ||
-                                        
+
                                         // Si dateTemp chevauche toute l'indisponibilité
                                         ($dateTemp <= $dateDebut && $dateTempEndAvecService >= $dateFin)
                                     ) {
@@ -182,30 +182,30 @@ class RendezVousClientComponent extends Component
                                         #dd($dateDebut,$dateFin,$dateTemp, $findIndispo);
                                         break;
                                     }
-            
+
                                 }
-            
+
                                 foreach ($rdvArr as $rdv){
                                     $debut = Carbon::parse($rdv->dateHeureDebut,'America/Toronto');
                                     $fin = $debut->copy()->addMinutes($rdv->service->duree);
-        
+
                                     if (
                                         // Si le début de dateTemp est dans l'indisponibilité
-                                        ($debut <= $dateTemp && $fin > $dateTemp) || 
-                                        
+                                        ($debut <= $dateTemp && $fin > $dateTemp) ||
+
                                         // Si la fin de dateTemp chevauche une indisponibilité
                                         ($debut < $dateTempEndAvecService && $fin >= $dateTempEndAvecService) ||
-                                        
+
                                         // Si dateTemp chevauche toute l'indisponibilité
                                         ($dateTemp <= $debut && $dateTempEndAvecService >= $fin)
                                     )  {
-            
+
                                         $findIndispo = true;
                                         break;
                                     }
-            
+
                                 }
-            
+
                                 if (!$findIndispo) {
                                     if ($now->diffInHours($dateTemp) >= 1) {
                                         $this->dispoDateArr[] = $dateTemp->copy();
@@ -221,14 +221,15 @@ class RendezVousClientComponent extends Component
                 }
             }
 
-            
+
             $dateTemp->modify('+1 day');
         }
-        
-        if ($this->startingWeek->isSameDay($dateToCheck) ) {
-            #dd($this);
-        }
 
+        /*if ($this->startingWeek->isSameDay($dateToCheck) ) {
+            #dd($this);
+        }*/
+
+        #dd($this);
         #$rdvs;
 
         # verification indispo ($indispo->dateHeureDebut <= $selectedDateTime && $indispo->dateHeureFin > $selectedDateTime )
@@ -245,7 +246,7 @@ class RendezVousClientComponent extends Component
 
         // Trouver le premier dimanche de novembre de l'année en cours
         $firstSundayOfNovember = Carbon::create($now->year, 11, 1)->next(Carbon::SUNDAY);
-        
+
         // Trouver le deuxième dimanche de mars de l'année en cours
         $secondSundayOfMarch = Carbon::create($now->year, 3, 1)->next(Carbon::SUNDAY)->addWeek();
 
@@ -266,18 +267,18 @@ class RendezVousClientComponent extends Component
             if ($now->diffInWeeks($this->startingWeek) >0) {
                 $this->startingWeek = $this->startingWeek->subWeek();
             }
-            
+
         }
 
         // Appliquer le fuseau horaire pour la semaine de départ
         $this->startingWeek->setTimezone($timezone);
         $this->refresh();
 
-        if(empty($this->dispoDateArr))
+        if(empty($this->dispoDateArr) && $now->diffInMonths($this->startingWeek) <= 3)
         {
             $this->changeWeek(1);
         }
-        
+
 
 
     }
@@ -303,7 +304,7 @@ class RendezVousClientComponent extends Component
     public function rdvClient(){
         dd($this);
     }
-    
+
     public function render()
     {
         return view('livewire.rendez-vous-client-component');
