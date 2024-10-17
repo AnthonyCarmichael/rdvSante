@@ -14,7 +14,6 @@
 
     </div>
 
-
     <!-- Affichage de la vue sélectionnée -->
     <div class="w-full text-gray-800">
         @if($view === 'semaine')
@@ -112,9 +111,14 @@
 
 
                                         @if ($findIndispo != true)
+                                        
                                             <button type="button" wire:click="consulterModalChoixRdvIndispo('<?php echo $selectedDateTime ?>')"
-                                                    class="{{ $selectedDateTime <= $now && $now < $selectedDateTime->copy()->addMinutes(30) ? 'border-2 border-blue-700' : ' ' }} absolute top-0 left-0 w-full h-full hover:bg-blue-400">
-                                            </button>
+                                                    class="tooltip {{ $selectedDateTime <= $now && $now < $selectedDateTime->copy()->addMinutes(30) ? 'border-2 border-blue-700' : ' ' }} absolute top-0 left-0 w-full h-full hover:bg-blue-400">
+                                                    <span class="tooltiptext">{{$selectedDateTime}}</span>
+                                                </button>
+                                            
+                                        
+
                                         @endif
                                     </td>
                                     <?php
