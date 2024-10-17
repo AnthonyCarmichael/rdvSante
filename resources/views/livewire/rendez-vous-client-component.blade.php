@@ -89,6 +89,8 @@
                                 <thead>
                                     <tr class="bg-stone-200">
                                         <!-- Titre col -->
+                                        <th class="">Heure </th>
+
                                         <?php
                                         foreach ($datesArr as $date) {?>
                                             <th class="">{{$date->isoFormat('ddd D')}}</th>
@@ -117,6 +119,9 @@
                                             <tr class=" bg-gray-200 text-center">
                                         @endif
 
+                                        <!-- colonne temps -->
+                                        <td class=""><?php echo $selectedDateTime->format('H:i') ?></td>
+
                                             <!-- colonne interactive de l'agenda -->
                                             <?php
 
@@ -128,28 +133,19 @@
                                                         @if (!empty($dispoDateArr))
 
                                                             @foreach ($dispoDateArr as $dispo)
-                                                                <?php $foundDispo = false; ?>
                                                                 @if ($dispo == $selectedDateTime)
-                                                                    <?php $foundDispo = true; ?>
+                                                                    <button class="w-full h-full bg-blue-500 text-white rounded"
+                                                                        type="button"
+                                                                        wire:click="choixDate('{{ $selectedDateTime }}')"
+                                                                        value="{{$selectedDateTime}}"
+                                                                        onclick="console.log(event.target.value);"
+                                                                        onmouseover="document.querySelectorAll('button[value=\'{{$dispo}}\']').forEach(btn => btn.classList.add('hover-effect-blue'))"
+                                                                        onmouseout="document.querySelectorAll('button[value=\'{{$dispo}}\']').forEach(btn => btn.classList.remove('hover-effect-blue'))">
+                                                                        <span class="">{{$selectedDateTime->format('H:i')}}</span>
+                                                                    </button>
                                                                     @break
                                                                 @endif
                                                             @endforeach
-
-                                                            @if ($foundDispo == true)
-                                                                <button class="w-full h-full bg-blue-500 rounded text-white"
-                                                                    type="button"
-                                                                    wire:click="choixDate('{{ $selectedDateTime }}')"
-                                                                    value="{{$selectedDateTime}}"
-                                                                    onclick="console.log(event.target.value);"
-                                                                    onmouseover="document.querySelectorAll('button[value=\'{{$dispo}}\']').forEach(btn => btn.classList.add('hover-effect-blue'))"
-                                                                    onmouseout="document.querySelectorAll('button[value=\'{{$dispo}}\']').forEach(btn => btn.classList.remove('hover-effect-blue'))">
-                                                                    {{$selectedDateTime->format('H:i')}}
-                                                                </button>
-                                                            @else
-
-                                                                <span class="w-full h-full invisible">indispo</span>
-
-                                                            @endif
 
                                                         @endif
                                                     </td>
@@ -192,4 +188,3 @@
     </div>
 
 </div>
-

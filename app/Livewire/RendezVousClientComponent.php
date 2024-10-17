@@ -226,7 +226,7 @@ class RendezVousClientComponent extends Component
         }
 
         if ($this->startingWeek->isSameDay($dateToCheck) ) {
-            dd($this);
+            #dd($this);
         }
 
 
