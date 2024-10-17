@@ -87,15 +87,19 @@
                             {{ $service->description }}</td>
                         <td wire:click="consulterService({{ $service->id }})" class="w-2/12 pr-4">{{ $service->duree }}
                             {{ $service->duree > 1 ? 'minutes' : 'minute' }}</td>
-                        <td wire:click="consulterService({{ $service->id }})" class="w-2/12 pr-4">{{ $service->prix }}
-                            $</td>
+                        <td wire:click="consulterService({{ $service->id }})" class="w-2/12 pr-4">{{ $service->prix }} $</td>
                         <td class="w-2/12 pr-4 justify-between">
                             <button class="w-auto bg-selected-green mx-1 my-1 rounded p-0.5"
                                 wire:click="modifierService({{ $service->id }})" type="button">
                                 Modifier
                             </button>
 
-                            <button type="button" wire:click="confirmDelete({{ $service->id }})"
+                            <button type="button" wire:click="desactiverService({{ $service->id }})"
+                                class="w-auto bg-selected-green mx-1 my-1 rounded p-0.5">
+                                Désactiver
+                            </button>
+
+                            <button hidden type="button" wire:click="confirmDelete({{ $service->id }})"
                                 class="w-auto bg-selected-green mx-1 my-1 rounded p-0.5">
                                 Supprimer
                             </button>
@@ -105,9 +109,15 @@
             </tbody>
         </table>
 
-        <div class="flex justify-end">
-            <button class="w-2/12 bg-selected-green mx-1 my-2 rounded p-0.5" wire:click="openModalAjouterService()">
+        <div class="flex items-center mt-4">
+            <button wire:click="openModalAjouterService()"
+                class="bg-selected-green text-white font-bold py-2 px-4 rounded mr-2">
                 Ajouter
+            </button>
+
+            <button wire:click="resetFilters"
+                class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded ml-auto">
+                Voir les services désactivés
             </button>
         </div>
     </div>
