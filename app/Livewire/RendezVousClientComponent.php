@@ -46,7 +46,12 @@ class RendezVousClientComponent extends Component
             $this->step++;
         }
         if ($this->step == 3) {
+            $now = Carbon::now('America/Toronto');
             $this->changeWeek(0);
+            while(empty($this->dispoDateArr) && $now->diffInMonths($this->startingWeek) <= 3)
+            {
+                $this->changeWeek(1);
+            }
         }
     }
     public function backStep()
@@ -275,10 +280,6 @@ class RendezVousClientComponent extends Component
         $this->refresh();
 
 
-        if(empty($this->dispoDateArr) && $now->diffInMonths($this->startingWeek) <= 3)
-        {
-            $this->changeWeek(1);
-        }
 
 
 
