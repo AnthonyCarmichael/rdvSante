@@ -192,7 +192,7 @@ class RendezVousClientComponent extends Component
 
                                 foreach ($rdvArr as $rdv){
                                     $debut = Carbon::parse($rdv->dateHeureDebut,'America/Toronto');
-                                    $fin = $debut->copy()->addMinutes($rdv->service->duree);
+                                    $fin = $debut->copy()->addMinutes($rdv->service->duree+$rdv->service->minutePause);
 
                                     if (
                                         // Si le début de dateTemp est dans l'indisponibilité
