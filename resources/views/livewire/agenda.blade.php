@@ -9,7 +9,7 @@
         </select>
 
         <div>
-            <input class="focus:outline-none focus:ring-0 mt-6 border-none bg-pale-green"type="date" wire:model="settingDate" wire:change="dateChanged" name="settingDate" style="text-indent: -9999px;"> 
+            <input class="focus:outline-none focus:ring-0 mt-6 border-none bg-pale-green"type="date" wire:model="settingDate" wire:change="dateChanged" name="settingDate" style="text-indent: -9999px;">
         </div>
 
     </div>
@@ -34,7 +34,7 @@
 
                         <?php
                         foreach ($datesArr as $date) {?>
-                            <th class="{{ $date->isSameDay($now) ? ' bg-blue-400' : '' }} border-solid border-2 border-gray-600">{{$date->translatedFormat('l d')}}</th>
+                            <th class="{{ $date->isSameDay($now) ? ' bg-blue-400' : '' }} border-solid border-2 border-gray-600">{{$date->isoFormat('ddd D')}}</th>
                             <?php
                         }
                         ?>
@@ -48,7 +48,7 @@
 
                     for ($i=0; $i < 180; $i++) {
                         if ($i % 6 == 0) {
-                            $rowColor = ($i / 6) % 2 == 0 ? 'bg-gray-100' : 'bg-mid-green'; // Alterne les couleurs toutes les 30 minutes
+                            $rowColor = ($i / 6) % 2 == 0 ? 'bg-green-100' : 'bg-mid-green'; // Alterne les couleurs toutes les 30 minutes
                         }
 
                         ?>
@@ -58,7 +58,7 @@
 
                         <!-- colonne temps -->
                         @if ($selectedDateTime->minute % 30 == 0)
-                            <td class="border-solid border-2 border-gray-600" rowspan="6"><?php echo $selectedDateTime->format('H:i') ?></td>
+                            <td class="border-solid border-r-2 border-gray-600" rowspan="6"><?php echo $selectedDateTime->format('H:i') ?></td>
                         @endif
                             <!-- colonne interactive de l'agenda -->
                             <?php
@@ -111,13 +111,11 @@
 
 
                                         @if ($findIndispo != true)
-                                        
+
                                             <button type="button" wire:click="consulterModalChoixRdvIndispo('<?php echo $selectedDateTime ?>')"
-                                                    class="tooltip {{ $selectedDateTime <= $now && $now < $selectedDateTime->copy()->addMinutes(30) ? 'border-2 border-blue-700' : ' ' }} absolute top-0 left-0 w-full h-full hover:bg-blue-400">
-                                                    <span class="tooltiptext">{{$selectedDateTime}}</span>
-                                                </button>
-                                            
-                                        
+                                                class="tooltip {{ $selectedDateTime <= $now && $now < $selectedDateTime->copy()->addMinutes(5) ? 'border-t-2 border-blue-700' : ' ' }} absolute top-0 left-0 w-full h-full hover:bg-blue-400">
+                                                <span class="tooltiptext">{{$selectedDateTime->format('H:i')}}</span>
+                                            </button>
 
                                         @endif
                                     </td>
