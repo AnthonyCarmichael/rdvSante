@@ -14,8 +14,6 @@
 
     </div>
 
-    
-
 
     <!-- Affichage de la vue sélectionnée -->
     <div class="w-full text-gray-800">
