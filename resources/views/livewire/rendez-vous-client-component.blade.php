@@ -128,19 +128,28 @@
                                                         @if (!empty($dispoDateArr))
 
                                                             @foreach ($dispoDateArr as $dispo)
+                                                                <?php $foundDispo = false; ?>
                                                                 @if ($dispo == $selectedDateTime)
-                                                                    <button class="w-full h-full bg-blue-500 rounded"
-                                                                        type="button"
-                                                                        wire:click="choixDate('{{ $selectedDateTime }}')"
-                                                                        value="{{$selectedDateTime}}"
-                                                                        onclick="console.log(event.target.value);"
-                                                                        onmouseover="document.querySelectorAll('button[value=\'{{$dispo}}\']').forEach(btn => btn.classList.add('hover-effect-blue'))"
-                                                                        onmouseout="document.querySelectorAll('button[value=\'{{$dispo}}\']').forEach(btn => btn.classList.remove('hover-effect-blue'))">
-                                                                        <span class="invisible">Disponible</span>
-                                                                    </button>
+                                                                    <?php $foundDispo = true; ?>
                                                                     @break
                                                                 @endif
                                                             @endforeach
+
+                                                            @if ($foundDispo == true)
+                                                                <button class="w-full h-full bg-blue-500 rounded text-white"
+                                                                    type="button"
+                                                                    wire:click="choixDate('{{ $selectedDateTime }}')"
+                                                                    value="{{$selectedDateTime}}"
+                                                                    onclick="console.log(event.target.value);"
+                                                                    onmouseover="document.querySelectorAll('button[value=\'{{$dispo}}\']').forEach(btn => btn.classList.add('hover-effect-blue'))"
+                                                                    onmouseout="document.querySelectorAll('button[value=\'{{$dispo}}\']').forEach(btn => btn.classList.remove('hover-effect-blue'))">
+                                                                    {{$selectedDateTime->format('H:i')}}
+                                                                </button>
+                                                            @else
+
+                                                                <span class="w-full h-full invisible">indispo</span>
+
+                                                            @endif
 
                                                         @endif
                                                     </td>
