@@ -14,6 +14,8 @@
 
     </div>
 
+    
+
 
     <!-- Affichage de la vue sélectionnée -->
     <div class="w-full text-gray-800">
@@ -112,9 +114,14 @@
 
 
                                         @if ($findIndispo != true)
-                                            <button type="button" wire:click="consulterModalChoixRdvIndispo('<?php echo $selectedDateTime ?>')"
+                                            <button data-tooltip-target="tooltip-default" type="button" wire:click="consulterModalChoixRdvIndispo('<?php echo $selectedDateTime ?>')"
                                                     class="{{ $selectedDateTime <= $now && $now < $selectedDateTime->copy()->addMinutes(30) ? 'border-2 border-blue-700' : ' ' }} absolute top-0 left-0 w-full h-full hover:bg-blue-400">
                                             </button>
+                                            <div id="tooltip-default" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                                                Tooltip content
+                                                <div class="tooltip-arrow" data-popper-arrow></div>
+                                            </div>
+
                                         @endif
                                     </td>
                                     <?php
