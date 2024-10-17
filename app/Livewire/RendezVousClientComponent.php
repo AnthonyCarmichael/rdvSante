@@ -33,7 +33,7 @@ class RendezVousClientComponent extends Component
         if ($now->isSunday())
             $this->startingWeek = $now->copy();
         else
-            $this->startingWeek = $now->copy()->startOfWeek();
+            $this->startingWeek = $now->copy()->startOfWeek()->subDay();
 
         $this->startingWeek->setTime(7, 0);
         $this->users = User::all();
@@ -123,7 +123,7 @@ class RendezVousClientComponent extends Component
                 # Gèrer le timzone ici
                 $dateTemp = $this->datesArr[$i]->copy();
                 $dateTemp->setTime(7, 0);
-                #$dateToCheck = Carbon::createFromFormat('Y-m-d', '2024-11-03', 'America/Toronto');
+                $dateToCheck = Carbon::createFromFormat('Y-m-d', '2024-10-27', 'America/Toronto');
 
 
 
@@ -225,11 +225,11 @@ class RendezVousClientComponent extends Component
             $dateTemp->modify('+1 day');
         }
 
-        /*if ($this->startingWeek->isSameDay($dateToCheck) ) {
-            #dd($this);
-        }*/
+        if ($this->startingWeek->isSameDay($dateToCheck) ) {
+            dd($this);
+        }
 
-        #dd($this);
+
         #$rdvs;
 
         # verification indispo ($indispo->dateHeureDebut <= $selectedDateTime && $indispo->dateHeureFin > $selectedDateTime )
@@ -273,6 +273,7 @@ class RendezVousClientComponent extends Component
         // Appliquer le fuseau horaire pour la semaine de départ
         $this->startingWeek->setTimezone($timezone);
         $this->refresh();
+
 
         if(empty($this->dispoDateArr) && $now->diffInMonths($this->startingWeek) <= 3)
         {
