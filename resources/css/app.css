@@ -10,3 +10,15 @@
 .hover-effect-blue {
     background-color: #3bb7ff; /* Change la couleur de fond au survol */
 }
+
+
+.tooltip {
+    position: absolute;
+    background-color: #333;
+    color: white;
+    padding: 5px;
+    border-radius: 4px;
+    visibility: hidden; /* Masqué par défaut */
+    z-index: 10;
+    transition: visibility 0.2s, opacity 0.2s linear;
+}
