@@ -38,7 +38,8 @@ class AjouterService extends Component
 
     public function mount()
     {
-        $this->services = Service::where('idProfessionnel', 1)->get();
+        $this->services = Service::where('idProfessionnel', Auth::user()->id)
+                                    ->where('actif', true)->get();
         $this->professions = Profession::all();
         #dd($this->professions);
     }
@@ -51,13 +52,14 @@ class AjouterService extends Component
 
     public function loadServices()
     {
-        return Service::where('idProfessionnel', 1)
+        return Service::where('idProfessionnel', Auth::user()->id)
             ->where(function($query) {
                 $query->where('nom', 'like', '%' . $this->search . '%')
                     ->orWhere('description', 'like', '%' . $this->search . '%')
                     ->orWhere('prix', 'like', '%' . $this->search . '%')
                     ->orWhere('duree', 'like', '%' . $this->search . '%');
             })
+            ->where('actif', true)
             ->orderBy($this->sortField, $this->sortDirection)
             ->get();
     }
@@ -169,7 +171,7 @@ class AjouterService extends Component
             'idProfessionnel' => Auth::user()->id,
         ]);
 
-        $this->services = Service::where('idProfessionnel', Auth::user()->id)->get();
+        $this->services = Service::where('idProfessionnel', Auth::user()->id)->where('actif', true)->get();
 
         $this->resetExcept('services','professions');
         $this->dispatch('close-modal');
@@ -192,6 +194,20 @@ class AjouterService extends Component
         $this->personneacharge = $service->droitPersonneACharge == 1;
 
         $this->dispatch('open-modal', name: 'modifierService');
+    }
+
+    public function desactiverService($id){
+        $service = Service::findOrFail($id);
+
+        if ($service) {
+            $service->update([
+                'actif' => false,
+            ]);
+
+            $this->resetExcept('services', 'professions');
+            $this->services = Service::where('idProfessionnel', Auth::user()->id)->where('actif', true)->get();
+        }
+
     }
 
     public function confirmDelete($id)
@@ -237,7 +253,7 @@ class AjouterService extends Component
             ]);
 
             $this->resetExcept('services', 'professions');
-            $this->services = Service::where('idProfessionnel', 1)->get();
+            $this->services = Service::where('idProfessionnel', Auth::user()->id)->where('actif', true)->get();
             $this->dispatch('close-modal');
         }
     }
