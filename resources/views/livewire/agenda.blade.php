@@ -47,21 +47,20 @@
                     $selectedDateTime = $startingDate->copy();
                     $selectedDateTime->setTime(7, 0, 0);
 
-                    for ($i=0; $i < 30; $i++) {
+                    for ($i=0; $i < 180; $i++) {
+                        if ($i % 6 == 0) {
+                            $rowColor = ($i / 6) % 2 == 0 ? 'bg-gray-100' : 'bg-mid-green'; // Alterne les couleurs toutes les 30 minutes
+                        }
 
                         ?>
 
                         <!-- Gestion de l'aternance des couleurs dans l'agenda -->
-                        @if(($i %4)<2)
-                            <tr class="bg-gray-100 text-center">
-
-                        @else
-                            <tr class=" bg-mid-green text-center">
-                        @endif
+                        <tr class=" {{$rowColor}} text-center">
 
                         <!-- colonne temps -->
-                        <td class="border-solid border-2 border-gray-600"><?php echo $selectedDateTime->format('H:i') ?></td>
-
+                        @if ($selectedDateTime->minute % 30 == 0)
+                            <td class="border-solid border-2 border-gray-600" rowspan="6"><?php echo $selectedDateTime->format('H:i') ?></td>
+                        @endif
                             <!-- colonne interactive de l'agenda -->
                             <?php
 
@@ -69,13 +68,13 @@
                                     $findIndispo = false;
                                     ?>
                                     <!-- Cellule intéractible -->
-                                    <td class="relative">
+                                    <td class="relative border-r-2 border-gray-600">
                                         <!-- verification cellule indispo -->
                                         @if (!empty($indispoArr))
                                             @foreach ($indispoArr as $indispo)
                                                 @if ($indispo->dateHeureDebut <= $selectedDateTime && $indispo->dateHeureFin > $selectedDateTime )
 
-                                                    <button class=" {{ $selectedDateTime <= $now && $now < $selectedDateTime->copy()->addMinutes(30) ? 'border-2 border-blue-700' : 'border-dotted border-b-2 border-r-2 border-gray-600' }} absolute top-0 left-0 w-full h-full bg-orange-500 "
+                                                    <button class=" {{ $selectedDateTime <= $now && $now < $selectedDateTime->copy()->addMinutes(30) ? 'border-2 border-blue-700' : ' ' }} absolute top-0 left-0 w-full h-full bg-orange-500 "
                                                         wire:click="consulterModalIndispo({{$indispo}})"
                                                         value="{{$indispo->id}}"
                                                         onclick="console.log(event.target.value);"
@@ -97,7 +96,7 @@
                                                     $debut = \Carbon\Carbon::parse($rdv->dateHeureDebut);
                                                 @endphp
                                                 @if ($debut <= $selectedDateTime && $debut->addMinutes($rdv->service->duree) > $selectedDateTime)
-                                                    <button class=" {{ $selectedDateTime <= $now && $now < $selectedDateTime->copy()->addMinutes(30) ? 'border-2 border-blue-700' : 'border-dotted border-b-2 border-r-2 border-gray-600' }} absolute top-0 left-0 w-full h-full bg-blue-500 "
+                                                    <button class=" {{ $selectedDateTime <= $now && $now < $selectedDateTime->copy()->addMinutes(30) ? 'border-2 border-blue-700' : ' ' }} absolute top-0 left-0 w-full h-full bg-blue-500 "
                                                         wire:click="consulterModalRdv({{$rdv}})"
                                                         value="{{$rdv->id}}"
                                                         onclick="console.log(event.target.value);"
@@ -114,7 +113,7 @@
 
                                         @if ($findIndispo != true)
                                             <button type="button" wire:click="consulterModalChoixRdvIndispo('<?php echo $selectedDateTime ?>')"
-                                                    class="{{ $selectedDateTime <= $now && $now < $selectedDateTime->copy()->addMinutes(30) ? 'border-2 border-blue-700' : 'border-dotted border-b-2 border-r-2 border-gray-600' }} absolute top-0 left-0 w-full h-full hover:bg-blue-400">
+                                                    class="{{ $selectedDateTime <= $now && $now < $selectedDateTime->copy()->addMinutes(30) ? 'border-2 border-blue-700' : ' ' }} absolute top-0 left-0 w-full h-full hover:bg-blue-400">
                                             </button>
                                         @endif
                                     </td>
@@ -127,7 +126,7 @@
 
 
                     <?php
-                        $selectedDateTime->modify('+30 minutes');
+                        $selectedDateTime->modify('+5 minutes');
                     }
                     ?>
 
