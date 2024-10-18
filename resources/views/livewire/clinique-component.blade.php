@@ -123,7 +123,12 @@
                                 Modifier
                             </button>
 
-                            <button type="button" wire:click="confirmDelete({{ $clinique->id }})"
+                            <button type="button" wire:click="desactiverClinique({{ $clinique->id }})"
+                                class="w-auto bg-selected-green mx-1 my-1 rounded p-0.5">
+                                Désactiver
+                            </button>
+
+                            <button hidden type="button" wire:click="confirmDelete({{ $clinique->id }})"
                                 class="w-auto bg-selected-green mx-1 my-1 rounded p-0.5">
                                 Supprimer
                             </button>
@@ -133,9 +138,15 @@
             </tbody>
         </table>
 
-        <div class="flex justify-end">
-            <button class="w-2/12 bg-selected-green mx-1 my-2 rounded p-0.5" wire:click="openModalAjouterClinique()">
+        <div class="flex items-center mt-4">
+            <button wire:click="openModalAjouterClinique()"
+                class="bg-selected-green text-white font-bold py-2 px-4 rounded mr-2">
                 Ajouter
+            </button>
+
+            <button wire:click="resetFilters"
+                class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded ml-auto">
+                Voir les services désactivés
             </button>
         </div>
     </div>

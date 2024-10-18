@@ -15,6 +15,8 @@ class Clinique extends Model
         'rue',
         'noCivique',
         'codePostal',
+        'actif',
+        'principal',
         'idVille'
     ];
 

@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('rue');
             $table->integer('noCivique');
             $table->string('codePostal');
+            $table->boolean('actif');
+            $table->boolean('principal');
             $table->bigInteger('idVille')->unsigned();
         });
 

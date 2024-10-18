@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\Clinique;
+use App\Models\CliniqueProfessionnel;
 use App\Models\Ville;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,6 +17,7 @@ class CliniqueComponent extends Component
     public $noCiviqueClinique;
     public $codePostalClinique;
     public $villeClinique;
+    public $principalClinique;
 
     public $cliniqueIdToDelete;
     public $showDeleteModal;
@@ -31,13 +33,9 @@ class CliniqueComponent extends Component
     public $searchQuery;
 
     public function mount() {
-
-        $this->foundCliniques = Clinique::all();
         $this->villes = Ville::all();
 
-        #$this->foundCliniques = Auth::user()->cliniques;
-
-        $this->foundCliniques = Clinique::all();
+        $this->foundCliniques = Auth::user()->cliniques;
     }
 
     public function resetFilters()
@@ -62,7 +60,7 @@ class CliniqueComponent extends Component
                     })
                     ->orWhereHas('ville.province.pays', function ($query) {
                         $query->where('nom', 'like', '%' . $this->search . '%');
-                    });
+                    })->where('actif', true);
         });
 
         if ($this->sortField === 'ville') {
@@ -110,15 +108,22 @@ class CliniqueComponent extends Component
     {
         $this->validate();
 
-        Clinique::create([
+        $idClinique = Clinique::insertGetId([
             'nom' => $this->nomClinique,
             'rue' => $this->rueClinique,
             'noCivique' => $this->noCiviqueClinique,
             'codePostal' => $this->codePostalClinique,
+            'actif' => true,
+            'principal' => false,
             'idVille' => $this->villeClinique
         ]);
 
-        $this->foundCliniques = Clinique::all();
+        CliniqueProfessionnel::create([
+            'idClinique' => $idClinique,
+            'idProfessionnel' => Auth::user()->id
+        ]);
+
+        $this->foundCliniques = Auth::user()->cliniques;
 
         $this->resetExcept('foundCliniques','villes');
         $this->dispatch('close-modal');
@@ -133,6 +138,7 @@ class CliniqueComponent extends Component
         $this->noCiviqueClinique = $clinique->noCivique;
         $this->codePostalClinique = $clinique->codePostal;
         $this->villeClinique = $clinique->idVille;
+        $this->principalClinique = $clinique->principal;
 
         $this->dispatch('open-modal', name: 'consulterClinique');
     }
@@ -146,6 +152,7 @@ class CliniqueComponent extends Component
         $this->noCiviqueClinique = $clinique->noCivique;
         $this->codePostalClinique = $clinique->codePostal;
         $this->villeClinique = $clinique->idVille;
+        $this->principalClinique = $clinique->principal;
 
         $this->dispatch('open-modal', name: 'modifierClinique');
     }
@@ -155,6 +162,20 @@ class CliniqueComponent extends Component
         $this->validate();
 
         $clinique = Clinique::find($this->clinique_id);
+
+        if ($clinique->principal) {
+            $cliniquePrincipal = Clinique::where('principal', true);
+            if($cliniquePrincipal){
+                $cliniquePrincipal->update([
+                    'actif' => false
+                ]);
+            }
+            if ($clinique) {
+                $clinique->update([
+                    'actif' => true
+                ]);
+            }
+        }
 
         if ($clinique) {
             $clinique->update([
@@ -167,9 +188,23 @@ class CliniqueComponent extends Component
 
             $this->resetExcept('foundCliniques', 'villes');
 
-        $this->foundCliniques = Clinique::all();
+            $this->foundCliniques = Auth::user()->cliniques;
             $this->dispatch('close-modal');
         }
+    }
+
+    public function desactiverClinique($id){
+        $service = Clinique::findOrFail($id);
+
+        if ($service) {
+            $service->update([
+                'actif' => false,
+            ]);
+
+            $this->resetExcept('foundCliniques', 'villes');
+            $this->foundCliniques = Clinique::where('idProfessionnel', Auth::user()->id)->where('actif', true)->get();
+        }
+
     }
 
     public function confirmDelete($id)
