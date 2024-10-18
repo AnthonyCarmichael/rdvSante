@@ -366,7 +366,7 @@ class AjouterClient extends Component
         if ($this->filtreActif == 2) {
             $this->clients = Client::where('nom', 'like', '%' . $this->filtreNom . '%')->where('prenom', 'like', '%' . $this->filtrePrenom . '%')->orderBy('nom', 'asc')->get();
         } else {
-            $this->clients = Client::where('nom', 'like', '%' . $this->filtreNom . '%')->where('prenom', 'like', '%' . $this->filtrePrenom . '%')->where('actif', 'like', '%' . $this->filtreActif . '%')->orderBy('nom', 'asc')->get();
+            $this->clients = Client::where('nom', 'like', '%' . $this->filtreNom . '%')->where('prenom', 'like', '%' . $this->filtrePrenom . '%')->where('actif', '=', $this->filtreActif)->orderBy('nom', 'asc')->get();
         }
     }
 

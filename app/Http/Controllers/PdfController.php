@@ -17,7 +17,7 @@ class PdfController extends Controller
     public function index()
     {
     	$this->fpdf->SetFont('Arial', 'B', 15);
-        $this->fpdf->AddPage("L", ['100', '100']);
+        $this->fpdf->AddPage();
         $this->fpdf->Text(10, 10, "Hello Bitch!");
 
         $this->fpdf->Output('D', 'Recu.pdf');
