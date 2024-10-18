@@ -177,7 +177,7 @@
                         <button type="button" wire:click="backStep" class="py-1 px-2 bg-gray-300 text-white rounded hover:bg-gray-500"><</button>
                         <h2 class="text-lg font-bold text-center">Résumé</h2>
                         <div>
-                            <p>{{Date: $heureSelected->translatedFormat('l, d F Y')}}</p>
+                            <p>Date: {{$heureSelected->translatedFormat('l, d F Y')}}</p>
                         </div>
 
 
