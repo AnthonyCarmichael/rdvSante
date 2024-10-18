@@ -21,15 +21,15 @@
                         <h2 class="text-lg font-bold text-center">Sélectionnez un professionnel</h2>
 
                         @foreach($users as $user)
-                            @if ($user->id==1)
+                            @if ($user->actif)
                                 <div class="flex items-center border-y py-6 hover:bg-stone-200 cursor-pointer"  wire:click="getProfessionnelId({{ $user->id }})">
                                     <div>
-                                        <img src="{{ asset('img/daph.jpg') }}" alt="imageDaph"
-                                            class="mr">
+                                        <img src="{{ asset('img/icone_'.$user->id.'.jpg') }}" alt="imageDaph"
+                                            class="mr w-[300px]">
                                     </div>
                                     <div class="mx-4 self-center">
                                         <div class="mb-8">
-                                            <p class="inline ">Daphné Carmichael</p> @foreach($user->professions as $profession) <p class="inline">, {{$profession->nom}}</p> @endforeach
+                                            <p class="inline ">{{$user->nom}} {{$user->prenom}}</p> @foreach($user->professions as $profession) <p class="inline">, {{$profession->nom}}</p> @endforeach
                                         </div>
 
                                         <p class="text-justify">
