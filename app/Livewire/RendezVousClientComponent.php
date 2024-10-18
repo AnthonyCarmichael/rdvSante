@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Clinique;
 use Carbon\Carbon;
 use App\Models\Indisponibilite;
 use App\Models\Rdv;
@@ -27,7 +28,11 @@ class RendezVousClientComponent extends Component
     public $heureSelected;
 
     # Section 4
+    public $service;
+    public $professionnel;
+    public $clinique;
     public $prenomClient;
+    public $client;
 
     public function mount(){
         $now = Carbon::now(('America/Toronto'));
@@ -55,6 +60,11 @@ class RendezVousClientComponent extends Component
             {
                 $this->changeWeek(1);
             }
+        }
+        if ($this->step == 4) {
+            $this->professionnel = User::find($this->professionnelId);
+            $this->service = Service::find($this->serviceId);
+            $this->clinique = Clinique::find(1); # A changer pour clinique principal
         }
     }
     public function backStep()
