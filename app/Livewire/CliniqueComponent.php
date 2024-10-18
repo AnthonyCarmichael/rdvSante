@@ -46,6 +46,20 @@ class CliniqueComponent extends Component
 
     public function updatedSearch($nomRecherche)
     {
+
+        $this->foundCliniques = Auth::user()->cliniques;
+        $indice=0;
+        foreach ($this->foundCliniques as $clinique) {
+            #dd($clinique->nom,$this->search,str_contains(strtolower($clinique->nom),strtolower($this->search)));
+            if (!str_contains(strtolower($clinique->nom),strtolower($this->search))&& !str_contains(strtolower($clinique->ville->nom),strtolower($this->search))) {
+                #dd("true");
+                unset($this->foundCliniques[$indice]);
+            }
+            $indice++;
+        }
+
+
+        /*
         $query = Clinique::with(['ville.province.pays'])
             ->where(function($query) {
                 $query->where('cliniques.nom', 'like', '%' . $this->search . '%')
@@ -81,8 +95,10 @@ class CliniqueComponent extends Component
         } else {
             $query = $query->orderBy($this->sortField, $this->sortDirection);
         }
-
         $this->foundCliniques = $query->get();
+        */
+
+
     }
 
     public function openModalAjouterClinique()
