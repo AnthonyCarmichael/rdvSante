@@ -23,8 +23,11 @@ class RendezVousClientComponent extends Component
     public $dispoDateArr;
     public $startingWeek;
     public $heureDebut;
-
     public $datesArr;
+    public $heureSelected;
+
+    # Section 4
+    public $prenomClient;
 
     public function mount(){
         $now = Carbon::now(('America/Toronto'));
@@ -42,7 +45,7 @@ class RendezVousClientComponent extends Component
 
     public function nextStep()
     {
-        if ($this->step < 3) {
+        if ($this->step < 4) {
             $this->step++;
         }
         if ($this->step == 3) {
@@ -294,13 +297,16 @@ class RendezVousClientComponent extends Component
     }
 
     public function choixDate($value){
-        $this->heureDebut = $value;
-        dd($this);
+
+        $this->heureSelected = Carbon::parse($value, 'America/Toronto');
+        $this->nextStep();
+
     }
 
 
     public function rdvClient(){
         dd($this);
+
     }
 
     public function render()

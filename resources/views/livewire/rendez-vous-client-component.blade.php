@@ -176,9 +176,26 @@
                     <div class="p-5 bg-white rounded shadow-md">
                         <button type="button" wire:click="backStep" class="py-1 px-2 bg-gray-300 text-white rounded hover:bg-gray-500"><</button>
                         <h2 class="text-lg font-bold text-center">Résumé</h2>
-                        <div class="flex justify-between">
-                            <button type="submit" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">Confirmer</button>
+                        <div>
+                            <p>{{Date: $heureSelected->translatedFormat('l, d F Y')}}</p>
                         </div>
+
+
+                        <form wire:submit.prevent="rdvClient">
+                            <div class="mb-4">
+                                <label for="prenomClient" class="block text-sm font-medium text-gray-700">Prénom *</label>
+                                <input required type="text" name="prenomClient" id="prenomClient"
+                                    wire:model="prenomClient"
+                                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            </div>
+
+
+                            <div class="mt-6">
+                                <div class="flex justify-between">
+                                    <button type="submit" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">Confirmer</button>
+                                </div>
+                            </div>
+                        </form>
 
                     </div>
                     @break
