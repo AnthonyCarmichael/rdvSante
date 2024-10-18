@@ -178,6 +178,16 @@
                         <h2 class="text-lg font-bold text-center">Résumé</h2>
                         <div>
                             <p>Date: {{$heureSelected->translatedFormat('l, d F Y')}}</p>
+                            <p>Heure: {{$heureSelected->translatedFormat('H:i')}}</p>
+                            <p>Service: {{$service->nom}} {{$service->prix}}$</p>
+                            <p>Professionnel: {{$professionnel->prenom}} {{$professionnel->nom}}
+
+                                @foreach ($professionnel->professions as $profession )
+                                ,
+                                    {{$profession->nom}}
+                                @endforeach
+                                </p>
+                            <p>Lieu: {{$heureSelected->translatedFormat('l, d F Y')}}</p>
                         </div>
 
 
@@ -188,6 +198,7 @@
                                     wire:model="prenomClient"
                                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                             </div>
+
 
 
                             <div class="mt-6">

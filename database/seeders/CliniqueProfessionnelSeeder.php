@@ -16,7 +16,15 @@ class CliniqueProfessionnelSeeder extends Seeder
             [
                 'idClinique' => 1,
                 'idProfessionnel' => 1,
-            ]
+            ],
+            [
+                'idClinique' => 1,
+                'idProfessionnel' => 2,
+            ],
+            [
+                'idClinique' => 1,
+                'idProfessionnel' => 3,
+            ],
 
         ]);
     }

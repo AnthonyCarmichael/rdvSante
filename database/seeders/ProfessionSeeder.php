@@ -13,8 +13,9 @@ class ProfessionSeeder extends Seeder
     public function run(): void
     {
         DB::table('professions')->insert([
-            ['nom' => 'Ostéopathe'],
-            ['nom' => 'Massothérapeute']
+            ['nom' => 'Ostéopathe D.O'],
+            ['nom' => 'Massothérapeute'],
+            ['nom' => 'Kinésithérapeute']
         ]);
     }
 }
