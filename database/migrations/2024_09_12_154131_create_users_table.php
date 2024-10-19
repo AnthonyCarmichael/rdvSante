@@ -24,6 +24,11 @@ return new class extends Migration
             $table->rememberToken();
             $table->timestamps();
             $table->bigInteger('idRole')->unsigned();
+            $table->text('description')->nullable();
+            $table->boolean('actif')->nullable(); # A CHANGER POUR NOT NULLABLE
+            $table->string('lien')->nullable();
+
+
         });
 
 
