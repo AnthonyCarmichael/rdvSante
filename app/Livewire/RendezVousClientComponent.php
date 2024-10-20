@@ -33,9 +33,11 @@ class RendezVousClientComponent extends Component
     public $clinique;
     public $prenomClient;
     public $client;
+    public $pourmoi;
 
     public function mount(){
         $now = Carbon::now(('America/Toronto'));
+        $this->clinique = Clinique::find(1); # A changer pour clinique principal
 
 
         if ($now->isSunday())
@@ -46,6 +48,8 @@ class RendezVousClientComponent extends Component
         $this->startingWeek->setTime(7, 0);
         $this->users = User::all();
         $this->dispoDateArr = [];
+        $this->pourmoi = true;
+
     }
 
     public function nextStep()
@@ -64,7 +68,7 @@ class RendezVousClientComponent extends Component
         if ($this->step == 4) {
             $this->professionnel = User::find($this->professionnelId);
             $this->service = Service::find($this->serviceId);
-            $this->clinique = Clinique::find(1); # A changer pour clinique principal
+
         }
     }
     public function backStep()
@@ -76,6 +80,7 @@ class RendezVousClientComponent extends Component
 
     public function getProfessionnelId($id) {
         $this->professionnelId = $id;
+        $this->professionnel = User::find($id);
         $this->services = Service::
             where('idProfessionnel',$this->professionnelId)->
             where('actif',true)->get();
@@ -85,6 +90,7 @@ class RendezVousClientComponent extends Component
 
     public function getServiceId($id) {
         $this->serviceId = $id;
+        $this->service = Service::find($id);
         $this->nextStep();
     }
 
@@ -141,7 +147,7 @@ class RendezVousClientComponent extends Component
                 # Gèrer le timzone ici
                 $dateTemp = $this->datesArr[$i]->copy();
                 $dateTemp->setTime(7, 0);
-                $dateToCheck = Carbon::createFromFormat('Y-m-d', '2024-10-27', 'America/Toronto');
+                #$dateToCheck = Carbon::createFromFormat('Y-m-d', '2024-10-27', 'America/Toronto');
 
 
 
@@ -243,10 +249,11 @@ class RendezVousClientComponent extends Component
             $dateTemp->modify('+1 day');
         }
 
+        /*
         if ($this->startingWeek->isSameDay($dateToCheck) ) {
             #dd($this);
         }
-
+*/
 
         #$rdvs;
 
