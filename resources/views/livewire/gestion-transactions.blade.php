@@ -79,9 +79,31 @@
                                     {{ $m->nom }}</td>
                             @endif
                         @endforeach
+                        @php
+                            $rdv = 0;
+                            $client = 0;
+                            foreach ($rdvs as $r) {
+                                if ($r->id == $t->idRdv) {
+                                    $rdv = $r;
+                                }
+
+                                foreach ($dossiers as $d) {
+                                    if ($r->idDossier == $d->id) {
+                                        foreach ($clients as $c) {
+                                            if ($c->id == $d->idClient) {
+                                                $client = $c;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                        @endphp
                         <td class="w-3/12 pr-4 justify-between">
                             <button class="w-5/12 bg-selected-green mx-0.5 my-1 rounded p-0.5" type="button"><a
-                                    href="{{ route('pdf') }}">Envoyer le reçu</a></button>
+                                    href="pdf/{{ $client->id }}/{{ $t->id }}/{{ $rdv->idClinique }}/{{ $rdv->id }}/{{ $rdv->idService }}">Envoyer
+                                    le
+                                    reçu</a></button>
                             {{ $trouve = false }}
                             @foreach ($remboursements as $r)
                                 @if ($r->idTransaction == $t->id)
@@ -128,7 +150,9 @@
                         @endforeach
                         <td class="w-3/12 pr-4 justify-between">
                             <button class="w-5/12 bg-selected-green mx-0.5 my-1 rounded p-0.5" type="button"><a
-                                    href="{{ route('pdf') }}">Envoyer le reçu</a></button>
+                                    href="pdf/{{ $client->id }}/{{ $t->id }}/{{ $rdv->idClinique }}/{{ $rdv->id }}/{{ $rdv->idService }}">Envoyer
+                                    le
+                                    reçu</a></button>
                         </td>
                     @endif
                 </tr>
@@ -167,7 +191,8 @@
                         @endforeach
                         <td class="w-3/12 pr-4 justify-between">
                             <button class="w-5/12 bg-selected-green mx-0.5 my-1 rounded p-0.5" type="button"><a
-                                    href="{{ route('pdf') }}">Envoyer le reçu</a></button>
+                                    href="pdf/{{ $client->id }}/{{ $t->id }}/{{ $rdv->idClinique }}/{{ $rdv->id }}/{{ $rdv->idService }}">Envoyer
+                                    le reçu</a></button>
                             {{ $trouve = false }}
                             @foreach ($remboursements as $r)
                                 @if ($r->idTransaction == $t->id)
@@ -214,7 +239,8 @@
                         @endforeach
                         <td class="w-3/12 pr-4 justify-between">
                             <button class="w-5/12 bg-selected-green mx-0.5 my-1 rounded p-0.5" type="button"><a
-                                    href="{{ route('pdf') }}">Envoyer le reçu</a></button>
+                                    href="pdf/{{ $client->id }}/{{ $t->id }}/{{ $rdv->idClinique }}/{{ $rdv->id }}/{{ $rdv->idService }}">Envoyer
+                                    le reçu</a></button>
                         </td>
                     @endif
                 </tr>

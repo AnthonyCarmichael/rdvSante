@@ -3,7 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Transaction;
-use Codedge\Fpdf\Facades\Fpdf;
+
 use Livewire\Component;
 
 use App\Models\Client;
