@@ -5,6 +5,8 @@ namespace App\Livewire;
 use App\Models\Clinique;
 use Carbon\Carbon;
 use App\Models\Indisponibilite;
+use App\Models\DossierProfessionnel;
+use App\Models\Client;
 use App\Models\Rdv;
 use App\Models\Genre;
 use Livewire\Component;
@@ -40,6 +42,9 @@ class RendezVousClientComponent extends Component
     public $prenomClient;
     public $nomClient;
 
+    public $newClient;
+    public $lookDossier;
+
 
     public function mount(){
         $now = Carbon::now(('America/Toronto'));
@@ -55,6 +60,7 @@ class RendezVousClientComponent extends Component
         $this->users = User::all();
         $this->dispoDateArr = [];
         $this->pourmoi = true;
+        $this->newClient = null;
 
     }
 
@@ -335,7 +341,33 @@ class RendezVousClientComponent extends Component
     }
 
 
+    public function lookingDossier($value) {
+        $this->lookDossier = $value;
+    }
+
+    public function fetchDossier() {
+        $clients = Client::where('courriel',$this->courrielClient)->get();
+
+        $dossiers= [];
+        foreach ($clients as $client) {
+            $dossier = DossierProfessionnel::with('dossier')
+            ->join('dossiers', 'dossier_professionnels.idDossier', '=', 'dossiers.id')
+            ->where('dossier_professionnels.idProfessionnel', $this->professionnelId)
+            ->where('dossiers.idClient', $client->id)
+            ->select('dossier_professionnels.*') // Sélectionnez les colonnes de la table d'association
+            ->get();
+
+            dd($dossier);
+        }
+
+        dd("fin");
+    }
+
+
     public function rdvClient(){
+
+
+
         dd($this);
 
     }
@@ -346,5 +378,6 @@ class RendezVousClientComponent extends Component
             'genres' => $genres = Genre::all()
         ]);
     }
+
 
 }
