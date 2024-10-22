@@ -167,7 +167,7 @@ class RendezVousClientComponent extends Component
                 # Gèrer le timzone ici
                 $dateTemp = $this->datesArr[$i]->copy();
                 $dateTemp->setTime(7, 0);
-                #$dateToCheck = Carbon::createFromFormat('Y-m-d', '2024-10-27', 'America/Toronto');
+                $dateToCheck = Carbon::createFromFormat('Y-m-d', '2024-10-27', 'America/Toronto');
 
 
 
@@ -269,11 +269,10 @@ class RendezVousClientComponent extends Component
             $dateTemp->modify('+1 day');
         }
 
-        /*
         if ($this->startingWeek->isSameDay($dateToCheck) ) {
             #dd($this);
         }
-*/
+
 
         #$rdvs;
 
@@ -339,6 +338,7 @@ class RendezVousClientComponent extends Component
         $this->nextStep();
 
     }
+
 
 
     public function lookingDossier($value) {

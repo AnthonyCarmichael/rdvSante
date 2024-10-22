@@ -103,65 +103,64 @@
                         </div>
 
                         @break
-                    @case(3)
+                        @case(3)
                         <!-- Section 3 -->
                         <div class="p-5 bg-white rounded shadow-md">
                             <button type="button" wire:click="backStep" class="py-1 px-2 bg-gray-300 text-white rounded hover:bg-gray-500"><</button>
                             <h2 class="text-lg font-bold text-center">Sélectionnez une heure</h2>
                             <div class="border-y py-6">
-                                @if (!empty($dispoDateArr))
+                                <div class="flex justify-between">
+                                    <button type="button" wire:click="changeWeek(-1)"><</button>
+                                    <h3>{{$startingWeek->translatedFormat('F')}}</h3>
+                                    <button type="button" wire:click="changeWeek(1)">></button>
+                                </div>
 
-                                    <div class="flex justify-between">
-                                        <button type="button" wire:click="changeWeek(-1)"><</button>
-                                        <h3>{{$startingWeek->translatedFormat('F')}}</h3>
-                                        <button type="button" wire:click="changeWeek(1)">></button>
-                                    </div>
-
-                                    <table class="table-fixed w-full text-sm text-stone-700 text-sm">
-                                        <thead>
-                                            <tr class="bg-stone-200">
-                                                <!-- Titre col -->
-                                                <th class="">Heure </th>
-
-                                                <?php
-                                                foreach ($datesArr as $date) {?>
-                                                    <th class="">{{$date->isoFormat('ddd D')}}</th>
-                                                    <?php
-                                                }
-                                                ?>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-
+                                <table class="table-fixed w-full text-sm text-stone-700 text-xs">
+                                    <thead>
+                                        <tr class="bg-stone-200">
+                                            <!-- Titre col -->
+                                            <th class="">Heure </th>
 
                                             <?php
-                                            $selectedDateTime = $startingWeek->copy();
-                                            $selectedDateTime->setTime(7, 0, 0);
+                                            foreach ($datesArr as $date) {?>
+                                                <th class="">{{$date->isoFormat('ddd D')}}</th>
+                                                <?php
+                                            }
+                                            ?>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
 
 
-                                            for ($i=0; $i < 60; $i++) {
+                                        <?php
+                                        $selectedDateTime = $startingWeek->copy();
+                                        $selectedDateTime->setTime(7, 0, 0);
 
-                                                ?>
 
-                                                <!-- Gestion de l'aternance des couleurs dans l'agenda -->
-                                                @if(($i %2)==0)
-                                                    <tr class="bg-gray-100 text-center">
+                                        for ($i=0; $i < 60; $i++) {
 
-                                                @else
-                                                    <tr class=" bg-gray-200 text-center">
-                                                @endif
+                                            ?>
 
-                                                <!-- colonne temps -->
-                                                <td class=""><?php echo $selectedDateTime->format('H:i') ?></td>
+                                            <!-- Gestion de l'aternance des couleurs dans l'agenda -->
+                                            @if(($i %2)==0)
+                                                <tr class="bg-gray-100 text-center">
 
-                                                    <!-- colonne interactive de l'agenda -->
-                                                    <?php
+                                            @else
+                                                <tr class=" bg-gray-200 text-center">
+                                            @endif
 
-                                                        for ($j=0; $j <7; $j++) {
-                                                            ?>
-                                                            <!-- Cellule intéractible -->
-                                                            <td class="">
-                                                                <!-- verification cellule dispo -->
+                                            <!-- colonne temps -->
+                                            <td class=""><?php echo $selectedDateTime->format('H:i') ?></td>
+
+                                                <!-- colonne interactive de l'agenda -->
+                                                <?php
+
+                                                    for ($j=0; $j <7; $j++) {
+                                                        ?>
+                                                        <!-- Cellule intéractible -->
+                                                        <td class="">
+                                                            <!-- verification cellule dispo -->
+                                                            @if (!empty($dispoDateArr))
 
                                                                 @foreach ($dispoDateArr as $dispo)
                                                                     @if ($dispo == $selectedDateTime)
@@ -169,6 +168,7 @@
                                                                             type="button"
                                                                             wire:click="choixDate('{{ $selectedDateTime }}')"
                                                                             value="{{$selectedDateTime}}"
+                                                                            onclick="console.log(event.target.value);"
                                                                             onmouseover="document.querySelectorAll('button[value=\'{{$dispo}}\']').forEach(btn => btn.classList.add('hover-effect-blue'))"
                                                                             onmouseout="document.querySelectorAll('button[value=\'{{$dispo}}\']').forEach(btn => btn.classList.remove('hover-effect-blue'))">
                                                                             <span class="">{{$selectedDateTime->format('H:i')}}</span>
@@ -177,32 +177,26 @@
                                                                     @endif
                                                                 @endforeach
 
+                                                            @endif
+                                                        </td>
+                                                        <?php
+                                                        $selectedDateTime->modify('+1 day');
+                                                    }
+                                                    $selectedDateTime->modify('-7 day');
+                                                ?>
+                                            </tr>
 
-                                                            </td>
-                                                            <?php
-                                                            $selectedDateTime->modify('+1 day');
-                                                        }
-                                                        $selectedDateTime->modify('-7 day');
-                                                    ?>
-                                                </tr>
 
+                                        <?php
+                                            $selectedDateTime->modify('+15 minutes');
+                                        }
+                                        ?>
 
-                                            <?php
-                                                $selectedDateTime->modify('+15 minutes');
-                                            }
-                                            ?>
+                                    </tbody>
+                                    <tfoot>
 
-                                        </tbody>
-                                        <tfoot>
-
-                                        </tfoot>
-                                    </table>
-
-                                @else
-                                    <!-- Pas de dispo dans les trois prochain mois liste d'attente? -->
-                                    <p class="mb-4"> Il n'y a pas de disponibilité dans les trois prochains mois avec {{$professionnel->prenom}} {{$professionnel->nom}}, pour {{$service->nom}}.</p>
-                                    <p> Contactez-nous pour plus d'informations ou pour prendre rendez-vous autrement.</p>
-                                @endif
+                                    </tfoot>
+                                </table>
                             </div>
 
                         </div>
