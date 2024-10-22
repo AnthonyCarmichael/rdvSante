@@ -289,21 +289,6 @@ class RendezVousClientComponent extends Component
         // Déterminer le fuseau horaire approprié
         $timezone = 'America/Toronto'; // Valeur par défaut
 
-        // Trouver le premier dimanche de novembre de l'année en cours
-        $firstSundayOfNovember = Carbon::create($now->year, 11, 1)->next(Carbon::SUNDAY);
-
-        // Trouver le deuxième dimanche de mars de l'année en cours
-        $secondSundayOfMarch = Carbon::create($now->year, 3, 1)->next(Carbon::SUNDAY)->addWeek();
-
-        // Vérifier si la date actuelle est entre le premier dimanche de novembre et le deuxième dimanche de mars
-        if ($now->between($firstSundayOfNovember, $secondSundayOfMarch)) {
-            // Appliquer l'heure d'hiver (UTC-5)
-            $timezone = 'America/Toronto'; // UTC-5 pour l'heure d'hiver
-        } else {
-            // Appliquer l'heure d'été (UTC-4)
-            $timezone = 'America/Toronto'; // UTC-4 pour l'heure d'été
-        }
-
         if ($value > 0) {
             if ($now->diffInMonths($this->startingWeek) <= 3) {
                 $this->startingWeek = $this->startingWeek->addWeek();
