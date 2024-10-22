@@ -168,8 +168,6 @@
                                                                         <button class="w-full h-full bg-blue-500 text-white rounded"
                                                                             type="button"
                                                                             wire:click="choixDate('{{ $selectedDateTime }}')"
-                                                                            value="{{$selectedDateTime}}"
-                                                                            onclick="console.log(event.target.value);"
                                                                             onmouseover="document.querySelectorAll('button[value=\'{{$dispo}}\']').forEach(btn => btn.classList.add('hover-effect-blue'))"
                                                                             onmouseout="document.querySelectorAll('button[value=\'{{$dispo}}\']').forEach(btn => btn.classList.remove('hover-effect-blue'))">
                                                                             <span class="">{{$selectedDateTime->format('H:i')}}</span>
@@ -244,15 +242,33 @@
 
                                 <div class="mb-4">
                                     <label for="courrielClient" class="block text-sm font-medium text-gray-700">Courriel *</label>
-                                    <input required type="text" name="courrielClient" id="courrielClient"
+                                    <input required type="email" name="courrielClient" id="courrielClient"
                                         wire:model="courrielClient"
                                         class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                 </div>
 
                                 <div class="mb-4">
                                     <label for="telephoneClient" class="block text-sm font-medium text-gray-700">Téléphone *</label>
-                                    <input required type="text" name="telephoneClient" id="telephoneClient"
-                                        wire:model="telephoneClient"
+                                    <input required type="text" name="telephoneClient" id="telephoneClient" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                        wire:model.live="telephoneClient"
+                                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                </div>
+
+                                <div class="mb-4">
+                                    <label for="sexe" class="block text-sm font-medium text-gray-700">Sexe *</label>
+                                    <select required name="sexe" id="sexe" class="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                        wire:model="genreId">
+                                        <option class="font-bold" value="">Sélectionnez une option</option>
+                                        @foreach ($genres as $genre)
+                                            <option value="{{$genre->id}}">{{$genre->nom}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="mb-4">
+                                    <label for="ddn" class="block text-sm font-medium text-gray-700">Date de naissance *</label>
+                                    <input required type="date" name="ddn" id="ddn"
+                                        wire:model="ddn"
                                         class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                 </div>
                             </fieldset>

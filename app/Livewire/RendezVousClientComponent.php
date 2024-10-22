@@ -6,6 +6,7 @@ use App\Models\Clinique;
 use Carbon\Carbon;
 use App\Models\Indisponibilite;
 use App\Models\Rdv;
+use App\Models\Genre;
 use Livewire\Component;
 use App\Models\User;
 use App\Models\Service;
@@ -31,9 +32,14 @@ class RendezVousClientComponent extends Component
     public $service;
     public $professionnel;
     public $clinique;
-    public $prenomClient;
-    public $client;
     public $pourmoi;
+    public $genreId;
+    public $ddn;
+    public $telephoneClient;
+    public $courrielClient;
+    public $prenomClient;
+    public $nomClient;
+
 
     public function mount(){
         $now = Carbon::now(('America/Toronto'));
@@ -50,6 +56,14 @@ class RendezVousClientComponent extends Component
         $this->dispoDateArr = [];
         $this->pourmoi = true;
 
+    }
+
+    public function updatedtelephoneClient($value) {
+
+        if (strlen($this->telephoneClient) == 10) {
+            $this->telephoneClient = '('.substr($this->telephoneClient, 0, 3).') '.substr($this->telephoneClient, 3, 3).'-'.substr($this->telephoneClient, 6);
+
+        }
     }
 
     public function nextStep()
@@ -328,7 +342,9 @@ class RendezVousClientComponent extends Component
 
     public function render()
     {
-        return view('livewire.rendez-vous-client-component');
+        return view('livewire.rendez-vous-client-component',[
+            'genres' => $genres = Genre::all()
+        ]);
     }
 
 }
