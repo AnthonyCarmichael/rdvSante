@@ -54,7 +54,7 @@ class RendezVousClientComponent extends Component
         if ($now->isSunday())
             $this->startingWeek = $now->copy();
         else
-            $this->startingWeek = $now->copy()->startOfWeek()->subDay();
+            $this->startingWeek = $now->copy()->startOfWeek();
 
         $this->startingWeek->setTime(7, 0);
         $this->users = User::all();
