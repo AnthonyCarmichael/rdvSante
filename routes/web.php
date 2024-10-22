@@ -39,7 +39,9 @@ Route::controller(ServiceController::class)->group(function () {
     Route::post('/service/ajouterService', 'store')->middleware('auth')->name('ajouterService');
 });
 
-Route::get('/pdf/{client}/{transaction}/{clinique}/{rdv}/{service}', [PdfController::class, 'index'])->name('pdf');
+Route::get('/recuPaiement/{client}/{transaction}/{clinique}/{rdv}/{service}', [PdfController::class, 'recuPaiement'])->name('pdf');
+
+Route::get('/recuRemboursement/{client}/{transaction}/{clinique}/{rdv}/{service}', [PdfController::class, 'recuRemboursement'])->name('pdf');
 
 Route::view('profile', 'profile')
     ->middleware(['auth'])->name('profile');

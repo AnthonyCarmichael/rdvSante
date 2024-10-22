@@ -69,7 +69,7 @@ class GestionTransactions extends Component
         ]);
 
 
-        $this->transactions = Transaction::all();
+        $this->filtrePaiement();
         $this->remboursements = Transaction::where('idTypeTransaction', '=', '2')->get();
         $this->dispatch('close-modal');
 
