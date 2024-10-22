@@ -1,5 +1,5 @@
 
-<div class="text-sm text-gray-700 bg-stone-200 m-10 grid grid-cols-3 gap-6 p-6">
+<div class="text-sm text-gray-700 bg-stone-200 my-10 grid grid-cols-3 gap-6 p-6">
     <div class="bg-white rounded shadow-md p-6 ">
         <div class="">
             <img src="{{ asset('img/logo.png') }}" alt="logo clinique" class="w-[200px]">
@@ -51,7 +51,7 @@
 
                             @foreach($users as $user)
                                 @if ($user->actif)
-                                    <div class="flex items-center border-y py-6 hover:bg-stone-200 cursor-pointer"  wire:click="getProfessionnelId({{ $user->id }})">
+                                    <div class="flex border-y py-6 hover:bg-stone-200 cursor-pointer"  wire:click="getProfessionnelId({{ $user->id }})">
                                         <div class="">
                                             <img src="{{ asset('img/icone_'.$user->id.'.jpg') }}" alt="imageDaph"
                                                 class="w-[200px] mr-6">
@@ -219,7 +219,7 @@
                             <h2 class="text-lg font-bold text-center">Avez-vous un dossier avec ce professionnel?</h2>
                             <div class=" flex justify-center">
                                 <button type="button" wire:click="lookingDossier('{{ true }}')" class="mt-4 mx-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">Oui</button>
-                                <button type="button" wire:click="lookingDossier('{{ false }}')" class="mt-4 mx-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">Non</button>
+                                <button type="button" wire:click="nextStep" class="mt-4 mx-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">Non</button>
                             </div>
 
                             <div>
@@ -230,109 +230,126 @@
                                             wire:model="courrielClient"
                                             class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                     </div>
-
-                                    <div class="mb-4">
-                                        <label for="telephoneClient" class="block text-sm font-medium text-gray-700">Téléphone *</label>
-                                        <input required type="text" name="telephoneClient" id="telephoneClient" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-                                            wire:model.live="telephoneClient"
-                                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                    </div>
                                     <button type="button" wire:click="fetchDossier()" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">Rechercher</button>
                                 @endif
 
-
+                                @if ($dossiers)
+                                    <div>
+                                        <p>Est-ce que le rendez-vous est pour une de ces personne?</p>
+                                        @foreach ($dossiers as $dossier)
+                                            <button type="button" class="block mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">{{$dossier->client->prenom}} {{$dossier->client->nom}}</button>
+                                        @endforeach
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     @break
                     @case(5)
+                        <div class="p-5 bg-white rounded shadow-md">
+                            <button type="button" wire:click="backStep" class="py-1 px-2 bg-gray-300 text-white rounded hover:bg-gray-500"><</button>
+                            <h2 class="text-lg font-bold text-center">Résumé</h2>
+                            <div class="border-y py-6 mb-4">
+                                <p class="mb-2"><b>Date:</b> {{$heureSelected->translatedFormat('l, d F Y')}}</p>
+                                <p class="mb-2"><b>Heure:</b> {{$heureSelected->translatedFormat('H:i')}}</p>
+                                <p class="mb-2"><b>Service:</b> {{$service->nom}} {{$service->prix}}$</p>
+                                <p class="mb-2"><b>Professionnel:</b> {{$professionnel->prenom}} {{$professionnel->nom}}
 
-                        <fieldset class="mb-4">
-                            <legend class="text-sm font-bold mb-2">Informations de la personne qui recevera le traitement</legend>
-                            <div class="mb-4">
-                                <label for="prenomClient" class="block text-sm font-medium text-gray-700">Prénom *</label>
-                                <input required type="text" name="prenomClient" id="prenomClient"
-                                    wire:model="prenomClient"
-                                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                            </div>
-
-                            <div class="mb-4">
-                                <label for="nomClient" class="block text-sm font-medium text-gray-700">nom *</label>
-                                <input required type="text" name="nomClient" id="nomClient"
-                                    wire:model="nomClient"
-                                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                            </div>
-
-                            <div class="mb-4">
-                                <label for="courrielClient" class="block text-sm font-medium text-gray-700">Courriel *</label>
-                                <input required type="email" name="courrielClient" id="courrielClient"
-                                    wire:model="courrielClient"
-                                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                            </div>
-
-                            <div class="mb-4">
-                                <label for="telephoneClient" class="block text-sm font-medium text-gray-700">Téléphone *</label>
-                                <input required type="text" name="telephoneClient" id="telephoneClient" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-                                    wire:model.live="telephoneClient"
-                                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                            </div>
-
-                            <div class="mb-4">
-                                <label for="sexe" class="block text-sm font-medium text-gray-700">Sexe *</label>
-                                <select required name="sexe" id="sexe" class="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                    wire:model="genreId">
-                                    <option class="font-bold" value="">Sélectionnez une option</option>
-                                    @foreach ($genres as $genre)
-                                        <option value="{{$genre->id}}">{{$genre->nom}}</option>
+                                    @foreach ($professionnel->professions as $profession )
+                                    , {{$profession->nom}}
                                     @endforeach
-                                </select>
+                                    </p>
+                                <p class=""><b>Lieu:</b> {{$clinique->nom}}, {{$clinique->noCivique}} rue {{$clinique->rue}}, {{$clinique->ville->nom}}, {{$clinique->ville->province->nom}}, Canada {{$clinique->codePostal}}</p>
                             </div>
+                        
 
-                            <div class="mb-4">
-                                <label for="ddn" class="block text-sm font-medium text-gray-700">Date de naissance *</label>
-                                <input required type="date" name="ddn" id="ddn"  min='1899-01-01' max='{{date('Y-m-d')}}'
-                                    wire:model="ddn"
-                                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                            </div>
-                        </fieldset>
-
-                        <div class="mb-6">
-                            <div class="mb-2">
-                                <input type="radio" id="pourMoi" name="pourmoi" value="1" wire:model.live="pourmoi">
-                                <label for="pourMoi">Ce rendez-vous est pour moi</label>
-                            </div>
-
-                            <div>
-                                <input type="radio" id="pourAutre" name="pourmoi"  value="0" wire:model.live="pourmoi">
-                                <label for="pourAutre">Ce rendez-vous est pour mon enfant ou une personne à charge</label>
-                            </div>
-
-                        </div>
-
-
-                        @if ($pourmoi == false)
-
-                            <fieldset class="mb-6">
-                                <legend class="text-sm font-bold mb-2">Informations de la personne responsable</legend>
+                            <fieldset class="mb-4">
+                                <legend class="text-sm font-bold mb-2">Informations de la personne qui recevera le traitement</legend>
                                 <div class="mb-4">
-                                    <label for="prenomResponsable" class="block text-sm font-medium text-gray-700">Prénom *</label>
-                                    <input required type="text" name="prenomResponsable" id="prenomResponsable"
-                                        wire:model="prenomResponsable"
+                                    <label for="prenomClient" class="block text-sm font-medium text-gray-700">Prénom *</label>
+                                    <input required type="text" name="prenomClient" id="prenomClient"
+                                        wire:model="prenomClient"
                                         class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                 </div>
 
                                 <div class="mb-4">
-                                    <label for="nomResponsable" class="block text-sm font-medium text-gray-700">Nom *</label>
-                                    <input required type="text" name="nomResponsable" id="nomResponsable"
-                                        wire:model="nomResponsable"
+                                    <label for="nomClient" class="block text-sm font-medium text-gray-700">nom *</label>
+                                    <input required type="text" name="nomClient" id="nomClient"
+                                        wire:model="nomClient"
+                                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                </div>
+
+                                <div class="mb-4">
+                                    <label for="courrielClient" class="block text-sm font-medium text-gray-700">Courriel *</label>
+                                    <input required type="email" name="courrielClient" id="courrielClient"
+                                        wire:model="courrielClient"
+                                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                </div>
+
+                                <div class="mb-4">
+                                    <label for="telephoneClient" class="block text-sm font-medium text-gray-700">Téléphone *</label>
+                                    <input required type="text" name="telephoneClient" id="telephoneClient" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                        wire:model.live="telephoneClient"
+                                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                </div>
+
+                                <div class="mb-4">
+                                    <label for="sexe" class="block text-sm font-medium text-gray-700">Sexe *</label>
+                                    <select required name="sexe" id="sexe" class="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                        wire:model="genreId">
+                                        <option class="font-bold" value="">Sélectionnez une option</option>
+                                        @foreach ($genres as $genre)
+                                            <option value="{{$genre->id}}">{{$genre->nom}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="mb-4">
+                                    <label for="ddn" class="block text-sm font-medium text-gray-700">Date de naissance *</label>
+                                    <input required type="date" name="ddn" id="ddn"  min='1899-01-01' max='{{date('Y-m-d')}}'
+                                        wire:model="ddn"
                                         class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                 </div>
                             </fieldset>
-                        @endif
+
+                            <div class="mb-6">
+                                <div class="mb-2">
+                                    <input type="radio" id="pourMoi" name="pourmoi" value="1" wire:model.live="pourmoi">
+                                    <label for="pourMoi">Ce rendez-vous est pour moi</label>
+                                </div>
+
+                                <div>
+                                    <input type="radio" id="pourAutre" name="pourmoi"  value="0" wire:model.live="pourmoi">
+                                    <label for="pourAutre">Ce rendez-vous est pour mon enfant ou une personne à charge</label>
+                                </div>
+
+                            </div>
 
 
-                        <div class="mt-6">
-                            <div class="flex justify-between">
-                                <button type="submit" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">Confirmer</button>
+                            @if ($pourmoi == false)
+
+                                <fieldset class="mb-6">
+                                    <legend class="text-sm font-bold mb-2">Informations de la personne responsable</legend>
+                                    <div class="mb-4">
+                                        <label for="prenomResponsable" class="block text-sm font-medium text-gray-700">Prénom *</label>
+                                        <input required type="text" name="prenomResponsable" id="prenomResponsable"
+                                            wire:model="prenomResponsable"
+                                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label for="nomResponsable" class="block text-sm font-medium text-gray-700">Nom *</label>
+                                        <input required type="text" name="nomResponsable" id="nomResponsable"
+                                            wire:model="nomResponsable"
+                                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                    </div>
+                                </fieldset>
+                            @endif
+
+
+                            <div class="mt-6">
+                                <div class="flex justify-between">
+                                    <button type="submit" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">Confirmer</button>
+                                </div>
                             </div>
                         </div>
                     @break

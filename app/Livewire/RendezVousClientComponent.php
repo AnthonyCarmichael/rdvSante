@@ -6,6 +6,7 @@ use App\Models\Clinique;
 use Carbon\Carbon;
 use App\Models\Indisponibilite;
 use App\Models\DossierProfessionnel;
+use App\Models\Dossier;
 use App\Models\Client;
 use App\Models\Rdv;
 use App\Models\Genre;
@@ -30,7 +31,14 @@ class RendezVousClientComponent extends Component
     public $datesArr;
     public $heureSelected;
 
+    
     # Section 4
+
+    public $newClient;
+    public $lookDossier;
+    public $dossiers;
+    
+    # Section 5
     public $service;
     public $professionnel;
     public $clinique;
@@ -42,8 +50,7 @@ class RendezVousClientComponent extends Component
     public $prenomClient;
     public $nomClient;
 
-    public $newClient;
-    public $lookDossier;
+
 
 
     public function mount(){
@@ -74,7 +81,7 @@ class RendezVousClientComponent extends Component
 
     public function nextStep()
     {
-        if ($this->step < 4) {
+        if ($this->step < 5) {
             $this->step++;
         }
         if ($this->step == 3) {
@@ -346,21 +353,16 @@ class RendezVousClientComponent extends Component
     }
 
     public function fetchDossier() {
-        $clients = Client::where('courriel',$this->courrielClient)->get();
+        $dossierIds  = DossierProfessionnel::join('dossiers', 'dossier_professionnels.idDossier', '=', 'dossiers.id')
+        ->join('clients', 'dossiers.idClient', '=', 'clients.id')
+        ->where('dossier_professionnels.idProfessionnel', $this->professionnelId)
+        ->where('clients.courriel', $this->courrielClient) 
+        ->pluck('dossiers.id');
 
-        $dossiers= [];
-        foreach ($clients as $client) {
-            $dossier = DossierProfessionnel::with('dossier')
-            ->join('dossiers', 'dossier_professionnels.idDossier', '=', 'dossiers.id')
-            ->where('dossier_professionnels.idProfessionnel', $this->professionnelId)
-            ->where('dossiers.idClient', $client->id)
-            ->select('dossier_professionnels.*') // Sélectionnez les colonnes de la table d'association
-            ->get();
-
-            dd($dossier);
-        }
-
-        dd("fin");
+     
+        $this->dossiers = Dossier::whereIn('id', $dossierIds)->get(); 
+        
+        #dd($this->dossiers);
     }
 
 
