@@ -8,9 +8,7 @@ use App\Models\CliniqueProfessionnel;
 use App\Models\Ville;
 use Illuminate\Support\Facades\Auth;
 
-
-class CliniqueComponent extends Component
-{
+class CliniqueComponent extends Component {
     public $clinique_id;
     public $nomClinique;
     public $rueClinique;
@@ -35,93 +33,59 @@ class CliniqueComponent extends Component
     public function mount() {
         $this->villes = Ville::all();
 
-        $this->foundCliniques = Auth::user()->cliniques;
+        $indice=0;
+        foreach (Auth::user()->cliniques as $clinique) {
+            if ($clinique->actif) {
+                $this->foundCliniques[$indice] = $clinique;
+            }
+            $indice++;
+        }
     }
 
-    public function resetFilters()
-    {
+    public function resetFilters() {
         $this->mount();
         $this->reset('sortDirection');
     }
 
-    public function updatedSearch($nomRecherche)
-    {
-
-        $this->foundCliniques = Auth::user()->cliniques;
+    public function updatedSearch($nomRecherche) {
         $indice=0;
-        foreach ($this->foundCliniques as $clinique) {
+
+        foreach (Auth::user()->cliniques as $clinique) {
             #dd($clinique->nom,$this->search,str_contains(strtolower($clinique->nom),strtolower($this->search)));
-            if (!str_contains(strtolower($clinique->nom),strtolower($this->search))&& !str_contains(strtolower($clinique->ville->nom),strtolower($this->search))) {
+            if (!str_contains(strtolower($clinique->nom),strtolower($this->search)) &&
+                !str_contains(strtolower($clinique->noCivique),strtolower($this->search)) &&
+                !str_contains(strtolower($clinique->rue),strtolower($this->search)) &&
+                !str_contains(strtolower($clinique->CodePostal),strtolower($this->search)) &&
+                !str_contains(strtolower($clinique->ville->nom),strtolower($this->search)) &&
+                !str_contains(strtolower($clinique->ville->province->nom),strtolower($this->search)) &&
+                !str_contains(strtolower($clinique->ville->province->pays->nom),strtolower($this->search))) {
                 #dd("true");
                 unset($this->foundCliniques[$indice]);
             }
+
             $indice++;
         }
-
-
-        /*
-        $query = Clinique::with(['ville.province.pays'])
-            ->where(function($query) {
-                $query->where('cliniques.nom', 'like', '%' . $this->search . '%')
-                    ->orWhere('cliniques.rue', 'like', '%' . $this->search . '%')
-                    ->orWhere('cliniques.nocivique', 'like', '%' . $this->search . '%')
-                    ->orWhere('cliniques.codePostal', 'like', '%' . $this->search . '%')
-                    ->orWhereHas('ville', function ($query) {
-                        $query->where('nom', 'like', '%' . $this->search . '%');
-                    })
-                    ->orWhereHas('ville.province', function ($query) {
-                        $query->where('nom', 'like', '%' . $this->search . '%');
-                    })
-                    ->orWhereHas('ville.province.pays', function ($query) {
-                        $query->where('nom', 'like', '%' . $this->search . '%');
-                    })->where('actif', true);
-        });
-
-        if ($this->sortField === 'ville') {
-            $query = $query->join('villes', 'cliniques.idVille', '=', 'villes.id')
-                           ->select('cliniques.*', 'villes.nom as ville_nom')
-                           ->orderBy('ville_nom', $this->sortDirection);
-        } elseif ($this->sortField === 'province') {
-            $query = $query->join('villes', 'cliniques.idVille', '=', 'villes.id')
-                           ->join('provinces', 'villes.idProvince', '=', 'provinces.id')
-                           ->select('cliniques.*', 'provinces.nom as province_nom')
-                           ->orderBy('province_nom', $this->sortDirection);
-        } elseif ($this->sortField === 'pays') {
-            $query = $query->join('villes', 'cliniques.idVille', '=', 'villes.id')
-                           ->join('provinces', 'villes.idProvince', '=', 'provinces.id')
-                           ->join('pays', 'provinces.idPays', '=', 'pays.id')
-                           ->select('cliniques.*', 'pays.nom as pays_nom')
-                           ->orderBy('pays_nom', $this->sortDirection);
-        } else {
-            $query = $query->orderBy($this->sortField, $this->sortDirection);
-        }
-        $this->foundCliniques = $query->get();
-        */
-
-
     }
 
-    public function openModalAjouterClinique()
-    {
+    public function openModalAjouterClinique() {
         $this->resetExcept('foundCliniques','villes');
         $this->dispatch('open-modal', name : 'ajouterClinique');
     }
 
-    public function rules()
-    {
+    public function rules() {
         $rules=[
             'nomClinique' => 'required|string|max:255',
             'rueClinique' => 'required|string|max:255',
             'noCiviqueClinique' => 'nullable|integer|min:0',
-            'codePostalClinique' => 'required|string|max:255|regex:/^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/',
-            'villeClinique' => 'required|exists:villes,id'
+            'codePostalClinique' => 'required|string|max:255|regex:/^[A-Z]\d[A-Z][ -]?\d[A-Z]\d$/',
+            'villeClinique' => 'required|exists:villes,id',
+            'principalClinique' => 'nullable|boolean'
         ];
 
         return $rules;
     }
 
-    public function ajouterClinique()
-    {
+    public function ajouterClinique() {
         $this->validate();
 
         $idClinique = Clinique::insertGetId([
@@ -139,14 +103,19 @@ class CliniqueComponent extends Component
             'idProfessionnel' => Auth::user()->id
         ]);
 
-        $this->foundCliniques = Auth::user()->cliniques;
+        $indice=0;
+        foreach (Auth::user()->cliniques as $clinique) {
+            if ($clinique->actif) {
+                $this->foundCliniques[$indice] = $clinique;
+            }
+            $indice++;
+        }
 
         $this->resetExcept('foundCliniques','villes');
         $this->dispatch('close-modal');
     }
 
-    public function consulterClinique($id)
-    {
+    public function consulterClinique($id) {
         $clinique = Clinique::findOrFail($id);
         $this->clinique_id = $clinique->id;
         $this->nomClinique = $clinique->nom;
@@ -159,8 +128,7 @@ class CliniqueComponent extends Component
         $this->dispatch('open-modal', name: 'consulterClinique');
     }
 
-    public function modifierClinique($id)
-    {
+    public function modifierClinique($id) {
         $clinique = Clinique::findOrFail($id);
         $this->clinique_id = $clinique->id;
         $this->nomClinique = $clinique->nom;
@@ -168,27 +136,28 @@ class CliniqueComponent extends Component
         $this->noCiviqueClinique = $clinique->noCivique;
         $this->codePostalClinique = $clinique->codePostal;
         $this->villeClinique = $clinique->idVille;
-        $this->principalClinique = $clinique->principal;
+        $this->principalClinique = $clinique->principal == 1;
 
         $this->dispatch('open-modal', name: 'modifierClinique');
     }
 
-    public function updateClinique()
-    {
+    public function updateClinique() {
         $this->validate();
 
         $clinique = Clinique::find($this->clinique_id);
 
-        if ($clinique->principal) {
+        if ($this->principalClinique) {
             $cliniquePrincipal = Clinique::where('principal', true);
+
             if($cliniquePrincipal){
                 $cliniquePrincipal->update([
-                    'actif' => false
+                    'principal' => false
                 ]);
             }
+
             if ($clinique) {
                 $clinique->update([
-                    'actif' => true
+                    'principal' => true
                 ]);
             }
         }
@@ -204,16 +173,24 @@ class CliniqueComponent extends Component
 
             $this->resetExcept('foundCliniques', 'villes');
 
-            $this->foundCliniques = Auth::user()->cliniques;
+            $indice=0;
+
+            foreach (Auth::user()->cliniques as $clinique) {
+                if ($clinique->actif) {
+                    $this->foundCliniques[$indice] = $clinique;
+                }
+                $indice++;
+            }
+
             $this->dispatch('close-modal');
         }
     }
 
-    public function desactiverClinique($id){
-        $service = Clinique::findOrFail($id);
+    public function desactiverClinique($id) {
+        $clinique = Clinique::findOrFail($id);
 
-        if ($service) {
-            $service->update([
+        if ($clinique) {
+            $clinique->update([
                 'actif' => false,
             ]);
 
@@ -223,14 +200,12 @@ class CliniqueComponent extends Component
 
     }
 
-    public function confirmDelete($id)
-    {
+    public function confirmDelete($id) {
         $this->cliniqueIdToDelete = $id;
         $this->showDeleteModal = true;
     }
 
-    public function deleteService()
-    {
+    public function deleteService() {
         if ($this->cliniqueIdToDelete) {
             Clinique::find($this->cliniqueIdToDelete)->delete();;
         }
@@ -239,13 +214,11 @@ class CliniqueComponent extends Component
         $this->reset('cliniqueIdToDelete', 'showDeleteModal');
     }
 
-    public function cancelDelete()
-    {
+    public function cancelDelete() {
         $this->reset('cliniqueIdToDelete', 'showDeleteModal');
     }
 
-    public function sortBy($field)
-    {
+    public function sortBy($field) {
         if ($this->sortField === $field) {
             $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
         } else {
@@ -256,8 +229,7 @@ class CliniqueComponent extends Component
         $this->cliniques = $this->updatedSearch($this->search);
     }
 
-    public function render()
-    {
+    public function render() {
         return view('livewire.clinique-component');
     }
 }

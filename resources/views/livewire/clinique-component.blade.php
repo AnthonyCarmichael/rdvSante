@@ -179,7 +179,7 @@
                     <div class="mb-4">
                         <label for="codePostalClinique" class="block text-sm font-medium text-gray-700">Code postal *</label>
                         <input maxlength="7" required type="text" name="codePostalClinique" id="codePostalClinique"
-                            wire:model="codePostalClinique" pattern="[A-Za-z]\d[A-Za-z] \d[A-Za-z]\d" title="Code postal"
+                            wire:model="codePostalClinique" pattern="[A-Z]\d[A-Z] \d[A-Z]\d" title="Code postal"
                             class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                     </div>
 
@@ -244,6 +244,15 @@
                                 <option value="{{ $ville->id }}">{{ $ville->nom }}</option>
                             @endforeach
                         </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" name="principalClinique" id="principalClinique"
+                                wire:model="principalClinique"
+                                class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                            <span class="ml-2 text-gray-700">Clinique principal</span>
+                        </label>
                     </div>
 
                     <div class="mt-6">
