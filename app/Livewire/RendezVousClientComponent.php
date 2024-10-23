@@ -82,9 +82,6 @@ class RendezVousClientComponent extends Component
 
     public function nextStep()
     {
-        $this->dossiers = [];
-        $this->lookDossier =0;
-        $this->dossierSelected = null;
         if ($this->step < 5) {
             $this->step++;
         }
@@ -368,12 +365,14 @@ class RendezVousClientComponent extends Component
 
      
         $this->dossiers = Dossier::whereIn('id', $dossierIds)->get(); 
+        $this->dossierSelected = null;
         
         #dd($this->dossiers);
     }
 
     public function selectDossierClient(Dossier $dossier) {
         $this->dossierSelected = $dossier;
+        $this->nextStep();
     }
 
 
