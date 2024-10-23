@@ -12,6 +12,8 @@ use App\Models\TypeTransaction;
 
 use App\Models\MoyenPaiement;
 
+use App\Http\Controllers\PdfController;
+
 use App\Models\Rdv;
 
 use App\Models\Dossier;
@@ -215,5 +217,17 @@ class GestionTransactions extends Component
                 }
             }
         }
+    }
+
+    public function envoiRecu($client, $transaction, $clinique, $rdv, $service)
+    {
+        $pdf = new PdfController;
+        $t = Transaction::find($transaction);
+        if ($t->idTypeTransaction == 1) {
+            $pdf->recuPaiement($client, $transaction, $clinique, $rdv, $service);
+        } elseif ($t->idTypeTransaction == 2) {
+            $pdf->recuRemboursement($client, $transaction, $clinique, $rdv, $service);
+        }
+
     }
 }

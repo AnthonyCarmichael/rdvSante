@@ -6,6 +6,7 @@ use Codedge\Fpdf\Fpdf\Fpdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Client;
+use App\Models\User;
 use App\Models\Transaction;
 use App\Models\Clinique;
 use App\Models\Rdv;
@@ -43,7 +44,7 @@ class PdfController extends Controller
         $this->fpdf->Ln(20);
     }
 
-    public function recuPaiement()
+    public function recuPaiement($client, $transaction, $clinique, $rdv, $service)
     {
         Carbon::setLocale('fr_CA');
 
@@ -53,12 +54,12 @@ class PdfController extends Controller
         $this->fpdf->AddPage();
         $this->Header();
 
-        $user = Auth::user();
-        $client = Client::find(request('client'));
-        $transaction = Transaction::find(request('transaction'));
-        $rdv = Rdv::find(request('rdv'));
-        $clinique = Clinique::find(request('clinique'));
-        $service = Service::find(request('service'));
+        $user = User::find(Auth::user()->id);
+        $client = Client::find($client);
+        $transaction = Transaction::find($transaction);
+        $rdv = Rdv::find($rdv);
+        $clinique = Clinique::find($clinique);
+        $service = Service::find($service);
         $ville = Ville::find($clinique->idVille);
         $province = Province::find($ville->idProvince);
         $dateRdv = Carbon::parse($rdv->dateHeureDebut)->translatedFormat('l d F Y');
@@ -107,14 +108,14 @@ class PdfController extends Controller
         $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "Total : $total $"), 0, 1);
         $this->fpdf->SetX(150);
         $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "Signature"), 0);
-        $recu = new Recu();
+        $recu = new Recu($client, $rdv, $user, $clinique);
         $recu->attachData($this->fpdf->Output('', 'S'), 'recu.pdf');
-        Mail::to('administrateur@chezmoi.com')
+        Mail::to($client->courriel)
             ->send($recu);
-        exit;
+        return back();
     }
 
-    public function recuRemboursement()
+    public function recuRemboursement($client, $transaction, $clinique, $rdv, $service)
     {
         Carbon::setLocale('fr_CA');
 
@@ -124,12 +125,12 @@ class PdfController extends Controller
         $this->fpdf->AddPage();
         $this->Header();
 
-        $user = Auth::user();
-        $client = Client::find(request('client'));
-        $transaction = Transaction::find(request('transaction'));
-        $rdv = Rdv::find(request('rdv'));
-        $clinique = Clinique::find(request('clinique'));
-        $service = Service::find(request('service'));
+        $user = User::find(Auth::user()->id);
+        $client = Client::find($client);
+        $transaction = Transaction::find($transaction);
+        $rdv = Rdv::find($rdv);
+        $clinique = Clinique::find($clinique);
+        $service = Service::find($service);
         $ville = Ville::find($clinique->idVille);
         $province = Province::find($ville->idProvince);
         $dateRdv = Carbon::parse($rdv->dateHeureDebut)->translatedFormat('l d F Y');
@@ -178,14 +179,12 @@ class PdfController extends Controller
         $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "Total : $total $"), 0, 1);
         $this->fpdf->SetX(150);
         $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "Signature"), 0);
-        $recu = new Recu();
+        $recu = new Recu($client, $rdv, $user, $clinique);
         $recu->attachData($this->fpdf->Output('', 'S'), 'recu.pdf');
-        Mail::to('administrateur@chezmoi.com')
+        Mail::to($client->courriel)
             ->send($recu);
 
-
-
-        exit;
+        return back();
     }
 
 }

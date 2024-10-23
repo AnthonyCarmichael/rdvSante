@@ -100,10 +100,11 @@
 
                         @endphp
                         <td class="w-3/12 pr-4 justify-between">
-                            <button class="w-5/12 bg-selected-green mx-0.5 my-1 rounded p-0.5" type="button"><a
-                                    href="recuPaiement/{{ $client->id }}/{{ $t->id }}/{{ $rdv->idClinique }}/{{ $rdv->id }}/{{ $rdv->idService }}">Envoyer
-                                    le
-                                    reçu</a></button>
+                            <button class="w-5/12 bg-selected-green mx-0.5 my-1 rounded p-0.5" type="button"
+                                wire:click="envoiRecu({{ $client->id }}, {{ $t->id }}, {{ $rdv->idClinique }}, {{ $rdv->id }}, {{ $rdv->idService }})">
+                                Envoyer
+                                le
+                                reçu</a></button>
                             {{ $trouve = false }}
                             @foreach ($remboursements as $r)
                                 @if ($r->idTransaction == $t->id)
@@ -169,10 +170,10 @@
 
                         @endphp
                         <td class="w-3/12 pr-4 justify-between">
-                            <button class="w-5/12 bg-selected-green mx-0.5 my-1 rounded p-0.5" type="button"><a
-                                    href="recuRemboursement/{{ $client->id }}/{{ $t->id }}/{{ $rdv->idClinique }}/{{ $rdv->id }}/{{ $rdv->idService }}">Envoyer
-                                    le
-                                    reçu</a></button>
+                            <button class="w-5/12 bg-selected-green mx-0.5 my-1 rounded p-0.5" type="button"
+                                wire:click="envoiRecu({{ $client->id }}, {{ $t->id }}, {{ $rdv->idClinique }}, {{ $rdv->id }}, {{ $rdv->idService }})">Envoyer
+                                le
+                                reçu</a></button>
                         </td>
                     @endif
                 </tr>
@@ -230,9 +231,9 @@
 
                         @endphp
                         <td class="w-3/12 pr-4 justify-between">
-                            <button class="w-5/12 bg-selected-green mx-0.5 my-1 rounded p-0.5" type="button"><a
-                                    href="recuPaiement/{{ $client->id }}/{{ $t->id }}/{{ $rdv->idClinique }}/{{ $rdv->id }}/{{ $rdv->idService }}">Envoyer
-                                    le reçu</a></button>
+                            <button class="w-5/12 bg-selected-green mx-0.5 my-1 rounded p-0.5" type="button"
+                                wire:click="envoiRecu({{ $client->id }}, {{ $t->id }}, {{ $rdv->idClinique }}, {{ $rdv->id }}, {{ $rdv->idService }})">Envoyer
+                                le reçu</a></button>
                             {{ $trouve = false }}
                             @foreach ($remboursements as $r)
                                 @if ($r->idTransaction == $t->id)
@@ -298,9 +299,9 @@
 
                         @endphp
                         <td class="w-3/12 pr-4 justify-between">
-                            <button class="w-5/12 bg-selected-green mx-0.5 my-1 rounded p-0.5" type="button"><a
-                                    href="recuRemboursement/{{ $client->id }}/{{ $t->id }}/{{ $rdv->idClinique }}/{{ $rdv->id }}/{{ $rdv->idService }}">Envoyer
-                                    le reçu</a></button>
+                            <button class="w-5/12 bg-selected-green mx-0.5 my-1 rounded p-0.5" type="button"
+                                wire:click="envoiRecu({{ $client->id }}, {{ $t->id }}, {{ $rdv->idClinique }}, {{ $rdv->id }}, {{ $rdv->idService }})">Envoyer
+                                le reçu</a></button>
                         </td>
                     @endif
                 </tr>
