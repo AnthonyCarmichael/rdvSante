@@ -216,7 +216,7 @@
                                 <p class=""><b>Lieu:</b> {{$clinique->nom}}, {{$clinique->noCivique}} rue {{$clinique->rue}}, {{$clinique->ville->nom}}, {{$clinique->ville->province->nom}}, Canada {{$clinique->codePostal}}</p>
                             </div>
 
-                            <h2 class="text-lg font-bold text-center">Avez-vous un dossier avec ce professionnel?</h2>
+                            <h2 class="text-lg font-bold text-center">Avez-vous un dossier avec ce professionnel ?</h2>
                             <div class=" flex justify-center">
                                 <button type="button" wire:click="lookingDossier('{{ true }}')" class="mt-4 mx-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">Oui</button>
                                 <button type="button" wire:click="nextStep" class="mt-4 mx-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">Non</button>
@@ -225,21 +225,31 @@
                             <div>
                                 @if ($lookDossier == true)
                                     <div class="mb-4">
-                                        <label for="courrielClient" class="block text-sm font-medium text-gray-700">Courriel *</label>
+                                        <label for="courrielClient" class="block text-sm font-medium text-gray-700">Courriel</label>
                                         <input required type="email" name="courrielClient" id="courrielClient"
                                             wire:model="courrielClient"
                                             class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                     </div>
-                                    <button type="button" wire:click="fetchDossier()" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">Rechercher</button>
+                                    <button type="button" wire:click="fetchDossier()" class="my-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">Rechercher</button>
                                 @endif
 
                                 @if ($dossiers)
-                                    <div>
-                                        <p>Est-ce que le rendez-vous est pour une de ces personne?</p>
-                                        @foreach ($dossiers as $dossier)
-                                            <button type="button" class="block mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">{{$dossier->client->prenom}} {{$dossier->client->nom}}</button>
-                                        @endforeach
+                                    <div class="border-y py-6 mb-4">
+                                        @if ($dossiers->count() !== 0)
+                                            <p>Est-ce que le rendez-vous est pour l'une de ces personnes ?</p>
+                                            @foreach ($dossiers as $dossier)
+                                                <button type="button"  wire:click="selectDossierClient({{$dossier}})" class="block mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">{{$dossier->client->prenom}} {{$dossier->client->nom}}</button>
+                                            @endforeach
+                                            <button type="button" wire:click="nextStep" class="block mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">Autre</button>
+                                        @else
+                                            <p>Aucun dossier client n'a été trouvé associé à ce professionnel et cette adresse courriel</p>
+                                        @endif
                                     </div>
+                                @endif
+
+                                @if ($dossierSelected)
+                                    <p>Veuillez confirmer la prise de rendez-vous pour {{$dossierSelected->client->prenom}} {{$dossierSelected->client->nom}}</p>
+                                    <button type="submit" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">Confirmer</button>
                                 @endif
                             </div>
                         </div>

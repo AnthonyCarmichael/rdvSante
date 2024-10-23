@@ -35,8 +35,9 @@ class RendezVousClientComponent extends Component
     # Section 4
 
     public $newClient;
-    public $lookDossier;
+    public $lookDossier; # boolean
     public $dossiers;
+    public $dossierSelected;
     
     # Section 5
     public $service;
@@ -81,6 +82,9 @@ class RendezVousClientComponent extends Component
 
     public function nextStep()
     {
+        $this->dossiers = [];
+        $this->lookDossier =0;
+        $this->dossierSelected = null;
         if ($this->step < 5) {
             $this->step++;
         }
@@ -100,6 +104,9 @@ class RendezVousClientComponent extends Component
     }
     public function backStep()
     {
+        $this->dossiers = [];
+        $this->lookDossier =0;
+        $this->dossierSelected = null;
         if ($this->step > 0) {
             $this->step--;
         }
@@ -363,6 +370,10 @@ class RendezVousClientComponent extends Component
         $this->dossiers = Dossier::whereIn('id', $dossierIds)->get(); 
         
         #dd($this->dossiers);
+    }
+
+    public function selectDossierClient(Dossier $dossier) {
+        $this->dossierSelected = $dossier;
     }
 
 
