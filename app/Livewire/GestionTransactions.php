@@ -216,16 +216,4 @@ class GestionTransactions extends Component
             }
         }
     }
-
-    public function envoyerRecu()
-    {
-        $this->pdf = new Fpdf;
-        $this->pdf::SetFont('Arial', '', 15);
-        $this->pdf::AddPage("L", ['100', '100']);
-        $this->pdf::Text(10, 10, "Hello World!");
-
-        $this->pdf::Output( 'I', 'fichier.pdf');
-
-        exit;
-    }
 }

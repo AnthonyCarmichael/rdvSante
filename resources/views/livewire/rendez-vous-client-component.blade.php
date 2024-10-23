@@ -1,191 +1,346 @@
 
-<div x-data="{ showForm: false }" class="text-xs text-gray-700 bg-stone-200 m-10 flex flex-col items-center m-6 p-6">
-    <img class="rounded w-full max-w-md" src="{{ asset('img/imgMassage.jpg') }}" alt="image massage">
-    <div class="w-full max-w-md">
-        <form wire:submit.prevent="rdvClient">
-            @switch ($step)
-                @case(0)
-                    <div class="p-5 bg-white rounded shadow-md">
-                        <div class="flex justify-center">
-                            <button type="button" wire:click="nextStep" class="px-4 py-2 mt-2 mb-4 text-white rounded-full bg-dark-green hover:bg-darker-green">
-                                Prendre rendez-vous
-                        </button>
+<div class="text-sm text-gray-700 bg-stone-200 m-10 grid grid-cols-3 gap-6 p-6">
+    <div class="bg-white rounded shadow-md p-6 ">
+        <div class="">
+            <img src="{{ asset('img/logo.png') }}" alt="logo clinique" class="w-[200px]">
+            <h2 class="text-xl my-8">{{$clinique->nom}}</h2>
+        </div>
+
+        <div class=" border-y py-6">
+            <h2 class="text-xl ">Adresse</h2>
+            <p>{{$clinique->noCivique}}, Rue {{$clinique->rue}}</p>
+            <p>{{$clinique->ville->nom}}, {{$clinique->ville->province->nom}}, Canada</p>
+            <p>{{$clinique->codePostal}}</p>
+
+            <a class="text-blue-700" href="https://maps.app.goo.gl/wwRDWyAPtB29TSMv8" target="_blank">Google Map</a>
+        </div>
+        @foreach ($users as $user )
+            <div class="my-2 font-bold">
+                <p class="inline ">{{$user->prenom}} {{$user->nom}}</p> @foreach($user->professions as $profession) <p class="inline">, {{$profession->nom}}</p> @endforeach
+            </div>
+
+            <p class="text-justify mb-2">
+                {{$user->description}}
+            </p>
+
+            <a class="text-justify mb-4 text-blue-700" href="{{$user->lien}}" target="_blank">
+                En savoir plus
+            </a>
+
+        @endforeach
+    </div>
+    <div class="col-span-2">
+        <img class="" src="{{ asset('img/imgMassage.jpg') }}" alt="image massage">
+        <div class="">
+            <form wire:submit.prevent="rdvClient">
+                @switch ($step)
+                    @case(0)
+                        <div class="p-5 bg-white rounded shadow-md">
+                            <div class="flex justify-center">
+                                <button type="button" wire:click="nextStep" class="px-4 py-2 mt-2 mb-4 text-white rounded-full bg-dark-green hover:bg-darker-green">
+                                    Prendre rendez-vous
+                            </button>
+                            </div>
                         </div>
-                    </div>
                     @break
-                @case(1)
+                    @case(1)
+                        <!-- Section 1 -->
+                        <div class="p-5 bg-white rounded shadow-md">
+                            <button type="button" wire:click="backStep" class="py-1 px-2 bg-gray-300 text-white rounded hover:bg-gray-500"><</button>
+                            <h2 class="text-lg font-bold text-center">Sélectionnez un professionnel</h2>
 
-                    <!-- Section 1 -->
-                    <div class="p-5 bg-white rounded shadow-md">
-                        <button type="button" wire:click="backStep" class="py-1 px-2 bg-gray-300 text-white rounded hover:bg-gray-500"><</button>
-                        <h2 class="text-lg font-bold text-center">Sélectionnez un professionnel</h2>
-
-                        @foreach($users as $user)
-                            @if ($user->id==1)
-                                <div class="flex items-center border-y py-6 hover:bg-stone-200 cursor-pointer"  wire:click="getProfessionnelId({{ $user->id }})">
-                                    <div>
-                                        <img src="{{ asset('img/daph.jpg') }}" alt="imageDaph"
-                                            class="mr">
-                                    </div>
-                                    <div class="mx-4 self-center">
-                                        <div class="mb-8">
-                                            <p class="inline ">Daphné Carmichael</p> @foreach($user->professions as $profession) <p class="inline">, {{$profession->nom}}</p> @endforeach
+                            @foreach($users as $user)
+                                @if ($user->actif)
+                                    <div class="flex items-center border-y py-6 hover:bg-stone-200 cursor-pointer"  wire:click="getProfessionnelId({{ $user->id }})">
+                                        <div class="">
+                                            <img src="{{ asset('img/icone_'.$user->id.'.jpg') }}" alt="imageDaph"
+                                                class="w-[200px] mr-6">
                                         </div>
-                
-                                        <p class="text-justify">
-                                            Afin de contribuer à l'accessibilité des soins, Daphné offre des tarifs préférentiels pour les artistes de la scène, les étudiant-es et les personnes de 65 ans et plus.
-                                        </p>
+                                        <div class="mx-4 self-center w-2/4">
+                                            <div class="mb-8">
+                                                <p class="inline ">{{$user->nom}} {{$user->prenom}}</p> @foreach($user->professions as $profession) <p class="inline">, {{$profession->nom}}</p> @endforeach
+                                            </div>
+
+                                            <p class="text-justify">
+                                                {{$user->description}}
+                                            </p>
+                                        </div>
+
+                                        <div>
+                                            <p class="text-stone-300 self-center text-lg mr-4">></p>
+                                        </div>
                                     </div>
-
-                                    <div>
-                                        <p class="text-stone-300 self-center text-lg mr-4">></p>
-                                    </div>
-                                </div>
-                            @endif
-                        @endforeach
-                    </div>
-                    @break
-
-                @case(2)
-
-                    <!-- Section 2 -->
-                    <div class="p-5 bg-white rounded shadow-md">
-                        <button type="button" wire:click="backStep" class="py-1 px-2 bg-gray-300 text-white rounded hover:bg-gray-500"><</button>
-                        <h2 class="text-lg font-bold text-center">Sélectionnez un service</h2>
-                        <div class="">
-                            @foreach($services as $service)
-                                <div class="border-y py-6 hover:bg-stone-200 cursor-pointer flex items-center place-content-between"  wire:click="getServiceId({{ $service->id }})">
-                                    <div>
-                                        <p>Service: {{$service->nom}}</p>
-                                        @if($service->description != null)
-                                            <p>description: {{$service->description}}</p>
-                                        @endif
-                                        <p>Durée: {{$service->duree}}min</p>
-                                        <p>Prix: {{$service->prix}}$</p>
-                                    </div> 
-                                    <div>
-                                        <p class="text-stone-300 self-center text-lg mr-4">></p>
-                                    </div>
-
-                                </div>
+                                @endif
                             @endforeach
                         </div>
-                    </div>
+                    @break
+                    @case(2)
+                        <!-- Section 2 -->
+                        <div class="p-5 bg-white rounded shadow-md">
+                            <button type="button" wire:click="backStep" class="py-1 px-2 bg-gray-300 text-white rounded hover:bg-gray-500"><</button>
+                            <h2 class="text-lg font-bold text-center">Sélectionnez un service</h2>
+                            <div class="">
+                                @foreach($services as $service)
+                                    <div class="border-y py-6 hover:bg-stone-200 cursor-pointer flex items-center place-content-between"  wire:click="getServiceId({{ $service->id }})">
+                                        <div>
+                                            <p class="mb-2"><b>Service:</b> {{$service->nom}}</p>
+                                            @if($service->description != null)
+                                                <p class="mb-2"><b>Description:</b> {{$service->description}}</p>
+                                            @endif
+                                            <p class="mb-2"><b>Durée:</b> {{$service->duree}} min</p>
+                                            <p><b>Prix:</b> {{$service->prix}} $</p>
+                                        </div>
+                                        <div>
+                                            <p class="text-stone-300 self-center text-lg mr-4">></p>
+                                        </div>
+
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
 
                     @break
-                @case(3)
-                    <!-- Section 3 -->
-                    <div class="p-5 bg-white rounded shadow-md">
-                        <button type="button" wire:click="backStep" class="py-1 px-2 bg-gray-300 text-white rounded hover:bg-gray-500"><</button>
-                        <h2 class="text-lg font-bold text-center">Sélectionnez une heure</h2>
-                        <div class="border-y py-6">
-                            <div class="flex justify-between">
-                                <button type="button" wire:click="changeWeek(-1)"><</button>
-                                <h3>{{$startingWeek->translatedFormat('F')}}</h3>
-                                <button type="button" wire:click="changeWeek(1)">></button>
-                            </div>
+                    @case(3)
+                        <!-- Section 3 -->
+                        <div class="p-5 bg-white rounded shadow-md">
+                            <button type="button" wire:click="backStep" class="py-1 px-2 bg-gray-300 text-white rounded hover:bg-gray-500"><</button>
+                            <h2 class="text-lg font-bold text-center">Sélectionnez une heure</h2>
+                            <div class="border-y py-6">
+                                <div class="flex justify-between">
+                                    <button type="button" wire:click="changeWeek(-1)"><</button>
+                                    <h3>{{$startingWeek->translatedFormat('F')}}</h3>
+                                    <button type="button" wire:click="changeWeek(1)">></button>
+                                </div>
 
-                            <table class="table-fixed w-full text-sm text-stone-700 text-xs">
-                                <thead>
-                                    <tr class="bg-stone-200">
-                                        <!-- Titre col -->
-                                        <th class="">Heure </th>
+                                <table class="table-fixed w-full text-sm text-stone-700 text-xs">
+                                    <thead>
+                                        <tr class="bg-stone-200">
+                                            <!-- Titre col -->
+                                            <th class="">Heure </th>
 
-                                        <?php
-                                        foreach ($datesArr as $date) {?>
-                                            <th class="">{{$date->isoFormat('ddd D')}}</th>
                                             <?php
-                                        }
-                                        ?>
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-
-                                    <?php
-                                    $selectedDateTime = $startingWeek->copy();
-                                    $selectedDateTime->setTime(7, 0, 0);
-
-
-                                    for ($i=0; $i < 30; $i++) {
-
-                                        ?>
-
-                                        <!-- Gestion de l'aternance des couleurs dans l'agenda -->
-                                        @if(($i %2)==0)
-                                            <tr class="bg-gray-100 text-center">
-
-                                        @else
-                                            <tr class=" bg-gray-200 text-center">
-                                        @endif
-
-                                        <!-- colonne temps -->
-                                        <td class=""><?php echo $selectedDateTime->format('H:i') ?></td>
-
-                                            <!-- colonne interactive de l'agenda -->
-                                            <?php
-
-                                                for ($j=0; $j <7; $j++) {
-                                                    ?>
-                                                    <!-- Cellule intéractible -->
-                                                    <td class="">
-                                                        <!-- verification cellule dispo -->
-                                                        @if (!empty($dispoDateArr))
-
-                                                            @foreach ($dispoDateArr as $dispo)
-                                                                @if ($dispo == $selectedDateTime)
-                                                                    <button class="w-full h-full bg-blue-500 "
-                                                                        type="button"
-                                                                        wire:click="choixDate('{{ $selectedDateTime }}')"
-                                                                        value="{{$selectedDateTime}}"
-                                                                        onclick="console.log(event.target.value);"
-                                                                        onmouseover="document.querySelectorAll('button[value=\'{{$dispo}}\']').forEach(btn => btn.classList.add('hover-effect-blue'))"
-                                                                        onmouseout="document.querySelectorAll('button[value=\'{{$dispo}}\']').forEach(btn => btn.classList.remove('hover-effect-blue'))">
-                                                                        <span class="invisible">Disponible</span>
-                                                                    </button>
-                                                                    @break
-                                                                @endif
-                                                            @endforeach
-
-                                                        @endif
-                                                    </td>
-                                                    <?php
-                                                    $selectedDateTime->modify('+1 day');
-                                                }
-                                                $selectedDateTime->modify('-7 day');
+                                            foreach ($datesArr as $date) {?>
+                                                <th class="">{{$date->isoFormat('ddd D')}}</th>
+                                                <?php
+                                            }
                                             ?>
                                         </tr>
+                                    </thead>
+                                    <tbody>
 
 
-                                    <?php
-                                        $selectedDateTime->modify('+30 minutes');
-                                    }
-                                    ?>
+                                        <?php
+                                        $selectedDateTime = $startingWeek->copy();
+                                        $selectedDateTime->setTime(7, 0, 0);
 
-                                </tbody>
-                                <tfoot>
 
-                                </tfoot>
-                            </table>
+                                        for ($i=0; $i < 60; $i++) {
+
+                                            ?>
+
+                                            <!-- Gestion de l'aternance des couleurs dans l'agenda -->
+                                            @if(($i %2)==0)
+                                                <tr class="bg-gray-100 text-center">
+
+                                            @else
+                                                <tr class=" bg-gray-200 text-center">
+                                            @endif
+
+                                            <!-- colonne temps -->
+                                            <td class=""><?php echo $selectedDateTime->format('H:i') ?></td>
+
+                                                <!-- colonne interactive de l'agenda -->
+                                                <?php
+
+                                                    for ($j=0; $j <7; $j++) {
+                                                        ?>
+                                                        <!-- Cellule intéractible -->
+                                                        <td class="">
+                                                            <!-- verification cellule dispo -->
+                                                            @if (!empty($dispoDateArr))
+
+                                                                @foreach ($dispoDateArr as $dispo)
+                                                                    @if ($dispo == $selectedDateTime)
+                                                                        <button class="w-full h-full bg-blue-500 text-white rounded"
+                                                                            type="button"
+                                                                            wire:click="choixDate('{{ $selectedDateTime }}')"
+                                                                            value="{{$selectedDateTime}}"
+                                                                            onclick="console.log(event.target.value);"
+                                                                            onmouseover="document.querySelectorAll('button[value=\'{{$dispo}}\']').forEach(btn => btn.classList.add('hover-effect-blue'))"
+                                                                            onmouseout="document.querySelectorAll('button[value=\'{{$dispo}}\']').forEach(btn => btn.classList.remove('hover-effect-blue'))">
+                                                                            <span class="">{{$selectedDateTime->format('H:i')}}</span>
+                                                                        </button>
+                                                                        @break
+                                                                    @endif
+                                                                @endforeach
+
+                                                            @endif
+                                                        </td>
+                                                        <?php
+                                                        $selectedDateTime->modify('+1 day');
+                                                    }
+                                                    $selectedDateTime->modify('-7 day');
+                                                ?>
+                                            </tr>
+
+
+                                        <?php
+                                            $selectedDateTime->modify('+15 minutes');
+                                        }
+                                        ?>
+
+                                    </tbody>
+                                    <tfoot>
+
+                                    </tfoot>
+                                </table>
+                            </div>
+
                         </div>
-                        
-                    </div>
                     @break
-                @case(4)
-                    <!-- Section 4 -->
-                    <div class="p-5 bg-white rounded shadow-md">
-                        <button type="button" wire:click="backStep" class="py-1 px-2 bg-gray-300 text-white rounded hover:bg-gray-500"><</button>
-                        <h2 class="text-lg font-bold text-center">Résumé</h2>
-                        <div class="flex justify-between">
-                            <button type="submit" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">Confirmer</button>
+                    @case(4)
+                        <!-- Section 4 -->
+                        <div class="p-5 bg-white rounded shadow-md">
+                            <button type="button" wire:click="backStep" class="py-1 px-2 bg-gray-300 text-white rounded hover:bg-gray-500"><</button>
+                            <h2 class="text-lg font-bold text-center">Résumé</h2>
+                            <div class="border-y py-6 mb-4">
+                                <p class="mb-2"><b>Date:</b> {{$heureSelected->translatedFormat('l, d F Y')}}</p>
+                                <p class="mb-2"><b>Heure:</b> {{$heureSelected->translatedFormat('H:i')}}</p>
+                                <p class="mb-2"><b>Service:</b> {{$service->nom}} {{$service->prix}}$</p>
+                                <p class="mb-2"><b>Professionnel:</b> {{$professionnel->prenom}} {{$professionnel->nom}}
+
+                                    @foreach ($professionnel->professions as $profession )
+                                    , {{$profession->nom}}
+                                    @endforeach
+                                    </p>
+                                <p class=""><b>Lieu:</b> {{$clinique->nom}}, {{$clinique->noCivique}} rue {{$clinique->rue}}, {{$clinique->ville->nom}}, {{$clinique->ville->province->nom}}, Canada {{$clinique->codePostal}}</p>
+                            </div>
+
+                            <h2 class="text-lg font-bold text-center">Avez-vous un dossier avec ce professionnel?</h2>
+                            <div class=" flex justify-center">
+                                <button type="button" wire:click="lookingDossier('{{ true }}')" class="mt-4 mx-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">Oui</button>
+                                <button type="button" wire:click="lookingDossier('{{ false }}')" class="mt-4 mx-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">Non</button>
+                            </div>
+
+                            <div>
+                                @if ($lookDossier == true)
+                                    <div class="mb-4">
+                                        <label for="courrielClient" class="block text-sm font-medium text-gray-700">Courriel *</label>
+                                        <input required type="email" name="courrielClient" id="courrielClient"
+                                            wire:model="courrielClient"
+                                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label for="telephoneClient" class="block text-sm font-medium text-gray-700">Téléphone *</label>
+                                        <input required type="text" name="telephoneClient" id="telephoneClient" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                            wire:model.live="telephoneClient"
+                                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                    </div>
+                                    <button type="button" wire:click="fetchDossier()" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">Rechercher</button>
+                                @endif
+
+
+                            </div>
                         </div>
-                        
-                    </div>
                     @break
-            @endswitch
-        
-        </form>
+                    @case(5)
+
+                        <fieldset class="mb-4">
+                            <legend class="text-sm font-bold mb-2">Informations de la personne qui recevera le traitement</legend>
+                            <div class="mb-4">
+                                <label for="prenomClient" class="block text-sm font-medium text-gray-700">Prénom *</label>
+                                <input required type="text" name="prenomClient" id="prenomClient"
+                                    wire:model="prenomClient"
+                                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="nomClient" class="block text-sm font-medium text-gray-700">nom *</label>
+                                <input required type="text" name="nomClient" id="nomClient"
+                                    wire:model="nomClient"
+                                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="courrielClient" class="block text-sm font-medium text-gray-700">Courriel *</label>
+                                <input required type="email" name="courrielClient" id="courrielClient"
+                                    wire:model="courrielClient"
+                                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="telephoneClient" class="block text-sm font-medium text-gray-700">Téléphone *</label>
+                                <input required type="text" name="telephoneClient" id="telephoneClient" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                    wire:model.live="telephoneClient"
+                                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="sexe" class="block text-sm font-medium text-gray-700">Sexe *</label>
+                                <select required name="sexe" id="sexe" class="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                    wire:model="genreId">
+                                    <option class="font-bold" value="">Sélectionnez une option</option>
+                                    @foreach ($genres as $genre)
+                                        <option value="{{$genre->id}}">{{$genre->nom}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="ddn" class="block text-sm font-medium text-gray-700">Date de naissance *</label>
+                                <input required type="date" name="ddn" id="ddn"  min='1899-01-01' max='{{date('Y-m-d')}}'
+                                    wire:model="ddn"
+                                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            </div>
+                        </fieldset>
+
+                        <div class="mb-6">
+                            <div class="mb-2">
+                                <input type="radio" id="pourMoi" name="pourmoi" value="1" wire:model.live="pourmoi">
+                                <label for="pourMoi">Ce rendez-vous est pour moi</label>
+                            </div>
+
+                            <div>
+                                <input type="radio" id="pourAutre" name="pourmoi"  value="0" wire:model.live="pourmoi">
+                                <label for="pourAutre">Ce rendez-vous est pour mon enfant ou une personne à charge</label>
+                            </div>
+
+                        </div>
+
+
+                        @if ($pourmoi == false)
+
+                            <fieldset class="mb-6">
+                                <legend class="text-sm font-bold mb-2">Informations de la personne responsable</legend>
+                                <div class="mb-4">
+                                    <label for="prenomResponsable" class="block text-sm font-medium text-gray-700">Prénom *</label>
+                                    <input required type="text" name="prenomResponsable" id="prenomResponsable"
+                                        wire:model="prenomResponsable"
+                                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                </div>
+
+                                <div class="mb-4">
+                                    <label for="nomResponsable" class="block text-sm font-medium text-gray-700">Nom *</label>
+                                    <input required type="text" name="nomResponsable" id="nomResponsable"
+                                        wire:model="nomResponsable"
+                                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                </div>
+                            </fieldset>
+                        @endif
+
+
+                        <div class="mt-6">
+                            <div class="flex justify-between">
+                                <button type="submit" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">Confirmer</button>
+                            </div>
+                        </div>
+                    @break
+                @endswitch
+
+            </form>
+        </div>
+
     </div>
-                    
-</div>
 
+</div>

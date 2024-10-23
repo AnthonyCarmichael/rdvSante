@@ -13,4 +13,14 @@ class DossierProfessionnel extends Pivot
     protected $primaryKey = 'id';
     public $incrementing = true;
     public $timestamps = false;
+
+    public function dossier()
+    {
+        return $this->belongsTo(Dossier::class, 'idDossier'); // Ajustez le foreign key si nécessaire
+    }
+
+    public function professionnel()
+    {
+        return $this->belongsTo(User::class, 'idProfessionnel'); // Ajustez le foreign key si nécessaire
+    }
 }

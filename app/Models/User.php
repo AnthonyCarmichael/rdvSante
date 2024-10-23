@@ -50,6 +50,9 @@ class User extends Authenticatable
         'password',
         'telephone',
         'idProfession',
+        'description',
+        'actif',
+        'lien',
     ];
 
     /**

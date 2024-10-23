@@ -11,6 +11,8 @@ class ProfessionProfessionnel extends Pivot
 
     protected $table = 'profession_professionnels';
     protected $primaryKey = 'id';
-    public $incrementing = true;
     public $timestamps = false;
+
+    protected $fillable = ['idProfession', 'user_id'];
+
 }
