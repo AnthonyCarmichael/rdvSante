@@ -6,6 +6,7 @@ use App\Models\Clinique;
 use Carbon\Carbon;
 use App\Models\Indisponibilite;
 use App\Models\DossierProfessionnel;
+use App\Models\Dossier;
 use App\Models\Client;
 use App\Models\Rdv;
 use App\Models\Genre;
@@ -30,7 +31,15 @@ class RendezVousClientComponent extends Component
     public $datesArr;
     public $heureSelected;
 
+    
     # Section 4
+
+    public $newClient;
+    public $lookDossier; # boolean
+    public $dossiers;
+    public $dossierSelected;
+    
+    # Section 5
     public $service;
     public $professionnel;
     public $clinique;
@@ -41,12 +50,33 @@ class RendezVousClientComponent extends Component
     public $courrielClient;
     public $prenomClient;
     public $nomClient;
+    public $prenomResponsable;
+    public $nomResponsable;
+    public $lienResponsable;
 
-    public $newClient;
-    public $lookDossier;
+
 
 
     public function mount(){
+        $now = Carbon::now(('America/Toronto'));
+        $this->clinique = Clinique::find(1); # A changer pour clinique principal
+
+
+        if ($now->isSunday())
+            $this->startingWeek = $now->copy();
+        else
+            $this->startingWeek = $now->copy()->startOfWeek();
+
+        $this->startingWeek->setTime(7, 0);
+        $this->users = User::all();
+        $this->dispoDateArr = [];
+        $this->pourmoi = true;
+        $this->newClient = null;
+
+    }
+
+    public function resetForm() {
+        $this->reset();
         $now = Carbon::now(('America/Toronto'));
         $this->clinique = Clinique::find(1); # A changer pour clinique principal
 
@@ -74,7 +104,7 @@ class RendezVousClientComponent extends Component
 
     public function nextStep()
     {
-        if ($this->step < 4) {
+        if ($this->step < 6) {
             $this->step++;
         }
         if ($this->step == 3) {
@@ -93,6 +123,9 @@ class RendezVousClientComponent extends Component
     }
     public function backStep()
     {
+        $this->dossiers = [];
+        $this->lookDossier =0;
+        $this->dossierSelected = null;
         if ($this->step > 0) {
             $this->step--;
         }
@@ -167,7 +200,7 @@ class RendezVousClientComponent extends Component
                 # Gèrer le timzone ici
                 $dateTemp = $this->datesArr[$i]->copy();
                 $dateTemp->setTime(7, 0);
-                $dateToCheck = Carbon::createFromFormat('Y-m-d', '2024-10-27', 'America/Toronto');
+                $dateToCheck = Carbon::createFromFormat('Y-m-d', '2024-10-25', 'America/Toronto');
 
 
 
@@ -238,10 +271,10 @@ class RendezVousClientComponent extends Component
                                         ($debut <= $dateTemp && $fin > $dateTemp) ||
 
                                         // Si la fin de dateTemp chevauche une indisponibilité
-                                        ($debut < $dateTempEndAvecService && $fin >= $dateTempEndAvecService) ||
+                                        ($debut <= $dateTempEndAvecService && $fin > $dateTempEndAvecService) ||
 
                                         // Si dateTemp chevauche toute l'indisponibilité
-                                        ($dateTemp <= $debut && $dateTempEndAvecService >= $fin)
+                                        ($dateTemp <= $debut && $dateTempEndAvecService > $fin)
                                     )  {
 
                                         $findIndispo = true;
@@ -346,29 +379,79 @@ class RendezVousClientComponent extends Component
     }
 
     public function fetchDossier() {
-        $clients = Client::where('courriel',$this->courrielClient)->get();
+        $dossierIds  = DossierProfessionnel::join('dossiers', 'dossier_professionnels.idDossier', '=', 'dossiers.id')
+        ->join('clients', 'dossiers.idClient', '=', 'clients.id')
+        ->where('dossier_professionnels.idProfessionnel', $this->professionnelId)
+        ->where('clients.courriel', $this->courrielClient) 
+        ->where('clients.actif', true) 
+        ->pluck('dossiers.id');
 
-        $dossiers= [];
-        foreach ($clients as $client) {
-            $dossier = DossierProfessionnel::with('dossier')
-            ->join('dossiers', 'dossier_professionnels.idDossier', '=', 'dossiers.id')
-            ->where('dossier_professionnels.idProfessionnel', $this->professionnelId)
-            ->where('dossiers.idClient', $client->id)
-            ->select('dossier_professionnels.*') // Sélectionnez les colonnes de la table d'association
-            ->get();
+     
+        $this->dossiers = Dossier::whereIn('id', $dossierIds)->get(); 
+        $this->dossierSelected = null;
+        
+        #dd($this->dossiers);
+    }
 
-            dd($dossier);
-        }
-
-        dd("fin");
+    public function selectDossierClient(Dossier $dossier) {
+        $this->dossierSelected = $dossier;
+        $this->nextStep();
     }
 
 
     public function rdvClient(){
 
+        if ($this->pourmoi == 1) {
+            $this->prenomResponsable = null;
+            $this->nomResponsable = null;
+            $this->lienResponsable = null;
+        }
 
+        if ($this->dossierSelected) {
+            Rdv::create([
+                'dateHeureDebut' => $this->heureSelected,
+                'idDossier' => $this->dossierSelected->id,
+                'idService' => $this->serviceId,
+                'idClinique' => $this->clinique->id,
+                'raison' => null,
+                'actif' => true,
+            ]);
+        } else {
+            $nouveauClient = Client::create([
+                'nom' => $this->nomClient,
+                'prenom' => $this->prenomClient,
+                'courriel' => $this->courrielClient,
+                'telephone' => $this->telephoneClient,
+                'ddn' => $this->ddn,
+                'actif' => true,
+                'nomResponsable' => $this->nomResponsable = null,
+                'prenomResponsable' => $this->prenomResponsable,
+                'lienResponsable' => $this->lienResponsable,
+                'idGenre' =>$this->genreId,
 
-        dd($this);
+            ]);
+            $nouveauDossier = Dossier::create([
+                'dateCreation' => Carbon::now('America/Toronto')->format('Y-m-d'),
+                'permissionPartage' => false,
+                'idClient' => $nouveauClient->id
+            ]);
+
+            $nouveauDossierProfessionnel = DossierProfessionnel::create([
+                'principal' => true,
+                'idDossier' => $nouveauDossier->id,
+                'idProfessionnel' => $this->professionnel->id,
+            ]);
+            $nouveauRdv = Rdv::create([
+                'dateHeureDebut' => $this->heureSelected,
+                'idDossier' => $nouveauDossier->id,
+                'idService' => $this->serviceId,
+                'idClinique' => $this->clinique->id,
+                'raison' => null,
+                'actif' => true,
+            ]);
+        }
+
+        $this->nextStep();
 
     }
 
