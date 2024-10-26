@@ -41,9 +41,9 @@ class GestionTransactions extends Component
         return view('livewire.gestion-transactions');
     }
 
-    public function mount($transactions)
+    public function mount()
     {
-        $this->transactions = $transactions;
+        $this->transactions = Transaction::where('idTypeTransaction', '=', '1')->get();
         $this->remboursements = Transaction::where('idTypeTransaction', '=', '2')->get();
         $this->clients = Client::all();
         $this->typeTransactions = TypeTransaction::all();
