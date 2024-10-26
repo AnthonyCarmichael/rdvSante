@@ -10,6 +10,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Dossier extends Model
 {
     use HasFactory;
+    public $timestamps = false;
+
+    protected $fillable = ['dateCreation', 'permissionPartage', 'idClient'];
+
 
     public function professionnels(): BelongsToMany
     {
