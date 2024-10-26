@@ -1,13 +1,16 @@
-@if ($errors->has('codePostalClinique'))
-    <div class="alert alert-danger">
-        {{ $errors->first('codePostalClinique') }}
-    </div>
-@endif
 <div>
     <div class="m-4">
         <div class="flex items-center mb-4">
             <input wire:model.live="search" type="text" placeholder="Rechercher..."
                 class="form-input rounded-md shadow-sm mr-2">
+
+            <label class="ml-4 text-m text-right font-bold" for="actif">Statut:</label>
+            <select wire:change="filtreClinique" wire:model="filtreActif" id="filtreActif" name="filtreActif"
+                class="h-8 text-m ml-2 py-0 rounded">
+                <option value='1' selected>Actif</option>
+                <option value='0'>Inactif</option>
+                <option value='2'>Tous</option>
+            </select>
 
             <button wire:click="resetFilters"
                 class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded ml-auto">
@@ -118,35 +121,37 @@
                         <td wire:click="consulterClinique({{ $clinique->id }})" class="w-auto pr-4">{{ $clinique->ville->province->nom }}</td>
                         <td wire:click="consulterClinique({{ $clinique->id }})" class="w-auto pr-4">{{ $clinique->ville->province->pays->nom }}</td>
                         <td class="w-auto pr-4 justify-between">
-                            <button class="w-auto bg-selected-green mx-1 my-1 rounded p-0.5"
-                                wire:click="modifierClinique({{ $clinique->id }})" type="button">
-                                Modifier
-                            </button>
+                            @if ($clinique->actif == 1)
+                                <button class="w-auto bg-selected-green mx-1 my-1 rounded p-0.5"
+                                    wire:click="modifierClinique({{ $clinique->id }})" type="button">
+                                    Modifier
+                                </button>
 
-                            <button type="button" wire:click="desactiverClinique({{ $clinique->id }})"
-                                class="w-auto bg-selected-green mx-1 my-1 rounded p-0.5">
-                                Désactiver
-                            </button>
+                                <button type="button" wire:click="desactiverClinique({{ $clinique->id }})"
+                                    class="w-auto bg-selected-green mx-1 my-1 rounded p-0.5">
+                                    Désactiver
+                                </button>
+                            @elseif ($clinique->actif == 0)
+                                <button type="button" wire:click="activerClinique({{ $clinique->id }})"
+                                    class="w-auto bg-selected-green mx-1 my-1 rounded p-0.5">
+                                    Activer
+                                </button>
 
-                            <button hidden type="button" wire:click="confirmDelete({{ $clinique->id }})"
-                                class="w-auto bg-selected-green mx-1 my-1 rounded p-0.5">
-                                Supprimer
-                            </button>
+                                <button type="button" wire:click="confirmDelete({{ $clinique->id }})"
+                                    class="w-auto bg-selected-green mx-1 my-1 rounded p-0.5">
+                                    Supprimer
+                                </button>
+                            @endif
                         </td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
 
-        <div class="flex items-center mt-4">
+        <div class="flex justify-end z-0">
             <button wire:click="openModalAjouterClinique()"
-                class="bg-selected-green text-white font-bold py-2 px-4 rounded mr-2">
+                class="w-2/12 bg-selected-green mx-1 my-2 rounded p-0.5 hide">
                 Ajouter
-            </button>
-
-            <button wire:click="resetFilters"
-                class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded ml-auto">
-                Voir les services désactivés
             </button>
         </div>
     </div>
@@ -231,7 +236,7 @@
                     <div class="mb-4">
                         <label for="codePostalClinique" class="block text-sm font-medium text-gray-700">Code postal *</label>
                         <input maxlength="7" required type="text" name="codePostalClinique" id="codePostalClinique"
-                            wire:model="codePostalClinique" pattern="[A-Za-z]\d[A-Za-z] \d[A-Za-z]\d" title="Code postal"
+                            wire:model="codePostalClinique" pattern="[A-Z]\d[A-Z] \d[A-Z]\d" title="Code postal"
                             class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                     </div>
 
@@ -309,7 +314,7 @@
             <div class="bg-white p-6 rounded shadow-lg">
                 <p>Êtes-vous sûr de vouloir supprimer cette clinique ?</p>
                 <div class="flex justify-between mt-4">
-                    <button wire:click="deleteService" class="bg-red-500 text-white px-4 py-2">
+                    <button wire:click="deleteClinique" class="bg-red-500 text-white px-4 py-2">
                         Confirmer
                     </button>
                     <button wire:click="cancelDelete" class="bg-gray-500 text-white px-4 py-2">

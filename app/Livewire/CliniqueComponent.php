@@ -27,19 +27,14 @@ class CliniqueComponent extends Component {
     public $search = '';
     public $sortField = 'nom';
     public $sortDirection = 'asc';
+    public $filtreActif = 1;
 
     public $searchQuery;
 
     public function mount() {
+        $this->filtreClinique();
+        
         $this->villes = Ville::all();
-
-        $indice=0;
-        foreach (Auth::user()->cliniques as $clinique) {
-            if ($clinique->actif) {
-                $this->foundCliniques[$indice] = $clinique;
-            }
-            $indice++;
-        }
     }
 
     public function resetFilters() {
@@ -103,13 +98,7 @@ class CliniqueComponent extends Component {
             'idProfessionnel' => Auth::user()->id
         ]);
 
-        $indice=0;
-        foreach (Auth::user()->cliniques as $clinique) {
-            if ($clinique->actif) {
-                $this->foundCliniques[$indice] = $clinique;
-            }
-            $indice++;
-        }
+        $this->filtreClinique();
 
         $this->resetExcept('foundCliniques','villes');
         $this->dispatch('close-modal');
@@ -173,14 +162,7 @@ class CliniqueComponent extends Component {
 
             $this->resetExcept('foundCliniques', 'villes');
 
-            $indice=0;
-
-            foreach (Auth::user()->cliniques as $clinique) {
-                if ($clinique->actif) {
-                    $this->foundCliniques[$indice] = $clinique;
-                }
-                $indice++;
-            }
+            $this->filtreClinique();
 
             $this->dispatch('close-modal');
         }
@@ -195,9 +177,21 @@ class CliniqueComponent extends Component {
             ]);
 
             $this->resetExcept('foundCliniques', 'villes');
-            $this->foundCliniques = Clinique::where('idProfessionnel', Auth::user()->id)->where('actif', true)->get();
+            $this->filtreClinique();
         }
+    }
 
+    public function activerClinique($id) {
+        $clinique = Clinique::findOrFail($id);
+
+        if ($clinique) {
+            $clinique->update([
+                'actif' => true,
+            ]);
+
+            $this->resetExcept('foundCliniques', 'villes');
+            $this->filtreClinique();
+        }
     }
 
     public function confirmDelete($id) {
@@ -205,7 +199,7 @@ class CliniqueComponent extends Component {
         $this->showDeleteModal = true;
     }
 
-    public function deleteService() {
+    public function deleteClinique() {
         if ($this->cliniqueIdToDelete) {
             Clinique::find($this->cliniqueIdToDelete)->delete();;
         }
@@ -227,6 +221,37 @@ class CliniqueComponent extends Component {
         }
 
         $this->cliniques = $this->updatedSearch($this->search);
+    }
+
+    public function filtreClinique()
+    {
+        if ($this->filtreActif == 1) {
+            $indice=0;
+            foreach (Auth::user()->cliniques as $clinique) {
+                if ($clinique->actif) {
+                    $this->foundCliniques[$indice] = $clinique;
+                }
+                $indice++;
+            }
+        }
+        elseif ($this->filtreActif == 0) {
+            $indice=0;
+            foreach (Auth::user()->cliniques as $clinique) {
+                if (!($clinique->actif)) {
+                    $this->foundCliniques[$indice] = $clinique;
+                }
+                $indice++;
+            }
+        }
+        elseif ($this->filtreActif == 2) {
+            $indice=0;
+            foreach (Auth::user()->cliniques as $clinique) {
+                if ($clinique) {
+                    $this->foundCliniques[$indice] = $clinique;
+                }
+                $indice++;
+            }
+        }
     }
 
     public function render() {
