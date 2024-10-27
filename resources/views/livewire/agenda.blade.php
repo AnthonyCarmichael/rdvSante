@@ -114,6 +114,7 @@
                                                             <div class="text-left text-[8px] absolute top-1 left-1 text-white z-10 ">
                                                                 <p class="leading-tight block">{{$rdv->client->prenom}} {{$rdv->client->nom}}</p>
                                                                 <p class="leading-tight block">Début : {{$debut->format('H:i')}}</p>
+                                                                <p class="leading-tight block">Fin : {{$debut->copy()->addMinutes($rdv->service->duree)->format('H:i')}}</p>
                                                                 <p class="leading-tight block text-red-400">Pas payé</p>
 
                                                             </div>
