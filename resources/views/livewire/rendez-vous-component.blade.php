@@ -61,11 +61,11 @@
     <x-modal title="Rendez-vous" name="consulterRdv" :show="false">
         <div class="border-b flex text-sm">
             <button type="button" 
-                class="px-4 py-2 rounded  {{ $sousMenuConsult === 'rdv' ? 'bg-green  cursor-default text-white' : 'bg-pale-green hover:bg-green hover:text-white' }}"
+                class="px-4 py-2 rounded  {{ $sousMenuConsult === 'rdv' ? 'bg-green  cursor-default text-white' : 'bg-pale-green hover:bg-dark-green hover:text-white' }}"
                 wire:click="changeSousMenu('rdv')"
                 >Rendez-vous</button>
             <button type="button" 
-                class="px-4 py-2 rounded {{ $sousMenuConsult === 'facture' ? 'bg-green  cursor-default text-white' : 'bg-pale-green hover:bg-green hover:text-white' }}"
+                class="px-4 py-2 rounded {{ $sousMenuConsult === 'facture' ? 'bg-green  cursor-default text-white' : 'bg-pale-green hover:bg-dark-green hover:text-white' }}"
                 wire:click="changeSousMenu('facture')"
                 >Facturation</button>
             
