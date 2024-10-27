@@ -30,8 +30,12 @@ Route::controller(ClientController::class)->group(function () {
 });
 
 Route::controller(TransactionController::class)->group(function () {
-    Route::get('/Transactions', 'index')->middleware('auth')->name('transactions');
+    Route::get('/Paiements', 'index')->middleware('auth')->name('paiements');
 });
+
+Route::get('/Transactions', function () {
+    return view('transaction/transactions');
+})->middleware('auth')->name('transactions');
 
 
 //Routes pour les services
