@@ -1,0 +1,126 @@
+<div>
+    <label class="text-m text-right font-bold" for="name">Nom:</label>
+    <input wire:change="filtrePaiement" wire:model="filtreClient" type="text" list="filtreClient"
+        class="h-8 text-m ml-2 mb-4">
+    <datalist wire:model="filtreClient" id="filtreClient" name="filtreClient" class="h-8 text-xs ml-2">
+        @foreach ($clients as $c)
+            <option data-value={{ $c->id }}>{{ $c->prenom }} {{ $c->nom }}</option>
+        @endforeach
+    </datalist>
+
+    <label class="ml-4 text-m text-right font-bold" for="name">Période:</label>
+    <select wire:change="filtrePaiement" wire:model="filtrePeriode" id="filtrePeriode" name="filtrePeriode"
+        class="h-8 text-m ml-2 mb-4 py-0">
+        <option value='1' selected>Aujourd'hui</option>
+        <option value='2'>Le dernier mois</option>
+        <option value='3'>Les trois derniers mois</option>
+        <option value='4'>Les six derniers mois</option>
+        <option value='5'>La dernière année</option>
+        <option value='6'>Tous</option>
+    </select>
+
+    <div class="overflow-auto max-h-96">
+        <table class="table-auto w-full">
+            <thead class="sticky top-0">
+                <tr>
+                    <th class="border-solid border-b-2 border-black bg-mid-green text-left w-1/12">No facture</th>
+                    <th class="border-solid border-b-2 border-black bg-mid-green text-left w-2/12">Client</th>
+                    <th class="border-solid border-b-2 border-black bg-mid-green text-left w-2/12">Date</th>
+                    <th class="border-solid border-b-2 border-black bg-mid-green text-left w-2/12">Total
+                    </th>
+                    <th class="border-solid border-b-2 border-black bg-mid-green text-left w-2/12">Solde
+                    </th>
+                    <th class="border-solid border-b-2 border-black bg-mid-green text-left w-3/12">Action</th>
+                </tr>
+            </thead>
+            @php
+                $cpt = 0;
+                $solde = 0;
+            @endphp
+            @foreach ($rdvs as $r)
+                <?php if ($cpt%2 == 0){ ?>
+                <tr class="bg-white">
+                    <td> {{ $r->id }} </td>
+                    @foreach ($dossiers as $d)
+                        @if ($r->idDossier == $d->id)
+                            @foreach ($clients as $c)
+                                @if ($c->id == $d->idClient)
+                                    <td class="w-2/12 pr-4">
+                                        {{ $c->prenom }} {{ $c->nom }}</td>
+                                @endif
+                            @endforeach
+                        @endif
+                    @endforeach
+
+                    <td> {{ $r->dateHeureDebut }} </td>
+
+                    @foreach ($services as $s)
+                        @if ($r->idService == $s->id)
+                            <td class="w-2/12 pr-4">
+                                {{ $s->prix }}$</td>
+                            <?php $solde += $s->prix; ?>
+                        @endif
+                    @endforeach
+                    @foreach ($transactions as $t)
+                        @if ($t->idRdv == $r->id)
+                            @if ($t->idTypeTransaction == 1)
+                                <?php $solde -= $t->montant; ?>
+                            @endif
+                            @if ($t->idTypeTransaction == 2)
+                                <?php $solde += $t->montant; ?>
+                            @endif
+                        @endif
+                    @endforeach
+                    <td>{{ number_format($solde, 2) }}$</td>
+                    <?php $solde = 0; ?>
+                    <td><button class="w-5/12 bg-selected-green mx-0.5 my-1 rounded p-0.5" type="button"
+                            wire:click="formRemboursement({{ $r->id }})">Télécharger</button></td>
+                </tr>
+                <?php $cpt += 1; }
+                else{ ?>
+                <tr class="bg-table-green">
+                    <td> {{ $r->id }} </td>
+
+                    @foreach ($dossiers as $d)
+                        @if ($r->idDossier == $d->id)
+                            @foreach ($clients as $c)
+                                @if ($c->id == $d->idClient)
+                                    <td class="w-2/12 pr-4">
+                                        {{ $c->prenom }} {{ $c->nom }}</td>
+                                @endif
+                            @endforeach
+                        @endif
+                    @endforeach
+
+                    <td> {{ $r->dateHeureDebut }} </td>
+
+                    @foreach ($services as $s)
+                        @if ($r->idService == $s->id)
+                            <td class="w-2/12 pr-4">
+                                {{ $s->prix }}$</td>
+                            <?php $solde += $s->prix; ?>
+                        @endif
+                    @endforeach
+                    @foreach ($transactions as $t)
+                        @if ($t->idRdv == $r->id)
+                            @if ($t->idTypeTransaction == 1)
+                                <?php $solde -= $t->montant; ?>
+                            @endif
+                            @if ($t->idTypeTransaction == 2)
+                                <?php $solde += $t->montant; ?>
+                            @endif
+                        @endif
+                    @endforeach
+                    <td>{{ number_format($solde, 2) }}$</td>
+                    <?php $solde = 0; ?>
+                    <td><button class="w-5/12 bg-selected-green mx-0.5 my-1 rounded p-0.5" type="button"
+                            wire:click="formRemboursement({{ $r->id }})">Télécharger</button></td>
+                </tr>
+                <?php } ?>
+            @endforeach
+
+
+        </table>
+    </div>
+
+</div>
