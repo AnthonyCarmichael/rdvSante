@@ -243,6 +243,11 @@ class RendezVousComponent extends Component
         $this->sousMenuConsult = $sousMenu;
     }
 
+    public function addPaiement() {
+        dd("Ajouter un paiement",$this->rdv);
+
+    }
+
 
 
 
