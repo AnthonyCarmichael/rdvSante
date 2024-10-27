@@ -24,6 +24,11 @@ class RendezVousComponent extends Component
     public $formattedDateFin;
     public $raison;
 
+    # Facturation
+    public $sousMenuConsult;
+
+
+
 
     
 
@@ -44,6 +49,7 @@ class RendezVousComponent extends Component
         $this->formattedDateDebut = null;
         $this->formattedDateFin = null;
         $this->raison = null;
+        $this->sousMenuConsult = null;
 
         $this->updatedFilter("");
     }
@@ -138,6 +144,7 @@ class RendezVousComponent extends Component
         $this->updatedFilter("");
 
         $this->rdv = $rdv;
+        $this->sousMenuConsult = "rdv";
         
 
         #$this->selectedTime = null;
@@ -222,7 +229,7 @@ class RendezVousComponent extends Component
     public function deleteRdv(){
         
         if ($this->rdv->transactions()->exists()) {
-            dd(); // As tester et gèrer
+            dd("Gestion du remboursement lors de la tentative de suppression d'un rdv ayant des paiement éffectué à compléter"); // As tester et gèrer
         } else {
             $deleted = Rdv::destroy($this->rdv->id);
             $this->resetExcept('clients');
@@ -231,6 +238,12 @@ class RendezVousComponent extends Component
         $this->dispatch('refreshAgenda');
 
     }
+
+    public function changeSousMenu($sousMenu) {
+        $this->sousMenuConsult = $sousMenu;
+    }
+
+
 
 
 }
