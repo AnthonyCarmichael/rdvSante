@@ -39,7 +39,6 @@ Route::get('/Transactions', function () {
     return view('transaction/transactions');
 })->middleware('auth')->name('transactions');
 
-
 //Routes pour les services
 Route::controller(ServiceController::class)->group(function () {
     Route::post('/service/ajouterService', 'store')->middleware('auth')->name('ajouterService');
