@@ -52,6 +52,10 @@ Route::view('profile', 'profile')
 
 Route::view('/welcome', 'welcome');
 
+Route::get('/facture/{client}/{clinique}/{rdv}/{service}', [PdfController::class, 'facture'])->name('facture');
+
+Route::get('/factureTout/{rdvs}', [PdfController::class, 'factureTout'])->name('factureTout');
+
 /*
 Route::get('/profil', function () {
     return view('profil');
