@@ -5,8 +5,10 @@ namespace App\Livewire;
 use App\Models\Rdv;
 use Livewire\Component;
 use App\Models\Client;
+use App\Models\Transaction;
 use App\Models\Service;
 use App\Models\Dossier;
+use App\Models\MoyenPaiement;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
@@ -23,6 +25,9 @@ class RendezVousComponent extends Component
     public $formattedDateDebut;
     public $formattedDateFin;
     public $raison;
+    public $moyenPaiements;
+    public $moyenPaiement = 1;
+    public $montant;
 
     # Facturation
     public $sousMenuConsult;
@@ -30,7 +35,7 @@ class RendezVousComponent extends Component
 
 
 
-    
+
 
 
     protected $listeners = ['createRdvModal' => 'createRdvModal',
@@ -50,6 +55,7 @@ class RendezVousComponent extends Component
         $this->formattedDateFin = null;
         $this->raison = null;
         $this->sousMenuConsult = null;
+        $this->moyenPaiements = MoyenPaiement::all();
 
         $this->updatedFilter("");
     }
@@ -63,7 +69,7 @@ class RendezVousComponent extends Component
 
         Carbon::setLocale('fr');
         $this->formattedDate = Carbon::parse($selectedTime);
-        
+
         $this->formattedDate = $this->formattedDate->translatedFormat('l \l\e d F Y \à H:i');
 
         $this->dispatch('open-modal', name: 'ajouterRdv');
@@ -126,12 +132,14 @@ class RendezVousComponent extends Component
 
     public function render()
     {
+
         $clients = Client::where('actif', '1')
             ->orderBy('prenom')
             ->get();
         $cliniques = Auth::user()->cliniques;
         #dd($cliniques);
         $services = $this->fetchServices();
+        $this->moyenPaiements = MoyenPaiement::all();
         return view('livewire.rendez-vous-component', [
             'services' => $services,
             'cliniques' => $cliniques,
@@ -141,18 +149,19 @@ class RendezVousComponent extends Component
 
     public function consulterModalRdv(Rdv $rdv) {
         $this->reset();
+        $this->resetValidation();
         $this->updatedFilter("");
 
         $this->rdv = $rdv;
         $this->sousMenuConsult = "rdv";
-        
+
 
         #$this->selectedTime = null;
         $this->clientSelected = $rdv->client->id;
         $this->serviceSelected =  $rdv->service->id;
         $this->cliniqueSelected = $rdv->clinique->id;
         $this->raison = $rdv->raison;
-        
+
         Carbon::setLocale('fr');
         $this->formattedDate = Carbon::parse($rdv->dateHeureDebut);
         $this->formattedDate = $this->formattedDate->translatedFormat('l \l\e d F Y');
@@ -162,7 +171,7 @@ class RendezVousComponent extends Component
 
         $this->formattedDateFin = Carbon::parse($rdv->dateHeureDebut)->addMinutes($rdv->service->duree);
         $this->formattedDateFin = $this->formattedDateFin->translatedFormat('H:i');
-    
+
         $this->dispatch('open-modal', name: 'consulterRdv');
         #dd($this);
 
@@ -194,9 +203,9 @@ class RendezVousComponent extends Component
             'cliniqueSelected.exists' => 'La clinique sélectionnée est invalide.',
             'raison.max' => 'La raison ne peut pas dépasser 255 caractères.',
         ]);
-        
+
         $rdv = Rdv::find($this->rdv->id);
-        
+
         if ($rdv) {
             #$rdv->dateHeureDebut = $this->selectedTime;
 
@@ -211,7 +220,7 @@ class RendezVousComponent extends Component
             $rdv->idClinique = $this->cliniqueSelected;
             $rdv->raison = $this->raison;
             $rdv->actif = true;
-            
+
             $rdv->save();
         }
         else {
@@ -227,7 +236,7 @@ class RendezVousComponent extends Component
     }
 
     public function deleteRdv(){
-        
+
         if ($this->rdv->transactions()->exists()) {
             dd("Gestion du remboursement lors de la tentative de suppression d'un rdv ayant des paiement éffectué à compléter"); // As tester et gèrer
         } else {
@@ -244,11 +253,29 @@ class RendezVousComponent extends Component
     }
 
     public function addPaiement() {
-        dd("Ajouter un paiement",$this->rdv);
+        $this->dispatch('open-modal', name: 'ajouterPaiement');
 
     }
 
+    public function ajoutPaiement() {
+        $this->validate([
+            'montant' => 'required',
+        ],[
+            'montant.required' => 'Veuillez entrer un montant.',
+        ]);
 
+        $Date = Carbon::now('America/Toronto');
+
+        Transaction::create([
+            'montant' => $this->montant,
+            'dateHeure' => $Date,
+            'idRdv' => $this->rdv->id,
+            'idTypeTransaction' => 1,
+            'idMoyenPaiement' => $this->moyenPaiement
+
+        ]);
+        $this->dispatch('close-modal');
+    }
 
 
 }
