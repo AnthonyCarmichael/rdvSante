@@ -162,8 +162,8 @@
                             </a>
                         </li>
 
-                        <li class="block {{ (Route::is('')) ? 'text-white bg-green' : ''}} nav-item p4">
-                            <a class="hover:text-white" href="">
+                        <li class="block {{ (Route::is('users.create')) ? 'text-white bg-green' : ''}} nav-item p4">
+                            <a class="hover:text-white" href="{{ route('users.create') }}">
                                 <div class="flex justify-center">
                                     <button class="">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"

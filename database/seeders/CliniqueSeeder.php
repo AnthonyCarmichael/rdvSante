@@ -18,6 +18,8 @@ class CliniqueSeeder extends Seeder
                 'rue' => 'St-Hubert',
                 'noCivique' => '6050',
                 'codePostal' => 'H2S 2L7',
+                'actif' => true,
+                'principal' => true,
                 'idVille' => 1
             ],
             [
@@ -25,6 +27,8 @@ class CliniqueSeeder extends Seeder
                 'rue' => 'St-hyacynthe',
                 'noCivique' => '8060',
                 'codePostal' => 'J2Y 7H9',
+                'actif' => true,
+                'principal' => false,
                 'idVille' => 2
             ],
             [
@@ -32,6 +36,8 @@ class CliniqueSeeder extends Seeder
                 'rue' => 'Vincent',
                 'noCivique' => '8547',
                 'codePostal' => 'P2L 4G7',
+                'actif' => true,
+                'principal' => false,
                 'idVille' => 3
             ],
             [
@@ -39,6 +45,8 @@ class CliniqueSeeder extends Seeder
                 'rue' => 'Du conseil',
                 'noCivique' => '4569',
                 'codePostal' => 'G4R 7V3',
+                'actif' => true,
+                'principal' => false,
                 'idVille' => 4
             ]
         ]);
