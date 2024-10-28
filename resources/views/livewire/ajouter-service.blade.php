@@ -16,6 +16,14 @@
             <input wire:model.live="search" type="text" placeholder="Rechercher..."
                 class="form-input rounded-md shadow-sm mr-2">
 
+            <label class="ml-4 text-m text-right font-bold" for="actif">Statut:</label>
+            <select wire:change="filtreService" wire:model="filtreActif" id="filtreActif" name="filtreActif"
+                class="h-8 text-m ml-2 py-0 rounded">
+                <option value='1' selected>Actif</option>
+                <option value='0'>Inactif</option>
+                <option value='2'>Tous</option>
+            </select>
+
             <button wire:click="resetFilters"
                 class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded ml-auto">
                 Réinitialiser les filtres
@@ -89,35 +97,36 @@
                             {{ $service->duree > 1 ? 'minutes' : 'minute' }}</td>
                         <td wire:click="consulterService({{ $service->id }})" class="w-2/12 pr-4">{{ $service->prix }} $</td>
                         <td class="w-2/12 pr-4 justify-between">
-                            <button class="w-auto bg-selected-green mx-1 my-1 rounded p-0.5"
-                                wire:click="modifierService({{ $service->id }})" type="button">
-                                Modifier
-                            </button>
+                            @if ($service->actif == 1)
+                                <button class="w-auto bg-selected-green mx-1 my-1 rounded p-0.5"
+                                    wire:click="modifierService({{ $service->id }})" type="button">
+                                    Modifier
+                                </button>
 
-                            <button type="button" wire:click="desactiverService({{ $service->id }})"
-                                class="w-auto bg-selected-green mx-1 my-1 rounded p-0.5">
-                                Désactiver
-                            </button>
+                                <button type="button" wire:click="desactiverService({{ $service->id }})"
+                                    class="w-auto bg-selected-green mx-1 my-1 rounded p-0.5">
+                                    Désactiver
+                                </button>
+                            @elseif ($service->actif == 0)
+                                <button class="w-auto bg-selected-green mx-1 my-1 rounded p-0.5"
+                                    wire:click="activerService({{ $service->id }})" type="button">
+                                    Activer
+                                </button>
 
-                            <button hidden type="button" wire:click="confirmDelete({{ $service->id }})"
-                                class="w-auto bg-selected-green mx-1 my-1 rounded p-0.5">
-                                Supprimer
-                            </button>
+                                <button type="button" wire:click="confirmDelete({{ $service->id }})"
+                                    class="w-auto bg-selected-green mx-1 my-1 rounded p-0.5">
+                                    Supprimer
+                                </button>
+                            @endif
                         </td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
 
-        <div class="flex items-center mt-4">
-            <button wire:click="openModalAjouterService()"
-                class="bg-selected-green text-white font-bold py-2 px-4 rounded mr-2">
+        <div class="flex justify-end z-0">
+            <button class="w-2/12 bg-selected-green mx-1 my-2 rounded p-0.5 hide" wire:click="openModalAjouterService()">
                 Ajouter
-            </button>
-
-            <button wire:click="resetFilters"
-                class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded ml-auto">
-                Voir les services désactivés
             </button>
         </div>
     </div>

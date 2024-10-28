@@ -6,9 +6,11 @@ use App\Http\Controllers\ProfileController;
 use App\Livewire\Agenda;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\PdfController;
+use App\Http\Controllers\UserController;
 use App\Models\Service;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\CheckRole;
 
 Route::get('/', function () {
     return view('index');
@@ -83,9 +85,14 @@ Route::get('/profil/disponibilites', function () {
     return view('profil/disponibilites');
 })->middleware('auth')->name('disponibilites');
 
-
 Route::get('/rendezVous', function () {
     return view('rendezVous');
 })->name('rendezVous');
 
-require __DIR__ . '/auth.php';
+Route::get('/users/create', [UserController::class, 'create'])->middleware(CheckRole::class)->name('users.create');
+Route::post('/users', [UserController::class, 'sendInvitation'])->name('sendInvitation');
+
+Route::get('/registration', [UserController::class, 'showRegistrationForm'])->name('invitation.showRegistrationForm');
+Route::post('/registration/complete', [UserController::class, 'completeRegistration'])->name('completeRegistration');
+
+require __DIR__.'/auth.php';

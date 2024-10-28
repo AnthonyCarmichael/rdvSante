@@ -27,8 +27,8 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->boolean('actif')->nullable(); # A CHANGER POUR NOT NULLABLE
             $table->string('lien')->nullable();
-
-
+            $table->string('invitation_token')->nullable()->unique();
+            $table->timestamp('invitation_expiration')->nullable();
         });
 
 
@@ -60,5 +60,8 @@ return new class extends Migration
         Schema::dropIfExists('users');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn(['invitation_token', 'invitation_expiration']);
+        });
     }
 };
