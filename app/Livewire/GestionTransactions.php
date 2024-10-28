@@ -3,7 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Transaction;
-use Codedge\Fpdf\Facades\Fpdf;
+
 use Livewire\Component;
 
 use App\Models\Client;
@@ -11,6 +11,8 @@ use App\Models\Client;
 use App\Models\TypeTransaction;
 
 use App\Models\MoyenPaiement;
+
+use App\Http\Controllers\PdfController;
 
 use App\Models\Rdv;
 
@@ -39,9 +41,9 @@ class GestionTransactions extends Component
         return view('livewire.gestion-transactions');
     }
 
-    public function mount($transactions)
+    public function mount()
     {
-        $this->transactions = $transactions;
+        $this->transactions = Transaction::where('idTypeTransaction', '=', '1')->get();
         $this->remboursements = Transaction::where('idTypeTransaction', '=', '2')->get();
         $this->clients = Client::all();
         $this->typeTransactions = TypeTransaction::all();
@@ -69,7 +71,7 @@ class GestionTransactions extends Component
         ]);
 
 
-        $this->transactions = Transaction::all();
+        $this->filtrePaiement();
         $this->remboursements = Transaction::where('idTypeTransaction', '=', '2')->get();
         $this->dispatch('close-modal');
 
@@ -215,5 +217,17 @@ class GestionTransactions extends Component
                 }
             }
         }
+    }
+
+    public function envoiRecu($client, $transaction, $clinique, $rdv, $service)
+    {
+        $pdf = new PdfController;
+        $t = Transaction::find($transaction);
+        if ($t->idTypeTransaction == 1) {
+            $pdf->recuPaiement($client, $transaction, $clinique, $rdv, $service);
+        } elseif ($t->idTypeTransaction == 2) {
+            $pdf->recuRemboursement($client, $transaction, $clinique, $rdv, $service);
+        }
+
     }
 }

@@ -58,7 +58,14 @@
 
                         <!-- colonne temps -->
                         @if ($selectedDateTime->minute % 30 == 0)
-                            <td class="border-solid border-r-2 border-gray-600" rowspan="6"><?php echo $selectedDateTime->format('H:i') ?></td>
+                            <td class="border-solid border-r-2 border-gray-600 text-xs text-[8px] leading-tight" rowspan="6">
+                                <p class="block ">
+                                    <?php echo $selectedDateTime->format('H:i')?>
+                                </p>
+                                <p class="block ">
+                                    <?php echo $selectedDateTime->copy()->addMinutes(30)->format('H:i')?>
+                                </p>
+                            </td>
                         @endif
                             <!-- colonne interactive de l'agenda -->
                             <?php
@@ -94,14 +101,28 @@
                                                 @php
                                                     $debut = \Carbon\Carbon::parse($rdv->dateHeureDebut);
                                                 @endphp
-                                                @if ($debut <= $selectedDateTime && $debut->addMinutes($rdv->service->duree) > $selectedDateTime)
+                                                @if ($debut <= $selectedDateTime && $debut->copy()->addMinutes($rdv->service->duree) > $selectedDateTime)
+                                                    
                                                     <button class=" {{ $selectedDateTime <= $now && $now < $selectedDateTime->copy()->addMinutes(5) ? 'border-t-2 border-blue-700' : ' ' }} absolute top-0 left-0 w-full h-full bg-blue-500 "
                                                         wire:click="consulterModalRdv({{$rdv}})"
                                                         value="{{$rdv->id}}"
                                                         onclick="console.log(event.target.value);"
                                                         onmouseover="document.querySelectorAll('button[value=\'{{$rdv->id}}\']').forEach(btn => btn.classList.add('hover-effect-blue'))"
                                                         onmouseout="document.querySelectorAll('button[value=\'{{$rdv->id}}\']').forEach(btn => btn.classList.remove('hover-effect-blue'))">
+                                                        @if ($debut == $selectedDateTime)
+
+                                                            <div class="text-left text-[8px] absolute top-1 left-1 text-white z-10 ">
+                                                                <p class="leading-tight block">{{$rdv->client->prenom}} {{$rdv->client->nom}}</p>
+                                                                <p class="leading-tight block">Début : {{$debut->format('H:i')}}</p>
+                                                                <p class="leading-tight block">Fin : {{$debut->copy()->addMinutes($rdv->service->duree)->format('H:i')}}</p>
+                                                                <p class="leading-tight block text-red-400">Pas payé</p>
+
+                                                            </div>
+                                                            
+                                                        @endif
+                                                        
                                                     </button>
+                                                    
                                                     <?php $findIndispo = true?>
                                                     @break
                                                 @endif
@@ -112,10 +133,14 @@
 
                                         @if ($findIndispo != true)
 
+                                        @if ($findIndispo != true)
+
                                             <button type="button" wire:click="consulterModalChoixRdvIndispo('<?php echo $selectedDateTime ?>')"
                                                 class="tooltip {{ $selectedDateTime <= $now && $now < $selectedDateTime->copy()->addMinutes(5) ? 'border-t-2 border-blue-700' : ' ' }} absolute top-0 left-0 w-full h-full hover:bg-blue-400">
                                                 <span class="tooltiptext">{{$selectedDateTime->format('H:i')}}</span>
                                             </button>
+
+                                        @endif
 
                                         @endif
                                     </td>

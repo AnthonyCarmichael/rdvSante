@@ -53,7 +53,7 @@
                                 @if ($user->actif)
                                     <div class="flex border-y py-6 hover:bg-stone-200 cursor-pointer"  wire:click="getProfessionnelId({{ $user->id }})">
                                         <div class="">
-                                            <img src="{{ asset('img/icone_'.$user->id.'.jpg') }}" alt="imageDaph"
+                                            <img src="{{ asset('img/icone_'.$user->id.'.jpg') }}" alt="image{{$user->prenom}}"
                                                 class="w-[200px] mr-6">
                                         </div>
                                         <div class="mx-4 self-center w-2/4">
@@ -267,9 +267,9 @@
                                     </p>
                                 <p class=""><b>Lieu:</b> {{$clinique->nom}}, {{$clinique->noCivique}} rue {{$clinique->rue}}, {{$clinique->ville->nom}}, {{$clinique->ville->province->nom}}, Canada {{$clinique->codePostal}}</p>
                             </div>
-                        
 
-               
+
+
                             @if ($dossierSelected)
                                 <p>Veuillez confirmer la prise de rendez-vous pour <p class="font-bold">{{$dossierSelected->client->prenom}} {{$dossierSelected->client->nom}}</p></p>
                             @else

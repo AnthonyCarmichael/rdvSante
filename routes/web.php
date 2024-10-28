@@ -25,21 +25,27 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->middleware('auth')->name('profile.destroy');
 });
 
-Route::controller(ClientController::class)->group(function() {
+Route::controller(ClientController::class)->group(function () {
     Route::get('/Clients', 'index')->middleware('auth')->name('clients');
 });
 
-Route::controller(TransactionController::class)->group(function() {
-    Route::get('/Transactions', 'index')->middleware('auth')->name('transactions');
+Route::controller(TransactionController::class)->group(function () {
+    Route::get('/Paiements', 'index')->middleware('auth')->name('paiements');
 });
+
+Route::get('/Transactions', function () {
+    return view('transaction/transactions');
+})->middleware('auth')->name('transactions');
 
 
 //Routes pour les services
 Route::controller(ServiceController::class)->group(function () {
-    Route::post('/service/ajouterService','store')->middleware('auth')->name('ajouterService');
+    Route::post('/service/ajouterService', 'store')->middleware('auth')->name('ajouterService');
 });
 
-Route::get('pdf', [PdfController::class, 'index'])->name('pdf');
+Route::get('/recuPaiement/{client}/{transaction}/{clinique}/{rdv}/{service}', [PdfController::class, 'recuPaiement'])->name('pdf');
+
+Route::get('/recuRemboursement/{client}/{transaction}/{clinique}/{rdv}/{service}', [PdfController::class, 'recuRemboursement'])->name('pdf');
 
 Route::view('profile', 'profile')
     ->middleware(['auth'])->name('profile');
@@ -78,4 +84,4 @@ Route::get('/rendezVous', function () {
     return view('rendezVous');
 })->name('rendezVous');
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
