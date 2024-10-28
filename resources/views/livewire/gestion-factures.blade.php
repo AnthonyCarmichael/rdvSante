@@ -38,6 +38,7 @@
                 $solde = 0;
             @endphp
             @foreach ($rdvs as $r)
+
                 <?php if ($cpt%2 == 0){ ?>
                 <tr class="bg-white">
                     <td> {{ $r->id }} </td>
@@ -72,9 +73,29 @@
                         @endif
                     @endforeach
                     <td>{{ number_format($solde, 2) }}$</td>
-                    <?php $solde = 0; ?>
-                    <td><button class="w-5/12 bg-selected-green mx-0.5 my-1 rounded p-0.5" type="button"
-                            wire:click="formRemboursement({{ $r->id }})">Télécharger</button></td>
+                    @php
+                        $solde = 0;
+                        $client = 0;
+
+                        foreach ($dossiers as $d) {
+                            if ($r->idDossier == $d->id) {
+                                foreach ($clients as $c) {
+                                    if ($c->id == $d->idClient) {
+                                        $client = $c;
+                                    }
+                                }
+                            }
+                        }
+
+                    @endphp
+                    <td>
+                        <a
+                            href="facture/{{ $client->id }}/{{ $r->idClinique }}/{{ $r->id }}/{{ $r->idService }}">
+                            <button class="w-5/12 bg-selected-green mx-0.5 my-1 rounded p-0.5"
+                                type="button">Télécharger
+                            </button>
+                        </a>
+                    </td>
                 </tr>
                 <?php $cpt += 1; }
                 else{ ?>
@@ -112,15 +133,39 @@
                         @endif
                     @endforeach
                     <td>{{ number_format($solde, 2) }}$</td>
-                    <?php $solde = 0; ?>
-                    <td><button class="w-5/12 bg-selected-green mx-0.5 my-1 rounded p-0.5" type="button"
-                            wire:click="formRemboursement({{ $r->id }})">Télécharger</button></td>
+
+                    @php
+                        $solde = 0;
+                        $client = 0;
+
+                        foreach ($dossiers as $d) {
+                            if ($r->idDossier == $d->id) {
+                                foreach ($clients as $c) {
+                                    if ($c->id == $d->idClient) {
+                                        $client = $c;
+                                    }
+                                }
+                            }
+                        }
+
+                    @endphp
+                    <td><a
+                            href="facture/{{ $client->id }}/{{ $r->idClinique }}/{{ $r->id }}/{{ $r->idService }}">
+                            <button class="w-5/12 bg-selected-green mx-0.5 my-1 rounded p-0.5"
+                                type="button">Télécharger
+                            </button>
+                        </a>
+                    </td>
                 </tr>
-                <?php } ?>
+                <?php $cpt += 1; }  ?>
             @endforeach
 
 
         </table>
     </div>
 
+    <div class="flex justify-end z-0">
+        <a href="factureTout/{{$rdvs}}" class="w-2/12"><button class="w-full bg-selected-green mx-1 my-2 rounded p-0.5 hide" type="button">Tout
+                télécharger</button></a>
+    </div>
 </div>

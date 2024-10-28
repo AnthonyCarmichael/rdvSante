@@ -90,6 +90,7 @@ class GestionFactures extends Component
     public function filtrePaiement()
     {
         $Date = Carbon::now('America/Toronto');
+        $demain = Carbon::now('America/Toronto')->addDay();
         $DernierMois = Carbon::now('America/Toronto')->startOfMonth();
         $TroisDernierMois = Carbon::now('America/Toronto')->startOfMonth()->subMonths(2);
         $SixDernierMois = Carbon::now('America/Toronto')->startOfMonth()->subMonths(5);
@@ -98,74 +99,63 @@ class GestionFactures extends Component
             if ($this->filtreClient != null) {
                 $client = Client::select('id')->whereRaw("CONCAT(`prenom`, ' ', `nom`) = ?", [$this->filtreClient]);
                 $dossier = Dossier::select('id')->where('idClient', '=', $client);
-                $this->rdvs = Rdv::where('idDossier', '=', $dossier)->whereDate('dateHeureDebut', '>=', $Date)->get();
+                $this->rdvs = Rdv::where('idDossier', '=', $dossier)->whereDate('dateHeureDebut', '>=', $Date)->whereDate('dateHeureDebut', '<', $demain)->get();
 
             } else {
 
-                $this->rdvs = Rdv::whereDate('dateHeureDebut', '>=', $Date)->get();
+                $this->rdvs = Rdv::whereDate('dateHeureDebut', '>=', $Date)->whereDate('dateHeureDebut', '<', $demain)->get();
 
             }
         } else if ($this->filtrePeriode == 2) {
             if ($this->filtreClient != null) {
                 $client = Client::select('id')->whereRaw("CONCAT(`prenom`, ' ', `nom`) = ?", [$this->filtreClient]);
                 $dossier = Dossier::select('id')->where('idClient', '=', $client);
-                $this->rdvs = Rdv::where('idDossier', '=', $dossier)->whereDate('dateHeureDebut', '>=', $DernierMois)->get();
+                $this->rdvs = Rdv::where('idDossier', '=', $dossier)->whereDate('dateHeureDebut', '>=', $DernierMois)->whereDate('dateHeureDebut', '<', $demain)->get();
 
             } else {
 
-                $this->rdvs = Rdv::whereDate('dateHeureDebut', '>=', $DernierMois)->get();
+                $this->rdvs = Rdv::whereDate('dateHeureDebut', '>=', $DernierMois)->whereDate('dateHeureDebut', '<', $demain)->get();
 
             }
         } else if ($this->filtrePeriode == 3) {
             if ($this->filtreClient != null) {
                 $client = Client::select('id')->whereRaw("CONCAT(`prenom`, ' ', `nom`) = ?", [$this->filtreClient]);
                 $dossier = Dossier::select('id')->where('idClient', '=', $client);
-                $this->rdvs = Rdv::where('idDossier', '=', $dossier)->whereDate('dateHeureDebut', '>=', $TroisDernierMois)->get();
+                $this->rdvs = Rdv::where('idDossier', '=', $dossier)->whereDate('dateHeureDebut', '>=', $TroisDernierMois)->whereDate('dateHeureDebut', '<', $demain)->get();
             } else {
 
-                $this->rdvs = Rdv::whereDate('dateHeureDebut', '>=', $TroisDernierMois)->get();
+                $this->rdvs = Rdv::whereDate('dateHeureDebut', '>=', $TroisDernierMois)->whereDate('dateHeureDebut', '<', $demain)->get();
 
             }
         } else if ($this->filtrePeriode == 4) {
             if ($this->filtreClient != null) {
                 $client = Client::select('id')->whereRaw("CONCAT(`prenom`, ' ', `nom`) = ?", [$this->filtreClient]);
                 $dossier = Dossier::select('id')->where('idClient', '=', $client);
-                $this->rdvs = Rdv::where('idDossier', '=', $dossier)->whereDate('dateHeureDebut', '>=', $SixDernierMois)->get();
+                $this->rdvs = Rdv::where('idDossier', '=', $dossier)->whereDate('dateHeureDebut', '>=', $SixDernierMois)->whereDate('dateHeureDebut', '<', $demain)->get();
             } else {
 
-                $this->rdvs = Rdv::whereDate('dateHeureDebut', '>=', $SixDernierMois)->get();
+                $this->rdvs = Rdv::whereDate('dateHeureDebut', '>=', $SixDernierMois)->whereDate('dateHeureDebut', '<', $demain)->get();
 
             }
         } else if ($this->filtrePeriode == 5) {
             if ($this->filtreClient != null) {
                 $client = Client::select('id')->whereRaw("CONCAT(`prenom`, ' ', `nom`) = ?", [$this->filtreClient]);
                 $dossier = Dossier::select('id')->where('idClient', '=', $client);
-                $this->rdvs = Rdv::where('idDossier', '=', $dossier)->whereDate('dateHeureDebut', '>=', $DerniereAnnee)->get();
+                $this->rdvs = Rdv::where('idDossier', '=', $dossier)->whereDate('dateHeureDebut', '>=', $DerniereAnnee)->whereDate('dateHeureDebut', '<', $demain)->get();
             } else {
 
-                $this->rdvs = Rdv::whereDate('dateHeureDebut', '>=', $DerniereAnnee)->get();
+                $this->rdvs = Rdv::whereDate('dateHeureDebut', '>=', $DerniereAnnee)->whereDate('dateHeureDebut', '<', $demain)->get();
 
             }
         } else if ($this->filtrePeriode == 6) {
             if ($this->filtreClient != null) {
-               $client = Client::select('id')->whereRaw("CONCAT(`prenom`, ' ', `nom`) = ?", [$this->filtreClient]);
+                $client = Client::select('id')->whereRaw("CONCAT(`prenom`, ' ', `nom`) = ?", [$this->filtreClient]);
                 $dossier = Dossier::select('id')->where('idClient', '=', $client);
-                $this->rdvs = Rdv::where('idDossier', '=', $dossier)->get();
+                $this->rdvs = Rdv::where('idDossier', '=', $dossier)->whereDate('dateHeureDebut', '<', $demain)->get();
             } else {
-                $this->rdvs = Rdv::all();
+                $this->rdvs = Rdv::whereDate('dateHeureDebut', '<', $demain)->get();
             }
         }
     }
 
-    public function envoiRecu($client, $transaction, $clinique, $rdv, $service)
-    {
-        $pdf = new PdfController;
-        $t = Transaction::find($transaction);
-        if ($t->idTypeTransaction == 1) {
-            $pdf->recuPaiement($client, $transaction, $clinique, $rdv, $service);
-        } elseif ($t->idTypeTransaction == 2) {
-            $pdf->recuRemboursement($client, $transaction, $clinique, $rdv, $service);
-        }
-
-    }
 }
