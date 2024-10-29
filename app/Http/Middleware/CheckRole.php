@@ -16,10 +16,10 @@ class CheckRole
      */
     public function handle($request, Closure $next)
     {
-        if (Auth::check() && Auth::user()->is_admin) {
+        if (Auth::check() && Auth::user()->idRole == 1) {
             return $next($request);
         }
-
+        
         return redirect()->route('index');
     }
 }

@@ -37,25 +37,31 @@ new #[Layout('layouts.guest')] class extends Component
 }; ?>
 
 <div>
-    <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
-        {{ __('Mot de passe oublié ? Aucun problème. Entrez votre adresse e-mail pour recevoir un lien de réinitialisation.') }}
+    <div class="text-center mb-2">
+        <label class="text-3xl mt-8 font-medium text-white" for="Title">Mot de passe oublié?</label>
     </div>
 
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
-
-    <form wire:submit="sendPasswordResetLink">
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input wire:model="email" id="email" class="block mt-1 w-full" type="email" name="email" required autofocus />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+    <div>
+        <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
+            {{ __('Aucun problème. Entrez votre adresse e-mail pour recevoir un lien de réinitialisation.') }}
         </div>
 
-        <div class="flex items-center justify-end mt-4">
-            <x-primary-button>
-                {{ __('Envoyer') }}
-            </x-primary-button>
-        </div>
-    </form>
+        <!-- Session Status -->
+        <x-auth-session-status class="mb-4" :status="session('status')" />
+
+        <form wire:submit="sendPasswordResetLink">
+            <!-- Email Address -->
+            <div>
+                <x-input-label for="email" :value="__('Email')" />
+                <x-text-input wire:model="email" id="email" class="block mt-1 w-full" type="email" name="email" required autofocus />
+                <x-input-error :messages="$errors->get('email')" class="mt-2" />
+            </div>
+
+            <div class="flex items-center justify-end mt-4">
+                <x-primary-button>
+                    {{ __('Envoyer') }}
+                </x-primary-button>
+            </div>
+        </form>
+    </div>
 </div>

@@ -1,46 +1,43 @@
-<!-- resources/views/users/create.blade.php -->
+<x-admin-layout>
+    <div class="max-w-md mx-auto p-6 bg-white dark:bg-gray-800 shadow-md rounded-md mt-40">
+        <h1 class="text-2xl font-semibold text-gray-800 dark:text-white mb-6 text-center">Inviter un utilisateur</h1>
 
-<!DOCTYPE html>
-<html lang="fr">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Créer un Utilisateur</title>
-    </head>
-
-    <body>
-        <h1>Créer un Utilisateur</h1>
-
+        <!-- Message de succès -->
         @if (session('success'))
-            <div style="color: green;">{{ session('success') }}</div>
+            <div class="mb-4 text-green-600 dark:text-green-400">{{ session('success') }}</div>
         @endif
 
         <!-- Formulaire de création d'utilisateur -->
-        <form action="{{ route('sendInvitation') }}" method="POST">
+        <form action="{{ route('sendInvitation') }}" method="POST" class="space-y-4">
             @csrf
 
             <!-- Champ nom -->
-            <label for="nom">Nom :</label>
-            <input type="text" name="nom" id="nom" value="{{ old('nom') }}">
-            @error('nom')
-                <div style="color: red;">{{ $message }}</div>
-            @enderror
+            <div>
+                <x-input-label for="nom" :value="__('Nom')" />
+                <x-text-input name="nom" id="nom" class="block mt-1 w-full" type="text" value="{{ old('nom') }}" />
+                <x-input-error :messages="$errors->get('nom')" class="mt-2" />
+            </div>
 
             <!-- Champ prénom -->
-            <label for="prenom">Prénom :</label>
-            <input type="text" name="prenom" id="prenom" value="{{ old('prenom') }}">
-            @error('prenom')
-                <div style="color: red;">{{ $message }}</div>
-            @enderror
+            <div>
+                <x-input-label for="prenom" :value="__('Prénom')" />
+                <x-text-input name="prenom" id="prenom" class="block mt-1 w-full" type="text" value="{{ old('prenom') }}" />
+                <x-input-error :messages="$errors->get('prenom')" class="mt-2" />
+            </div>
 
             <!-- Champ email -->
-            <label for="email">Email :</label>
-            <input type="email" name="email" id="email" value="{{ old('email') }}">
-            @error('email')
-                <div style="color: red;">{{ $message }}</div>
-            @enderror
+            <div>
+                <x-input-label for="email" :value="__('Email')" />
+                <x-text-input name="email" id="email" class="block mt-1 w-full" type="email" value="{{ old('email') }}" />
+                <x-input-error :messages="$errors->get('email')" class="mt-2" />
+            </div>
 
-            <button type="submit">Créer</button>
+            <!-- Bouton de soumission -->
+            <div class="mt-4">
+                <x-primary-button class="w-full">
+                    {{ __('Créer') }}
+                </x-primary-button>
+            </div>
         </form>
-    </body>
-</html>
+    </div>
+</x-admin-layout>

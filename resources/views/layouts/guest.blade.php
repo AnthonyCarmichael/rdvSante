@@ -37,10 +37,6 @@
             </nav>
         </header>
         <div class="min-h-screen flex flex-col items-center pt-16 bg-darker-green">
-            <div>
-                <label class="text-3xl mt-8 font-medium text-white" for="Title">Connexion</label>
-            </div>
-
             <div class="bg-green w-full sm:max-w-md mt-6 px-6 py-4 shadow-md overflow-hidden sm:rounded-lg">
                 {{ $slot }}
             </div>
