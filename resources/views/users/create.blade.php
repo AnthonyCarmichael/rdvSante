@@ -35,7 +35,7 @@
             <!-- Bouton de soumission -->
             <div class="mt-4">
                 <x-primary-button class="w-full">
-                    {{ __('Créer') }}
+                    {{ __('Envoyer') }}
                 </x-primary-button>
             </div>
         </form>
