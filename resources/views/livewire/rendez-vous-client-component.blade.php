@@ -15,17 +15,20 @@
             <a class="text-blue-700" href="https://maps.app.goo.gl/wwRDWyAPtB29TSMv8" target="_blank">Google Map</a>
         </div>
         @foreach ($users as $user )
-            <div class="my-2 font-bold">
-                <p class="inline ">{{$user->prenom}} {{$user->nom}}</p> @foreach($user->professions as $profession) <p class="inline">, {{$profession->nom}}</p> @endforeach
-            </div>
 
-            <p class="text-justify mb-2">
-                {{$user->description}}
-            </p>
+            @if($user->lien != null)
+                <div class="my-2 font-bold">
+                    <p class="inline ">{{$user->prenom}} {{$user->nom}}</p> @foreach($user->professions as $profession) <p class="inline">, {{$profession->nom}}</p> @endforeach
+                </div>
 
-            <a class="text-justify mb-4 text-blue-700" href="{{$user->lien}}" target="_blank">
-                En savoir plus
-            </a>
+                <p class="text-justify mb-2">
+                    {{$user->description}}
+                </p>
+
+                <a class="text-justify mb-4 text-blue-700" href="{{$user->lien}}" target="_blank">
+                    En savoir plus
+                </a>
+            @endif
 
         @endforeach
     </div>
