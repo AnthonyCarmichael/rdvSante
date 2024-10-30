@@ -5,6 +5,9 @@ namespace App\Livewire;
 use App\Models\ProfessionProfessionnel;
 use App\Models\Profession;
 use App\Models\User;
+use App\Models\Service;
+use App\Models\DiponibiliteProfessionnel;
+use App\Models\CliniqueProfessionnel;
 
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -20,6 +23,8 @@ class Compte extends Component
     public $idRole;
     public $stringProfession;
     public $selectedIdProfession;
+    public $actif;
+
 
     public function mount()
     {
@@ -31,6 +36,7 @@ class Compte extends Component
         $this->telephone = $user->telephone;
         $this->idProfession = $user->professions()->get();
         $this->idRole = $user->idRole;
+        $this->actif = $user->actif;
 
     }
 
@@ -59,6 +65,68 @@ class Compte extends Component
 
             session()->flash('message', 'Profil mis à jour avec succès.');
         }
+    }
+
+    public function activer()
+    {
+        $photo = false;
+        $service = false;
+        $clinique = false;
+        $description = false;
+        $dispo = false;
+        $profession = false;
+
+        $services = Service::all();
+        $professionProfessionnel = ProfessionProfessionnel::all();
+        $dispoProfessionnel = DiponibiliteProfessionnel::all();
+        $cliniqueProfessionnel = CliniqueProfessionnel::all();
+
+        foreach ($services as $s) {
+            if ($s->idProfessionnel == Auth::user()->id) {
+                $service = true;
+            }
+        }
+        foreach ($professionProfessionnel as $p) {
+            if ($p->user_id == Auth::user()->id) {
+                $profession = true;
+            }
+        }
+        foreach ($dispoProfessionnel as $d) {
+            if ($d->id_user == Auth::user()->id) {
+                $dispo = true;
+            }
+        }
+        foreach ($cliniqueProfessionnel as $c) {
+            if ($c->idProfessionnel == Auth::user()->id) {
+                $clinique = true;
+            }
+        }
+        if (Auth::user()->description != null) {
+            $description = true;
+        }
+        if (file_exists("../public/img/icone_" . strval(Auth::user()->id) . ".jpg")) {
+            $photo = true;
+        }
+
+        if (!$photo || !$service || !$clinique || !$description || !$dispo || !$profession) {
+            session()->flash('message', 'Impossible d\'activer votre compte. Vérifier que toutes les conditions mentionner à l\'acceuil sont remplies.');
+        } else {
+            User::find(Auth::user()->id)->update([
+                'actif' => 1,
+            ]);
+            $this->actif = 1;
+        }
+        #dd(Auth::user()->actif);
+
+    }
+
+    public function desactiver()
+    {
+        User::find(Auth::user()->id)->update([
+            'actif' => 0,
+        ]);
+
+        $this->actif = 0;
     }
 
     public function render()
