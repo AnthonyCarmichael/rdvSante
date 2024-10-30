@@ -87,7 +87,6 @@ class Agenda extends Component
 
         $this->indispoArr = Indisponibilite::where('dateHeureFin', '>=', $this->startingDate)->get();
         $this->rdvArr = Rdv::where('dateHeureDebut', '>=', $this->startingDate)->get();
-        #dd($this->rdvArr);
     }
 
     public function setView($view)
@@ -158,7 +157,7 @@ class Agenda extends Component
                 $this->startingDate->setTimezone('America/Toronto');
             }
             $startingDate->setTime(7, 0);
-            dd($this->startingDate);
+            
             $this->endingDate = $this->startingDate->copy()->modify('+6 days');
 
 
@@ -203,28 +202,26 @@ class Agenda extends Component
 
     public function changeStartingDate($days) {
         $this->startingDate->addDays($days);
-        $this->endingDate->addDays($days);
+         // Trouver le deuxième dimanche de mars de l'année en cours
+         $secondSundayOfMarch = Carbon::create($this->now->year, 3, 1)->next(Carbon::SUNDAY)->addWeek();
+
+         // Calculer le premier dimanche de novembre
+         $firstSundayOfNovember = Carbon::createFromDate( $this->startingDate->year, 11, 1)->next(Carbon::SUNDAY);
+
+         // Vérifiez si la date est entre ces deux dates
+         if ( $this->startingDate->greaterThanOrEqualTo($secondSundayOfMarch) &&  $this->startingDate->lessThan($firstSundayOfNovember)) {
+             // Heure d'été (UTC - 4)
+             // Pas besoin de changer ici, car nous gérons déjà le fuseau horaire avec 'America/Toronto'
+             $this->startingDate->setTimezone('America/Toronto');
+         } else {
+             // Heure normale (UTC - 5)
+             $this->startingDate->setTimezone('America/Toronto');
+         }
+        $this->endingDate = $this->startingDate->copy()->addDays($days);
 
         $this->datesArr = [];
         for ($i=0; $i < 7; $i++) {
             $date = $this->startingDate->copy()->addDays($i);
-
-            // Trouver le deuxième dimanche de mars de l'année en cours
-            $secondSundayOfMarch = Carbon::create($this->now->year, 3, 1)->next(Carbon::SUNDAY)->addWeek();
-
-            // Calculer le premier dimanche de novembre
-            $firstSundayOfNovember = Carbon::createFromDate($date->year, 11, 1)->next(Carbon::SUNDAY);
-
-            // Vérifiez si la date est entre ces deux dates
-            if ($date->greaterThanOrEqualTo($secondSundayOfMarch) && $date->lessThan($firstSundayOfNovember)) {
-                // Heure d'été (UTC - 4)
-                // Pas besoin de changer ici, car nous gérons déjà le fuseau horaire avec 'America/Toronto'
-                $date->setTimezone('America/Toronto');
-            } else {
-                // Heure normale (UTC - 5)
-                $date->setTimezone('America/Toronto');
-            }
-
 
             $date->setTime(7, 0);
             $this->datesArr[] = $date;
