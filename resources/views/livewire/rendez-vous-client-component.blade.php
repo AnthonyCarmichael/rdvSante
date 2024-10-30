@@ -16,7 +16,7 @@
         </div>
         @foreach ($users as $user )
 
-            @if($user->lien != null)
+            @if($user->lien != null && $user->description != null)
                 <div class="my-2 font-bold">
                     <p class="inline ">{{$user->prenom}} {{$user->nom}}</p> @foreach($user->professions as $profession) <p class="inline">, {{$profession->nom}}</p> @endforeach
                 </div>
