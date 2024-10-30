@@ -37,6 +37,8 @@ new #[Layout('layouts.guest')] class extends Component
             'token' => ['required'],
             'email' => ['required', 'string', 'email'],
             'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
+        ], [
+            'email.email' => 'Veuillez entrer une adresse e-mail valide.',
         ]);
 
         // Here we will attempt to reset the user's password. If it is successful we

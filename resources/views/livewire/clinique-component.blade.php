@@ -1,4 +1,6 @@
 <div>
+    <x-input-error :messages="$errors->get('clinique')" class="mt-2 mb-4" />
+
     <div class="m-4">
         <div class="flex items-center mb-4">
             <input wire:model.live="search" type="text" placeholder="Rechercher..."
@@ -24,85 +26,36 @@
                     <th class="border-solid border-b-2 border-black bg-mid-green text-left">
                         <button wire:click="sortBy('nom')" class="font-bold">
                             Nom
-                            @if ($sortField === 'nom')
-                                @if ($sortDirection === 'asc')
-                                    ↑
-                                @else
-                                    ↓
-                                @endif
-                            @endif
                         </button>
                     </th>
                     <th class="border-solid border-b-2 border-black bg-mid-green text-left">
                         <button wire:click="sortBy('nocivique')" class="font-bold">
                             Numéro civique
-                            @if ($sortField === 'nocivique')
-                                @if ($sortDirection === 'asc')
-                                    ↑
-                                @else
-                                    ↓
-                                @endif
-                            @endif
                         </button>
                     </th>
                     <th class="border-solid border-b-2 border-black bg-mid-green text-left">
                         <button wire:click="sortBy('rue')" class="font-bold">
                             Rue
-                            @if ($sortField === 'rue')
-                                @if ($sortDirection === 'asc')
-                                    ↑
-                                @else
-                                    ↓
-                                @endif
-                            @endif
                         </button>
                     </th>
                     <th class="border-solid border-b-2 border-black bg-mid-green text-left">
                         <button wire:click="sortBy('codePostal')" class="font-bold">
                             Code postal
-                            @if ($sortField === 'codePostal')
-                                @if ($sortDirection === 'asc')
-                                    ↑
-                                @else
-                                    ↓
-                                @endif
-                            @endif
                         </button>
                     </th>
                     <th class="border-solid border-b-2 border-black bg-mid-green text-left">
                         <button wire:click="sortBy('ville')" class="font-bold">
                             Ville
-                            @if ($sortField === 'ville')
-                                @if ($sortDirection === 'asc')
-                                    ↑
-                                @else
-                                    ↓
-                                @endif
-                            @endif
                         </button>
                     </th>
                     <th class="border-solid border-b-2 border-black bg-mid-green text-left">
                         <button wire:click="sortBy('province')" class="font-bold">
                             Province
-                            @if ($sortField === 'province')
-                                @if ($sortDirection === 'asc')
-                                    ↑
-                                @else
-                                    ↓
-                                @endif
-                            @endif
                         </button>
                     </th>
                     <th class="border-solid border-b-2 border-black bg-mid-green text-left">
                         <button wire:click="sortBy('pays')" class="font-bold">
                             Pays
-                            @if ($sortField === 'pays')
-                                @if ($sortDirection === 'asc')
-                                    ↑
-                                @else
-                                    ↓
-                                @endif
-                            @endif
                         </button>
                     </th>
                     <th class="border-solid border-b-2 border-black bg-mid-green text-left">Actions</th>
@@ -121,12 +74,12 @@
                         <td wire:click="consulterClinique({{ $clinique->id }})" class="w-auto pr-4">{{ $clinique->ville->province->nom }}</td>
                         <td wire:click="consulterClinique({{ $clinique->id }})" class="w-auto pr-4">{{ $clinique->ville->province->pays->nom }}</td>
                         <td class="w-auto pr-4 justify-between">
-                            @if ($clinique->actif == 1)
-                                <button class="w-auto bg-selected-green mx-1 my-1 rounded p-0.5"
-                                    wire:click="modifierClinique({{ $clinique->id }})" type="button">
-                                    Modifier
-                                </button>
+                            <button class="w-auto bg-selected-green mx-1 my-1 rounded p-0.5"
+                                wire:click="modifierClinique({{ $clinique->id }})" type="button">
+                                Modifier
+                            </button>
 
+                            @if ($clinique->actif == 1)
                                 <button type="button" wire:click="desactiverClinique({{ $clinique->id }})"
                                     class="w-auto bg-selected-green mx-1 my-1 rounded p-0.5">
                                     Désactiver
@@ -135,11 +88,6 @@
                                 <button type="button" wire:click="activerClinique({{ $clinique->id }})"
                                     class="w-auto bg-selected-green mx-1 my-1 rounded p-0.5">
                                     Activer
-                                </button>
-
-                                <button type="button" wire:click="confirmDelete({{ $clinique->id }})"
-                                    class="w-auto bg-selected-green mx-1 my-1 rounded p-0.5">
-                                    Supprimer
                                 </button>
                             @endif
                         </td>

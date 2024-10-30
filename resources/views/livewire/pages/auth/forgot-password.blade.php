@@ -15,6 +15,8 @@ new #[Layout('layouts.guest')] class extends Component
     {
         $this->validate([
             'email' => ['required', 'string', 'email'],
+        ], [
+            'email.email' => 'Veuillez entrer une adresse e-mail valide.',
         ]);
 
         // We will send the password reset link to this user. Once we have attempted

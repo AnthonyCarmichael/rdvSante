@@ -25,9 +25,11 @@ new #[Layout('layouts.guest')] class extends Component
 }; ?>
 
 <div>
-    <div class="text-center">
+    <div class="text-center mb-4">
         <label class="text-3xl mt-8 font-medium text-white" for="Title">Connexion</label>
     </div>
+
+    <x-input-error :messages="$errors->get('form.email')" class="mt-2 mb-4" />
 
     <div class="">
         <!-- Session Status -->
@@ -38,7 +40,6 @@ new #[Layout('layouts.guest')] class extends Component
             <div>
                 <x-input-label for="email" :value="__('Email')" />
                 <x-text-input wire:model="form.email" id="email" class="block mt-1 w-full" type="email" name="email" required autofocus autocomplete="username" />
-                <x-input-error :messages="$errors->get('form.email')" class="mt-2" />
             </div>
 
             <!-- Password -->
@@ -49,8 +50,6 @@ new #[Layout('layouts.guest')] class extends Component
                                 type="password"
                                 name="password"
                                 required autocomplete="current-password" />
-
-                <x-input-error :messages="$errors->get('form.password')" class="mt-2" />
             </div>
 
             <!-- Remember Me -->

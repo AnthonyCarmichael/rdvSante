@@ -7,6 +7,7 @@ use App\Models\Clinique;
 use App\Models\CliniqueProfessionnel;
 use App\Models\Ville;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 class CliniqueComponent extends Component {
     public $clinique_id;
@@ -33,7 +34,7 @@ class CliniqueComponent extends Component {
 
     public function mount() {
         $this->filtreClinique();
-        
+
         $this->villes = Ville::all();
     }
 
@@ -46,7 +47,6 @@ class CliniqueComponent extends Component {
         $indice=0;
 
         foreach (Auth::user()->cliniques as $clinique) {
-            #dd($clinique->nom,$this->search,str_contains(strtolower($clinique->nom),strtolower($this->search)));
             if (!str_contains(strtolower($clinique->nom),strtolower($this->search)) &&
                 !str_contains(strtolower($clinique->noCivique),strtolower($this->search)) &&
                 !str_contains(strtolower($clinique->rue),strtolower($this->search)) &&
@@ -54,7 +54,6 @@ class CliniqueComponent extends Component {
                 !str_contains(strtolower($clinique->ville->nom),strtolower($this->search)) &&
                 !str_contains(strtolower($clinique->ville->province->nom),strtolower($this->search)) &&
                 !str_contains(strtolower($clinique->ville->province->pays->nom),strtolower($this->search))) {
-                #dd("true");
                 unset($this->foundCliniques[$indice]);
             }
 
@@ -172,9 +171,17 @@ class CliniqueComponent extends Component {
         $clinique = Clinique::findOrFail($id);
 
         if ($clinique) {
-            $clinique->update([
-                'actif' => false,
-            ]);
+
+            if ($clinique->principal == 1) {
+                throw ValidationException::withMessages([
+                    'clinique' => 'La clinique principale ne peut pas être désactivée.',
+                ]);
+            }
+            else{
+                $clinique->update([
+                    'actif' => false,
+                ]);
+            }
 
             $this->resetExcept('foundCliniques', 'villes');
             $this->filtreClinique();
