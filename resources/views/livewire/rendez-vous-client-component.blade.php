@@ -176,7 +176,6 @@
                                                                         @break
                                                                     @endif
                                                                 @endforeach
-
                                                             @endif
                                                         </td>
                                                         <?php

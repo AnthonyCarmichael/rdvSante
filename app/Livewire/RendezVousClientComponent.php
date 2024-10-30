@@ -302,9 +302,11 @@ class RendezVousClientComponent extends Component
             $dateTemp->modify('+1 day');
         }
 
+        /*
         if ($this->startingWeek->isSameDay($dateToCheck) ) {
             #dd($this);
         }
+*/
 
 
         #$rdvs;
