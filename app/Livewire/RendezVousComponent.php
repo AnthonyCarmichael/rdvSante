@@ -179,12 +179,8 @@ class RendezVousComponent extends Component
 
     public function annuler()
     {
-
         #$this->selectedTime = null;
-        $this->clientSelected = $this->rdv->client;
-        $this->serviceSelected =  $this->rdv->service;
-        $this->cliniqueSelected = $this->rdv->clinique;
-        $this->raison = $this->rdv->raison;
+        # Sert à rien à Revoir!!!
     }
 
     public function modifierRdv()
