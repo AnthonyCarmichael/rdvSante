@@ -82,10 +82,10 @@
 
                                                     <button class=" {{ $selectedDateTime <= $now && $now < $selectedDateTime->copy()->addMinutes(5) ? 'border-t-2 border-blue-700' : ' '  }} absolute top-0 left-0 w-full h-full bg-orange-500 "
                                                         wire:click="consulterModalIndispo({{$indispo}})"
-                                                        value="{{$indispo->id}}"
+                                                        value="indispo{{$indispo->id}}"
                                                         onclick="console.log(event.target.value);"
-                                                        onmouseover="document.querySelectorAll('button[value=\'{{$indispo->id}}\']').forEach(btn => btn.classList.add('hover-effect-orange'))"
-                                                        onmouseout="document.querySelectorAll('button[value=\'{{$indispo->id}}\']').forEach(btn => btn.classList.remove('hover-effect-orange'))">
+                                                        onmouseover="document.querySelectorAll('button[value=\'indispo{{$indispo->id}}\']').forEach(btn => btn.classList.add('hover-effect-orange'))"
+                                                        onmouseout="document.querySelectorAll('button[value=\'indispo{{$indispo->id}}\']').forEach(btn => btn.classList.remove('hover-effect-orange'))">
                                                     </button>
                                                     <?php $findIndispo = true?>
                                                     @break
@@ -105,10 +105,10 @@
                                                     
                                                     <button class=" {{ $selectedDateTime <= $now && $now < $selectedDateTime->copy()->addMinutes(5) ? 'border-t-2 border-blue-700' : ' ' }} absolute top-0 left-0 w-full h-full bg-blue-500 "
                                                         wire:click="consulterModalRdv({{$rdv}})"
-                                                        value="{{$rdv->id}}"
+                                                        value="rdv{{$rdv->id}}"
                                                         onclick="console.log(event.target.value);"
-                                                        onmouseover="document.querySelectorAll('button[value=\'{{$rdv->id}}\']').forEach(btn => btn.classList.add('hover-effect-blue'))"
-                                                        onmouseout="document.querySelectorAll('button[value=\'{{$rdv->id}}\']').forEach(btn => btn.classList.remove('hover-effect-blue'))">
+                                                        onmouseover="document.querySelectorAll('button[value=\'rdv{{$rdv->id}}\']').forEach(btn => btn.classList.add('hover-effect-blue'))"
+                                                        onmouseout="document.querySelectorAll('button[value=\'rdv{{$rdv->id}}\']').forEach(btn => btn.classList.remove('hover-effect-blue'))">
                                                         @if ($debut == $selectedDateTime)
 
                                                             <div class="text-left text-[8px] absolute top-1 left-1 text-white z-10 ">
