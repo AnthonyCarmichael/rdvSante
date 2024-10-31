@@ -108,13 +108,12 @@ class PdfController extends Controller
         $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "Total : $total $"), 0, 1);
         $this->fpdf->SetX(150);
         $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "Signature"), 0);
-        $this->fpdf->Output('D', 'Recu.pdf');
-        exit;
-        /*$recu = new Recu($client, $rdv, $user, $clinique);
+
+        $recu = new Recu($client, $rdv, $user, $clinique);
         $recu->attachData($this->fpdf->Output('', 'S'), 'recu.pdf');
         Mail::to($client->courriel)
             ->send($recu);
-        return back();*/
+        return back();
     }
 
     public function recuRemboursement($client, $transaction, $clinique, $rdv, $service)
