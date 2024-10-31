@@ -7,7 +7,7 @@ use App\Models\Rdv;
 use Livewire\Component;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
-
+use Illuminate\Support\Facades\Auth;
 
 class Agenda extends Component
 {
@@ -57,9 +57,9 @@ class Agenda extends Component
         }
 
         $this->startingDate->setTime(7, 0);
-        
+
         $this->endingDate = $this->startingDate->copy()->modify('+6 days');
-        
+
         $this->datesArr = [];
         for ($i=0; $i < 7; $i++) {
             $date = $this->startingDate->copy()->addDays($i);
@@ -85,7 +85,9 @@ class Agenda extends Component
         }
 
 
-        $this->indispoArr = Indisponibilite::where('dateHeureFin', '>=', $this->startingDate)->get();
+        $this->indispoArr = Indisponibilite::
+            where('dateHeureFin', '>=', $this->startingDate)->
+            where('idProfessionnel', '>=', Auth::user()->id)->get();
         $this->rdvArr = Rdv::where('dateHeureDebut', '>=', $this->startingDate)->get();
     }
 
@@ -115,7 +117,7 @@ class Agenda extends Component
         $this->dispatch('open-modal', name: 'choixRdvIndispo');
     }
 
-    
+
 
 
     public function updateSelectedTime($newTime)
@@ -126,7 +128,8 @@ class Agenda extends Component
 
     public function refreshAgenda(){
         $this->indispoArr = [];
-        $this->indispoArr = Indisponibilite::where('dateHeureFin', '>=', $this->startingDate)->get();
+        $this->indispoArr = Indisponibilite::where('dateHeureFin', '>=', $this->startingDate)->
+            where('idProfessionnel', Auth::user()->id)->get();
         $this->rdvArr = [];
         $this->rdvArr = Rdv::where('dateHeureDebut', '>=', $this->startingDate)->
             where('actif', true)->get();
@@ -135,7 +138,7 @@ class Agenda extends Component
 
     public function fullRefresh($startingDate){
         if ($this->view == "semaine") {
-            
+
             if ($startingDate->isSunday())
                 $this->startingDate = $startingDate->copy();
             else
@@ -157,7 +160,7 @@ class Agenda extends Component
                 $this->startingDate->setTimezone('America/Toronto');
             }
             $startingDate->setTime(7, 0);
-            
+
             $this->endingDate = $this->startingDate->copy()->modify('+6 days');
 
 
@@ -186,7 +189,8 @@ class Agenda extends Component
 
             }
 
-            $this->indispoArr = Indisponibilite::where('dateHeureFin', '>=', $this->startingDate)->get();
+            $this->indispoArr = Indisponibilite::where('dateHeureFin', '>=', $this->startingDate)->
+            where('idProfessionnel', Auth::user()->id)->get();
 
         } elseif ($this->view == "mois") {
             $this->startingDate = $startingDate->copy()->firstOfMonth();
@@ -227,7 +231,7 @@ class Agenda extends Component
             $this->datesArr[] = $date;
         }
         $this->refreshAgenda();
-        
+
     }
 
     public function consulterModalIndispo(Indisponibilite $indispo) {
@@ -236,7 +240,7 @@ class Agenda extends Component
         $this->dispatch('consulterModalIndispo', $indispo);
     }
 
-    
+
     public function consulterModalRdv(Rdv $rdv) {
 
         #dd($indispo);
