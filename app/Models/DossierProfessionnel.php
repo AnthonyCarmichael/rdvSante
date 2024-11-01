@@ -23,4 +23,5 @@ class DossierProfessionnel extends Pivot
     {
         return $this->belongsTo(User::class, 'idProfessionnel'); // Ajustez le foreign key si nécessaire
     }
+
 }

@@ -14,8 +14,8 @@
                         size="5">
                         <option class="font-bold" value="" disabled>Sélectionnez un client</option>
                         @if (!is_null($clients))
-                            @foreach ($clients as $client)
-                                <option value="{{ $client->id }}">{{ $client->prenom . ' ' . $client->nom }}</option>
+                            @foreach ($clients as $dossier)
+                                <option value="{{ $dossier->client->id }}">{{ $dossier->client->prenom . ' ' . $dossier->client->nom }}</option>
                             @endforeach
                         @endif
                     </select>
@@ -121,30 +121,6 @@
                                     {{ $rdv->client->prenom }} {{ $rdv->client->nom }}
                                 @endif
                             </p>
-                        </div>
-
-                        <div x-show="editable">
-                            <label class="block text-sm font-medium text-gray-700" for="client">Choisir un client
-                                :</label>
-                            <input type="text" wire:model.live="filter" name="recherche" id="recherche"
-                                placeholder="Recherche"
-                                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                            <select required name="client" wire:model="clientSelected" :disabled="!editable"
-                                class="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                size="5">
-                                <option class="font-bold" value="" disabled>Sélectionnez un client</option>
-                                @if (!is_null($clients))
-                                    @foreach ($clients as $client)
-                                        @if (isset($rdv) && $client->id == $rdv->client->id)
-                                            <option selected value="{{ $client->id }}">
-                                                {{ $client->prenom . ' ' . $client->nom }}</option>
-                                        @else
-                                            <option value="{{ $client->id }}">
-                                                {{ $client->prenom . ' ' . $client->nom }}</option>
-                                        @endif
-                                    @endforeach
-                                @endif
-                            </select>
                         </div>
 
                     </div>

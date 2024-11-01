@@ -25,4 +25,9 @@ class Dossier extends Model
         return $this->belongsTo(Client::class, 'idClient');
     }
 
+    public function dossier_professionnels()
+    {
+        return $this->hasMany(DossierProfessionnel::class, 'idDossier', 'id');
+    }
+
 }

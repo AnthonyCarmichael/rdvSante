@@ -8,6 +8,7 @@ use App\Models\Client;
 use App\Models\Transaction;
 use App\Models\Service;
 use App\Models\Dossier;
+use App\Models\DossierProfessionnel;
 use App\Models\MoyenPaiement;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -81,7 +82,7 @@ class RendezVousComponent extends Component
     public function updatedFilter($value)
     {
 
-        $this->clients = Client::where(function ($query) {
+        $this->clients = Client::select('id')->where(function ($query) {
             $query->where('actif', '1')
                 ->where('nom', 'like', '%' . $this->filter . '%');
             })->orWhere(function($query) {
@@ -89,6 +90,14 @@ class RendezVousComponent extends Component
                     ->where('prenom', 'like', '%' . $this->filter . '%');
             })->
             orderBy('prenom')->get();
+
+        $dossiers = DossierProfessionnel::select('idDossier')->where('idProfessionnel',Auth::user()->id);
+        #dd($this->clients);
+
+        if(!is_null($this->clients))
+            $this->clients = Dossier::whereIn('id',$dossiers)->whereIn('idClient',$this->clients)->get();
+        #dd($this->clients);
+
     }
 
 
@@ -133,9 +142,6 @@ class RendezVousComponent extends Component
 
     public function render()
     {
-
-        $dossiers = Auth::user()->dossiers;
-
         $clients = Client::where('actif', '1')
             ->orderBy('prenom')
             ->get();
@@ -146,7 +152,6 @@ class RendezVousComponent extends Component
         return view('livewire.rendez-vous-component', [
             'services' => $services,
             'cliniques' => $cliniques,
-            'dossiers' => $dossiers,
         ]);
     }
 

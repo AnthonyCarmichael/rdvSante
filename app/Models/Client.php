@@ -17,4 +17,5 @@ class Client extends Model
     {
         return $this->hasMany(Dossier::class, 'idClient');
     }
+
 }
