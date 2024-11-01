@@ -28,6 +28,7 @@ class RendezVousComponent extends Component
     public $moyenPaiements;
     public $moyenPaiement = 1;
     public $montant;
+    public $dossiers;
 
     # Facturation
     public $sousMenuConsult;
@@ -133,6 +134,8 @@ class RendezVousComponent extends Component
     public function render()
     {
 
+        $dossiers = Auth::user()->dossiers;
+
         $clients = Client::where('actif', '1')
             ->orderBy('prenom')
             ->get();
@@ -143,6 +146,7 @@ class RendezVousComponent extends Component
         return view('livewire.rendez-vous-component', [
             'services' => $services,
             'cliniques' => $cliniques,
+            'dossiers' => $dossiers,
         ]);
     }
 

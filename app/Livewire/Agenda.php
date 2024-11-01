@@ -88,7 +88,10 @@ class Agenda extends Component
         $this->indispoArr = Indisponibilite::
             where('dateHeureFin', '>=', $this->startingDate)->
             where('idProfessionnel', '>=', Auth::user()->id)->get();
-        $this->rdvArr = Rdv::where('dateHeureDebut', '>=', $this->startingDate)->get();
+        $this->rdvArr = Auth::user()->rdvs()
+            ->whereBetween('dateHeureDebut', [$this->startingDate, $this->startingDate->copy()->addDays(7)])
+            ->where('rdvs.actif',true)
+            ->get();
     }
 
     public function setView($view)
@@ -131,8 +134,10 @@ class Agenda extends Component
         $this->indispoArr = Indisponibilite::where('dateHeureFin', '>=', $this->startingDate)->
             where('idProfessionnel', Auth::user()->id)->get();
         $this->rdvArr = [];
-        $this->rdvArr = Rdv::where('dateHeureDebut', '>=', $this->startingDate)->
-            where('actif', true)->get();
+        $this->rdvArr = Auth::user()->rdvs()
+        ->whereBetween('dateHeureDebut', [$this->startingDate, $this->startingDate->copy()->addDays(7)])
+        ->where('rdvs.actif',true)
+        ->get();
         #dd($this);
     }
 

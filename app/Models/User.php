@@ -37,6 +37,16 @@ class User extends Authenticatable
         return $this->hasMany(Indisponibilite::class, 'idProfessionnel');
     }
 
+    public function services()
+    {
+        return $this->hasMany(Service::class, 'idProfessionnel');
+    }
+
+    public function rdvs()
+    {
+        return $this->hasManyThrough(Rdv::class, Service::class, 'idProfessionnel', 'idService', 'id', 'id');
+    }
+
 
     /**
      * The attributes that are mass assignable.
