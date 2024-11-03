@@ -31,6 +31,8 @@ class RendezVousClientComponent extends Component
     public $datesArr;
     public $heureSelected;
 
+    public $dispoNotFounded;
+
     
     # Section 4
 
@@ -113,6 +115,12 @@ class RendezVousClientComponent extends Component
             while(empty($this->dispoDateArr) && $now->diffInMonths($this->startingWeek) <= 3)
             {
                 $this->changeWeek(1);
+            }
+            if (empty($this->dispoDateArr)) {
+                $this->dispoNotFounded=true;
+            }
+            else {
+                $this->dispoNotFounded=false;
             }
         }
         if ($this->step == 4) {
