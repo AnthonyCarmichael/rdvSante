@@ -44,7 +44,7 @@ class CliniqueComponent extends Component {
         $this->reset('sortDirection');
     }
 
-    public function updatedSearch($nomRecherche)
+    public function updatedSearch()
     {
         if ($this->filtreActif == 1)
         {
@@ -62,7 +62,9 @@ class CliniqueComponent extends Component {
                                         });
                                 });
                     });
-            })->where('actif', true);
+            })
+            ->where('actif', true)
+            ->orderBy($this->sortField, $this->sortDirection);
 
 
             $this->foundCliniques = $query->get();
@@ -83,7 +85,9 @@ class CliniqueComponent extends Component {
                                         });
                                 });
                     });
-            })->where('actif', false);
+            })
+            ->where('actif', false)
+            ->orderBy($this->sortField, $this->sortDirection);
 
 
             $this->foundCliniques = $query->get();
@@ -104,7 +108,8 @@ class CliniqueComponent extends Component {
                                         });
                                 });
                     });
-            });
+            })
+            ->orderBy($this->sortField, $this->sortDirection);
 
 
             $this->foundCliniques = $query->get();
@@ -278,7 +283,7 @@ class CliniqueComponent extends Component {
             $this->sortDirection = 'asc';
         }
 
-        $this->cliniques = $this->updatedSearch($this->search);
+        $this->cliniques = $this->updatedSearch();
     }
 
     public function filtreClinique()
