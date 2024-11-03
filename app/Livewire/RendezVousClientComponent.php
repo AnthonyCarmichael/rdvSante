@@ -31,6 +31,8 @@ class RendezVousClientComponent extends Component
     public $datesArr;
     public $heureSelected;
 
+    public $dispoNotFounded;
+
     
     # Section 4
 
@@ -114,6 +116,12 @@ class RendezVousClientComponent extends Component
             {
                 $this->changeWeek(1);
             }
+            if (empty($this->dispoDateArr)) {
+                $this->dispoNotFounded=true;
+            }
+            else {
+                $this->dispoNotFounded=false;
+            }
         }
         if ($this->step == 4) {
             $this->professionnel = User::find($this->professionnelId);
@@ -123,6 +131,15 @@ class RendezVousClientComponent extends Component
     }
     public function backStep()
     {
+        if ($this->step == 3) {
+            $now = Carbon::now(('America/Toronto'));
+            if ($now->isSunday())
+                $this->startingWeek = $now->copy();
+            else
+                $this->startingWeek = $now->copy()->startOfWeek();
+    
+            $this->startingWeek->setTime(7, 0);
+        }
         $this->dossiers = [];
         $this->lookDossier =0;
         $this->dossierSelected = null;
