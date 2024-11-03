@@ -142,10 +142,19 @@
 
                                             <?php
                                             $selectedDateTime = $startingWeek->copy();
-                                            $selectedDateTime->setTime(7, 0, 0);
+                                            $heureDispoInit = null;
+
+                                            foreach ($professionnel->disponibilites as $dispo) {
+                                                if ($heureDispoInit >  $dispo->heureDebut || $heureDispoInit == null) {
+                                                    $heureDispoInit =  $dispo->heureDebut;
+                                                }
+                                                
+                                            }
+                                            $heureDispoInit = \Carbon\Carbon::parse($heureDispoInit, 'America/Toronto');
+                                            $selectedDateTime->setTime($heureDispoInit->hour,0,0);
 
 
-                                            for ($i=0; $i < 60; $i++) {
+                                            for ($i=0; $i < 900/($service->duree+$service->minutePause); $i++) {
 
                                                 ?>
 
@@ -195,7 +204,9 @@
 
 
                                             <?php
-                                                $selectedDateTime->modify('+15 minutes');
+                                                $totalMinutes = $service->duree + $service->minutePause;
+            
+                                                $selectedDateTime->modify("+{$totalMinutes} minutes");
                                             }
                                             ?>
 
