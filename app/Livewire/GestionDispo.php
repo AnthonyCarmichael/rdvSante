@@ -46,7 +46,8 @@ class GestionDispo extends Component
 
     public function mount()
     {
-        $this->dispos = Disponibilite::orderBy('heureDebut', 'asc')->findMany(DiponibiliteProfessionnel::where('id_user', '=', Auth::user()->id)->get());
+        $dispoPro = DiponibiliteProfessionnel::select('idDisponibilite')->where('id_user', '=', Auth::user()->id);
+        $this->dispos = Disponibilite::orderBy('heureDebut', 'asc')->whereIn('id', $dispoPro)->get();
         $this->jours = Jour::all();
     }
 
@@ -87,7 +88,8 @@ class GestionDispo extends Component
 
 
         $this->reset(['jour', 'heureDebut', 'heureFin']);
-        $this->dispos = Disponibilite::orderBy('heureDebut', 'asc')->findMany(DiponibiliteProfessionnel::where('id_user', '=', Auth::user()->id)->get());
+        $dispoPro = DiponibiliteProfessionnel::select('idDisponibilite')->where('id_user', '=', Auth::user()->id);
+        $this->dispos = Disponibilite::orderBy('heureDebut', 'asc')->whereIn('id', $dispoPro)->get();
         $this->jours = Jour::all();
         $this->dispatch('close-modal');
     }
