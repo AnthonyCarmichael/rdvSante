@@ -20,24 +20,46 @@ new #[Layout('layouts.guest')] class extends Component
     public string $lien = '';
     public int $idRole = 2;
     public bool $actif = false;
+    public ?string $token = null;
+
+    public function mount($token = null)
+    {
+        $this->token = $token;
+
+        // Récupérer les informations d'invitation depuis le cache
+        $userData = Cache::pull('invitation_' . $this->token);
+
+        /*if (!$userData) {
+            abort(403, 'Lien d\'invitation invalide ou expiré.');
+        }*/
+    }
 
     /**
      * Handle an incoming registration request.
      */
-     public function register(): void
+    public function register()
     {
-
         $validated = $this->validate([
             'nom' => ['required', 'string', 'max:255'],
             'prenom' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'telephone' => ['required', 'string', 'max:20'],
-            'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
+            'telephone' => ['required', 'string', 'max:20', 'regex:/^\(\d{3}\) \d{3}-\d{4}$/'],
+            'password' => ['required', 'string', 'confirmed'],
             'description' => ['nullable', 'string'],
             'lien' => ['nullable', 'string'],
             'idRole' => ['required', 'integer'],
             'actif' => ['required', 'boolean']
-        ]);
+        ],  [
+            'nom.required' => 'Le champ nom est obligatoire.',
+            'prenom.required' => 'Le champ prénom est obligatoire.',
+            'email.required' => 'Veuillez fournir une adresse e-mail.',
+            'email.email' => 'Veuillez entrer une adresse e-mail valide.',
+            'email.unique' => 'Cette adresse e-mail est déjà utilisée.',
+            'telephone.required' => 'Le champ téléphone est obligatoire.',
+            'telephone.regex' => 'Respecter le format télephonique',
+            'password.required' => 'Le mot de passe est obligatoire.',
+            'password.confirmed' => 'La confirmation du mot de passe ne correspond pas.',
+    ]);
 
         $validated['password'] = Hash::make($validated['password']);
 
@@ -53,15 +75,12 @@ new #[Layout('layouts.guest')] class extends Component
             'actif' => $validated['actif'],
         ]);
 
-
-
         event(new Registered($user));
 
         Auth::login($user);
 
-        $this->redirect(route('index', absolute: false), navigate: true);
+        return redirect()->route('index')->with('success', 'Inscription réussie!');
     }
-
 };
 ?>
 
@@ -96,7 +115,7 @@ new #[Layout('layouts.guest')] class extends Component
             <!-- Téléphone -->
             <div class="mt-4">
                 <x-input-label for="telephone" :value="__('Téléphone *')" />
-                <x-text-input wire:model="telephone" id="telephone" class="block mt-1 w-full" type="text" name="telephone" required autocomplete="telephone" />
+                <x-text-input wire:model="telephone" id="telephone" class="block mt-1 w-full" type="text" name="telephone" required autocomplete="telephone" placeholder="(123) 456-7890"/>
                 <x-input-error :messages="$errors->get('telephone')" class="mt-2" />
             </div>
 

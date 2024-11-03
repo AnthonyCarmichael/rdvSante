@@ -1,5 +1,3 @@
-<!-- resources/views/emails/invitation.blade.php -->
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -8,8 +6,8 @@
     <title>Invitation</title>
 </head>
 <body>
-    <h1>Bonjour,</h1>
-    <p>Vous avez été invité à créer un compte. Veuillez cliquer sur le lien ci-dessous pour finaliser votre inscription.</p>
+    <h1>Invitation,</h1>
+    <p>Bonjour, <br> Vous avez été invité(e) à créer un compte. Veuillez cliquer sur le lien ci-dessous pour finaliser votre inscription.</p>
     <p>
         <a href="{{ $url }}">Créer mon compte</a>
     </p>

@@ -5,6 +5,7 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\Clinique;
 use App\Models\CliniqueProfessionnel;
+use App\Models\User;
 use App\Models\Ville;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
@@ -43,23 +44,73 @@ class CliniqueComponent extends Component {
         $this->reset('sortDirection');
     }
 
-    public function updatedSearch($nomRecherche) {
-        $indice=0;
+    public function updatedSearch($nomRecherche)
+    {
+        if ($this->filtreActif == 1)
+        {
+            $query = Auth::user()->cliniques()->where(function($query) {
+                $query->where('nom', 'like', '%' . $this->search . '%')
+                    ->orWhere('noCivique', 'like', '%' . $this->search . '%')
+                    ->orWhere('rue', 'like', '%' . $this->search . '%')
+                    ->orWhere('CodePostal', 'like', '%' . $this->search . '%')
+                    ->orWhereHas('ville', function($query) {
+                        $query->where('nom', 'like', '%' . $this->search . '%')
+                                ->orWhereHas('province', function($query) {
+                                    $query->where('nom', 'like', '%' . $this->search . '%')
+                                        ->orWhereHas('pays', function($query) {
+                                            $query->where('nom', 'like', '%' . $this->search . '%');
+                                        });
+                                });
+                    });
+            })->where('actif', true);
 
-        foreach (Auth::user()->cliniques as $clinique) {
-            if (!str_contains(strtolower($clinique->nom),strtolower($this->search)) &&
-                !str_contains(strtolower($clinique->noCivique),strtolower($this->search)) &&
-                !str_contains(strtolower($clinique->rue),strtolower($this->search)) &&
-                !str_contains(strtolower($clinique->CodePostal),strtolower($this->search)) &&
-                !str_contains(strtolower($clinique->ville->nom),strtolower($this->search)) &&
-                !str_contains(strtolower($clinique->ville->province->nom),strtolower($this->search)) &&
-                !str_contains(strtolower($clinique->ville->province->pays->nom),strtolower($this->search))) {
-                unset($this->foundCliniques[$indice]);
-            }
 
-            $indice++;
+            $this->foundCliniques = $query->get();
+        }
+        elseif ($this->filtreActif == 0)
+        {
+            $query = Auth::user()->cliniques()->where(function($query) {
+                $query->where('nom', 'like', '%' . $this->search . '%')
+                    ->orWhere('noCivique', 'like', '%' . $this->search . '%')
+                    ->orWhere('rue', 'like', '%' . $this->search . '%')
+                    ->orWhere('CodePostal', 'like', '%' . $this->search . '%')
+                    ->orWhereHas('ville', function($query) {
+                        $query->where('nom', 'like', '%' . $this->search . '%')
+                                ->orWhereHas('province', function($query) {
+                                    $query->where('nom', 'like', '%' . $this->search . '%')
+                                        ->orWhereHas('pays', function($query) {
+                                            $query->where('nom', 'like', '%' . $this->search . '%');
+                                        });
+                                });
+                    });
+            })->where('actif', false);
+
+
+            $this->foundCliniques = $query->get();
+        }
+        else
+        {
+            $query = Auth::user()->cliniques()->where(function($query) {
+                $query->where('nom', 'like', '%' . $this->search . '%')
+                    ->orWhere('noCivique', 'like', '%' . $this->search . '%')
+                    ->orWhere('rue', 'like', '%' . $this->search . '%')
+                    ->orWhere('CodePostal', 'like', '%' . $this->search . '%')
+                    ->orWhereHas('ville', function($query) {
+                        $query->where('nom', 'like', '%' . $this->search . '%')
+                                ->orWhereHas('province', function($query) {
+                                    $query->where('nom', 'like', '%' . $this->search . '%')
+                                        ->orWhereHas('pays', function($query) {
+                                            $query->where('nom', 'like', '%' . $this->search . '%');
+                                        });
+                                });
+                    });
+            });
+
+
+            $this->foundCliniques = $query->get();
         }
     }
+
 
     public function openModalAjouterClinique() {
         $this->resetExcept('foundCliniques','villes');
@@ -233,31 +284,13 @@ class CliniqueComponent extends Component {
     public function filtreClinique()
     {
         if ($this->filtreActif == 1) {
-            $indice=0;
-            foreach (Auth::user()->cliniques as $clinique) {
-                if ($clinique->actif) {
-                    $this->foundCliniques[$indice] = $clinique;
-                }
-                $indice++;
-            }
+            $this->foundCliniques = Auth::user()->cliniques()->where('actif', true)->get();
         }
         elseif ($this->filtreActif == 0) {
-            $indice=0;
-            foreach (Auth::user()->cliniques as $clinique) {
-                if (!($clinique->actif)) {
-                    $this->foundCliniques[$indice] = $clinique;
-                }
-                $indice++;
-            }
+            $this->foundCliniques = Auth::user()->cliniques()->where('actif', false)->get();
         }
         elseif ($this->filtreActif == 2) {
-            $indice=0;
-            foreach (Auth::user()->cliniques as $clinique) {
-                if ($clinique) {
-                    $this->foundCliniques[$indice] = $clinique;
-                }
-                $indice++;
-            }
+            $this->foundCliniques = Auth::user()->cliniques()->get();
         }
     }
 

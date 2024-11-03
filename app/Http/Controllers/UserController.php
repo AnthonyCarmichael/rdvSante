@@ -19,44 +19,6 @@ class UserController extends Controller
         return view('users.create');
     }
 
-    public function store(Request $request)
-    {
-        $validatedData = $request->validate([
-            'nom' => 'required|string|max:255',
-            'prenom' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email|max:255',
-        ]);
-
-        // Enregistrez l’utilisateur
-        $user = User::create($validatedData);
-
-        // Générer un lien signé avec une expiration de 72 heures (3 jours)
-        $url = URL::temporarySignedRoute('invitation.register', now()->addDays(3), ['user' => $user->id]);
-
-        // Envoyer l'email d'invitation
-        Mail::to($user->email)->send(new InvitationMailable($url));
-
-        return redirect()->route('users.create')->with('success', 'Invitation envoyée avec succès.');
-    }
-
-    public function register(Request $request)
-    {
-        // Vérification de la signature et de la validité du lien
-        if (!$request->hasValidSignature()) {
-            abort(403, 'Lien d\'invitation expiré ou non valide.');
-        }
-
-        $email = $request->query('email');
-
-        // Vérifie que l'e-mail n'est pas déjà utilisé
-        if (User::where('email', $email)->exists()) {
-            abort(403, 'Cet utilisateur est déjà enregistré.');
-        }
-
-        // Affiche le formulaire d'inscription avec l'email en tant que champ caché
-        return view('users.completeRegistration', compact('email'));
-    }
-
     public function sendInvitation(Request $request)
     {
         $validatedData = $request->validate([
@@ -76,62 +38,13 @@ class UserController extends Controller
         ], now()->addDays(3)); // Expire après 3 jours
 
         // Générez l'URL d'invitation
-        $invitationLink = url('/register?token=' . $invitationToken);
+        $invitationLink = url('register?token=' . $invitationToken);
 
         // Envoyez l'e-mail avec le lien d'invitation
-        Mail::to($validatedData['email'])->send(new \App\Mail\InvitationMailable($invitationLink));
+        Mail::to($validatedData['email'])->send(new InvitationMailable($invitationLink));
 
-        return back()->with('success', 'Invitation envoyée avec succès.');
+        session()->flash('status', 'Invitation envoyée avec succès');
+
+        return back();
     }
-
-    public function showRegistrationForm(Request $request)
-    {
-        $token = $request->query('token');
-
-        // Récupérez les informations de l'invitation via le cache
-        $userData = Cache::get('invitation_' . $token);
-
-        if (!$userData) {
-            abort(403, 'Lien d\'invitation invalide ou expiré.');
-        }
-
-        return view('users.completeRegistration', ['userData' => $userData]);
-    }
-
-
-    public function completeRegistration(Request $request)
-    {
-        $validatedData = $request->validate([
-            'token' => 'required',
-            'password' => 'required|string|min:8|confirmed',
-            'telephone' => 'required|string',
-            'idRole' => 'required|integer',
-            'description' => 'nullable|string',
-            'lien' => 'nullable|string',
-        ]);
-
-        // Récupérer les informations d'invitation depuis le cache
-        $userData = Cache::pull('invitation_' . $validatedData['token']);
-
-        if (!$userData) {
-            abort(403, 'Lien d\'invitation invalide ou expiré.');
-        }
-
-        // Enregistrement du nouvel utilisateur dans la base de données
-        $user = User::create([
-            'prenom' => $userData['prenom'],
-            'nom' => $userData['nom'],
-            'email' => $userData['email'],
-            'password' => bcrypt($validatedData['password']),
-            'telephone' => $validatedData['telephone'],
-            'idRole' => $validatedData['idRole'],
-            'description' => $validatedData['description'] ?? null,
-            'actif' => true, // Activer l'utilisateur par défaut
-            'lien' => $validatedData['lien'] ?? null,
-        ]);
-
-        return redirect()->route('login')->with('success', 'Inscription réussie!');
-    }
-
-
 }

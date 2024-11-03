@@ -2,10 +2,8 @@
     <div class="max-w-md mx-auto p-6 bg-white dark:bg-gray-800 shadow-md rounded-md mt-40">
         <h1 class="text-2xl font-semibold text-gray-800 dark:text-white mb-6 text-center">Inviter un utilisateur</h1>
 
-        <!-- Message de succès -->
-        @if (session('success'))
-            <div class="mb-4 text-green-600 dark:text-green-400">{{ session('success') }}</div>
-        @endif
+        <!-- Session Status -->
+        <x-auth-session-status class="mb-4" :status="session('status')" />
 
         <!-- Formulaire de création d'utilisateur -->
         <form action="{{ route('sendInvitation') }}" method="POST" class="space-y-4">

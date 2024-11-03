@@ -27,14 +27,14 @@ new #[Layout('layouts.guest')] class extends Component
         );
 
         if ($status != Password::RESET_LINK_SENT) {
-            $this->addError('email', __($status));
+            $this->addError('email', 'Aucun utilisateur n\'est associé à cette adresse e-mail.');
 
             return;
         }
 
         $this->reset('email');
 
-        session()->flash('status', __($status));
+        session()->flash('status', 'Le lien de réinitialisation vous a été envoyé');
     }
 }; ?>
 
