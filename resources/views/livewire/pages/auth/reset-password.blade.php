@@ -36,9 +36,11 @@ new #[Layout('layouts.guest')] class extends Component
         $this->validate([
             'token' => ['required'],
             'email' => ['required', 'string', 'email'],
-            'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
+            'password' => ['required', 'string', 'confirmed'],
         ], [
             'email.email' => 'Veuillez entrer une adresse e-mail valide.',
+            'password.required' => 'Le mot de passe est obligatoire.',
+            'password.confirmed' => 'La confirmation du mot de passe ne correspond pas.',
         ]);
 
         // Here we will attempt to reset the user's password. If it is successful we
@@ -60,12 +62,12 @@ new #[Layout('layouts.guest')] class extends Component
         // the application's home authenticated view. If there is an error we can
         // redirect them back to where they came from with their error message.
         if ($status != Password::PASSWORD_RESET) {
-            $this->addError('email', __($status));
+            $this->addError('email', 'Aucun utilisateur n\'est associé à cette adresse e-mail.');
 
             return;
         }
 
-        Session::flash('status', __($status));
+        Session::flash('status', 'Mot de passe réinitialiser');
 
         $this->redirectRoute('login', navigate: true);
     }

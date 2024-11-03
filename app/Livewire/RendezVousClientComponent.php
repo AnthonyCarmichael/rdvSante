@@ -31,6 +31,8 @@ class RendezVousClientComponent extends Component
     public $datesArr;
     public $heureSelected;
 
+    public $dispoNotFounded;
+
     
     # Section 4
 
@@ -114,6 +116,12 @@ class RendezVousClientComponent extends Component
             {
                 $this->changeWeek(1);
             }
+            if (empty($this->dispoDateArr)) {
+                $this->dispoNotFounded=true;
+            }
+            else {
+                $this->dispoNotFounded=false;
+            }
         }
         if ($this->step == 4) {
             $this->professionnel = User::find($this->professionnelId);
@@ -123,6 +131,15 @@ class RendezVousClientComponent extends Component
     }
     public function backStep()
     {
+        if ($this->step == 3) {
+            $now = Carbon::now(('America/Toronto'));
+            if ($now->isSunday())
+                $this->startingWeek = $now->copy();
+            else
+                $this->startingWeek = $now->copy()->startOfWeek();
+    
+            $this->startingWeek->setTime(7, 0);
+        }
         $this->dossiers = [];
         $this->lookDossier =0;
         $this->dossierSelected = null;
@@ -185,7 +202,8 @@ class RendezVousClientComponent extends Component
             ->get();
 
 
-        $rdvArr = Rdv::where('dateHeureDebut', '>=', $this->startingWeek)->get();
+        $rdvArr = $profesh->rdvs()
+            ->where('dateHeureDebut', '>=', $this->startingWeek)->get();
 
         $dateTemp = $this->startingWeek->copy();
 
@@ -218,7 +236,7 @@ class RendezVousClientComponent extends Component
                     if ($goodDay) {
                         # Le professionnel à mit de dispo cette journée
                         # Vérification si il y aurait des blocs possible pour un rdv
-                        for ($j=0; $j < 60 ; $j++) {
+                        for ($j=0; $j < 180 ; $j++) {
                             $findIndispo = false;
                             $heureDebut = Carbon::parse($goodDispo->heureDebut, 'America/Toronto');
                             $heureFin = Carbon::parse($goodDispo->heureFin, 'America/Toronto');
@@ -267,13 +285,13 @@ class RendezVousClientComponent extends Component
                                     $fin = $debut->copy()->addMinutes($rdv->service->duree+$rdv->service->minutePause);
 
                                     if (
-                                        // Si le début de dateTemp est dans l'indisponibilité
+                                        // Si le début de dateTemp est dans un rdv
                                         ($debut <= $dateTemp && $fin > $dateTemp) ||
 
-                                        // Si la fin de dateTemp chevauche une indisponibilité
+                                        // Si la fin de dateTemp chevauche un rdv
                                         ($debut <= $dateTempEndAvecService && $fin > $dateTempEndAvecService) ||
 
-                                        // Si dateTemp chevauche toute l'indisponibilité
+                                        // Si dateTemp chevauche toute un rdv
                                         ($dateTemp <= $debut && $dateTempEndAvecService > $fin)
                                     )  {
 
@@ -291,8 +309,8 @@ class RendezVousClientComponent extends Component
 
                                 }
                             }
-                            $dateTemp->modify('+15 minutes');
-                            $dateTempEndAvecService->modify('+15 minutes');
+                            $dateTemp->modify('+5 minutes');
+                            $dateTempEndAvecService->modify('+5 minutes');
                         }
                     }
                 }

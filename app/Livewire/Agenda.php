@@ -211,6 +211,7 @@ class Agenda extends Component
 
     public function changeStartingDate($days) {
         $this->startingDate->addDays($days);
+        $this->endingDate->addDays($days);
          // Trouver le deuxième dimanche de mars de l'année en cours
          $secondSundayOfMarch = Carbon::create($this->now->year, 3, 1)->next(Carbon::SUNDAY)->addWeek();
 
@@ -226,7 +227,7 @@ class Agenda extends Component
              // Heure normale (UTC - 5)
              $this->startingDate->setTimezone('America/Toronto');
          }
-        $this->endingDate = $this->startingDate->copy()->addDays($days);
+    
 
         $this->datesArr = [];
         for ($i=0; $i < 7; $i++) {

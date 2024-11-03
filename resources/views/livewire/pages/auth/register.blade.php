@@ -135,14 +135,14 @@ new #[Layout('layouts.guest')] class extends Component
 
             <!-- Description -->
             <div class="mt-4">
-                <x-input-label for="description" :value="__('Description')" />
+                <x-input-label for="description" :value="__('Description de votre/vos fonction(s)')" />
                 <textarea wire:model="description" id="description" class="block mt-1 w-full" name="description" autocomplete="description"></textarea>
                 <x-input-error :messages="$errors->get('description')" class="mt-2" />
             </div>
 
             <!-- Lien -->
             <div class="mt-4">
-                <x-input-label for="lien" :value="__('Lien')" />
+                <x-input-label for="lien" :value="__('Lien vers votre site web')" />
                 <x-text-input wire:model="lien" id="lien" class="block mt-1 w-full" type="text" name="lien" autocomplete="lien" />
                 <x-input-error :messages="$errors->get('lien')" class="mt-2" />
             </div>

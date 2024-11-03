@@ -81,24 +81,30 @@
                         <!-- Section 2 -->
                         <div class="p-5 bg-white rounded shadow-md">
                             <button type="button" wire:click="backStep" class="py-1 px-2 bg-gray-300 text-white rounded hover:bg-gray-500"><</button>
-                            <h2 class="text-lg font-bold text-center">Sélectionnez un service</h2>
+                            <h2 class="border-b text-lg font-bold text-center">Sélectionnez un service</h2>
                             <div class="">
-                                @foreach($services as $service)
-                                    <div class="border-y py-6 hover:bg-stone-200 cursor-pointer flex items-center place-content-between"  wire:click="getServiceId({{ $service->id }})">
-                                        <div>
-                                            <p class="mb-2"><b>Service:</b> {{$service->nom}}</p>
-                                            @if($service->description != null)
-                                                <p class="mb-2"><b>Description:</b> {{$service->description}}</p>
-                                            @endif
-                                            <p class="mb-2"><b>Durée:</b> {{$service->duree}} min</p>
-                                            <p><b>Prix:</b> {{$service->prix}} $</p>
-                                        </div>
-                                        <div>
-                                            <p class="text-stone-300 self-center text-lg mr-4">></p>
-                                        </div>
+                                @if($services->count()>0)
+                                    @foreach($services as $service)
+                                        <div class="border-b py-6 hover:bg-stone-200 cursor-pointer flex items-center place-content-between"  wire:click="getServiceId({{ $service->id }})">
+                                            <div>
+                                                <p class="mb-2"><b>Service:</b> {{$service->nom}}</p>
+                                                @if($service->description != null)
+                                                    <p class="mb-2"><b>Description:</b> {{$service->description}}</p>
+                                                @endif
+                                                <p class="mb-2"><b>Durée:</b> {{$service->duree}} min</p>
+                                                <p><b>Prix:</b> {{$service->prix}} $</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-stone-300 self-center text-lg mr-4">></p>
+                                            </div>
 
-                                    </div>
-                                @endforeach
+                                        </div>
+                                    @endforeach
+
+                                @else
+                                    <p class="border-y py-6 mb-4">{{$professionnel->prenom}} {{$professionnel->nom}} n'offre aucun services pour le moment, veuillez nous contacter pour plus d'information.</p>
+                                @endif
+
                             </div>
                         </div>
 
@@ -109,93 +115,111 @@
                             <button type="button" wire:click="backStep" class="py-1 px-2 bg-gray-300 text-white rounded hover:bg-gray-500"><</button>
                             <h2 class="text-lg font-bold text-center">Sélectionnez une heure</h2>
                             <div class="border-y py-6">
-                                <div class="flex justify-between">
-                                    <button type="button" wire:click="changeWeek(-1)"><</button>
-                                    <h3>{{$startingWeek->translatedFormat('F')}}</h3>
-                                    <button type="button" wire:click="changeWeek(1)">></button>
-                                </div>
 
-                                <table class="table-fixed w-full text-sm text-stone-700 text-xs">
-                                    <thead>
-                                        <tr class="bg-stone-200">
-                                            <!-- Titre col -->
-                                            <th class="">Heure </th>
+                                @if($dispoNotFounded==false)
+                                    <div class="flex justify-between">
+                                        <button type="button" wire:click="changeWeek(-1)"><</button>
+                                        <h3>{{$startingWeek->translatedFormat('F')}}</h3>
+                                        <button type="button" wire:click="changeWeek(1)">></button>
+                                    </div>
 
-                                            <?php
-                                            foreach ($datesArr as $date) {?>
-                                                <th class="">{{$date->isoFormat('ddd D')}}</th>
+                                    <table class="table-fixed w-full text-sm text-stone-700 text-xs">
+                                        <thead>
+                                            <tr class="bg-stone-200">
+                                                <!-- Titre col -->
+                                                <th class="">Heure </th>
+
                                                 <?php
-                                            }
-                                            ?>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-
-
-                                        <?php
-                                        $selectedDateTime = $startingWeek->copy();
-                                        $selectedDateTime->setTime(7, 0, 0);
-
-
-                                        for ($i=0; $i < 60; $i++) {
-
-                                            ?>
-
-                                            <!-- Gestion de l'aternance des couleurs dans l'agenda -->
-                                            @if(($i %2)==0)
-                                                <tr class="bg-gray-100 text-center">
-
-                                            @else
-                                                <tr class=" bg-gray-200 text-center">
-                                            @endif
-
-                                            <!-- colonne temps -->
-                                            <td class=""><?php echo $selectedDateTime->format('H:i') ?></td>
-
-                                                <!-- colonne interactive de l'agenda -->
-                                                <?php
-
-                                                    for ($j=0; $j <7; $j++) {
-                                                        ?>
-                                                        <!-- Cellule intéractible -->
-                                                        <td class="">
-                                                            <!-- verification cellule dispo -->
-                                                            @if (!empty($dispoDateArr))
-
-                                                                @foreach ($dispoDateArr as $dispo)
-                                                                    @if ($dispo == $selectedDateTime)
-                                                                        <button class="w-full h-full bg-blue-500 text-white rounded"
-                                                                            type="button"
-                                                                            wire:click="choixDate('{{ $selectedDateTime }}')"
-                                                                            value="{{$selectedDateTime}}"
-                                                                            onclick="console.log(event.target.value);"
-                                                                            onmouseover="document.querySelectorAll('button[value=\'{{$dispo}}\']').forEach(btn => btn.classList.add('hover-effect-blue'))"
-                                                                            onmouseout="document.querySelectorAll('button[value=\'{{$dispo}}\']').forEach(btn => btn.classList.remove('hover-effect-blue'))">
-                                                                            <span class="">{{$selectedDateTime->format('H:i')}}</span>
-                                                                        </button>
-                                                                        @break
-                                                                    @endif
-                                                                @endforeach
-                                                            @endif
-                                                        </td>
-                                                        <?php
-                                                        $selectedDateTime->modify('+1 day');
-                                                    }
-                                                    $selectedDateTime->modify('-7 day');
+                                                foreach ($datesArr as $date) {?>
+                                                    <th class="">{{$date->isoFormat('ddd D')}}</th>
+                                                    <?php
+                                                }
                                                 ?>
                                             </tr>
+                                        </thead>
+                                        <tbody>
 
 
-                                        <?php
-                                            $selectedDateTime->modify('+15 minutes');
-                                        }
-                                        ?>
+                                            <?php
+                                            $selectedDateTime = $startingWeek->copy();
+                                            $heureDispoInit = null;
 
-                                    </tbody>
-                                    <tfoot>
+                                            foreach ($professionnel->disponibilites as $dispo) {
+                                                if ($heureDispoInit >  $dispo->heureDebut || $heureDispoInit == null) {
+                                                    $heureDispoInit =  $dispo->heureDebut;
+                                                }
+                                                
+                                            }
+                                            $heureDispoInit = \Carbon\Carbon::parse($heureDispoInit, 'America/Toronto');
+                                            $selectedDateTime->setTime($heureDispoInit->hour,0,0);
 
-                                    </tfoot>
-                                </table>
+
+                                            for ($i=0; $i < 900/($service->duree+$service->minutePause); $i++) {
+
+                                                ?>
+
+                                                <!-- Gestion de l'aternance des couleurs dans l'agenda -->
+                                                @if(($i %2)==0)
+                                                    <tr class="bg-gray-100 text-center">
+
+                                                @else
+                                                    <tr class=" bg-gray-200 text-center">
+                                                @endif
+
+                                                <!-- colonne temps -->
+                                                <td class=""><?php echo $selectedDateTime->format('H:i') ?></td>
+
+                                                    <!-- colonne interactive de l'agenda -->
+                                                    <?php
+
+                                                        for ($j=0; $j <7; $j++) {
+                                                            ?>
+                                                            <!-- Cellule intéractible -->
+                                                            <td class="">
+                                                                <!-- verification cellule dispo -->
+                                                                @if (!empty($dispoDateArr))
+
+                                                                    @foreach ($dispoDateArr as $dispo)
+                                                                        @if ($dispo == $selectedDateTime)
+                                                                            <button class="w-full h-full bg-blue-500 text-white rounded"
+                                                                                type="button"
+                                                                                wire:click="choixDate('{{ $selectedDateTime }}')"
+                                                                                value="{{$selectedDateTime}}"
+                                                                                onclick="console.log(event.target.value);"
+                                                                                onmouseover="document.querySelectorAll('button[value=\'{{$dispo}}\']').forEach(btn => btn.classList.add('hover-effect-blue'))"
+                                                                                onmouseout="document.querySelectorAll('button[value=\'{{$dispo}}\']').forEach(btn => btn.classList.remove('hover-effect-blue'))">
+                                                                                <span class="">{{$selectedDateTime->format('H:i')}}</span>
+                                                                            </button>
+                                                                            @break
+                                                                        @endif
+                                                                    @endforeach
+                                                                @endif
+                                                            </td>
+                                                            <?php
+                                                            $selectedDateTime->modify('+1 day');
+                                                        }
+                                                        $selectedDateTime->modify('-7 day');
+                                                    ?>
+                                                </tr>
+
+
+                                            <?php
+                                                $totalMinutes = $service->duree + $service->minutePause;
+            
+                                                $selectedDateTime->modify("+{$totalMinutes} minutes");
+                                            }
+                                            ?>
+
+                                        </tbody>
+                                        <tfoot>
+
+                                        </tfoot>
+                                    </table>
+
+                                @else
+                                    <p class="">{{$professionnel->prenom}} {{$professionnel->nom}} n'a aucune disponibilité pour les trois prochains mois, veuillez nous contacter pour plus d'informations.</p>
+                                @endif
+
                             </div>
 
                         </div>
