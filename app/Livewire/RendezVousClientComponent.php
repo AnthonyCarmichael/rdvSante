@@ -285,13 +285,13 @@ class RendezVousClientComponent extends Component
                                     $fin = $debut->copy()->addMinutes($rdv->service->duree+$rdv->service->minutePause);
 
                                     if (
-                                        // Si le début de dateTemp est dans l'indisponibilité
+                                        // Si le début de dateTemp est dans un rdv
                                         ($debut <= $dateTemp && $fin > $dateTemp) ||
 
-                                        // Si la fin de dateTemp chevauche une indisponibilité
+                                        // Si la fin de dateTemp chevauche un rdv
                                         ($debut <= $dateTempEndAvecService && $fin > $dateTempEndAvecService) ||
 
-                                        // Si dateTemp chevauche toute l'indisponibilité
+                                        // Si dateTemp chevauche toute un rdv
                                         ($dateTemp <= $debut && $dateTempEndAvecService > $fin)
                                     )  {
 
