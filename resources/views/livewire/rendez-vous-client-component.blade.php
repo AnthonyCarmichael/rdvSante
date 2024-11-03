@@ -83,22 +83,28 @@
                             <button type="button" wire:click="backStep" class="py-1 px-2 bg-gray-300 text-white rounded hover:bg-gray-500"><</button>
                             <h2 class="text-lg font-bold text-center">Sélectionnez un service</h2>
                             <div class="">
-                                @foreach($services as $service)
-                                    <div class="border-y py-6 hover:bg-stone-200 cursor-pointer flex items-center place-content-between"  wire:click="getServiceId({{ $service->id }})">
-                                        <div>
-                                            <p class="mb-2"><b>Service:</b> {{$service->nom}}</p>
-                                            @if($service->description != null)
-                                                <p class="mb-2"><b>Description:</b> {{$service->description}}</p>
-                                            @endif
-                                            <p class="mb-2"><b>Durée:</b> {{$service->duree}} min</p>
-                                            <p><b>Prix:</b> {{$service->prix}} $</p>
-                                        </div>
-                                        <div>
-                                            <p class="text-stone-300 self-center text-lg mr-4">></p>
-                                        </div>
+                                @if($services->count()>0)
+                                    @foreach($services as $service)
+                                        <div class="border-y py-6 hover:bg-stone-200 cursor-pointer flex items-center place-content-between"  wire:click="getServiceId({{ $service->id }})">
+                                            <div>
+                                                <p class="mb-2"><b>Service:</b> {{$service->nom}}</p>
+                                                @if($service->description != null)
+                                                    <p class="mb-2"><b>Description:</b> {{$service->description}}</p>
+                                                @endif
+                                                <p class="mb-2"><b>Durée:</b> {{$service->duree}} min</p>
+                                                <p><b>Prix:</b> {{$service->prix}} $</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-stone-300 self-center text-lg mr-4">></p>
+                                            </div>
 
-                                    </div>
-                                @endforeach
+                                        </div>
+                                    @endforeach
+
+                                @else
+                                    <p class="border-y py-6 mb-4">{{$professionnel->prenom}} {{$professionnel->nom}} n'offre aucun services pour le moment, veuillez nous contacter pour plus d'information.</p>
+                                @endif
+
                             </div>
                         </div>
 
