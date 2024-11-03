@@ -20,7 +20,7 @@ class AjouterClient extends Component
     public $nomFiltre = [];
     public $filtreNom;
     public $filtrePrenom;
-    public $filtreActif;
+    public $filtreActif = 1;
     public $genres;
     public $villes;
     public $action;
@@ -48,7 +48,7 @@ class AjouterClient extends Component
     }
     public function mount($clients, $genres, $villes)
     {
-        $this->clients = $clients;
+        $this->filtreClient();
 
         foreach ($this->clients as $c) {
             $nomFound = false;
@@ -363,10 +363,12 @@ class AjouterClient extends Component
 
     public function filtreClient()
     {
+        $dossierPro = DossierProfessionnel::select('idDossier')->where('idProfessionnel', '=', Auth::user()->id);
+        $dossier = Dossier::select('idClient')->whereIn('id', $dossierPro);
         if ($this->filtreActif == 2) {
-            $this->clients = Client::where('nom', 'like', '%' . $this->filtreNom . '%')->where('prenom', 'like', '%' . $this->filtrePrenom . '%')->orderBy('nom', 'asc')->get();
+            $this->clients = Client::whereIn('id', $dossier)->where('nom', 'like', '%' . $this->filtreNom . '%')->where('prenom', 'like', '%' . $this->filtrePrenom . '%')->orderBy('nom', 'asc')->get();
         } else {
-            $this->clients = Client::where('nom', 'like', '%' . $this->filtreNom . '%')->where('prenom', 'like', '%' . $this->filtrePrenom . '%')->where('actif', '=', $this->filtreActif)->orderBy('nom', 'asc')->get();
+            $this->clients = Client::whereIn('id', $dossier)->where('nom', 'like', '%' . $this->filtreNom . '%')->where('prenom', 'like', '%' . $this->filtrePrenom . '%')->where('actif', '=', $this->filtreActif)->orderBy('nom', 'asc')->get();
         }
     }
 

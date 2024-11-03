@@ -8,16 +8,11 @@
         @endforeach
     </datalist>
 
-    <label class="ml-4 text-m text-right font-bold" for="name">Période:</label>
-    <select wire:change="filtrePaiement" wire:model="filtrePeriode" id="filtrePeriode" name="filtrePeriode"
-        class="h-8 text-m ml-2 mb-4 py-0">
-        <option value='1' selected>Aujourd'hui</option>
-        <option value='2'>Le dernier mois</option>
-        <option value='3'>Les trois derniers mois</option>
-        <option value='4'>Les six derniers mois</option>
-        <option value='5'>La dernière année</option>
-        <option value='6'>Tous</option>
-    </select>
+    <label class="ml-4 text-m text-right font-bold" for="dateDebut">Date de début:</label>
+    <input wire:change="filtrePaiement" wire:model="dateDebut" type="date" class="h-8 text-m ml-2 mb-4">
+
+    <label class="ml-4 text-m text-right font-bold" for="dateFin">Date de fin:</label>
+    <input wire:change="filtrePaiement" wire:model="dateFin" type="date" class="h-8 text-m ml-2 mb-4">
 
 
     <label class="ml-4 text-m text-right font-bold" for="filtreType">Type de transaction:</label>
