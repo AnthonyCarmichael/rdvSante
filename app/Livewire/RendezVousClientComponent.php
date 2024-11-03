@@ -131,6 +131,15 @@ class RendezVousClientComponent extends Component
     }
     public function backStep()
     {
+        if ($this->step == 3) {
+            $now = Carbon::now(('America/Toronto'));
+            if ($now->isSunday())
+                $this->startingWeek = $now->copy();
+            else
+                $this->startingWeek = $now->copy()->startOfWeek();
+    
+            $this->startingWeek->setTime(7, 0);
+        }
         $this->dossiers = [];
         $this->lookDossier =0;
         $this->dossierSelected = null;
