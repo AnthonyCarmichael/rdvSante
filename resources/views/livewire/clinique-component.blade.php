@@ -184,15 +184,6 @@
                         </select>
                     </div>
 
-                    <div class="mb-4">
-                        <label class="inline-flex items-center">
-                            <input type="checkbox" name="principalClinique" id="principalClinique"
-                                wire:model="principalClinique"
-                                class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                            <span class="ml-2 text-gray-700">Clinique principal</span>
-                        </label>
-                    </div>
-
                     <div class="mt-6">
                         <button type="submit"
                             class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
