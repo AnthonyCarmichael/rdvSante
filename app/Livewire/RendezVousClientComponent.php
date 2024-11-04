@@ -35,14 +35,14 @@ class RendezVousClientComponent extends Component
 
     public $dispoNotFounded;
 
-    
+
     # Section 4
 
     public $newClient;
     public $lookDossier; # boolean
     public $dossiers;
     public $dossierSelected;
-    
+
     # Section 5
     public $service;
     public $professionnel;
@@ -139,7 +139,7 @@ class RendezVousClientComponent extends Component
                 $this->startingWeek = $now->copy();
             else
                 $this->startingWeek = $now->copy()->startOfWeek();
-    
+
             $this->startingWeek->setTime(7, 0);
         }
         $this->dossiers = [];
@@ -404,14 +404,14 @@ class RendezVousClientComponent extends Component
         $dossierIds  = DossierProfessionnel::join('dossiers', 'dossier_professionnels.idDossier', '=', 'dossiers.id')
         ->join('clients', 'dossiers.idClient', '=', 'clients.id')
         ->where('dossier_professionnels.idProfessionnel', $this->professionnelId)
-        ->where('clients.courriel', $this->courrielClient) 
-        ->where('clients.actif', true) 
+        ->where('clients.courriel', $this->courrielClient)
+        ->where('clients.actif', true)
         ->pluck('dossiers.id');
 
-     
-        $this->dossiers = Dossier::whereIn('id', $dossierIds)->get(); 
+
+        $this->dossiers = Dossier::whereIn('id', $dossierIds)->get();
         $this->dossierSelected = null;
-        
+
         #dd($this->dossiers);
     }
 
