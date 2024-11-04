@@ -148,7 +148,7 @@
                                                 if ($heureDispoInit >  $dispo->heureDebut || $heureDispoInit == null) {
                                                     $heureDispoInit =  $dispo->heureDebut;
                                                 }
-                                                
+
                                             }
                                             $heureDispoInit = \Carbon\Carbon::parse($heureDispoInit, 'America/Toronto');
                                             $selectedDateTime->setTime($heureDispoInit->hour,0,0);
@@ -205,7 +205,7 @@
 
                                             <?php
                                                 $totalMinutes = $service->duree + $service->minutePause;
-            
+
                                                 $selectedDateTime->modify("+{$totalMinutes} minutes");
                                             }
                                             ?>
