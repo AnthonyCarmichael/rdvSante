@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Mail\ConfirmerRdv;
 use App\Models\Clinique;
 use Carbon\Carbon;
 use App\Models\Indisponibilite;
@@ -10,6 +11,7 @@ use App\Models\Dossier;
 use App\Models\Client;
 use App\Models\Rdv;
 use App\Models\Genre;
+use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
 use App\Models\User;
 use App\Models\Service;
@@ -427,8 +429,12 @@ class RendezVousClientComponent extends Component
             $this->lienResponsable = null;
         }
 
+        $client = null;
+
+
         if ($this->dossierSelected) {
-            Rdv::create([
+            $client = $this->dossierSelected->client;
+            $nouveauRdv = Rdv::create([
                 'dateHeureDebut' => $this->heureSelected,
                 'idDossier' => $this->dossierSelected->id,
                 'idService' => $this->serviceId,
@@ -437,7 +443,7 @@ class RendezVousClientComponent extends Component
                 'actif' => true,
             ]);
         } else {
-            $nouveauClient = Client::create([
+            $client = Client::create([
                 'nom' => $this->nomClient,
                 'prenom' => $this->prenomClient,
                 'courriel' => $this->courrielClient,
@@ -453,7 +459,7 @@ class RendezVousClientComponent extends Component
             $nouveauDossier = Dossier::create([
                 'dateCreation' => Carbon::now('America/Toronto')->format('Y-m-d'),
                 'permissionPartage' => false,
-                'idClient' => $nouveauClient->id
+                'idClient' => $client->id
             ]);
 
             $nouveauDossierProfessionnel = DossierProfessionnel::create([
@@ -469,10 +475,19 @@ class RendezVousClientComponent extends Component
                 'raison' => null,
                 'actif' => true,
             ]);
+            
         }
+
+        $this->sendConfirmedRdvMail($client,$nouveauRdv,$this->professionnel);
 
         $this->nextStep();
 
+    }
+
+    public function sendConfirmedRdvMail($client,$rdv,$professionnel) {
+
+        Mail::to($client->courriel)
+            ->send(new ConfirmerRdv($rdv,$professionnel));
     }
 
     public function render()
