@@ -204,7 +204,9 @@
 
 
                                             <?php
-                                                $totalMinutes = $service->duree + $service->minutePause;
+                                        
+
+                                                $totalMinutes = $service->duree + 15;
 
                                                 $selectedDateTime->modify("+{$totalMinutes} minutes");
                                             }
