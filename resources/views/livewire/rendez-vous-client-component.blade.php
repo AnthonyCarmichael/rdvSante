@@ -144,18 +144,23 @@
                                             <?php
                                             $selectedDateTime = $startingWeek->copy();
                                             $heureDispoInit = null;
+                                            $heureDispoFin = null;
 
                                             foreach ($professionnel->disponibilites as $dispo) {
                                                 if ($heureDispoInit >  $dispo->heureDebut || $heureDispoInit == null) {
                                                     $heureDispoInit =  $dispo->heureDebut;
                                                 }
+                                                if ($heureDispoFin <  $dispo->heureFin || $heureDispoFin == null) {
+                                                    $heureDispoFin =  $dispo->heureFin;
+                                                }
 
                                             }
                                             $heureDispoInit = \Carbon\Carbon::parse($heureDispoInit, 'America/Toronto');
+                                            $heureDispoFin = \Carbon\Carbon::parse($heureDispoFin, 'America/Toronto');
                                             $selectedDateTime->setTime($heureDispoInit->hour,0,0);
 
 
-                                            for ($i=0; $i < 900/($service->duree+15); $i++) {
+                                            for ($i=0; $i < (($heureDispoFin->hour-$heureDispoInit->hour)*60)/($service->duree+15); $i++) {
 
                                                 ?>
 
