@@ -21,6 +21,7 @@ return new class extends Migration
             $table->bigInteger('idClinique')->unsigned();
             $table->text('raison')->nullable();
             $table->boolean('actif');
+            $table->string('token')->nullable(); // Enlever le nullable apres avoir gèrer au complet la fonctionnalité
         });
 
         Schema::table('rdvs', function (Blueprint $table) {

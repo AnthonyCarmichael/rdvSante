@@ -19,11 +19,20 @@ class ConfirmerRdv extends Mailable
     /**
      * Create a new message instance.
      */
-    public $rdv, $professionnel;
+    public $rdv, $professionnel, $urlModif, $urlAnnuler;
     public function __construct(Rdv $rdv,User $professionnel)
     {
         $this->rdv = $rdv;
         $this->professionnel = $professionnel;
+
+        $baseUrl = config('app.url');
+        $baseUrl .= ':8000';
+        // URL de modification
+        $this->urlModif = "{$baseUrl}/rendez-vous/modifier/{$this->rdv->id}?token={$this->rdv->token}";
+
+        // URL d'annulation
+        $this->urlAnnuler= "{$baseUrl}/rendez-vous/annuler/{$this->rdv->id}?token={$this->rdv->token}";
+
     }
 
     public function build()

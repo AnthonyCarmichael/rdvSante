@@ -10,6 +10,23 @@ class RdvController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+    public function modifier($id, Request $request)
+    {
+        $rdv = Rdv::where('id', $id)->where('token', $request->token)->firstOrFail();
+
+        return view('rendez-vous.modifier', ['rdv' => $rdv]);
+    }
+
+    public function annuler($id, Request $request)
+    {
+        $rdv = Rdv::where('id', $id)->where('token', $request->token)->firstOrFail();
+
+        #$rdv->update(['status' => 'annulé']);
+
+        return view('rendez-vous.annuler', ['rdv' => $rdv]);
+    }
+
     public function index()
     {
         //

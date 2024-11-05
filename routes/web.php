@@ -6,6 +6,7 @@ use App\Http\Controllers\ProfileController;
 use App\Livewire\Agenda;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\PdfController;
+use App\Http\Controllers\RdvController;
 use App\Http\Controllers\UserController;
 use App\Models\Service;
 use Illuminate\Support\Facades\Auth;
@@ -87,6 +88,9 @@ Route::get('/profil/disponibilites', function () {
 Route::get('/rendezVous', function () {
     return view('rendezVous');
 })->name('rendezVous');
+
+Route::get('/rendez-vous/modifier/{id}', [RdvController::class, 'modifier']);
+Route::get('/rendez-vous/annuler/{id}', [RdvController::class, 'annuler']);
 
 Route::get('/users/create', [UserController::class, 'create'])->middleware(CheckRole::class)->name('users.create');
 Route::post('/users', [UserController::class, 'sendInvitation'])->name('sendInvitation');

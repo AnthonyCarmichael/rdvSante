@@ -102,7 +102,7 @@
                                     @endforeach
 
                                 @else
-                                    <p class="border-y py-6 mb-4">{{$professionnel->prenom}} {{$professionnel->nom}} n'offre aucun services pour le moment, veuillez nous contacter pour plus d'information.</p>
+                                    <p class="border-y py-6 mb-4">{{$professionnel->prenom}} {{$professionnel->nom}} n'offre aucun services pour le moment. Veuillez nous contacter pour plus d'information.</p>
                                 @endif
 
                             </div>

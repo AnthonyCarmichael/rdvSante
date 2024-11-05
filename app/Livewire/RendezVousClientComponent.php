@@ -16,6 +16,8 @@ use Livewire\Component;
 use App\Models\User;
 use App\Models\Service;
 
+use Illuminate\Support\Str;
+
 class RendezVousClientComponent extends Component
 {
     # Section 0
@@ -430,6 +432,7 @@ class RendezVousClientComponent extends Component
         }
 
         $client = null;
+        $token = Str::random(32);
 
 
         if ($this->dossierSelected) {
@@ -441,6 +444,7 @@ class RendezVousClientComponent extends Component
                 'idClinique' => $this->clinique->id,
                 'raison' => null,
                 'actif' => true,
+                'token' => $token,
             ]);
         } else {
             $client = Client::create([
@@ -474,8 +478,9 @@ class RendezVousClientComponent extends Component
                 'idClinique' => $this->clinique->id,
                 'raison' => null,
                 'actif' => true,
+                'token' => $token,
             ]);
-            
+
         }
 
         $this->sendConfirmedRdvMail($client,$nouveauRdv,$this->professionnel);
