@@ -114,6 +114,7 @@
                         <div class="p-5 bg-white rounded shadow-md">
                             <button type="button" wire:click="backStep" class="py-1 px-2 bg-gray-300 text-white rounded hover:bg-gray-500"><</button>
                             <h2 class="text-lg font-bold text-center">Sélectionnez une heure</h2>
+                            <p class="text-center">Cliquer sur une des heures proposées dans le calendrier</p>
                             <div class="border-y py-6">
 
                                 @if($dispoNotFounded==false)
@@ -204,7 +205,7 @@
 
 
                                             <?php
-                                        
+
 
                                                 $totalMinutes = $service->duree + 15;
 
