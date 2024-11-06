@@ -15,12 +15,13 @@ use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
 use App\Models\User;
 use App\Models\Service;
-
+use App\Models\Taxe;
 use Illuminate\Support\Str;
 
 
 class ModifierRdvParClient extends Component
 {
+    public $taxes;
     # Section 0
     public $step = 0;
     public $users;
@@ -71,6 +72,7 @@ class ModifierRdvParClient extends Component
 
 
     public function mount(Rdv $oldRdv){
+        $this->taxes = Taxe::all();
         $now = Carbon::now(('America/Toronto'));
         $this->now = $now->copy();
         $this->clinique = Clinique::find(1); # A changer pour clinique principal
@@ -104,78 +106,11 @@ class ModifierRdvParClient extends Component
 
     }
 
-    public function resetForm() {
-        $this->reset();
-        $now = Carbon::now(('America/Toronto'));
-        $this->clinique = Clinique::find(1); # A changer pour clinique principal
-
-
-        if ($now->isSunday())
-            $this->startingWeek = $now->copy();
-        else
-            $this->startingWeek = $now->copy()->startOfWeek();
-
-        $this->startingWeek->setTime(7, 0);
-        $this->users = User::all();
-        $this->dispoDateArr = [];
-        $this->pourmoi = true;
-        $this->newClient = null;
-
-    }
-
-    public function updatedtelephoneClient($value) {
-
-        if (strlen($this->telephoneClient) == 10) {
-            $this->telephoneClient = '('.substr($this->telephoneClient, 0, 3).') '.substr($this->telephoneClient, 3, 3).'-'.substr($this->telephoneClient, 6);
-
-        }
-    }
-
-    public function nextStep()
-    {
-        if ($this->step < 6) {
-            $this->step++;
-        }
-        if ($this->step == 3) {
-            $now = Carbon::now('America/Toronto');
-            $this->changeWeek(0);
-            while(empty($this->dispoDateArr) && $now->diffInMonths($this->startingWeek) <= 3)
-            {
-                $this->changeWeek(1);
-            }
-            if (empty($this->dispoDateArr)) {
-                $this->dispoNotFounded=true;
-            }
-            else {
-                $this->dispoNotFounded=false;
-            }
-        }
-        if ($this->step == 4) {
-            $this->professionnel = User::find($this->professionnelId);
-            $this->service = Service::find($this->serviceId);
-
-        }
-    }
     public function backStep()
     {
         $this->modification = null;
     }
 
-    public function getProfessionnelId($id) {
-        $this->professionnelId = $id;
-        $this->professionnel = User::find($id);
-        $this->services = Service::
-            where('idProfessionnel',$this->professionnelId)->
-            where('actif',true)->get();
-        $this->nextStep();
-
-    }
-
-    public function getServiceId($id) {
-        $this->serviceId = $id;
-        $this->service = Service::find($id);
-        $this->nextStep();
-    }
 
     public function fetchDispoDateArr() {
         $this->dispoDateArr = [];
@@ -407,102 +342,13 @@ class ModifierRdvParClient extends Component
     }
 
 
-
-    public function lookingDossier($value) {
-        $this->lookDossier = $value;
-    }
-
-    public function fetchDossier() {
-        $dossierIds  = DossierProfessionnel::join('dossiers', 'dossier_professionnels.idDossier', '=', 'dossiers.id')
-        ->join('clients', 'dossiers.idClient', '=', 'clients.id')
-        ->where('dossier_professionnels.idProfessionnel', $this->professionnelId)
-        ->where('clients.courriel', $this->courrielClient)
-        ->where('clients.actif', true)
-        ->pluck('dossiers.id');
-
-
-        $this->dossiers = Dossier::whereIn('id', $dossierIds)->get();
-        $this->dossierSelected = null;
-
-        #dd($this->dossiers);
-    }
-
-    public function selectDossierClient(Dossier $dossier) {
-        $this->dossierSelected = $dossier;
-        $this->nextStep();
-    }
-
-
-    public function rdvClient(){
-
-        if ($this->pourmoi == 1) {
-            $this->prenomResponsable = null;
-            $this->nomResponsable = null;
-            $this->lienResponsable = null;
-        }
-
-        $client = null;
-        $token = Str::random(32);
-
-
-        if ($this->dossierSelected) {
-            $client = $this->dossierSelected->client;
-            $nouveauRdv = Rdv::create([
-                'dateHeureDebut' => $this->heureSelected,
-                'idDossier' => $this->dossierSelected->id,
-                'idService' => $this->serviceId,
-                'idClinique' => $this->clinique->id,
-                'raison' => null,
-                'actif' => true,
-                'token' => $token,
-            ]);
-        } else {
-            $client = Client::create([
-                'nom' => $this->nomClient,
-                'prenom' => $this->prenomClient,
-                'courriel' => $this->courrielClient,
-                'telephone' => $this->telephoneClient,
-                'ddn' => $this->ddn,
-                'actif' => true,
-                'nomResponsable' => $this->nomResponsable = null,
-                'prenomResponsable' => $this->prenomResponsable,
-                'lienResponsable' => $this->lienResponsable,
-                'idGenre' =>$this->genreId,
-
-            ]);
-            $nouveauDossier = Dossier::create([
-                'dateCreation' => Carbon::now('America/Toronto')->format('Y-m-d'),
-                'permissionPartage' => false,
-                'idClient' => $client->id
-            ]);
-
-            $nouveauDossierProfessionnel = DossierProfessionnel::create([
-                'principal' => true,
-                'idDossier' => $nouveauDossier->id,
-                'idProfessionnel' => $this->professionnel->id,
-            ]);
-            $nouveauRdv = Rdv::create([
-                'dateHeureDebut' => $this->heureSelected,
-                'idDossier' => $nouveauDossier->id,
-                'idService' => $this->serviceId,
-                'idClinique' => $this->clinique->id,
-                'raison' => null,
-                'actif' => true,
-                'token' => $token,
-            ]);
-
-        }
-
-        $this->sendConfirmedRdvMail($client,$nouveauRdv,$this->professionnel);
-
-        $this->nextStep();
-
-    }
-
     public function sendConfirmedRdvMail($client,$rdv,$professionnel) {
 
+        $tps = Taxe::where('nom','TPS')->first();
+        $tvq =  Taxe::where('nom','TVQ')->first();
+
         Mail::to($client->courriel)
-            ->send(new ConfirmerRdv($rdv,$professionnel));
+            ->send(new ConfirmerRdv($rdv,$professionnel,$tps,$tvq));
     }
 
     # Non gèré en standby
@@ -538,8 +384,6 @@ class ModifierRdvParClient extends Component
         $rdv->save();
         $this->sendConfirmedRdvMail($rdv->dossier->client,$rdv,$this->professionnel);
         $this->modification = "end";
-
-
 
     }
 

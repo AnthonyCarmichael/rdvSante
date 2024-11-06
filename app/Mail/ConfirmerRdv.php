@@ -4,6 +4,7 @@ namespace App\Mail;
 
 
 use App\Models\Rdv;
+use App\Models\Taxe;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -19,12 +20,14 @@ class ConfirmerRdv extends Mailable
     /**
      * Create a new message instance.
      */
-    public $rdv, $professionnel, $urlModif, $urlAnnuler;
-    public function __construct(Rdv $rdv,User $professionnel)
+    public $rdv, $professionnel, $urlModif, $urlAnnuler,$tps,$tvq,$total;
+    public function __construct(Rdv $rdv,User $professionnel,Taxe $tps, Taxe $tvq)
     {
         $this->rdv = $rdv;
         $this->professionnel = $professionnel;
-
+        $this->tps = $tps;
+        $this->tvq = $tvq;
+        $this->total = number_format($this->rdv->service->prix + $this->tps->valeur + $this->tvq->valeur, 2);
         $baseUrl = config('app.url');
         $baseUrl .= ':8000';
         // URL de modification
@@ -41,7 +44,10 @@ class ConfirmerRdv extends Mailable
             ->subject('Confirmation du rendez-vous avec '.$this->professionnel->prenom.' ' .$this->professionnel->nom)
             ->with([
                 'rdv' => $this->rdv,
-                'professionnel' => $this->professionnel
+                'professionnel' => $this->professionnel,
+                'tps' => $this->tps,
+                'tvq' => $this->tvq,
+                'total' => $this->total
             ]);
     }
 

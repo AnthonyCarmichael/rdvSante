@@ -240,7 +240,15 @@
                             <div class="border-y py-6 mb-4">
                                 <p class="mb-2"><b>Date:</b> {{$heureSelected->translatedFormat('l, d F Y')}}</p>
                                 <p class="mb-2"><b>Heure:</b> {{$heureSelected->translatedFormat('H:i')}}</p>
-                                <p class="mb-2"><b>Service:</b> {{$service->nom}} {{$service->prix}}$</p>
+                                <p class="mb-2"><b>Service:</b> {{$service->nom}}</p>
+                                <p class="mb-2"><b>Couts:</b> {{$service->prix}} $
+                                    <?php $total =  $service->prix?>
+                                    @foreach ($taxes as $taxe )
+                                    + {{$taxe->nom}} {{$taxe->valeur}} $
+                                    <?php $total += $taxe->valeur?>
+                                    @endforeach
+                                    =  {{number_format($total, 2)}} $
+                                </p>
                                 <p class="mb-2"><b>Professionnel:</b> {{$professionnel->prenom}} {{$professionnel->nom}}
 
                                     @foreach ($professionnel->professions as $profession )
@@ -292,7 +300,15 @@
                             <div class="border-y py-6 mb-4">
                                 <p class="mb-2"><b>Date:</b> {{$heureSelected->translatedFormat('l, d F Y')}}</p>
                                 <p class="mb-2"><b>Heure:</b> {{$heureSelected->translatedFormat('H:i')}}</p>
-                                <p class="mb-2"><b>Service:</b> {{$service->nom}} {{$service->prix}}$</p>
+                                <p class="mb-2"><b>Service:</b> {{$service->nom}}</p>
+                                <p class="mb-2"><b>Couts:</b> {{$service->prix}} $
+                                    <?php $total =  $service->prix?>
+                                    @foreach ($taxes as $taxe )
+                                    + {{$taxe->nom}} {{$taxe->valeur}} $
+                                    <?php $total += $taxe->valeur?>
+                                    @endforeach
+                                    =  {{number_format($total, 2)}} $
+                                </p>
                                 <p class="mb-2"><b>Professionnel:</b> {{$professionnel->prenom}} {{$professionnel->nom}}
 
                                     @foreach ($professionnel->professions as $profession )
@@ -413,7 +429,15 @@
                             <div class="border-y py-6 mb-4">
                                 <p class="mb-2"><b>Date:</b> {{$heureSelected->translatedFormat('l, d F Y')}}</p>
                                 <p class="mb-2"><b>Heure:</b> {{$heureSelected->translatedFormat('H:i')}}</p>
-                                <p class="mb-2"><b>Service:</b> {{$service->nom}} {{$service->prix}}$</p>
+                                <p class="mb-2"><b>Service:</b> {{$service->nom}}</p>
+                                <p class="mb-2"><b>Couts:</b> {{$service->prix}} $
+                                    <?php $total =  $service->prix?>
+                                    @foreach ($taxes as $taxe )
+                                    + {{$taxe->nom}} {{$taxe->valeur}} $
+                                    <?php $total += $taxe->valeur?>
+                                    @endforeach
+                                    =  {{number_format($total, 2)}} $
+                                </p>
                                 <p class="mb-2"><b>Professionnel:</b> {{$professionnel->prenom}} {{$professionnel->nom}}
 
                                     @foreach ($professionnel->professions as $profession )
