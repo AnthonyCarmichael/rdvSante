@@ -16,11 +16,12 @@ use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
 use App\Models\User;
 use App\Models\Service;
-
+use App\Models\Taxe;
 use Illuminate\Support\Str;
 
 class AnnulerRdvParClient extends Component
 {
+    public $taxes;
     # Section 0
     public $step = 0;
     public $users;
@@ -71,6 +72,7 @@ class AnnulerRdvParClient extends Component
 
 
     public function mount(Rdv $oldRdv){
+        $this->taxes= Taxe::all();
         $this->now = Carbon::now(('America/Toronto'));
         $this->clinique = Clinique::find(1); # A changer pour clinique principal
         $this->users = User::all();
@@ -93,27 +95,36 @@ class AnnulerRdvParClient extends Component
     }
 
 
+    public function backStep()
+    {
+        $this->modification = null;
+    }
+
+    public function askConfirmation() {
+        $this->modification = "confirmer";
+    }
+
     public function sendConfirmedRdvMail($client,$rdv,$professionnel) {
 
+        $tps = Taxe::where('nom','TPS')->first();
+        $tvq =  Taxe::where('nom','TVQ')->first();
+
         Mail::to($client->courriel)
-            ->send(new ConfirmerRdv($rdv,$professionnel));
+            ->send(new ConfirmerRdv($rdv,$professionnel,$tps,$tvq));
     }
 
 
 
     public function annuler(){
-        dd();
-        $token = Str::random(32);
-
-        $rdv = Rdv::find($this->oldRdv->id);
-
-        $rdv->dateHeureDebut = $this->heureSelected;
-        $rdv->token = $token;
-        $rdv->save();
-        $this->sendConfirmedRdvMail($rdv->dossier->client,$rdv,$this->professionnel);
-        $this->modification = "end";
-
-
+        $this->now = Carbon::now(('America/Toronto'));
+        if ($this->oldRdv->transactions()->exists()) {
+            dd("Gestion du remboursement lors de la tentative de suppression d'un rdv ayant des paiement éffectué à compléter"); // As tester et gèrer
+        } elseif ($this->oldDate->copy()->subDay() >= $this->now) {
+            $deleted = Rdv::destroy($this->oldRdv->id);
+            $this->modification = "deleted";
+        } else {
+            dd("Impossible d'annuler", $this->oldDate, $this->now->copy()->subDay());
+        }
 
     }
 
