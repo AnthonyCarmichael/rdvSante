@@ -78,6 +78,8 @@ new #[Layout('layouts.guest')] class extends Component
             'actif' => $validated['actif'],
         ]);
 
+        $user->cliniques()->attach(1); // Possibilité d'optimisation
+
         event(new Registered($user));
 
         Auth::login($user);
