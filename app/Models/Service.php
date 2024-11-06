@@ -21,6 +21,7 @@ class Service extends Model
         'actif',
         'idProfessionService',
         'idProfessionnel',
+        'montantPenalite',
     ];
 
     public $timestamps = false;

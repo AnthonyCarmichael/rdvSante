@@ -22,6 +22,9 @@ return new class extends Migration
             $table->text('raison')->nullable();
             $table->boolean('actif');
             $table->string('token')->nullable(); // Enlever le nullable apres avoir gèrer au complet la fonctionnalité
+            $table->boolean('penalite')->default(false);
+
+
         });
 
         Schema::table('rdvs', function (Blueprint $table) {
