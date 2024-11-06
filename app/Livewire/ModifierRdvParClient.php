@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
 use App\Models\User;
 use App\Models\Service;
-
+use App\Models\Taxe;
 use Illuminate\Support\Str;
 
 
@@ -501,8 +501,11 @@ class ModifierRdvParClient extends Component
 
     public function sendConfirmedRdvMail($client,$rdv,$professionnel) {
 
+        $tps = Taxe::where('nom','TPS')->first();
+        $tvq =  Taxe::where('nom','TVQ')->first();
+
         Mail::to($client->courriel)
-            ->send(new ConfirmerRdv($rdv,$professionnel));
+            ->send(new ConfirmerRdv($rdv,$professionnel,$tps,$tvq));
     }
 
     # Non gèré en standby

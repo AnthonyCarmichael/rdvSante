@@ -85,6 +85,7 @@ class RendezVousClientComponent extends Component
 
     public function resetForm() {
         $this->reset();
+        $this->taxes = Taxe::all();
         $now = Carbon::now(('America/Toronto'));
         $this->clinique = Clinique::find(1); # A changer pour clinique principal
 
@@ -494,8 +495,11 @@ class RendezVousClientComponent extends Component
 
     public function sendConfirmedRdvMail($client,$rdv,$professionnel) {
 
+        $tps = Taxe::where('nom','TPS')->first();
+        $tvq =  Taxe::where('nom','TVQ')->first();
+
         Mail::to($client->courriel)
-            ->send(new ConfirmerRdv($rdv,$professionnel));
+            ->send(new ConfirmerRdv($rdv,$professionnel,$tps,$tvq));
     }
 
     public function render()

@@ -5,12 +5,17 @@
 
 Bonjour {{$rdv->client->prenom}},
 
-Votre rendez-vous sera le {{$rdv->dateHeureDebut->translatedFormat('l, d F Y')}} à {{$rdv->dateHeureDebut->translatedFormat('H:i')}}
+Votre rendez-vous sera le **{{$rdv->dateHeureDebut->translatedFormat('l, d F Y')}}** à **{{$rdv->dateHeureDebut->translatedFormat('H:i')}}**.
 
 Lieu du rendez-vous :
 {{$rdv->clinique->noCivique}} {{$rdv->clinique->rue}}
-{{$rdv->clinique->ville->nom}}, {{$rdv->clinique->ville->province->nom}}, {{$rdv->clinique->ville->province->pays->nom}}, {{$rdv->clinique->codePostal}}
-{{$rdv->clinique->nom}}
+{{$rdv->clinique->ville->nom}}, {{$rdv->clinique->ville->province->nom}}, {{$rdv->clinique->ville->province->pays->nom}}, {{$rdv->clinique->codePostal}}, {{$rdv->clinique->nom}}.
+
+
+**Cout:** {{$rdv->service->prix}} $ + {{$tps->nom}} {{$tps->valeur}} + {{$tvq->nom}} {{$tvq->valeur}} = **{{$total}} $**
+
+
+
 
 
 Merci de prendre le temps de lire ce courriel.
