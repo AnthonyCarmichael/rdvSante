@@ -15,7 +15,7 @@ class RdvController extends Controller
     {
         $rdv = Rdv::where('id', $id)->where('token', $request->token)->firstOrFail();
 
-        return view('rendez-vous.modifier', ['rdv' => $rdv]);
+        return view('rendez-vous.modifier', ['oldRdv' => $rdv]);
     }
 
     public function annuler($id, Request $request)
