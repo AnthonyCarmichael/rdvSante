@@ -65,12 +65,14 @@ class ModifierRdvParClient extends Component
     public $oldRdv;
     public $modification;
     public $oldDate;
+    public $now;
 
 
 
 
     public function mount(Rdv $oldRdv){
         $now = Carbon::now(('America/Toronto'));
+        $this->now = $now->copy();
         $this->clinique = Clinique::find(1); # A changer pour clinique principal
 
 

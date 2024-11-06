@@ -54,9 +54,19 @@
                             </div>
 
                             <div class="flex justify-center">
-                                <button type="button" wire:click="modifierDate" class="px-4 py-2 m-2 mb-4 text-white rounded-full bg-orange-500 hover:bg-orange-700">
-                                    Modifier la date
-                                </button>
+
+                                @if ($oldDate >= $now)
+                                    <div class="flex justify-center">
+                                        <button type="button" wire:click="modifierDate" class="px-4 py-2 m-2 mb-4 text-white rounded-full bg-orange-500 hover:bg-orange-700">
+                                            Modifier la date
+                                        </button>
+                                    </div>
+
+                                @else
+                                    <p class="text-red-600">Vous ne pouvez pas modifier ce rendez-vous, car il est déjà passé</p>
+                                @endif
+
+
 
                                 <!--
                                 <button type="button" wire:click="modifierDossier" class="px-4 py-2 m-2 mb-4 text-white rounded-full bg-orange-500 hover:bg-orange-700">
@@ -187,59 +197,6 @@
 
                             </div>
 
-                        </div>
-                    @break
-                    @case("dossier")
-                        <!-- Section 4 -->
-                        <div class="p-5 bg-white rounded shadow-md">
-                            <button type="button" wire:click="backStep" class="py-1 px-2 bg-gray-300 text-white rounded hover:bg-gray-500"><</button>
-                            <h2 class="text-lg font-bold text-center">Résumé</h2>
-                            <div class="border-y py-6 mb-4">
-                                <p class="mb-2"><b>Date:</b> {{$heureSelected->translatedFormat('l, d F Y')}}</p>
-                                <p class="mb-2"><b>Heure:</b> {{$heureSelected->translatedFormat('H:i')}}</p>
-                                <p class="mb-2"><b>Service:</b> {{$service->nom}} {{$service->prix}}$</p>
-                                <p class="mb-2"><b>Professionnel:</b> {{$professionnel->prenom}} {{$professionnel->nom}}
-
-                                    @foreach ($professionnel->professions as $profession )
-                                    , {{$profession->nom}}
-                                    @endforeach
-                                    </p>
-                                <p class=""><b>Lieu:</b> {{$clinique->nom}}, {{$clinique->noCivique}} rue {{$clinique->rue}}, {{$clinique->ville->nom}}, {{$clinique->ville->province->nom}}, Canada {{$clinique->codePostal}}</p>
-                            </div>
-
-                            <h2 class="text-lg font-bold text-center">Avez-vous un dossier avec ce professionnel ?</h2>
-                            <div class=" flex justify-center">
-                                <button type="button" wire:click="lookingDossier('{{ true }}')" class="mt-4 mx-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">Oui</button>
-                                <button type="button" wire:click="nextStep" class="mt-4 mx-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">Non</button>
-                            </div>
-
-                            <div>
-                                @if ($lookDossier == true)
-                                    <div class="mb-4">
-                                        <label for="courrielClient" class="block text-sm font-medium text-gray-700">Courriel</label>
-                                        <input required type="email" name="courrielClient" id="courrielClient"
-                                            wire:model="courrielClient"
-                                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                    </div>
-                                    <button type="button" wire:click="fetchDossier()" class="my-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">Rechercher</button>
-                                @endif
-
-                                @if ($dossiers)
-                                    <div class="border-y py-6 mb-4">
-                                        @if ($dossiers->count() !== 0)
-                                            <p>Est-ce que le rendez-vous est pour l'une de ces personnes ?</p>
-                                            @foreach ($dossiers as $dossier)
-                                                <button type="button"  wire:click="selectDossierClient({{$dossier}})" class="block mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">{{$dossier->client->prenom}} {{$dossier->client->nom}}</button>
-                                            @endforeach
-                                            <button type="button" wire:click="nextStep" class="block mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">Autre</button>
-                                        @else
-                                            <p>Aucun dossier client n'a été trouvé associé à ce professionnel et cette adresse courriel</p>
-                                        @endif
-                                    </div>
-                                @endif
-
-
-                            </div>
                         </div>
                     @break
                     @case("confirmer")
