@@ -17,7 +17,8 @@ class Rdv extends Model
         'idClinique',
         'raison',
         'actif',
-        'token'
+        'token',
+        'penalite'
     ];
 
     public $timestamps = false;

@@ -26,6 +26,7 @@ return new class extends Migration
             $table->boolean('actif');
             $table->bigInteger('idProfessionService')->unsigned();
             $table->bigInteger('idProfessionnel')->unsigned();
+            $table->decimal('montantPenalite', 5, 2)->default(45.00);
         });
 
         Schema::table('services', function (Blueprint $table) {
