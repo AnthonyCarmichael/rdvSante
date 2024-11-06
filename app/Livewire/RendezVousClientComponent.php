@@ -15,11 +15,12 @@ use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
 use App\Models\User;
 use App\Models\Service;
-
+use App\Models\Taxe;
 use Illuminate\Support\Str;
 
 class RendezVousClientComponent extends Component
 {
+    public $taxes;
     # Section 0
     public $step = 0;
     public $users;
@@ -64,6 +65,7 @@ class RendezVousClientComponent extends Component
 
 
     public function mount(){
+        $this->taxes = Taxe::all();
         $now = Carbon::now(('America/Toronto'));
         $this->clinique = Clinique::find(1); # A changer pour clinique principal
 
