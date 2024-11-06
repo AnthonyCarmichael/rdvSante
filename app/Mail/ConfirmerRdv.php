@@ -6,6 +6,7 @@ namespace App\Mail;
 use App\Models\Rdv;
 use App\Models\Taxe;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -20,13 +21,15 @@ class ConfirmerRdv extends Mailable
     /**
      * Create a new message instance.
      */
-    public $rdv, $professionnel, $urlModif, $urlAnnuler,$tps,$tvq,$total;
-    public function __construct(Rdv $rdv,User $professionnel,Taxe $tps, Taxe $tvq)
+    public $rdv, $professionnel, $urlModif, $urlAnnuler,$tps,$tvq,$total,$sujet,$dateHeureDebut;
+    public function __construct(Rdv $rdv,User $professionnel,Taxe $tps, Taxe $tvq, $sujet)
     {
         $this->rdv = $rdv;
         $this->professionnel = $professionnel;
         $this->tps = $tps;
         $this->tvq = $tvq;
+        $this->sujet = $sujet;
+        $this->dateHeureDebut = Carbon::parse($rdv->dateHeureDebut);
         $this->total = number_format($this->rdv->service->prix + $this->tps->valeur + $this->tvq->valeur, 2);
         $baseUrl = config('app.url');
         $baseUrl .= ':8000';
@@ -40,7 +43,19 @@ class ConfirmerRdv extends Mailable
 
     public function build()
     {
-        return $this->markdown('email.confirmerRdv')
+        if ($this->sujet=="annuler") {
+            return $this->markdown('email.annulerRdv')
+            ->subject('Annulation du rendez-vous avec '.$this->professionnel->prenom.' ' .$this->professionnel->nom)
+            ->with([
+                'rdv' => $this->rdv,
+                'professionnel' => $this->professionnel,
+                'tps' => $this->tps,
+                'tvq' => $this->tvq,
+                'total' => $this->total,
+                'dateHeureDebut' => $this->dateHeureDebut
+            ]);;
+        } elseif ($this->sujet=="confirmer") {
+            return $this->markdown('email.confirmerRdv')
             ->subject('Confirmation du rendez-vous avec '.$this->professionnel->prenom.' ' .$this->professionnel->nom)
             ->with([
                 'rdv' => $this->rdv,
@@ -49,6 +64,8 @@ class ConfirmerRdv extends Mailable
                 'tvq' => $this->tvq,
                 'total' => $this->total
             ]);
+        }
+
     }
 
     /**
@@ -56,9 +73,17 @@ class ConfirmerRdv extends Mailable
      */
     public function envelope(): Envelope
     {
-        return new Envelope(
-            subject: 'Confirmer Rdv',
-        );
+
+        if ($this->sujet=="annuler") {
+            return new Envelope(
+                subject: 'Annuler Rdv',
+            );
+        } elseif ($this->sujet=="confirmer") {
+            return new Envelope(
+                subject: 'Confirmer Rdv',
+            );
+        }
+
     }
 
     /**
@@ -66,9 +91,16 @@ class ConfirmerRdv extends Mailable
      */
     public function content(): Content
     {
-        return new Content(
-            markdown: 'email.confirmerRdv',
-        );
+        if ($this->sujet=="annuler") {
+            return new Content(
+                markdown: 'email.annulerRdv',
+            );
+        } elseif ($this->sujet=="confirmer") {
+            return new Content(
+                markdown: 'email.confirmerRdv',
+            );
+        }
+
     }
 
     /**

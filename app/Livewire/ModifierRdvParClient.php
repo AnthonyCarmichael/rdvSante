@@ -348,7 +348,7 @@ class ModifierRdvParClient extends Component
         $tvq =  Taxe::where('nom','TVQ')->first();
 
         Mail::to($client->courriel)
-            ->send(new ConfirmerRdv($rdv,$professionnel,$tps,$tvq));
+            ->send(new ConfirmerRdv($rdv,$professionnel,$tps,$tvq,"confirmer"));
     }
 
     # Non gèré en standby

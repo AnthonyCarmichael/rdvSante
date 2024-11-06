@@ -110,18 +110,21 @@ class AnnulerRdvParClient extends Component
         $tvq =  Taxe::where('nom','TVQ')->first();
 
         Mail::to($client->courriel)
-            ->send(new ConfirmerRdv($rdv,$professionnel,$tps,$tvq));
+            ->send(new ConfirmerRdv($rdv,$professionnel,$tps,$tvq,"annuler"));
     }
 
 
 
     public function annuler(){
         $this->now = Carbon::now(('America/Toronto'));
+        $oldRdvSend = $this->oldRdv;
+
         if ($this->oldRdv->transactions()->exists()) {
             dd("Gestion du remboursement lors de la tentative de suppression d'un rdv ayant des paiement éffectué à compléter"); // As tester et gèrer
         } elseif ($this->oldDate->copy()->subDay() >= $this->now) {
             $deleted = Rdv::destroy($this->oldRdv->id);
             $this->modification = "deleted";
+            $this->sendConfirmedRdvMail($oldRdvSend->client,$oldRdvSend,$oldRdvSend->dossier->professionnels[0]);
         } else {
             dd("Impossible d'annuler", $this->oldDate, $this->now->copy()->subDay());
         }
