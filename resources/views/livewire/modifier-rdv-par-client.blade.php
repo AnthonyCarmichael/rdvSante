@@ -52,6 +52,12 @@
                                     </p>
                                 <p class=""><b>Lieu:</b> {{$clinique->nom}}, {{$clinique->noCivique}} rue {{$clinique->rue}}, {{$clinique->ville->nom}}, {{$clinique->ville->province->nom}}, Canada {{$clinique->codePostal}}</p>
                             </div>
+
+                            <div class="flex justify-center">
+                                <button type="button" wire:click="nextStep" class="px-4 py-2 mt-2 mb-4 text-white rounded-full bg-orange-500 hover:bg-orange-700">
+                                    Modifier votre rendez-vous
+                                </button>
+                            </div>
                         </div>
                     @break
                     @case(1)

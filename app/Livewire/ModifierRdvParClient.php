@@ -84,8 +84,13 @@ class ModifierRdvParClient extends Component
         $this->newClient = null;
 
         if ($oldRdv->id !=null) {
-        $this->oldRdv = $oldRdv;
-        $this->heureSelected = Carbon::parse($this->oldRdv->dateHeureDebut, 'America/Toronto');
+            $this->oldRdv = $oldRdv;
+            $this->heureSelected = Carbon::parse($this->oldRdv->dateHeureDebut, 'America/Toronto');
+
+            $this->lookDossier = true;
+
+            $this->courrielClient= $this->oldRdv->client->courriel;
+
         }
 
     }
