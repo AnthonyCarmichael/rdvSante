@@ -27,6 +27,10 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->boolean('actif')->nullable(); # A CHANGER POUR NOT NULLABLE
             $table->string('lien')->nullable();
+            $table->string('numTps')->nullable();
+            $table->string('numTvq')->nullable();
+            $table->string('photoProfil')->nullable();
+            $table->string('signature')->nullable();
             $table->string('invitation_token')->nullable()->unique();
             $table->timestamp('invitation_expiration')->nullable();
         });

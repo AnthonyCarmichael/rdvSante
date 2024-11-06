@@ -31,6 +31,7 @@ class DatabaseSeeder extends Seeder
             CliniqueSeeder::class,
             CliniqueProfessionnelSeeder::class,
             ProfessionProfessionnelSeeder::class,
+            TaxeSeeder::class,
             ]);
     }
 }

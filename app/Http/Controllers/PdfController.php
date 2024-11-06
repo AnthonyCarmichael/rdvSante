@@ -13,6 +13,7 @@ use App\Models\Rdv;
 use App\Models\Service;
 use App\Models\Ville;
 use App\Models\Province;
+use App\Models\Taxe;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\Recu;
@@ -53,6 +54,8 @@ class PdfController extends Controller
         $this->fpdf->SetFont('Arial', 'B', 15);
         $this->fpdf->AddPage();
         $this->Header();
+        $tps = Taxe::select('valeur')->where('nom', '=', 'tps')->get();
+        $tvq = Taxe::select('valeur')->where('nom', '=', 'tvq')->get();
 
         $user = User::find(Auth::user()->id);
         $client = Client::find($client);
@@ -64,9 +67,9 @@ class PdfController extends Controller
         $province = Province::find($ville->idProvince);
         $dateRdv = Carbon::parse($rdv->dateHeureDebut)->translatedFormat('l d F Y');
         $heureRdv = Carbon::parse($rdv->dateHeureDebut)->translatedFormat('H:m');
-        $tps = round($service->prix * 5 / 100, 2);
-        $tvq = round($service->prix * 9.975 / 100, 2);
-        $total = $service->prix + $tvq + $tps;
+        $montantTps = round($service->prix * $tps->value('valeur') / 100, 2);
+        $montantTvq = round($service->prix * $tvq->value('valeur') / 100, 2);
+        $total = $service->prix + $montantTvq + $montantTps;
         $this->fpdf->SetFillColor(240, 240, 240);
         $this->fpdf->Rect(10, 25, 190, 110, true);
         $this->fpdf->Image('../public/img/logoRdvSante.png', 170, 28, 20);
@@ -100,14 +103,14 @@ class PdfController extends Controller
         $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "Prix : $service->prix $"), 0, 1);
         $this->fpdf->SetFont('Arial', '', 8);
         $this->fpdf->SetX(40);
-        $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "$tvq $ TVQ (TVQ #)"), 0, 1);
+        $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "$montantTvq $ TVQ (TVQ $user->numTvq)"), 0, 1);
         $this->fpdf->SetX(40);
-        $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "$tps $ TPS (TPS #)"), 0, 1);
+        $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "$montantTps $ TPS (TPS $user->numTps)"), 0, 1);
         $this->fpdf->SetFont('Arial', '', 10);
         $this->fpdf->SetX(30);
         $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "Total : $total $"), 0, 1);
         $this->fpdf->SetX(150);
-        $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "Signature"), 0);
+        $this->fpdf->Image('../public/img/'.strval(Auth::user()->signature), 150, 105, 20);
 
         $recu = new Recu($client, $rdv, $user, $clinique);
         $recu->attachData($this->fpdf->Output('', 'S'), 'recu.pdf');
@@ -125,7 +128,8 @@ class PdfController extends Controller
         $this->fpdf->SetFont('Arial', 'B', 15);
         $this->fpdf->AddPage();
         $this->Header();
-
+        $tps = Taxe::select('valeur')->where('nom', '=', 'tps')->get();
+        $tvq = Taxe::select('valeur')->where('nom', '=', 'tvq')->get();
         $user = User::find(Auth::user()->id);
         $client = Client::find($client);
         $transaction = Transaction::find($transaction);
@@ -136,9 +140,9 @@ class PdfController extends Controller
         $province = Province::find($ville->idProvince);
         $dateRdv = Carbon::parse($rdv->dateHeureDebut)->translatedFormat('l d F Y');
         $heureRdv = Carbon::parse($rdv->dateHeureDebut)->translatedFormat('H:m');
-        $tps = round($service->prix * 5 / 100, 2);
-        $tvq = round($service->prix * 9.975 / 100, 2);
-        $total = $service->prix + $tvq + $tps;
+        $montantTps = round($service->prix * $tps->value('valeur') / 100, 2);
+        $montantTvq = round($service->prix * $tvq->value('valeur') / 100, 2);
+        $total = $service->prix + $montantTvq + $montantTps;
         $this->fpdf->SetFillColor(240, 240, 240);
         $this->fpdf->Rect(10, 25, 190, 110, true);
         $this->fpdf->Image('../public/img/logoRdvSante.png', 170, 28, 20);
@@ -172,14 +176,14 @@ class PdfController extends Controller
         $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "Prix : $service->prix $"), 0, 1);
         $this->fpdf->SetFont('Arial', '', 8);
         $this->fpdf->SetX(40);
-        $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "$tvq $ TVQ (TVQ #)"), 0, 1);
+        $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "$montantTvq $ TVQ (TVQ $user->numTvq)"), 0, 1);
         $this->fpdf->SetX(40);
-        $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "$tps $ TPS (TPS #)"), 0, 1);
+        $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "$montantTps $ TPS (TPS $user->numTps)"), 0, 1);
         $this->fpdf->SetFont('Arial', '', 10);
         $this->fpdf->SetX(30);
         $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "Total : $total $"), 0, 1);
         $this->fpdf->SetX(150);
-        $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "Signature"), 0);
+        $this->fpdf->Image('../public/img/'.strval(Auth::user()->signature), 150, 105, 20);
         $recu = new Recu($client, $rdv, $user, $clinique);
         $recu->attachData($this->fpdf->Output('', 'S'), 'recu.pdf');
         Mail::to($client->courriel)
@@ -197,7 +201,9 @@ class PdfController extends Controller
         $this->fpdf->SetFont('Arial', 'B', 15);
         $this->fpdf->AddPage();
         $this->Header();
-
+        $tps = Taxe::select('valeur')->where('nom', '=', 'tps')->get();
+        $tvq = Taxe::select('valeur')->where('nom', '=', 'tvq')->get();
+        #dd($tps);
         $user = User::find(Auth::user()->id);
         $client = Client::find($client);
         $rdv = Rdv::find($rdv);
@@ -207,9 +213,9 @@ class PdfController extends Controller
         $province = Province::find($ville->idProvince);
         $dateRdv = Carbon::parse($rdv->dateHeureDebut)->translatedFormat('l d F Y');
         $heureRdv = Carbon::parse($rdv->dateHeureDebut)->translatedFormat('H:m');
-        $tps = round($service->prix * 5 / 100, 2);
-        $tvq = round($service->prix * 9.975 / 100, 2);
-        $total = $service->prix + $tvq + $tps;
+        $montantTps = round($service->prix * $tps->value('valeur') / 100, 2);
+        $montantTvq = round($service->prix * $tvq->value('valeur') / 100, 2);
+        $total = $service->prix + $montantTvq + $montantTps;
         $this->fpdf->SetFillColor(240, 240, 240);
         $this->fpdf->Rect(10, 25, 190, 110, true);
         $this->fpdf->Image('../public/img/logoRdvSante.png', 170, 28, 20);
@@ -241,14 +247,14 @@ class PdfController extends Controller
         $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "Prix : $service->prix $"), 0, 1);
         $this->fpdf->SetFont('Arial', '', 8);
         $this->fpdf->SetX(40);
-        $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "$tvq $ TVQ (TVQ #)"), 0, 1);
+        $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "$montantTvq $ TVQ (TVQ $user->numTvq)"), 0, 1);
         $this->fpdf->SetX(40);
-        $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "$tps $ TPS (TPS #)"), 0, 1);
+        $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "$montantTps $ TPS (TPS $user->numTps)"), 0, 1);
         $this->fpdf->SetFont('Arial', '', 10);
         $this->fpdf->SetX(30);
         $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "Total : $total $"), 0, 1);
         $this->fpdf->SetX(150);
-        $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "Signature"), 0);
+        $this->fpdf->Image('../public/img/'.strval(Auth::user()->signature), 150, 105, 20);
 
         $this->fpdf->Output('Recu.pdf', 'D');
         /*$recu = new Recu($client, $rdv, $user, $clinique);
@@ -270,7 +276,8 @@ class PdfController extends Controller
             $this->fpdf->SetFont('Arial', 'B', 15);
             $this->fpdf->AddPage();
             $this->Header();
-
+            $tps = Taxe::select('valeur')->where('nom', '=', 'tps')->get();
+            $tvq = Taxe::select('valeur')->where('nom', '=', 'tvq')->get();
             $user = User::find(Auth::user()->id);
             $clinique = Clinique::find($r->idClinique);
             $service = Service::find($r->idService);
@@ -278,9 +285,9 @@ class PdfController extends Controller
             $province = Province::find($ville->idProvince);
             $dateRdv = Carbon::parse($r->dateHeureDebut)->translatedFormat('l d F Y');
             $heureRdv = Carbon::parse($r->dateHeureDebut)->translatedFormat('H:m');
-            $tps = round($service->prix * 5 / 100, 2);
-            $tvq = round($service->prix * 9.975 / 100, 2);
-            $total = $service->prix + $tvq + $tps;
+            $montantTps = round($service->prix * $tps->value('valeur') / 100, 2);
+            $montantTvq = round($service->prix * $tvq->value('valeur') / 100, 2);
+            $total = $service->prix + $montantTvq + $montantTps;
             $this->fpdf->SetFillColor(240, 240, 240);
             $this->fpdf->Rect(10, 25, 190, 110, true);
             $this->fpdf->Image('../public/img/logoRdvSante.png', 170, 28, 20);
@@ -310,14 +317,14 @@ class PdfController extends Controller
             $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "Prix : $service->prix $"), 0, 1);
             $this->fpdf->SetFont('Arial', '', 8);
             $this->fpdf->SetX(40);
-            $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "$tvq $ TVQ (TVQ #)"), 0, 1);
+            $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "$montantTvq $ TVQ (TVQ $user->numTvq)"), 0, 1);
             $this->fpdf->SetX(40);
-            $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "$tps $ TPS (TPS #)"), 0, 1);
+            $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "$montantTps $ TPS (TPS $user->numTps)"), 0, 1);
             $this->fpdf->SetFont('Arial', '', 10);
             $this->fpdf->SetX(30);
             $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "Total : $total $"), 0, 1);
             $this->fpdf->SetX(150);
-            $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "Signature"), 0);
+            $this->fpdf->Image('../public/img/'.strval(Auth::user()->signature), 150, 105, 20);
         }
 
         $this->fpdf->Output('recu.pdf', 'D');

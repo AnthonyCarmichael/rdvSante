@@ -14,14 +14,15 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         DB::table('users')->insert([
-            ['nom' => 'Carmichael',
-            'prenom' => 'Daphné',
-            'email' => 'admin@admin.com',
-            'telephone' => '(123) 456-7890',
-            'password' => Hash::make('admin'),
-            'idRole' => '1',
-            'description' =>
-                "Daphné prend en considération l’individu, dans sa réalité actuelle physique,
+            [
+                'nom' => 'Carmichael',
+                'prenom' => 'Daphné',
+                'email' => 'admin@admin.com',
+                'telephone' => '(123) 456-7890',
+                'password' => Hash::make('admin'),
+                'idRole' => '1',
+                'description' =>
+                    "Daphné prend en considération l’individu, dans sa réalité actuelle physique,
                 psychologique et émotionnelle avec ses besoins et ses objectifs. Elle
                 offre ainsi un traitement personnalisé et adapté aux besoins de chacun.e
                 en combinant les différentes pratiques ostéopathiques, et ce, avec une
@@ -35,16 +36,19 @@ class UserSeeder extends Seeder
                 son approche attentive et en douceur, Daphné aide au retour ainsi qu’au
                 soutien de l’équilibre des divers systèmes et structures du corps.",
                 'actif' => true,
-                'lien' => 'https://www.macliniquegenerale.com/daphne-carmichael'
+                'lien' => 'https://www.macliniquegenerale.com/daphne-carmichael',
+                'photoProfil' => 'aaa',
+                'signature' => 'aaa',
             ],
-            ['nom' => 'Maheu-Guay',
-            'prenom' => 'Olivier ',
-            'email' => 'olivier@test.com',
-            'telephone' => '(123) 456-7890',
-            'password' => Hash::make('test'),
-            'idRole' => '2',
-            'description'=>
-                "Olivier est un passionné de la thérapie manuelle depuis de nombreuses années.
+            [
+                'nom' => 'Maheu-Guay',
+                'prenom' => 'Olivier ',
+                'email' => 'olivier@test.com',
+                'telephone' => '(123) 456-7890',
+                'password' => Hash::make('test'),
+                'idRole' => '2',
+                'description' =>
+                    "Olivier est un passionné de la thérapie manuelle depuis de nombreuses années.
                 Membre de la Fédération des Massothérapeutes du Québec et diplômé de
                 l’Institut KinéConcept, Olivier est massothérapeute depuis 2018 et a
                 également approfondi ses compétences en complétant une formation en
@@ -62,18 +66,21 @@ class UserSeeder extends Seeder
                 objectifs, les séances avec lui peuvent comporter un volet d’analyse
                 posturale et de bilan de mobilité afin de cibler les causes potentielles
                 des symptômes pour agir à la source de ceux-ci.",
-            'actif' => true,
-            'lien' => 'https://www.macliniquegenerale.com/olivier-maheux-guay'
+                'actif' => true,
+                'lien' => 'https://www.macliniquegenerale.com/olivier-maheux-guay',
+                'photoProfil' => 'aaa',
+                'signature' => 'aaa',
             ],
 
-            ['nom' => 'Yale',
-            'prenom' => 'Catherine',
-            'email' => 'catherine@test.com',
-            'telephone' => '(123) 456-7890',
-            'password' => Hash::make('test'),
-            'idRole' => '2',
-            'description' =>
-                "** Présentement en congé de maternité
+            [
+                'nom' => 'Yale',
+                'prenom' => 'Catherine',
+                'email' => 'catherine@test.com',
+                'telephone' => '(123) 456-7890',
+                'password' => Hash::make('test'),
+                'idRole' => '2',
+                'description' =>
+                    "** Présentement en congé de maternité
 
                 Catherine détient un diplôme en ostéopathie et une certification de massothérapeute praticienne. Ayant dansé toute sa vie, la biomécanique et la santé musculosquelettique ont toujours eu un rôle central dans son quotidien. Interpellée
                 par la prévention et l’autonomie du patient, la vulgarisation tient une
@@ -86,8 +93,10 @@ class UserSeeder extends Seeder
                 c'est pourquoi le client est libre de choisir le montant qu'il est
                 confortable de donner entre un prix minimum et maximum (indiqués lorsque
                 vous sélectionnez un service).",
-            'actif' => false,
-            'lien' => 'https://www.macliniquegenerale.com/catherine-yale'
+                'actif' => false,
+                'lien' => 'https://www.macliniquegenerale.com/catherine-yale',
+                'photoProfil' => 'aaa',
+                'signature' => 'aaa',
             ]
         ]);
 
