@@ -102,7 +102,7 @@
                                     @endforeach
 
                                 @else
-                                    <p class="border-y py-6 mb-4">{{$professionnel->prenom}} {{$professionnel->nom}} n'offre aucun services pour le moment, veuillez nous contacter pour plus d'information.</p>
+                                    <p class="border-y py-6 mb-4">{{$professionnel->prenom}} {{$professionnel->nom}} n'offre aucun services pour le moment. Veuillez nous contacter pour plus d'information.</p>
                                 @endif
 
                             </div>
@@ -114,6 +114,7 @@
                         <div class="p-5 bg-white rounded shadow-md">
                             <button type="button" wire:click="backStep" class="py-1 px-2 bg-gray-300 text-white rounded hover:bg-gray-500"><</button>
                             <h2 class="text-lg font-bold text-center">Sélectionnez une heure</h2>
+                            <p class="text-center">Cliquer sur une des heures proposées dans le calendrier</p>
                             <div class="border-y py-6">
 
                                 @if($dispoNotFounded==false)
@@ -143,18 +144,23 @@
                                             <?php
                                             $selectedDateTime = $startingWeek->copy();
                                             $heureDispoInit = null;
+                                            $heureDispoFin = null;
 
                                             foreach ($professionnel->disponibilites as $dispo) {
                                                 if ($heureDispoInit >  $dispo->heureDebut || $heureDispoInit == null) {
                                                     $heureDispoInit =  $dispo->heureDebut;
                                                 }
+                                                if ($heureDispoFin <  $dispo->heureFin || $heureDispoFin == null) {
+                                                    $heureDispoFin =  $dispo->heureFin;
+                                                }
 
                                             }
                                             $heureDispoInit = \Carbon\Carbon::parse($heureDispoInit, 'America/Toronto');
+                                            $heureDispoFin = \Carbon\Carbon::parse($heureDispoFin, 'America/Toronto');
                                             $selectedDateTime->setTime($heureDispoInit->hour,0,0);
 
 
-                                            for ($i=0; $i < 900/($service->duree+15); $i++) {
+                                            for ($i=0; $i < (($heureDispoFin->hour-$heureDispoInit->hour)*60)/($service->duree+15); $i++) {
 
                                                 ?>
 
@@ -204,7 +210,7 @@
 
 
                                             <?php
-                                        
+
 
                                                 $totalMinutes = $service->duree + 15;
 

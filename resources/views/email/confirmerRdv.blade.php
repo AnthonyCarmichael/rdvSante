@@ -13,16 +13,16 @@ Lieu du rendez-vous :
 {{$rdv->clinique->nom}}
 
 
-Merci de prendre le temps de lire ce courriel. 
+Merci de prendre le temps de lire ce courriel.
 
 **IMPORTANT**
 
-Il y aura maintenant un code à la porte d’entrée. Voici le code 
+Il y aura maintenant un code à la porte d’entrée. Voici le code
 
 5124
 
 
-Pour la séance, pensez à vous apporter un top et un short de sport ainsi que des vêtements amples. 
+Pour la séance, pensez à vous apporter un top et un short de sport ainsi que des vêtements amples.
 
 ** Pour faciliter le paiement par virement interac, je vous invite à préparer à l'avance le virement avec ces informations:
 
@@ -40,7 +40,13 @@ Au plaisir de vous accompagner !
 {{$professionnel->prenom}} {{$professionnel->nom}} @foreach ($professionnel->professions as $profession ), {{$profession->nom}}
 @endforeach
 
+@component('mail::button', ['url' => $urlModif])
+Modifier
+@endcomponent
 
+@component('mail::button', ['url' => $urlAnnuler])
+Annuler
+@endcomponent
 Ma Clinique Générale
 
 {{$professionnel->telephone}}, {{$professionnel->email}}
