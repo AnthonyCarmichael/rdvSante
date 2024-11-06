@@ -36,13 +36,13 @@
         <img class="" src="{{ asset('img/imgMassage.jpg') }}" alt="image massage">
         <div class="">
             <form wire:submit.prevent="modifierRdvClient">
-                @switch ($step)
-                    @case(0)
+                @switch ($modification)
+                    @case(null)
                         <div class="p-5 bg-white rounded shadow-md">
                             <h2 class="text-lg font-bold text-center">Résumer de votre rendez-vous</h2>
                             <div class="border-y py-6 mb-4">
-                                <p class="mb-2"><b>Date:</b> {{$heureSelected->translatedFormat('l, d F Y')}}</p>
-                                <p class="mb-2"><b>Heure:</b> {{$heureSelected->translatedFormat('H:i')}}</p>
+                                <p class="mb-2"><b>Date:</b> {{$oldDate->translatedFormat('l, d F Y')}}</p>
+                                <p class="mb-2"><b>Heure:</b> {{$oldDate->translatedFormat('H:i')}}</p>
                                 <p class="mb-2"><b>Service:</b> {{$oldRdv->service->nom}} {{$oldRdv->service->prix}}$</p>
                                 <p class="mb-2"><b>Professionnel:</b> {{$this->oldRdv->dossier->professionnels[0]->prenom}} {{$oldRdv->dossier->professionnels[0]->nom}}
 
@@ -54,76 +54,19 @@
                             </div>
 
                             <div class="flex justify-center">
-                                <button type="button" wire:click="nextStep" class="px-4 py-2 mt-2 mb-4 text-white rounded-full bg-orange-500 hover:bg-orange-700">
-                                    Modifier votre rendez-vous
+                                <button type="button" wire:click="modifierDate" class="px-4 py-2 m-2 mb-4 text-white rounded-full bg-orange-500 hover:bg-orange-700">
+                                    Modifier la date
                                 </button>
+
+                                <!--
+                                <button type="button" wire:click="modifierDossier" class="px-4 py-2 m-2 mb-4 text-white rounded-full bg-orange-500 hover:bg-orange-700">
+                                    Modifier le dossier
+                                </button>
+                                -->
                             </div>
                         </div>
                     @break
-                    @case(1)
-                        <!-- Section 1 -->
-                        <div class="p-5 bg-white rounded shadow-md">
-                            <button type="button" wire:click="backStep" class="py-1 px-2 bg-gray-300 text-white rounded hover:bg-gray-500"><</button>
-                            <h2 class="text-lg font-bold text-center">Sélectionnez un professionnel</h2>
-
-                            @foreach($users as $user)
-                                @if ($user->actif)
-                                    <div class="flex border-y py-6 hover:bg-stone-200 cursor-pointer"  wire:click="getProfessionnelId({{ $user->id }})">
-                                        <div class="">
-                                            <img src="{{ asset('img/icone_'.$user->id.'.jpg') }}" alt="image{{$user->prenom}}"
-                                                class="w-[200px] mr-6">
-                                        </div>
-                                        <div class="mx-4 self-center w-2/4">
-                                            <div class="mb-8">
-                                                <p class="inline ">{{$user->nom}} {{$user->prenom}}</p> @foreach($user->professions as $profession) <p class="inline">, {{$profession->nom}}</p> @endforeach
-                                            </div>
-
-                                            <p class="text-justify">
-                                                {{$user->description}}
-                                            </p>
-                                        </div>
-
-                                        <div>
-                                            <p class="text-stone-300 self-center text-lg mr-4">></p>
-                                        </div>
-                                    </div>
-                                @endif
-                            @endforeach
-                        </div>
-                    @break
-                    @case(2)
-                        <!-- Section 2 -->
-                        <div class="p-5 bg-white rounded shadow-md">
-                            <button type="button" wire:click="backStep" class="py-1 px-2 bg-gray-300 text-white rounded hover:bg-gray-500"><</button>
-                            <h2 class="border-b text-lg font-bold text-center">Sélectionnez un service</h2>
-                            <div class="">
-                                @if($services->count()>0)
-                                    @foreach($services as $service)
-                                        <div class="border-b py-6 hover:bg-stone-200 cursor-pointer flex items-center place-content-between"  wire:click="getServiceId({{ $service->id }})">
-                                            <div>
-                                                <p class="mb-2"><b>Service:</b> {{$service->nom}}</p>
-                                                @if($service->description != null)
-                                                    <p class="mb-2"><b>Description:</b> {{$service->description}}</p>
-                                                @endif
-                                                <p class="mb-2"><b>Durée:</b> {{$service->duree}} min</p>
-                                                <p><b>Prix:</b> {{$service->prix}} $</p>
-                                            </div>
-                                            <div>
-                                                <p class="text-stone-300 self-center text-lg mr-4">></p>
-                                            </div>
-
-                                        </div>
-                                    @endforeach
-
-                                @else
-                                    <p class="border-y py-6 mb-4">{{$professionnel->prenom}} {{$professionnel->nom}} n'offre aucun services pour le moment. Veuillez nous contacter pour plus d'information.</p>
-                                @endif
-
-                            </div>
-                        </div>
-
-                    @break
-                    @case(3)
+                    @case("date")
                         <!-- Section 3 -->
                         <div class="p-5 bg-white rounded shadow-md">
                             <button type="button" wire:click="backStep" class="py-1 px-2 bg-gray-300 text-white rounded hover:bg-gray-500"><</button>
@@ -246,7 +189,7 @@
 
                         </div>
                     @break
-                    @case(4)
+                    @case("dossier")
                         <!-- Section 4 -->
                         <div class="p-5 bg-white rounded shadow-md">
                             <button type="button" wire:click="backStep" class="py-1 px-2 bg-gray-300 text-white rounded hover:bg-gray-500"><</button>
@@ -299,7 +242,7 @@
                             </div>
                         </div>
                     @break
-                    @case(5)
+                    @case("confirmer")
                         <div class="p-5 bg-white rounded shadow-md">
                             <button type="button" wire:click="backStep" class="py-1 px-2 bg-gray-300 text-white rounded hover:bg-gray-500"><</button>
                             <h2 class="text-lg font-bold text-center">Résumé</h2>
@@ -320,97 +263,6 @@
 
                             @if ($dossierSelected)
                                 <p>Veuillez confirmer la prise de rendez-vous pour <p class="font-bold">{{$dossierSelected->client->prenom}} {{$dossierSelected->client->nom}}</p></p>
-                            @else
-                                <fieldset class="mb-4">
-                                    <legend class="text-sm font-bold mb-2">Informations de la personne qui recevera le traitement</legend>
-                                    <div class="mb-4">
-                                        <label for="prenomClient" class="block text-sm font-medium text-gray-700">Prénom *</label>
-                                        <input required type="text" name="prenomClient" id="prenomClient"
-                                            wire:model="prenomClient"
-                                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                    </div>
-
-                                    <div class="mb-4">
-                                        <label for="nomClient" class="block text-sm font-medium text-gray-700">nom *</label>
-                                        <input required type="text" name="nomClient" id="nomClient"
-                                            wire:model="nomClient"
-                                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                    </div>
-
-                                    <div class="mb-4">
-                                        <label for="courrielClient" class="block text-sm font-medium text-gray-700">Courriel *</label>
-                                        <input required type="email" name="courrielClient" id="courrielClient"
-                                            wire:model="courrielClient"
-                                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                    </div>
-
-                                    <div class="mb-4">
-                                        <label for="telephoneClient" class="block text-sm font-medium text-gray-700">Téléphone *</label>
-                                        <input required type="text" name="telephoneClient" id="telephoneClient" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-                                            wire:model.live="telephoneClient"
-                                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                    </div>
-
-                                    <div class="mb-4">
-                                        <label for="sexe" class="block text-sm font-medium text-gray-700">Sexe *</label>
-                                        <select required name="sexe" id="sexe" class="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                            wire:model="genreId">
-                                            <option class="font-bold" value="">Sélectionnez une option</option>
-                                            @foreach ($genres as $genre)
-                                                <option value="{{$genre->id}}">{{$genre->nom}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-
-                                    <div class="mb-4">
-                                        <label for="ddn" class="block text-sm font-medium text-gray-700">Date de naissance *</label>
-                                        <input required type="date" name="ddn" id="ddn"  min='1899-01-01' max='{{date('Y-m-d')}}'
-                                            wire:model="ddn"
-                                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                    </div>
-                                </fieldset>
-
-                                <div class="mb-6">
-                                    <div class="mb-2">
-                                        <input type="radio" id="pourMoi" name="pourmoi" value="1" wire:model.live="pourmoi">
-                                        <label for="pourMoi">Ce rendez-vous est pour moi</label>
-                                    </div>
-
-                                    <div>
-                                        <input type="radio" id="pourAutre" name="pourmoi"  value="0" wire:model.live="pourmoi">
-                                        <label for="pourAutre">Ce rendez-vous est pour mon enfant ou une personne à charge</label>
-                                    </div>
-
-                                </div>
-
-
-                                @if ($pourmoi == false)
-
-                                    <fieldset class="mb-6">
-                                        <legend class="text-sm font-bold mb-2">Informations de la personne responsable</legend>
-                                        <div class="mb-4">
-                                            <label for="prenomResponsable" class="block text-sm font-medium text-gray-700">Prénom *</label>
-                                            <input required type="text" name="prenomResponsable" id="prenomResponsable"
-                                                wire:model="prenomResponsable"
-                                                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                        </div>
-
-                                        <div class="mb-4">
-                                            <label for="nomResponsable" class="block text-sm font-medium text-gray-700">Nom *</label>
-                                            <input required type="text" name="nomResponsable" id="nomResponsable"
-                                                wire:model="nomResponsable"
-                                                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                        </div>
-                                        <div class="mb-4">
-                                            <label for="nomResponsable" class="block text-sm font-medium text-gray-700">Lien entre le responsable et l'autre personne *</label>
-                                            <input required type="text" name="nomResponsable" id="nomResponsable"
-                                                wire:model="lienResponsable"
-                                                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                        </div>
-                                    </fieldset>
-                                @endif
-
-
                             @endif
 
                             <div class="mt-6">
@@ -420,10 +272,9 @@
                             </div>
                         </div>
                     @break
-                    @case(6)
+                    @case("end")
                         <div class="p-5 bg-white rounded shadow-md">
-                            <button type="button" wire:click="resetForm" class="py-1 px-2 bg-gray-300 text-white rounded hover:bg-gray-500"><</button>
-                            <h2 class="text-lg font-bold text-center">Merci d'avoir prix rendez-vous avec nous !</h2>
+                            <h2 class="text-lg font-bold text-center">Votre date de rendez-vous a bien été modifiée !</h2>
                             <div class="border-y py-6 mb-4">
                                 <p class="mb-2"><b>Date:</b> {{$heureSelected->translatedFormat('l, d F Y')}}</p>
                                 <p class="mb-2"><b>Heure:</b> {{$heureSelected->translatedFormat('H:i')}}</p>

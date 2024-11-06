@@ -63,6 +63,8 @@ class ModifierRdvParClient extends Component
 
     # Modifier un rdv
     public $oldRdv;
+    public $modification;
+    public $oldDate;
 
 
 
@@ -85,11 +87,16 @@ class ModifierRdvParClient extends Component
 
         if ($oldRdv->id !=null) {
             $this->oldRdv = $oldRdv;
-            $this->heureSelected = Carbon::parse($this->oldRdv->dateHeureDebut, 'America/Toronto');
+            $this->oldDate = Carbon::parse($this->oldRdv->dateHeureDebut, 'America/Toronto');
 
             $this->lookDossier = true;
 
             $this->courrielClient= $this->oldRdv->client->courriel;
+            $this->service =$this->oldRdv->service;
+            $this->serviceId =$this->oldRdv->service->id;
+            $this->professionnel = $this->oldRdv->dossier->professionnels[0];
+            $this->professionnelId =$this->oldRdv->dossier->professionnels[0]->id;
+            $this->dossierSelected =$this->oldRdv->dossier;
 
         }
 
@@ -149,21 +156,7 @@ class ModifierRdvParClient extends Component
     }
     public function backStep()
     {
-        if ($this->step == 3) {
-            $now = Carbon::now(('America/Toronto'));
-            if ($now->isSunday())
-                $this->startingWeek = $now->copy();
-            else
-                $this->startingWeek = $now->copy()->startOfWeek();
-
-            $this->startingWeek->setTime(7, 0);
-        }
-        $this->dossiers = [];
-        $this->lookDossier =0;
-        $this->dossierSelected = null;
-        if ($this->step > 0) {
-            $this->step--;
-        }
+        $this->modification = null;
     }
 
     public function getProfessionnelId($id) {
@@ -406,7 +399,7 @@ class ModifierRdvParClient extends Component
     public function choixDate($value){
 
         $this->heureSelected = Carbon::parse($value, 'America/Toronto');
-        $this->nextStep();
+        $this->modification="confirmer";
 
     }
 
@@ -509,9 +502,41 @@ class ModifierRdvParClient extends Component
             ->send(new ConfirmerRdv($rdv,$professionnel));
     }
 
+    # Non gèré en standby
+    public function modifierDossier() {
+        $this->modification = "dossier";
+
+    }
+
+    public function modifierDate() {
+        $this->modification = "date";
+
+        $now = Carbon::now('America/Toronto');
+        $this->changeWeek(0);
+        while(empty($this->dispoDateArr) && $now->diffInMonths($this->startingWeek) <= 3)
+        {
+            $this->changeWeek(1);
+        }
+        if (empty($this->dispoDateArr)) {
+            $this->dispoNotFounded=true;
+        }
+        else {
+            $this->dispoNotFounded=false;
+        }
+    }
 
     public function modifierRdvClient(){
-        dd($this);
+        $token = Str::random(32);
+
+        $rdv = Rdv::find($this->oldRdv->id);
+
+        $rdv->dateHeureDebut = $this->heureSelected;
+        $rdv->token = $token;
+        $rdv->save();
+        $this->sendConfirmedRdvMail($rdv->dossier->client,$rdv,$this->professionnel);
+        $this->modification = "end";
+
+
 
     }
 
