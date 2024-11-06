@@ -61,7 +61,7 @@ use Illuminate\Support\Facades\Auth;
     @endphp
     @if (!$photo || !$service || !$clinique || !$description || !$dispo || !$profession)
         <div class="container mx-auto p-4">
-            <h3 class="text-2xl font-bold mb-6">Voici une liste de choses à faire pour officielement activé votre compte!
+            <h3 class="text-2xl font-bold mb-6">Voici une liste de choses à faire pour officielement activer votre compte!
             </h3>
             <ul class="mx-auto p-4 text-xl">
                 @if (!$photo)
