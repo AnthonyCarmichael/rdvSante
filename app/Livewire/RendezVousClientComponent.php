@@ -207,7 +207,8 @@ class RendezVousClientComponent extends Component
 
 
         $rdvArr = $profesh->rdvs()
-            ->where('dateHeureDebut', '>=', $this->startingWeek)->get();
+            ->where('dateHeureDebut', '>=', $this->startingWeek)
+            ->where('rdvs.actif', true)->get();
 
         $dateTemp = $this->startingWeek->copy();
 
