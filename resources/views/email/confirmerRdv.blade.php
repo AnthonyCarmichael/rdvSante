@@ -12,10 +12,7 @@ Lieu du rendez-vous :
 {{$rdv->clinique->ville->nom}}, {{$rdv->clinique->ville->province->nom}}, {{$rdv->clinique->ville->province->pays->nom}}, {{$rdv->clinique->codePostal}}, {{$rdv->clinique->nom}}.
 
 
-**Cout:** {{$rdv->service->prix}} $ + {{$tps->nom}} {{$tps->valeur}} + {{$tvq->nom}} {{$tvq->valeur}} = **{{$total}} $**
-
-
-
+**Cout:** {{$rdv->service->prix}} $ + {{$tps->nom}} {{number_format(($tps->valeur/100)*$rdv->service->prix,2)}} $ + {{$tvq->nom}} {{number_format(($tvq->valeur/100)*$rdv->service->prix,2)}} $ = **{{$rdv->service->prix + number_format(($tps->valeur/100)*$rdv->service->prix,2) + number_format(($tvq->valeur/100)*$rdv->service->prix,2)}} $**
 
 
 Merci de prendre le temps de lire ce courriel.

@@ -86,8 +86,8 @@ class AnnulerRdvParClient extends Component
             $this->courrielClient= $this->oldRdv->client->courriel;
             $this->service =$this->oldRdv->service;
             $this->serviceId =$this->oldRdv->service->id;
-            $this->professionnel = $this->oldRdv->dossier->professionnels[0];
-            $this->professionnelId =$this->oldRdv->dossier->professionnels[0]->id;
+            $this->professionnel = $this->oldRdv->service->professionnel;
+            $this->professionnelId =$this->oldRdv->service->professionnel->id;
             $this->dossierSelected =$this->oldRdv->dossier;
 
         }
@@ -124,7 +124,7 @@ class AnnulerRdvParClient extends Component
         } elseif ($this->oldDate->copy()->subDay() >= $this->now) {
             $deleted = Rdv::destroy($this->oldRdv->id);
             $this->modification = "deleted";
-            $this->sendConfirmedRdvMail($oldRdvSend->client,$oldRdvSend,$oldRdvSend->dossier->professionnels[0]);
+            $this->sendConfirmedRdvMail($oldRdvSend->client,$oldRdvSend,$this->professionnel);
         } else {
             dd("Impossible d'annuler", $this->oldDate, $this->now->copy()->subDay());
         }
