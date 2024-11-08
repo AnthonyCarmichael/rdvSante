@@ -114,10 +114,28 @@ class AnnulerRdvParClient extends Component
     }
 
 
+    protected function rules()
+    {
+        return [
+            'oldRdv.id' => 'exists:rdvs,id',
+
+        ];
+    }
+
+    protected $messages = [
+        'oldRdv.id.exists' => 'Une erreur c\'est produite, le rendez-vous à déjà été annulé. Pour plus d\'information, veuillez nous contacter',
+ ];
+
+
 
     public function annuler(){
         $this->now = Carbon::now(('America/Toronto'));
+
+
         $oldRdvSend = $this->oldRdv;
+        $this->validate();
+
+
 
         if ($this->oldRdv->transactions()->exists()) {
             dd("Gestion du remboursement lors de la tentative de suppression d'un rdv ayant des paiement éffectué à compléter"); // As tester et gèrer
@@ -126,7 +144,7 @@ class AnnulerRdvParClient extends Component
             $this->modification = "deleted";
             $this->sendConfirmedRdvMail($oldRdvSend->client,$oldRdvSend,$this->professionnel);
         } else {
-            dd("Impossible d'annuler", $this->oldDate, $this->now->copy()->subDay());
+            dd("Faire la gestion de si la personne annule mais y'a une pénalité", $this->oldDate, $this->now->copy()->subDay());
         }
 
     }

@@ -101,7 +101,6 @@ class ModifierRdvParClient extends Component
             $this->professionnel = $this->oldRdv->service->professionnel;
             $this->professionnelId =$this->oldRdv->service->professionnel->id;
             $this->dossierSelected =$this->oldRdv->dossier;
-
         }
 
     }
