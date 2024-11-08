@@ -186,6 +186,13 @@
                             class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                     </div>
 
+                    <div class="mb-4">
+                        <label for="montantPenalite" class="block text-sm font-medium text-gray-700">Pénalité *</label>
+                        <input required min="0" step="0.01" type="number" pattern="\d" name="montantPenalite" id="montantPenalite"
+                            wire:model="montantPenalite"
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    </div>
+
                     <!--
                     <script>
                         let input = document.getElementById("prixservice");
@@ -235,14 +242,14 @@
                         </div>
                     </div>
 
-                    <div class="mb-4">
+                    <!--<div class="mb-4">
                         <label class="inline-flex items-center">
                             <input type="checkbox" name="personneacharge" id="personneacharge"
-                                wire:model="personneacharge"
+
                                 class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
                             <span class="ml-2 text-gray-700">Permettre les rendez-vous pour une personne à charge</span>
                         </label>
-                    </div>
+                    </div>-->
 
                     <div class="mt-6">
                         <button type="submit"
@@ -300,6 +307,13 @@
                     </div>
 
                     <div class="mb-4">
+                        <label for="montantPenalite" class="block text-sm font-medium text-gray-700">Pénalité *</label>
+                        <input required min="0" step="0.01" type="number" pattern="\d" name="montantPenalite" id="montantPenalite"
+                            wire:model="montantPenalite"
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    </div>
+
+                    <div class="mb-4">
                         <label class="inline-flex items-center">
                             <input type="checkbox" name="taxableservice" id="taxableservice"
                                 wire:model="taxableservice"
@@ -338,14 +352,14 @@
                         </div>
                     </div>
 
-                    <div class="mb-4">
+                    <!--<div class="mb-4">
                         <label class="inline-flex items-center">
                             <input type="checkbox" name="personneacharge" id="personneacharge"
-                                wire:model="personneacharge"
+                                
                                 class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
                             <span class="ml-2 text-gray-700">Permettre les rendez-vous pour une personne à charge</span>
                         </label>
-                    </div>
+                    </div>-->
 
                     <div class="mt-6">
                         <button type="submit"

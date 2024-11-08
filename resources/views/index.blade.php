@@ -65,13 +65,20 @@ use Illuminate\Support\Facades\Auth;
             $numTps = true;
         }
         if (Auth::user()->photoProfil != null) {
-            if (file_exists('../public/img/' . strval(Auth::user()->photoProfil))) {
+            /*if (file_exists('../public/img/' . strval(Auth::user()->photoProfil))) {
+                $photo = true;
+            }*/
+            if (Storage::exists('public/' . Auth::user()->photoProfil)) {
                 $photo = true;
             }
         }
 
         if (Auth::user()->signature != null) {
-            if (file_exists('../public/img/' . strval(Auth::user()->signature))) {
+            /*if (file_exists('../public/img/' . strval(Auth::user()->signature))) {
+                $signature = true;
+            }*/
+            
+            if (Storage::exists('public/' . Auth::user()->photoProfil)) {
                 $signature = true;
             }
         }
