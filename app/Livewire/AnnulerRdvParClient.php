@@ -144,7 +144,11 @@ class AnnulerRdvParClient extends Component
             $this->modification = "deleted";
             $this->sendConfirmedRdvMail($oldRdvSend->client,$oldRdvSend,$this->professionnel);
         } else {
-            dd("Faire la gestion de si la personne annule mais y'a une pénalité", $this->oldDate, $this->now->copy()->subDay());
+            $this->oldRdv->penalite = true;
+            $this->oldRdv->actif = false;
+            $this->oldRdv->save();
+            $this->modification = "deleted";
+            $this->sendConfirmedRdvMail($oldRdvSend->client,$oldRdvSend,$this->professionnel);
         }
 
     }
