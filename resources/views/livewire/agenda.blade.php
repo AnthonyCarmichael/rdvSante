@@ -115,7 +115,26 @@
                                                                 <p class="leading-tight block">{{$rdv->client->prenom}} {{$rdv->client->nom}}</p>
                                                                 <p class="leading-tight block">Début : {{$debut->format('H:i')}}</p>
                                                                 <p class="leading-tight block">Fin : {{$debut->copy()->addMinutes($rdv->service->duree)->format('H:i')}}</p>
-                                                                <p class="leading-tight block text-red-400">Pas payé</p>
+                                                                @php
+
+                                                                    $totalPaiement = 0;
+                                                                    $totalFacture= $rdv->service->prix + ($taxes[0]->valeur/100 *$rdv->service->prix)+ ($taxes[1]->valeur/100 *$rdv->service->prix);
+                                                                @endphp
+                                                                @foreach ($rdv->transactions as $transaction )
+
+                                                                    @php
+                                                                        $totalPaiement += $transaction->montant;
+                                                                    @endphp
+
+                                                                @endforeach
+
+                                                                @if ( $totalPaiement < $totalFacture)
+                                                                    <p class="leading-tight block text-red-400 text-sm">Pas payé</p>
+                                                                @elseif ($totalPaiement == $totalFacture)
+                                                                    <p class="leading-tight block text-green text-sm">Payé</p>
+                                                                @elseif ($totalPaiement > $totalFacture)
+                                                                    <p class="leading-tight block text-red-400 text-sm">Trop payé</p>
+                                                                @endif
 
                                                             </div>
 
