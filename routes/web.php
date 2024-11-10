@@ -77,6 +77,10 @@ Route::get('/profil/services', function () {
     return view('profil/services');
 })->middleware('auth')->name('services');
 
+Route::get('/profil/professions', function () {
+    return view('profil/professions');
+})->middleware('auth')->name('professions');
+
 Route::get('/clinique', function () {
     return view('clinique');
 })->middleware('auth')->name('clinique');

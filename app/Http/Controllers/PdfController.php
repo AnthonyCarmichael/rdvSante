@@ -14,6 +14,8 @@ use App\Models\Service;
 use App\Models\Ville;
 use App\Models\Province;
 use App\Models\Taxe;
+use App\Models\Organisation;
+use App\Models\OrganisationProfessionnel;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\Recu;
@@ -63,6 +65,15 @@ class PdfController extends Controller
         $rdv = Rdv::find($rdv);
         $clinique = Clinique::find($clinique);
         $service = Service::find($service);
+        $organisations = OrganisationProfessionnel::where('idProfessionnel', '=', Auth::user()->id)->get();
+        foreach ($organisations as $o) {
+            $organisation = Organisation::find($o->idOrganisation);
+            if ($organisation->idProfession == $service->idProfessionService) {
+                $infoOrg = OrganisationProfessionnel::find($o->id);
+                $organisation = Organisation::find($o->idOrganisation);
+                break;
+            }
+        }
         $ville = Ville::find($clinique->idVille);
         $province = Province::find($ville->idProvince);
         $dateRdv = Carbon::parse($rdv->dateHeureDebut)->translatedFormat('l d F Y');
@@ -75,9 +86,9 @@ class PdfController extends Controller
         $this->fpdf->Image('../public/img/logoRdvSante.png', 170, 28, 20);
         $this->fpdf->SetFont('Arial', '', 10);
         $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "$user->prenom $user->nom"), 0, 1);
-        $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "membre"), 0, 1);
-        $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "num membre"), 0, 1);
-        $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "date epiration membre"), 0, 1);
+        $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "Membre de : " . $organisation->nom), 0, 1);
+        $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "Numéro de membre : " . $infoOrg->numMembre), 0, 1);
+        $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "Date d'expiration : " . $infoOrg->dateExpiration), 0, 1);
         $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "$clinique->nom"), 0, 1);
         $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "$clinique->noCivique rue $clinique->rue"), 0, 1);
         $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "$ville->nom, $province->nom"), 0, 1);
@@ -110,7 +121,7 @@ class PdfController extends Controller
         $this->fpdf->SetX(30);
         $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "Total : $total $"), 0, 1);
         $this->fpdf->SetX(150);
-        $this->fpdf->Image('../public/img/'.strval(Auth::user()->signature), 150, 105, 20);
+        $this->fpdf->Image('../public/img/' . strval(Auth::user()->signature), 150, 105, 20);
 
         $recu = new Recu($client, $rdv, $user, $clinique);
         $recu->attachData($this->fpdf->Output('', 'S'), 'recu.pdf');
@@ -136,6 +147,15 @@ class PdfController extends Controller
         $rdv = Rdv::find($rdv);
         $clinique = Clinique::find($clinique);
         $service = Service::find($service);
+        $organisations = OrganisationProfessionnel::where('idProfessionnel', '=', Auth::user()->id)->get();
+        foreach ($organisations as $o) {
+            $organisation = Organisation::find($o->idOrganisation);
+            if ($organisation->idProfession == $service->idProfessionService) {
+                $infoOrg = OrganisationProfessionnel::find($o->id);
+                $organisation = Organisation::find($o->idOrganisation);
+                break;
+            }
+        }
         $ville = Ville::find($clinique->idVille);
         $province = Province::find($ville->idProvince);
         $dateRdv = Carbon::parse($rdv->dateHeureDebut)->translatedFormat('l d F Y');
@@ -148,9 +168,9 @@ class PdfController extends Controller
         $this->fpdf->Image('../public/img/logoRdvSante.png', 170, 28, 20);
         $this->fpdf->SetFont('Arial', '', 10);
         $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "$user->prenom $user->nom"), 0, 1);
-        $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "membre"), 0, 1);
-        $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "num membre"), 0, 1);
-        $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "date epiration membre"), 0, 1);
+        $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "Membre de : " . $organisation->nom), 0, 1);
+        $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "Numéro de membre : " . $infoOrg->numMembre), 0, 1);
+        $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "Date d'expiration : " . $infoOrg->dateExpiration), 0, 1);
         $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "$clinique->nom"), 0, 1);
         $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "$clinique->noCivique rue $clinique->rue"), 0, 1);
         $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "$ville->nom, $province->nom"), 0, 1);
@@ -183,7 +203,7 @@ class PdfController extends Controller
         $this->fpdf->SetX(30);
         $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "Total : $total $"), 0, 1);
         $this->fpdf->SetX(150);
-        $this->fpdf->Image('../public/img/'.strval(Auth::user()->signature), 150, 105, 20);
+        $this->fpdf->Image('../public/img/' . strval(Auth::user()->signature), 150, 105, 20);
         $recu = new Recu($client, $rdv, $user, $clinique);
         $recu->attachData($this->fpdf->Output('', 'S'), 'recu.pdf');
         Mail::to($client->courriel)
@@ -201,14 +221,26 @@ class PdfController extends Controller
         $this->fpdf->SetFont('Arial', 'B', 15);
         $this->fpdf->AddPage();
         $this->Header();
+        $infoOrg = null;
+        $organisation = null;
         $tps = Taxe::select('valeur')->where('nom', '=', 'tps')->get();
         $tvq = Taxe::select('valeur')->where('nom', '=', 'tvq')->get();
-        #dd($tps);
+        $service = Service::find($service);
+        $organisations = OrganisationProfessionnel::where('idProfessionnel', '=', Auth::user()->id)->get();
+        foreach ($organisations as $o) {
+            $organisation = Organisation::find($o->idOrganisation);
+            if ($organisation->idProfession == $service->idProfessionService) {
+                $infoOrg = OrganisationProfessionnel::find($o->id);
+                $organisation = Organisation::find($o->idOrganisation);
+                break;
+            }
+        }
+
         $user = User::find(Auth::user()->id);
         $client = Client::find($client);
         $rdv = Rdv::find($rdv);
         $clinique = Clinique::find($clinique);
-        $service = Service::find($service);
+
         $ville = Ville::find($clinique->idVille);
         $province = Province::find($ville->idProvince);
         $dateRdv = Carbon::parse($rdv->dateHeureDebut)->translatedFormat('l d F Y');
@@ -221,9 +253,9 @@ class PdfController extends Controller
         $this->fpdf->Image('../public/img/logoRdvSante.png', 170, 28, 20);
         $this->fpdf->SetFont('Arial', '', 10);
         $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "$user->prenom $user->nom"), 0, 1);
-        $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "membre"), 0, 1);
-        $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "num membre"), 0, 1);
-        $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "date epiration membre"), 0, 1);
+        $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "Membre de : " . $organisation->nom), 0, 1);
+        $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "Numéro de membre : " . $infoOrg->numMembre), 0, 1);
+        $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "Date d'expiration : " . $infoOrg->dateExpiration), 0, 1);
         $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "$clinique->nom"), 0, 1);
         $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "$clinique->noCivique rue $clinique->rue"), 0, 1);
         $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "$ville->nom, $province->nom"), 0, 1);
@@ -254,7 +286,7 @@ class PdfController extends Controller
         $this->fpdf->SetX(30);
         $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "Total : $total $"), 0, 1);
         $this->fpdf->SetX(150);
-        $this->fpdf->Image('../public/img/'.strval(Auth::user()->signature), 150, 105, 20);
+        $this->fpdf->Image('../public/img/' . strval(Auth::user()->signature), 150, 105, 20);
 
         $this->fpdf->Output('Recu.pdf', 'D');
         /*$recu = new Recu($client, $rdv, $user, $clinique);
@@ -281,6 +313,15 @@ class PdfController extends Controller
             $user = User::find(Auth::user()->id);
             $clinique = Clinique::find($r->idClinique);
             $service = Service::find($r->idService);
+            $organisations = OrganisationProfessionnel::where('idProfessionnel', '=', Auth::user()->id)->get();
+            foreach ($organisations as $o) {
+                $organisation = Organisation::find($o->idOrganisation);
+                if ($organisation->idProfession == $service->idProfessionService) {
+                    $infoOrg = OrganisationProfessionnel::find($o->id);
+                    $organisation = Organisation::find($o->idOrganisation);
+                    break;
+                }
+            }
             $ville = Ville::find($clinique->idVille);
             $province = Province::find($ville->idProvince);
             $dateRdv = Carbon::parse($r->dateHeureDebut)->translatedFormat('l d F Y');
@@ -293,9 +334,9 @@ class PdfController extends Controller
             $this->fpdf->Image('../public/img/logoRdvSante.png', 170, 28, 20);
             $this->fpdf->SetFont('Arial', '', 10);
             $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "$user->prenom $user->nom"), 0, 1);
-            $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "membre"), 0, 1);
-            $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "num membre"), 0, 1);
-            $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "date epiration membre"), 0, 1);
+            $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "Membre de : " . $organisation->nom), 0, 1);
+            $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "Numéro de membre : " . $infoOrg->numMembre), 0, 1);
+            $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "Date d'expiration : " . $infoOrg->dateExpiration), 0, 1);
             $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "$clinique->nom"), 0, 1);
             $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "$clinique->noCivique rue $clinique->rue"), 0, 1);
             $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "$ville->nom, $province->nom"), 0, 1);
@@ -324,7 +365,7 @@ class PdfController extends Controller
             $this->fpdf->SetX(30);
             $this->fpdf->Cell(10, 5, iconv('UTF-8', 'windows-1252', "Total : $total $"), 0, 1);
             $this->fpdf->SetX(150);
-            $this->fpdf->Image('../public/img/'.strval(Auth::user()->signature), 150, 105, 20);
+            $this->fpdf->Image('../public/img/' . strval(Auth::user()->signature), 150, 105, 20);
         }
 
         $this->fpdf->Output('recu.pdf', 'D');
