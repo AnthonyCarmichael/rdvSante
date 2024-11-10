@@ -102,7 +102,7 @@
                                                     $debut = \Carbon\Carbon::parse($rdv->dateHeureDebut);
                                                 @endphp
                                                 @if ($debut <= $selectedDateTime && $debut->copy()->addMinutes($rdv->service->duree) > $selectedDateTime)
-                                                    
+
                                                     <button class=" {{ $selectedDateTime <= $now && $now < $selectedDateTime->copy()->addMinutes(5) ? 'border-t-2 border-blue-700' : ' ' }} absolute top-0 left-0 w-full h-full bg-blue-500 "
                                                         wire:click="consulterModalRdv({{$rdv}})"
                                                         value="rdv{{$rdv->id}}"
@@ -118,11 +118,11 @@
                                                                 <p class="leading-tight block text-red-400">Pas payé</p>
 
                                                             </div>
-                                                            
+
                                                         @endif
-                                                        
+
                                                     </button>
-                                                    
+
                                                     <?php $findIndispo = true?>
                                                     @break
                                                 @endif
@@ -172,6 +172,9 @@
 
     <x-modal title="Choisir" name="choixRdvIndispo" :show="false">
         <p>Voulez-vous ajouter un rendez-vous ou une indisponibilité ?</p>
+        @if($selectedTime!=null)
+            <p class="font-bold">{{$selectedTime->translatedFormat('d F Y H:i')}}</p>
+        @endif
         <div class="flex mt-8">
             <button wire:click="openModalRdv()" class="mr-4 px-4 py-2 bg-green hover:bg-darker-green text-white rounded">Rendez-vous</button>
             <button wire:click="openModalIndispo()" class="px-4 py-2 bg-orange-500 hover:bg-orange-700 text-white rounded">Indisponibilite</button>
