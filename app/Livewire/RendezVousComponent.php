@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Mail\ConfirmerRdv;
 use App\Models\Rdv;
 use Livewire\Component;
 use App\Models\Client;
@@ -10,8 +11,12 @@ use App\Models\Service;
 use App\Models\Dossier;
 use App\Models\DossierProfessionnel;
 use App\Models\MoyenPaiement;
+use App\Models\Taxe;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
+
+use Illuminate\Support\Str;
 
 class RendezVousComponent extends Component
 {
@@ -117,7 +122,7 @@ class RendezVousComponent extends Component
         ->first();
 
 
-        Rdv::create([
+        $rdv = Rdv::create([
             'dateHeureDebut' => $this->selectedTime,
             'idDossier' => $dossier->id,
             'idService' => $this->serviceSelected,
@@ -125,6 +130,9 @@ class RendezVousComponent extends Component
             'raison' => $this->raison,
             'actif' => true,
         ]);
+
+
+        $this->sendConfirmedRdvMail($rdv->dossier->client,$rdv,$rdv->service->professionnel,"confirmer");
 
         $this->reset();
 
@@ -226,21 +234,26 @@ class RendezVousComponent extends Component
             $rdv->raison = $this->raison;
             $rdv->actif = true;
 
+
+            $token = Str::random(32);
+            $rdv->token = $token;
             $rdv->save();
         }
         else {
             session()->flash('error', 'Rendez-vous non trouvée.');
         }
 
-
+        $this->sendConfirmedRdvMail($rdv->dossier->client,$rdv,$rdv->service->professionnel,"confirmer");
         $this->reset();
         $this->dispatch('close-modal');
         $this->dispatch('refreshAgenda');
         $this->consulterModalRdv($rdv);
 
+
     }
 
     public function deleteRdv(){
+        $rdv= $this->rdv;
 
         if ($this->rdv->transactions()->exists()) {
             dd("Gestion du remboursement lors de la tentative de suppression d'un rdv ayant des paiement éffectué à compléter"); // As tester et gèrer
@@ -251,6 +264,7 @@ class RendezVousComponent extends Component
         $this->dispatch('close-modal');
         $this->dispatch('refreshAgenda');
 
+        $this->sendConfirmedRdvMail($rdv->dossier->client,$rdv,$rdv->service->professionnel,"annuler");
     }
 
     public function changeSousMenu($sousMenu) {
@@ -281,6 +295,17 @@ class RendezVousComponent extends Component
         ]);
         $this->dispatch('close-modal');
     }
+
+
+    public function sendConfirmedRdvMail($client,$rdv,$professionnel,$raison) {
+
+        $tps = Taxe::where('nom','TPS')->first();
+        $tvq =  Taxe::where('nom','TVQ')->first();
+
+        Mail::to($client->courriel)
+            ->send(new ConfirmerRdv($rdv,$professionnel,$tps,$tvq,$raison));
+    }
+
 
 
 }

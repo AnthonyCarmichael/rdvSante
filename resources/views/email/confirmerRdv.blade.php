@@ -5,7 +5,7 @@
 
 Bonjour {{$rdv->client->prenom}},
 
-Votre rendez-vous sera le **{{$rdv->dateHeureDebut->translatedFormat('l, d F Y')}}** à **{{$rdv->dateHeureDebut->translatedFormat('H:i')}}**.
+Votre rendez-vous sera le **{{$dateHeureDebut->translatedFormat('l, d F Y')}}** à **{{$dateHeureDebut->translatedFormat('H:i')}}**.
 
 Lieu du rendez-vous :
 {{$rdv->clinique->noCivique}} {{$rdv->clinique->rue}}
