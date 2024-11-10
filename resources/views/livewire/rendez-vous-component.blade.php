@@ -231,8 +231,78 @@
             </div>
         @elseif($sousMenuConsult === 'facture')
             <!-- Permet de consulter les informations lier a la facturation d'un rdv -->
+
             <div class="bg-white p-6 rounded-lg shadow-md">
-                <p>Facture</p>
+
+                <div class="flex">
+
+                    <div class="w-1/2 border-b ">
+                        <div class="flex justify-between">
+                            <div>
+                                <p class="inline">Sous-total</p>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 inline">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.666 3.888A2.25 2.25 0 0 0 13.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 0 1-.75.75H9a.75.75 0 0 1-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 0 1-2.25 2.25H6.75A2.25 2.25 0 0 1 4.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 0 1 1.927-.184" />
+                                </svg>
+                            </div>
+                            <p class="inline pr-6">{{$rdv->service->prix}} $</p>
+                        </div>
+                        @php
+                            $totalvalue=$rdv->service->prix;
+                        @endphp
+
+                        @foreach ($this->taxes as $taxe)
+                            <div class="flex justify-between text-xs">
+                                <p class="">{{$taxe->nom.'('.number_format($taxe->valeur,3).'%)'}}</p>
+                                <p class="inline pr-6">
+                                    @php
+                                        $taxeValue= $taxe->valeur /100 * $rdv->service->prix;
+                                        $totalvalue +=$taxeValue;
+                                    @endphp
+                                    {{number_format($taxeValue,2)}} $
+                                </p>
+                            </div>
+
+                        @endforeach
+
+                    </div>
+                    <div class="w-1/2 border-l border-b pl-6 flex flex-col items-end text-xs">
+
+                        @php
+                            $totalPaiement=0;
+                        @endphp
+                        @foreach ($rdv->transactions as $transaction )
+                            <div class="w-full flex justify-between">
+                                <p class="">{{$transaction->moyenPaiement->nom}}</p>
+                                <p class="">{{$transaction->dateHeure}}</p>
+                                <p class="">{{$transaction->montant}} $</p>
+                            </div>
+
+
+                            @php
+                                $totalPaiement+=$transaction->montant;
+                            @endphp
+
+                        @endforeach
+
+
+                    </div>
+
+                </div>
+                <div class="flex">
+                    <div class="flex justify-between w-1/2">
+                        <p>Total</p>
+                        <p class="pr-6">{{$totalvalue}} $</p>
+
+                    </div>
+
+                    <div class=" w-1/2 flex justify-between">
+
+                        <p class="inline pl-6">Solde</p>
+                        <p class="inline">{{number_format($totalPaiement,2)}} $</p>
+                    </div>
+                </div>
+
+
                 <div class="border-b">
                     <button type="button" class="text-blue-300 hover:text-blue-700" wire:click="addPaiement()">
                         <div class="flex">
@@ -265,7 +335,7 @@
             <div class=" grid grid-cols-2 justify-center gap-y-4 w-full">
                 <label class="text-md text-center w-full" for="montant">Quel est le montant du
                     paiement?</label>
-                <input wire:model="montant" class="h-12 text-md ml-2 w-full" type="number" id="montant"
+                <input wire:model="montant" class="h-12 text-md ml-2 w-full" type="number" step="0.01" id="montant"
                     name="montant" />
 
                 <label class="text-md text-center w-full" for="moyenPaiement">De quel façon sera

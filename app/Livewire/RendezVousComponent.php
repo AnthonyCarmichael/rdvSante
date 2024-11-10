@@ -38,6 +38,7 @@ class RendezVousComponent extends Component
 
     # Facturation
     public $sousMenuConsult;
+    public $taxes;
 
 
 
@@ -189,6 +190,8 @@ class RendezVousComponent extends Component
         $this->formattedDateFin = Carbon::parse($rdv->dateHeureDebut)->addMinutes($rdv->service->duree);
         $this->formattedDateFin = $this->formattedDateFin->translatedFormat('H:i');
 
+        $this->taxes= Taxe::all();
+
         $this->dispatch('open-modal', name: 'consulterRdv');
         #dd($this);
 
@@ -294,6 +297,9 @@ class RendezVousComponent extends Component
 
         ]);
         $this->dispatch('close-modal');
+        $this->dispatch('refreshAgenda');
+        $this->consulterModalRdv($this->rdv);
+        $this->sousMenuConsult='facture';
     }
 
 
