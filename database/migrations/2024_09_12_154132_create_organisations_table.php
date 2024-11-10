@@ -16,11 +16,6 @@ return new class extends Migration
             $table->bigIncrements('id'); // Clé primaire automatiquement créée avec "bigIncrements()".
             // "usigned()" nécessaire pour éventuellement pouvoir définir une clé étrangère sur cette colonne.
             $table->text('nom');
-            $table->bigInteger('idProfession')->unsigned();
-        });
-
-        Schema::table('organisations', function (Blueprint $table) {
-            $table->foreign('idProfession')->references('id')->on('professions');
         });
     }
 

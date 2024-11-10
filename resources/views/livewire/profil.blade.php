@@ -4,7 +4,8 @@
             <button wire:click="setView('Compte')" class="btn">Compte</button>
             <button wire:click="setView('AjouterService')" class="btn">Services</button>
             <button wire:click="setView('GestionProfessionnel')" class="btn">Gestion Professionnel</button>
-            <button wire:click="setView('Disponibilite')" class="btn">Disponibilité</button>
+            <button wire:click="setView('Disponibilite')" class="btn">Disponibilités</button>
+            <button wire:click="setView('Profession')" class="btn">Professions</button>
         </div>
 
         @if ($view === 'AjouterService')
@@ -15,6 +16,8 @@
             @livewire('Compte')
         @elseif ($view === 'Disponibilite')
             @livewire('GestionDispo')
+        @elseif ($view === 'Profession')
+            @livewire('GestionProfession')
         @endif
     </div>
 </div>
