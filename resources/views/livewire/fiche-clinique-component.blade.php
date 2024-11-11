@@ -93,44 +93,44 @@
                         <fieldset class="">
                             <legend class="text-lg">Raison de consultation client</legend>
 
-                            <div class="flex m-4 justify-between">
+                            <div class="flex m-4 justify-between items-center">
                                 <label class="block text-sm w-1/3" for="contreIndication">RC et ED</label>
                                 <textarea name="contreIndication" id="contreIndication"
                                 class="w-2/3 mt-1 text-black block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                 rows="1"></textarea>
                             </div>
 
-                            <div class="flex  m-4">
+                            <div class="flex  m-4 justify-between items-center">
                                 <label class="block text-sm w-1/3" for="contreIndication">Local et irr</label>
                                 <textarea name="contreIndication" id="contreIndication"
                                 class="w-2/3 mt-1 text-black block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                 rows="1"></textarea>
                             </div>
-                            <div class="flex  m-4">
+                            <div class="flex  m-4 justify-between items-center">
                                 <label class="block text-sm w-1/3" for="contreIndication">Douleur (Type, intensité, évolution)</label>
                                 <textarea name="contreIndication" id="contreIndication"
                                 class="w-2/3 mt-1 text-black block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                 rows="1"></textarea>
                             </div>
-                            <div class="flex  m-4">
+                            <div class="flex  m-4 justify-between items-center">
                                 <label class="block text-sm w-1/3" for="contreIndication">FA</label>
                                 <textarea name="contreIndication" id="contreIndication"
                                 class="w-2/3 mt-1 text-black block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                 rows="1"></textarea>
                             </div>
-                            <div class="flex  m-4">
+                            <div class="flex  m-4 justify-between items-center">
                                 <label class="block text-sm w-1/3" for="contreIndication">FD</label>
                                 <textarea name="contreIndication" id="contreIndication"
                                 class="w-2/3 mt-1 text-black block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                 rows="1"></textarea>
                             </div>
-                            <div class="flex  m-4">
+                            <div class="flex  m-4 justify-between items-center">
                                 <label class="block text-sm w-1/3" for="contreIndication">Nuit</label>
                                 <textarea name="contreIndication" id="contreIndication"
                                 class="w-2/3 mt-1 text-black block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                 rows="1"></textarea>
                             </div>
-                            <div class="flex  m-4">
+                            <div class="flex  m-4 justify-between items-center">
                                 <label class="block text-sm w-1/3" for="contreIndication">SA</label>
                                 <textarea name="contreIndication" id="contreIndication"
                                 class="w-2/3 mt-1 text-black block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
