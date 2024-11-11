@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\FicheCliniqueController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\ProfileController;
 use App\Livewire\Agenda;
@@ -103,9 +104,7 @@ Route::get('/registration', [UserController::class, 'showRegistrationForm'])->na
 Route::post('/registration/complete', [UserController::class, 'completeRegistration'])->name('completeRegistration');
 
 
-Route::get('/dossier/ficheClinique/{id}', function () {
-    return view('dossier/ficheClinique');
-})->middleware('auth')->name('ficheClinique');
+Route::get('/dossier/ficheClinique/{id}',[FicheCliniqueController::class, 'create'])->middleware('auth')->name('ficheClinique');
 
 
 require __DIR__.'/auth.php';

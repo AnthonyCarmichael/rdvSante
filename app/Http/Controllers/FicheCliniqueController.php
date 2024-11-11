@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Dossier;
 use App\Models\FicheClinique;
+
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class FicheCliniqueController extends Controller
 {
@@ -18,9 +21,29 @@ class FicheCliniqueController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create($id, Request $request)
     {
-        //
+        $dossierClient = Dossier::where('id', $id)->first();
+
+        $profeshHasAcces = false;
+
+
+        if ( $dossierClient != null ) {
+
+
+            foreach ($dossierClient->professionnels as $professionnel) {
+
+                if($professionnel->id == Auth::user()->id) {
+                    return view('dossier/ficheClinique',  ['dossierClient' => $dossierClient]);
+                }
+            }
+
+
+        }
+
+        abort(404);
+
+
     }
 
     /**
