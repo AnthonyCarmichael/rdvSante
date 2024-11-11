@@ -47,8 +47,8 @@
                                 <p class="mb-2"><b>Couts:</b> {{$service->prix}} $
                                     <?php $total =  $service->prix?>
                                     @foreach ($taxes as $taxe )
-                                    + {{$taxe->nom}} {{$taxe->valeur}} $
-                                    <?php $total += $taxe->valeur?>
+                                    + {{$taxe->nom}} {{number_format(($taxe->valeur /100) * $service->prix,2)}} $
+                                    <?php $total += ($taxe->valeur /100) * $service->prix?>
                                     @endforeach
                                     =  {{number_format($total, 2)}} $
                                 </p>
@@ -63,7 +63,7 @@
 
                             <div class="flex justify-center">
 
-                                @if ($oldDate >= $now)
+                                @if ($oldDate->copy()->subday() >= $now)
                                     <div class="flex justify-center">
                                         <button type="button" wire:click="modifierDate" class="px-4 py-2 m-2 mb-4 text-white rounded-full bg-orange-500 hover:bg-orange-700">
                                             Modifier la date
@@ -71,7 +71,7 @@
                                     </div>
 
                                 @else
-                                    <p class="text-red-600">Vous ne pouvez pas modifier ce rendez-vous, car il est déjà passé</p>
+                                    <p class="text-red-600">Vous ne pouvez pas modifier ce rendez-vous. Pour modifier un rendez-vous, vous devez aviser le professionnel 24h à l'avance.</p>
                                 @endif
 
 
@@ -218,8 +218,8 @@
                                 <p class="mb-2"><b>Couts:</b> {{$service->prix}} $
                                     <?php $total =  $service->prix?>
                                     @foreach ($taxes as $taxe )
-                                    + {{$taxe->nom}} {{$taxe->valeur}} $
-                                    <?php $total += $taxe->valeur?>
+                                    + {{$taxe->nom}} {{number_format(($taxe->valeur /100) * $service->prix,2)}} $
+                                    <?php $total += ($taxe->valeur /100) * $service->prix?>
                                     @endforeach
                                     =  {{number_format($total, 2)}} $
                                 </p>
@@ -255,8 +255,8 @@
                                 <p class="mb-2"><b>Couts:</b> {{$service->prix}} $
                                     <?php $total =  $service->prix?>
                                     @foreach ($taxes as $taxe )
-                                    + {{$taxe->nom}} {{$taxe->valeur}} $
-                                    <?php $total += $taxe->valeur?>
+                                    + {{$taxe->nom}} {{number_format(($taxe->valeur /100) * $service->prix,2)}} $
+                                    <?php $total += ($taxe->valeur /100) * $service->prix?>
                                     @endforeach
                                     =  {{number_format($total, 2)}} $
                                 </p>

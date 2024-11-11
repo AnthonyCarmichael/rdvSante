@@ -86,8 +86,8 @@ class AnnulerRdvParClient extends Component
             $this->courrielClient= $this->oldRdv->client->courriel;
             $this->service =$this->oldRdv->service;
             $this->serviceId =$this->oldRdv->service->id;
-            $this->professionnel = $this->oldRdv->dossier->professionnels[0];
-            $this->professionnelId =$this->oldRdv->dossier->professionnels[0]->id;
+            $this->professionnel = $this->oldRdv->service->professionnel;
+            $this->professionnelId =$this->oldRdv->service->professionnel->id;
             $this->dossierSelected =$this->oldRdv->dossier;
 
         }
@@ -114,19 +114,41 @@ class AnnulerRdvParClient extends Component
     }
 
 
+    protected function rules()
+    {
+        return [
+            'oldRdv.id' => 'exists:rdvs,id',
+
+        ];
+    }
+
+    protected $messages = [
+        'oldRdv.id.exists' => 'Une erreur c\'est produite, le rendez-vous à déjà été annulé. Pour plus d\'information, veuillez nous contacter',
+ ];
+
+
 
     public function annuler(){
         $this->now = Carbon::now(('America/Toronto'));
+
+
         $oldRdvSend = $this->oldRdv;
+        $this->validate();
+
+
 
         if ($this->oldRdv->transactions()->exists()) {
             dd("Gestion du remboursement lors de la tentative de suppression d'un rdv ayant des paiement éffectué à compléter"); // As tester et gèrer
         } elseif ($this->oldDate->copy()->subDay() >= $this->now) {
             $deleted = Rdv::destroy($this->oldRdv->id);
             $this->modification = "deleted";
-            $this->sendConfirmedRdvMail($oldRdvSend->client,$oldRdvSend,$oldRdvSend->dossier->professionnels[0]);
+            $this->sendConfirmedRdvMail($oldRdvSend->client,$oldRdvSend,$this->professionnel);
         } else {
-            dd("Impossible d'annuler", $this->oldDate, $this->now->copy()->subDay());
+            $this->oldRdv->penalite = true;
+            $this->oldRdv->actif = false;
+            $this->oldRdv->save();
+            $this->modification = "deleted";
+            $this->sendConfirmedRdvMail($oldRdvSend->client,$oldRdvSend,$this->professionnel);
         }
 
     }

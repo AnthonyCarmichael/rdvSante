@@ -244,8 +244,8 @@
                                 <p class="mb-2"><b>Couts:</b> {{$service->prix}} $
                                     <?php $total =  $service->prix?>
                                     @foreach ($taxes as $taxe )
-                                    + {{$taxe->nom}} {{$taxe->valeur}} $
-                                    <?php $total += $taxe->valeur?>
+                                    + {{$taxe->nom}} {{number_format(($taxe->valeur /100) * $service->prix,2)}} $
+                                    <?php $total += ($taxe->valeur /100) * $service->prix?>
                                     @endforeach
                                     =  {{number_format($total, 2)}} $
                                 </p>
@@ -304,8 +304,8 @@
                                 <p class="mb-2"><b>Couts:</b> {{$service->prix}} $
                                     <?php $total =  $service->prix?>
                                     @foreach ($taxes as $taxe )
-                                    + {{$taxe->nom}} {{$taxe->valeur}} $
-                                    <?php $total += $taxe->valeur?>
+                                    + {{$taxe->nom}} {{number_format(($taxe->valeur /100) * $service->prix,2)}} $
+                                    <?php $total += ($taxe->valeur /100) * $service->prix?>
                                     @endforeach
                                     =  {{number_format($total, 2)}} $
                                 </p>
@@ -433,8 +433,8 @@
                                 <p class="mb-2"><b>Couts:</b> {{$service->prix}} $
                                     <?php $total =  $service->prix?>
                                     @foreach ($taxes as $taxe )
-                                    + {{$taxe->nom}} {{$taxe->valeur}} $
-                                    <?php $total += $taxe->valeur?>
+                                    + {{$taxe->nom}} {{number_format(($taxe->valeur /100) * $service->prix,2)}} $
+                                    <?php $total += ($taxe->valeur /100) * $service->prix?>
                                     @endforeach
                                     =  {{number_format($total, 2)}} $
                                 </p>

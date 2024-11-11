@@ -24,5 +24,11 @@ class Service extends Model
         'montantPenalite',
     ];
 
+
+    public function professionnel()
+    {
+        return $this->belongsTo(User::class, 'idProfessionnel');
+    }
+
     public $timestamps = false;
 }

@@ -47,8 +47,8 @@
                                 <p class="mb-2"><b>Couts:</b> {{$service->prix}} $
                                     <?php $total =  $service->prix?>
                                     @foreach ($taxes as $taxe )
-                                    + {{$taxe->nom}} {{$taxe->valeur}} $
-                                    <?php $total += $taxe->valeur?>
+                                    + {{$taxe->nom}} {{number_format(($taxe->valeur /100) * $service->prix,2)}} $
+                                    <?php $total += ($taxe->valeur /100) * $service->prix?>
                                     @endforeach
                                     =  {{number_format($total, 2)}} $
                                 </p>
@@ -64,12 +64,21 @@
                                 <p>Voulez-vous annuler votre rendez-vous ?<p class="font-bold">{{$dossierSelected->client->prenom}} {{$dossierSelected->client->nom}}</p></p>
                             @endif
 
-                            @if ($oldDate >= $now)
+                            @if ($oldDate->copy()->subday() >= $now)
+
                                 <div class="flex justify-center">
                                     <button type="button"  wire:click="askConfirmation" class="px-4 py-2 m-2 mb-4 text-white rounded-full bg-red-500 hover:bg-red-700">
                                         Annuler le rendez-vous
                                     </button>
                                 </div>
+
+                            @elseif($oldDate->copy()->subday() < $now && $oldDate > $now  )
+                                <div class="flex justify-center">
+                                    <button type="button"  wire:click="askConfirmation" class="px-4 py-2 m-2 mb-4 text-white rounded-full bg-red-500 hover:bg-red-700">
+                                        Annuler le rendez-vous
+                                    </button>
+                                </div>
+                                <p class="text-red-600">Vous pouvez possiblement avoir des frais associés à une annulation de moins de 24h à l'avance</p>
 
                             @else
                                 <p class="text-red-600">Vous ne pouvez pas annuler ce rendez-vous, car il est déjà passé</p>
@@ -88,8 +97,8 @@
                                 <p class="mb-2"><b>Couts:</b> {{$service->prix}} $
                                     <?php $total =  $service->prix?>
                                     @foreach ($taxes as $taxe )
-                                    + {{$taxe->nom}} {{$taxe->valeur}} $
-                                    <?php $total += $taxe->valeur?>
+                                    + {{$taxe->nom}} {{number_format(($taxe->valeur /100) * $service->prix,2)}} $
+                                    <?php $total += ($taxe->valeur /100) * $service->prix?>
                                     @endforeach
                                     =  {{number_format($total, 2)}} $
                                 </p>
@@ -106,20 +115,41 @@
                                 <p>Voulez-vous annuler votre rendez-vous ?<p class="font-bold">{{$dossierSelected->client->prenom}} {{$dossierSelected->client->nom}}</p></p>
                             @endif
 
-                            @if ($oldDate >= $now)
-                            <div class="flex justify-center">
-                                <button type="submit" class="px-4 py-2 m-2 mb-4 text-white rounded-full bg-red-500 hover:bg-red-700">
-                                    Vous êtes sûr?
-                                </button>
-                            </div>
+                            @if ($errors->has('oldRdv.id'))
 
-                        @else
-                            <p class="text-red-600">Vous ne pouvez pas annuler ce rendez-vous, car il est déjà passé</p>
-                        @endif
+                                @error('oldRdv.id')
+                                    <p class="error text-red-400 mt-8">{{ $message }}</p>
+                                @enderror
+                            @else
+
+                                @if ($oldDate->copy()->subday() >= $now)
+
+                                <div class="flex justify-center">
+                                    <button type="submit" class="px-4 py-2 m-2 mb-4 text-white rounded-full bg-red-500 hover:bg-red-700">
+                                        Vous êtes sûr?
+                                    </button>
+                                </div>
+
+                                @elseif ($oldDate->copy()->subday() < $now && $oldDate > $now  )
+
+                                    <div class="flex justify-center">
+                                        <button type="submit" class="px-4 py-2 m-2 mb-4 text-white rounded-full bg-red-500 hover:bg-red-700">
+                                            Vous êtes sûr?
+                                        </button>
+                                    </div>
+                                    <p class="text-red-600">Vous pouvez possiblement avoir des frais associés à une annulation de moins de 24h à l'avance</p>
+
+                                @else
+                                    <p class="text-red-600">Vous ne pouvez pas annuler ce rendez-vous, car il est déjà passé</p>
+                                @endif
+
+                            @endif
+
                         </div>
                     @break
                     @case("deleted")
                         <div class="p-5 bg-white rounded shadow-md">
+
                             <h2 class="text-lg font-bold text-center">Votre rendez-vous a été annulé !</h2>
                             <div class="border-y py-6 mb-4">
                                 <p>Vous allez recevoir très bientôt un courriel pour confirmer l'annulation du rendez-vous.</p>

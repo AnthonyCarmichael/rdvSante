@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Indisponibilite;
 use App\Models\Rdv;
+use App\Models\Taxe;
 use Livewire\Component;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
@@ -24,6 +25,7 @@ class Agenda extends Component
     public $settingDate;
 
     protected $listeners = ['refreshAgenda' => 'refreshAgenda'];
+
 
 
     public function mount()
@@ -103,7 +105,9 @@ class Agenda extends Component
     }
     public function render()
     {
-        return view('livewire.agenda');
+        return view('livewire.agenda',[
+            'taxes' => Taxe::all()
+        ]);
     }
 
     public function openModalIndispo() {
@@ -227,7 +231,7 @@ class Agenda extends Component
              // Heure normale (UTC - 5)
              $this->startingDate->setTimezone('America/Toronto');
          }
-    
+
 
         $this->datesArr = [];
         for ($i=0; $i < 7; $i++) {

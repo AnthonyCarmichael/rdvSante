@@ -12,4 +12,9 @@ class Transaction extends Model
     protected $fillable = ['montant', 'dateHeure', 'idRdv', 'idTypeTransaction', 'idMoyenPaiement', 'idTransaction'];
 
     public $timestamps = false;
+
+    public function moyenPaiement()
+    {
+        return $this->belongsTo(MoyenPaiement::class, 'idMoyenPaiement');
+    }
 }
