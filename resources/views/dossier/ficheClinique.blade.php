@@ -8,7 +8,7 @@
                 <p class="text-xs">nom: {{$dossierClient->client->nom}}</p>
             </div>
 
-            <div class="bg-dark-green text-white w-full p-6">
+            <div class="bg-dark-green text-white w-full">
                 @livewire('FicheCliniqueComponent', ['dossierClient' => $dossierClient])
             </div>
 

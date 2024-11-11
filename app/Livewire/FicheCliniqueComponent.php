@@ -24,6 +24,14 @@ class FicheCliniqueComponent extends Component
         dd("AjouterFiche",$this);
     }
 
+    public function updatedTypeFicheId($value)
+    {
+        #dd("updatedTypeFicheId",$this->typeFicheId);
+        $this->newFiche = new FicheClinique();
+        $this->newFiche->idTypeFiche = $value;
+
+    }
+
     public function render()
     {
         $typeFiches = TypeFiche::all();
