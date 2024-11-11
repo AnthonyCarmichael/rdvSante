@@ -275,6 +275,12 @@ class CliniqueComponent extends Component {
         $this->reset('cliniqueIdToDelete', 'showDeleteModal');
     }
 
+    public function updatedcodePostal($value) {
+        if (strlen($this->codePostalClinique) == 6) {
+            $this->codePostalClinique = ''.strtoupper(substr($this->codePostalClinique, 0, 1)) .substr($this->codePostalClinique, 1,  1) .strtoupper(substr($this->codePostalClinique, 2, 1)) .' '.substr($this->codePostalClinique, 3,  1) .strtoupper(substr($this->codePostalClinique, 4, 1)).substr($this->codePostalClinique, 5,  1);
+        }
+    }
+
     public function sortBy($field) {
         if ($this->sortField === $field) {
             $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';

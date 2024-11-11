@@ -31,6 +31,7 @@ return new class extends Migration
             $table->string('numTvq')->nullable();
             $table->string('photoProfil')->nullable();
             $table->string('signature')->nullable();
+            $table->longText('messagePersonnalise')->nullable();
             $table->string('invitation_token')->nullable()->unique();
             $table->timestamp('invitation_expiration')->nullable();
         });

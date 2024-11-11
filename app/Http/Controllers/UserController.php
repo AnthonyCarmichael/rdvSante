@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Mail\InvitationMailable;
 use App\Models\Role;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
@@ -14,9 +15,26 @@ use Illuminate\Support\Facades\Cache;
 
 class UserController extends Controller
 {
+    public $message;
+
     public function create()
     {
         return view('users.create');
+    }
+
+    public function message()
+    {
+        return view('users.setMessage');
+    }
+
+    public function updateMessage() {
+        $user = User::findOrFail(Auth::user()->id);
+
+        if ($user) {
+            $user->update([
+                'messagePersonaliser' => $this->message,
+            ]);
+        }
     }
 
     public function sendInvitation(Request $request)

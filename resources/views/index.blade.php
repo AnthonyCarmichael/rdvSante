@@ -77,7 +77,7 @@ use Illuminate\Support\Facades\Auth;
             /*if (file_exists('../public/img/' . strval(Auth::user()->signature))) {
                 $signature = true;
             }*/
-            
+
             if (Storage::exists('public/' . Auth::user()->photoProfil)) {
                 $signature = true;
             }

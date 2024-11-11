@@ -85,6 +85,10 @@ Route::get('/clinique', function () {
     return view('clinique');
 })->middleware('auth')->name('clinique');
 
+Route::get('/dossier', function () {
+    return view('dossier');
+})->middleware('auth')->name('dossier');
+
 Route::get('/profil/disponibilites', function () {
     return view('profil/disponibilites');
 })->middleware('auth')->name('disponibilites');
@@ -98,6 +102,9 @@ Route::get('/rendez-vous/annuler/{id}', [RdvController::class, 'annuler']);
 
 Route::get('/users/create', [UserController::class, 'create'])->middleware(CheckRole::class)->name('users.create');
 Route::post('/users', [UserController::class, 'sendInvitation'])->name('sendInvitation');
+
+Route::get('/message', [UserController::class, 'message'])->name('message');
+Route::post('/messagePersonalise', [UserController::class, 'updateMessage'])->name('updateMessage');
 
 Route::get('/registration', [UserController::class, 'showRegistrationForm'])->name('invitation.showRegistrationForm');
 Route::post('/registration/complete', [UserController::class, 'completeRegistration'])->name('completeRegistration');

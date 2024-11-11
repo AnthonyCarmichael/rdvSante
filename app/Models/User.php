@@ -68,7 +68,8 @@ class User extends Authenticatable
         'description',
         'actif',
         'lien',
-        'idRole'
+        'idRole',
+        'messagePersonnalise'
     ];
 
     /**

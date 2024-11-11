@@ -13,6 +13,7 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <script src="https://cdn.tiny.cloud/1/kvjxmlixjrwpg5r5y1xw7miusp3xkkkmvlxzf8fadb0kdsgv/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
     </head>
     <body class="font-sans antialiased bg-pale-green">
 

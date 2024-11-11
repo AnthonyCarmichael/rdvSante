@@ -116,6 +116,14 @@ class Compte extends Component
         }
     }
 
+    public function updatedtelephone($value) {
+
+        if (strlen($this->telephone) == 10) {
+            $this->telephone = '('.substr($this->telephone, 0, 3).') '.substr($this->telephone, 3, 3).'-'.substr($this->telephone, 6);
+
+        }
+    }
+
     public function activer()
     {
         $service = false;
