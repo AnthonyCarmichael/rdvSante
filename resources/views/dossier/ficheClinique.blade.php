@@ -1,8 +1,16 @@
 <x-admin-layout>
     <div class="py-12">
-        <div class="max-w-7xl ml-20 sm:px-6 lg:px-8">
+        <div class="container mx-auto p-4">
+            <div class="bg-dark-green text-white w-full p-6 border-b">
+                <h2>Information du dossier sélectionné</h2>
+                <p class="text-xs">no dossier: {{$dossierClient->id}}</p>
+                <p class="text-xs">prenom: {{$dossierClient->client->prenom}}</p>
+                <p class="text-xs">nom: {{$dossierClient->client->nom}}</p>
+            </div>
 
-            @livewire('ficheClinique', ['dossierClient' => $dossierClient])
+            <div class="bg-dark-green text-white w-full p-6">
+                @livewire('FicheCliniqueComponent', ['dossierClient' => $dossierClient])
+            </div>
 
         </div>
 

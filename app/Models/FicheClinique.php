@@ -16,7 +16,6 @@ class FicheClinique extends Model
         'idTypeFiche',
         'idProfession',
         'nom',
-        'description',
         'conseilsPrevention',
         'occupation',
         'loisirs',

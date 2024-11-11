@@ -35,6 +35,7 @@ class DatabaseSeeder extends Seeder
             OrganisationSeeder::class,
             OrganisationProfessionnelSeeder::class,
             OrganisationProfessionSeeder::class,
+            TypeFicheSeeder::class,
             ]);
     }
 }

@@ -21,7 +21,6 @@ return new class extends Migration
             $table->bigInteger('idProfession')->unsigned();
 
             $table->string('nom')->nullable();
-            $table->text('description')->nullable();
             $table->text('analyse')->nullable();
             $table->text('conseilsPrevention')->nullable();
             // Zone anamnèse
