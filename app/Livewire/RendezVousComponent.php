@@ -174,7 +174,7 @@ class RendezVousComponent extends Component
         $this->sousMenuConsult = "rdv";
 
 
-        #$this->selectedTime = null;
+
         $this->clientSelected = $rdv->client->id;
         $this->serviceSelected =  $rdv->service->id;
         $this->cliniqueSelected = $rdv->clinique->id;
@@ -191,6 +191,7 @@ class RendezVousComponent extends Component
         $this->formattedDateFin = $this->formattedDateFin->translatedFormat('H:i');
 
         $this->taxes= Taxe::all();
+        $this->selectedTime = $rdv->dateHeureDebut;
 
         $this->dispatch('open-modal', name: 'consulterRdv');
         #dd($this);
@@ -205,6 +206,12 @@ class RendezVousComponent extends Component
 
     public function modifierRdv()
     {
+
+        if (!$this->selectedDateCheckDispo()) {
+            $this->addError('selectedDate', 'La date sélectionnée n\'est pas disponible.');
+            return;
+        }
+
         $this->validate([
             'clientSelected' => 'required|exists:clients,id',
             'serviceSelected' => 'required|exists:services,id',
@@ -236,6 +243,7 @@ class RendezVousComponent extends Component
             $rdv->idClinique = $this->cliniqueSelected;
             $rdv->raison = $this->raison;
             $rdv->actif = true;
+            $rdv->dateHeureDebut = $this->selectedTime;
 
 
             $token = Str::random(32);
@@ -310,6 +318,37 @@ class RendezVousComponent extends Component
 
         Mail::to($client->courriel)
             ->send(new ConfirmerRdv($rdv,$professionnel,$tps,$tvq,$raison));
+    }
+
+
+    public function selectedDateCheckDispo() {
+
+        $dispo = true;
+
+        $debut = Carbon::parse($this->selectedTime);
+
+
+        $fin = $debut->copy()->addMinutes( $this->rdv->service->duree);
+        if ($debut->hour < 7 || $fin->hour > 22) {
+            $dispo = false;
+            return $dispo;
+        }
+
+        $result = Auth::user()->rdvs()
+        ->whereDate('dateHeureDebut', $debut) // Compare uniquement la date (sans l'heure)
+        ->get();
+
+        foreach ($result as $rdv) {
+            if ($rdv->id != $this->rdv->id) {
+                $dateFinRdv =  Carbon::parse($rdv->dateHeureDebut)->addMinutes($rdv->service->duree);
+                if (($rdv->dateHeureDebut < $fin && $dateFinRdv > $debut)) {
+                    $dispo = false;
+                    break;
+                }
+            }
+
+        }
+        return $dispo;
     }
 
 

@@ -80,20 +80,6 @@
             <div class="bg-white p-6 rounded-lg shadow-md" x-data="{ editable: false }"
                 @reset-editable.window="editable = false">
                 <form wire:submit.prevent="modifierRdv">
-
-                    <div>
-                        @if ($errors->any())
-                            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
-                                role="alert">
-                                <strong class="font-bold">Erreurs :</strong>
-                                <ul class="mt-1 list-disc list-inside">
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endif
-                    </div>
                     <div>
                         <div x-show="!editable">
                             <p class="block text-sm font-medium text-gray-700">Date:
@@ -107,8 +93,18 @@
                             </p>
                         </div>
                         <div x-show="editable">
-                            <p class="block text-sm font-medium text-gray-700">Date et heure sélectionnées:</p>
+                            <label class="block text-sm font-medium text-gray-700" for="selectedTime">Date et heure actuel du rendez-vous:</label>
                             <p class="mb-5">{{ $formattedDate }}</p>
+
+                            @error('selectedDate')
+                                <div>
+                                    <p class="error text-red-400">{{ $message }}</p>
+                                </div>
+
+                            @enderror
+                            <input type="datetime-local" wire:model="selectedTime" name="selectedTime" min="{{ \Carbon\Carbon::now()->format('Y-m-d\TH:i') }}">
+
+
                         </div>
                     </div>
 
@@ -128,7 +124,7 @@
                     <div class="mt-3">
 
                         <div x-show="!editable">
-                            <label class="block text-sm font-medium text-gray-700" for="client">Service :</label>
+                            <label class="block text-sm font-medium text-gray-700" for="service">Service :</label>
                             <p class="">
                                 @if (isset($rdv))
                                     {{ $rdv->service->nom }}
@@ -157,7 +153,7 @@
 
                     <div class="mt-3">
                         <div x-show="!editable">
-                            <label class="block text-sm font-medium text-gray-700" for="client">Clinique :</label>
+                            <label class="block text-sm font-medium text-gray-700" for="clinique">Clinique :</label>
                             <p class="">
                                 @if (isset($rdv))
                                     {{ $rdv->clinique->nom }}
