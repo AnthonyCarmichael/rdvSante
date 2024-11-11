@@ -70,6 +70,7 @@ class FicheClinique extends Model
         'neuro',
         'motifConsultation',
         'techniques',
+        'age' # important pcq indique a quelle age il a eu sont traitement
     ];
 
     public $timestamps = false;

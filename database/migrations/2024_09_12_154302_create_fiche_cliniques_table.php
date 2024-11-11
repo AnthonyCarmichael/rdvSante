@@ -79,6 +79,7 @@ return new class extends Migration
             $table->text('neuro')->nullable();
             $table->text('motifConsultation')->nullable();
             $table->text('techniques')->nullable();
+            $table->text('age')->nullable(); # text pour permettre au user de mettre 2 semaine ou 2 mois
         });
 
         Schema::table('fiche_cliniques', function (Blueprint $table) {
