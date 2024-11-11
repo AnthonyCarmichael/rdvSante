@@ -8,6 +8,7 @@
                 </th>
                 <th class="border-solid border-b-2 border-black bg-mid-green text-left w-3/8 pl-2">Numéro de membre</th>
                 <th class="border-solid border-b-2 border-black bg-mid-green text-left w-3/8 pl-2">Date d'expiration</th>
+                <th class="border-solid border-b-2 border-black bg-mid-green text-left w-3/8 pl-2">Actions</th>
             </tr>
         </thead>
         @php
@@ -37,6 +38,11 @@
                                 @endforeach
                                 <td class="pl-2"> {{ $op->numMembre }} </td>
                                 <td class="pl-2"> {{ $op->dateExpiration }} </td>
+                                <td><button class="w-5/12 bg-selected-green mx-1 my-1 rounded p-0.5" type="button"
+                                        wire:click="formModif({{$op}}, {{$op->idProfession}}, {{$op->idOrganisation}})">Modifier</button>
+                                    <button class="w-6/12 bg-selected-green mx-0.5 rounded p-0.5" type="button"
+                                        wire:click="">Supprimer</button>
+                                </td>
                             @else
                                 @foreach ($professions as $p)
                                     @if ($p->id == $op->idProfession)
@@ -50,6 +56,11 @@
                                 @endforeach
                                 <td class="pl-2 text-red-600"> {{ $op->numMembre }} </td>
                                 <td class="pl-2 text-red-600"> {{ $op->dateExpiration }} </td>
+                                <td><button class="w-5/12 bg-selected-green mx-1 my-1 rounded p-0.5" type="button"
+                                        wire:click="formModif({{$op}}, {{$op->idProfession}}, {{$op->idOrganisation}})">Modifier</button>
+                                    <button class="w-6/12 bg-selected-green mx-0.5 rounded p-0.5" type="button"
+                                        wire:click="">Supprimer</button>
+                                </td>
                             @endif
 
                         </tr>
@@ -68,6 +79,11 @@
                                 @endforeach
                                 <td class="pl-2"> {{ $op->numMembre }} </td>
                                 <td class="pl-2"> {{ $op->dateExpiration }} </td>
+                                <td><button class="w-5/12 bg-selected-green mx-1 my-1 rounded p-0.5" type="button"
+                                        wire:click="formModif({{$op}}, {{$op->idProfession}}, {{$op->idOrganisation}})">Modifier</button>
+                                    <button class="w-6/12 bg-selected-green mx-0.5 rounded p-0.5" type="button"
+                                        wire:click="">Supprimer</button>
+                                </td>
                             @else
                                 @foreach ($professions as $p)
                                     @if ($p->id == $op->idProfession)
@@ -81,6 +97,11 @@
                                 @endforeach
                                 <td class="pl-2 text-red-600"> {{ $op->numMembre }} </td>
                                 <td class="pl-2 text-red-600"> {{ $op->dateExpiration }} </td>
+                                <td><button class="w-5/12 bg-selected-green mx-1 my-1 rounded p-0.5" type="button"
+                                        wire:click="formModif({{$op}}, {{$op->idProfession}}, {{$op->idOrganisation}})">Modifier</button>
+                                    <button class="w-6/12 bg-selected-green mx-0.5 rounded p-0.5" type="button"
+                                        wire:click="">Supprimer</button>
+                                </td>
                             @endif
                         </tr>
                     @endif
@@ -98,6 +119,11 @@
                         <td class="pl-2"> Aucune </td>
                         <td class="pl-2"> N/A </td>
                         <td class="pl-2">N/A </td>
+                        <td><button class="w-5/12 bg-selected-green mx-1 my-1 rounded p-0.5" type="button"
+                                wire:click="formModif(null, {{$p->id}}, null)">Modifier</button>
+                            <button class="w-6/12 bg-selected-green mx-0.5 rounded p-0.5" type="button"
+                                wire:click="">Supprimer</button>
+                        </td>
                     </tr>
                 @elseif ($cpt % 2 == 1)
                     <tr class="bg-table-green">
@@ -109,6 +135,11 @@
                         <td class="pl-2"> Aucune </td>
                         <td class="pl-2"> N/A </td>
                         <td class="pl-2">N/A </td>
+                        <td><button class="w-5/12 bg-selected-green mx-1 my-1 rounded p-0.5" type="button"
+                                wire:click="formModif(null, {{$pp->idProfession}}, null)">Modifier</button>
+                            <button class="w-6/12 bg-selected-green mx-0.5 rounded p-0.5" type="button"
+                                wire:click="">Supprimer</button>
+                        </td>
                     </tr>
                 @endif
                 <?php $cpt += 1; ?>
@@ -120,7 +151,7 @@
         <button wire:click="formAjout" class="w-2/12 bg-selected-green mx-1 my-2 rounded p-0.5 hide"
             type="button">Ajouter</button>
     </div>
-    <x-modal title="Ajouter un lien à une organisation" name="ajouterOrg" :show="false">
+    <x-modal title="Ajouter une profession et/ou l'organisation liée" name="ajouterOrg" :show="false">
         <ul class="ml-8">
             @error('profession')
                 <li class="list-disc text-red-400">
@@ -160,8 +191,70 @@
                 <label class="text-sm text-right" for="organisation">Organisation:</label>
                 <input wire:model="organisation" type="text" wire:change="triProfession" list="organisation"
                     class="h-8 text-xs ml-2">
-                <datalist wire:model="organisation" id="organisation" wire:change="triProfession" name="organisation"
+                <datalist wire:model="organisation" id="organisation" wire:change="triProfession"
+                    name="organisation" class="h-8 text-xs ml-2">
+                    @foreach ($organisations as $o)
+                        <option data-value={{ $o->id }}> {{ $o->nom }}</option>
+                    @endforeach
+                </datalist>
+
+                <label class="text-sm text-right" for="numMembre">Numéro de membre:</label>
+                <input wire:model="numMembre" type="text" name="numMembre" class="h-8 text-xs ml-2">
+
+                <label class="text-sm text-right" for="dateExpiration">Date d'expiration:</label>
+                <input wire:model="dateExpiration" type="date" name="dateExpiration" class="h-8 text-xs ml-2">
+
+
+            </div>
+            <div class="flex justify-center mt-4">
+                <button class="w-3/12 bg-selected-green mx-1 my-1 rounded p-0.5" type="submit">Confirmer</button>
+            </div>
+
+        </form>
+    </x-modal>
+
+    <x-modal title="Modifier sa profession et/ou l'organisation liée" name="modifierOrg" :show="false">
+        <ul class="ml-8">
+            @error('profession')
+                <li class="list-disc text-red-400">
+
+                    <span class="error text-red-400">{{ $message }}</span>
+
+                </li>
+            @enderror
+            @error('numMembre')
+                <li class="list-disc text-red-400">
+
+                    <span class="error text-red-400">{{ $message }}</span>
+
+                </li>
+            @enderror
+            @error('dateExpiration')
+                <li class="list-disc text-red-400">
+
+                    <span class="error text-red-400">{{ $message }}</span>
+
+                </li>
+            @enderror
+        </ul>
+        <form wire:submit.prevent="modifOrg" class="bg-white p-4 rounded-lg">
+            <div class="grid grid-cols-2 gap-y-4 pr-32">
+
+                <label class="text-sm text-right" for="profession">Profession:</label>
+                <input wire:model="profession" wire:change="triOrg" type="text" list="profession"
                     class="h-8 text-xs ml-2">
+                <datalist wire:model="profession" wire:change="triOrg" id="profession" name="profession"
+                    class="h-8 text-xs ml-2">
+                    @foreach ($professions as $p)
+                        <option data-value={{ $p->id }}> {{ $p->nom }}</option>
+                    @endforeach
+                </datalist>
+
+                <label class="text-sm text-right" for="organisation">Organisation:</label>
+                <input wire:model="organisation" type="text" wire:change="triProfession" list="organisation"
+                    class="h-8 text-xs ml-2">
+                <datalist wire:model="organisation" id="organisation" wire:change="triProfession"
+                    name="organisation" class="h-8 text-xs ml-2">
                     @foreach ($organisations as $o)
                         <option data-value={{ $o->id }}> {{ $o->nom }}</option>
                     @endforeach
