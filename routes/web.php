@@ -102,4 +102,10 @@ Route::post('/users', [UserController::class, 'sendInvitation'])->name('sendInvi
 Route::get('/registration', [UserController::class, 'showRegistrationForm'])->name('invitation.showRegistrationForm');
 Route::post('/registration/complete', [UserController::class, 'completeRegistration'])->name('completeRegistration');
 
+
+Route::get('/dossier/ficheClinique/{id}', function () {
+    return view('dossier/ficheClinique');
+})->middleware('auth')->name('ficheClinique');
+
+
 require __DIR__.'/auth.php';
