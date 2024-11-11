@@ -102,7 +102,7 @@
                             </a>
                         </li>
 
-                        <li class="block {{ (Route::is('')) ? 'text-white bg-green' : ''}} nav-item p4">
+                        <li class="{{ request()->is('dossier/*') ? 'text-white bg-green' : ''}} nav-item p4">
                             <a class="hover:text-white" href="">
                                 <div class="flex justify-center">
                                     <button class="">
