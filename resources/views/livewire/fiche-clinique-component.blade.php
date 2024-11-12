@@ -1,7 +1,7 @@
 <section>
 
     <div>
-        <select id="typeFiche" name="typeFiche" wire:model.live="typeFicheId" class="border-none bg-green m-6">
+        <select id="typeFiche" name="typeFiche" wire:model.live="idTypeFiche" class="border-none bg-green m-6">
             <option class="" value="" selected>Sélectionnez un type de fiche</option>
             @foreach ($typeFiches as $typeFiche )
                 <option  value="{{$typeFiche->id}}">{{$typeFiche->nom}}</option>
@@ -11,7 +11,7 @@
 
 
     <form wire:submit.prevent="ajouterFiche" class="">
-        @if ($typeFicheId)
+        @if ($idTypeFiche)
             <div class="pl-6 pb-6 border-b">
                 <p class="underline underline-offset-2">Type de fiche :</p>
                 <p class="text-sm mt-2">{{$newFiche->typeFiche->nom}}</p>
@@ -25,7 +25,7 @@
         @endif
 
 
-        @switch($typeFicheId)
+        @switch($idTypeFiche)
             @case(1) <!-- Amamnèse -->
 
                 <div class="px-6 py-2 text-sm">

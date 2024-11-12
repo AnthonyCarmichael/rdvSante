@@ -10,7 +10,12 @@ class FicheCliniqueComponent extends Component
 {
     public $dossierClient;
     public $newFiche;
-    public $typeFicheId;
+
+
+    // liste de tout les champs dans la table ficheClinique
+
+    public $dateHeure, $idTypeFiche ;
+
 
     public function mount($dossierClient)
     {
@@ -24,7 +29,7 @@ class FicheCliniqueComponent extends Component
         dd("AjouterFiche",$this);
     }
 
-    public function updatedTypeFicheId($value)
+    public function updatedidTypeFiche($value)
     {
         #dd("updatedTypeFicheId",$this->typeFicheId);
         $this->newFiche = new FicheClinique();
