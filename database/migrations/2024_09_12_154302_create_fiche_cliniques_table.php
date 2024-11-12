@@ -18,6 +18,7 @@ return new class extends Migration
             $table->dateTime('dateHeure');
             $table->bigInteger('idTypeFiche')->unsigned();
             $table->bigInteger('idDossier')->unsigned();
+            $table->bigInteger('idProfession')->unsigned();
 
             $table->string('nom')->nullable();
             $table->text('analyse')->nullable();
@@ -88,6 +89,9 @@ return new class extends Migration
             $table->foreign('idDossier')->references('id')->on('dossiers');
         });
 
+        Schema::table('fiche_cliniques', function (Blueprint $table) {
+            $table->foreign('idProfession')->references('id')->on('professions');
+        });
     }
 
     /**

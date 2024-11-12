@@ -14,6 +14,7 @@ class FicheClinique extends Model
         'dateHeure',
         'idDossier',
         'idTypeFiche',
+        'idProfession',
         'nom',
         'conseilsPrevention',
         'occupation',
@@ -80,6 +81,10 @@ class FicheClinique extends Model
     public function dossier()
     {
         return $this->belongsTo(Dossier::class, 'idDossier');
+    }
+    public function profession()
+    {
+        return $this->belongsTo(Profession::class, 'idProfession');
     }
 
 }
