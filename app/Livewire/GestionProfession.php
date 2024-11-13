@@ -165,6 +165,7 @@ class GestionProfession extends Component
             ]);
         }
 
+
         #ajout lien professionnel et profession
         $profPro = ProfessionProfessionnel::where('idProfession', '=', $this->idProfession)->where('user_id', '=', Auth::user()->id)->get();
         #dd($profPro->value('items'));
@@ -219,8 +220,9 @@ class GestionProfession extends Component
             }
 
         }
+        #dd($this);
 
-        $this->reset(['dateExpiration', 'numMembre', 'idOrganisation', 'idProfession', 'organisation', 'profession']);
+        $this->reset();
         $this->orgPro = OrganisationProfessionnel::where('idProfessionnel', '=', Auth::user()->id)->get();
         $this->idOrg = OrganisationProfessionnel::select('idOrganisation')->where('idProfessionnel', '=', Auth::user()->id)->get();
         $this->org = Organisation::whereIn('id', $this->idOrg)->get();
@@ -342,7 +344,7 @@ class GestionProfession extends Component
         }
 
 
-        $this->reset(['dateExpiration', 'numMembre', 'idOrganisation', 'idProfession', 'organisation', 'profession']);
+        $this->reset();
         $this->orgPro = OrganisationProfessionnel::where('idProfessionnel', '=', Auth::user()->id)->get();
         $this->idOrg = OrganisationProfessionnel::select('idOrganisation')->where('idProfessionnel', '=', Auth::user()->id)->get();
         $this->org = Organisation::whereIn('id', $this->idOrg)->get();
@@ -370,7 +372,7 @@ class GestionProfession extends Component
                 OrganisationProfessionnel::find($this->idOrgProProf)->delete();
             }
         }
-        $this->reset(['dateExpiration', 'numMembre', 'idOrganisation', 'idProfession', 'organisation', 'profession']);
+        $this->reset();
         $this->orgPro = OrganisationProfessionnel::where('idProfessionnel', '=', Auth::user()->id)->get();
         $this->idOrg = OrganisationProfessionnel::select('idOrganisation')->where('idProfessionnel', '=', Auth::user()->id)->get();
         $this->org = Organisation::whereIn('id', $this->idOrg)->get();
