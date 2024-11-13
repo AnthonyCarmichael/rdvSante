@@ -15,9 +15,9 @@ class Dossier extends Component
     public $client;
 
     public $search = '';
-    public $sortField = 'nom';
+    public $sortField = 'id';
     public $sortDirection = 'asc';
-    public $view = 'Fiches';
+    public $view = null;
     public $filtreActif = 1;
 
     public function mount() {
@@ -31,9 +31,9 @@ class Dossier extends Component
     }
 
     public function consulterDossier($id) {
-        $dossier = ModelsDossier::findOrFail($id);
+        $this->dossier = ModelsDossier::findOrFail($id);
 
-        $this->client = $dossier->client;
+        $this->client = $this->dossier->client;
     }
 
     public function resetFilters() {
@@ -54,23 +54,7 @@ class Dossier extends Component
         }
     }
 
-    public function updatedView($id)
-    {
-        $dossier = ModelsDossier::findOrFail($id);
 
-        if ($this->view == "Fiches")
-        {
-            $this->fiches = $dossier->fichesCliniques;
-        }
-        elseif ($this->filtreActif == "Images")
-        {
-            $this->fiches = $dossier->fichesCliniques;
-        }
-        else
-        {
-            $this->fiches = $dossier->fichesCliniques;
-        }
-    }
 
     public function updatedSearch()
     {
@@ -78,6 +62,7 @@ class Dossier extends Component
         {
             $query = Auth::user()->dossiers()->where(function($query) {
                 $query->where('dateCreation', 'like', '%' . $this->search . '%')
+                        ->where('idDossier', 'like', '%' . $this->search . '%')
                     ->orWhereHas('client', function($query) {
                         $query->where('nom', 'like', '%' . $this->search . '%')
                                 ->orWhere('prenom', 'like', '%' . $this->search . '%');
@@ -93,6 +78,7 @@ class Dossier extends Component
         {
             $query = Auth::user()->dossiers()->where(function($query) {
                 $query->where('dateCreation', 'like', '%' . $this->search . '%')
+                        ->where('idDossier', 'like', '%' . $this->search . '%')
                     ->orWhereHas('client', function($query) {
                         $query->where('nom', 'like', '%' . $this->search . '%')
                                 ->orWhere('prenom', 'like', '%' . $this->search . '%');
@@ -107,6 +93,7 @@ class Dossier extends Component
         {
             $query = Auth::user()->dossiers()->where(function($query) {
                 $query->where('dateCreation', 'like', '%' . $this->search . '%')
+                        ->where('idDossier', 'like', '%' . $this->search . '%')
                     ->orWhereHas('client', function($query) {
                         $query->where('nom', 'like', '%' . $this->search . '%')
                                 ->orWhere('prenom', 'like', '%' . $this->search . '%');
@@ -127,6 +114,27 @@ class Dossier extends Component
         }
 
         $this->dossiers = $this->updatedSearch();
+    }
+
+    public function setView($view) {
+        $this->view = $view;
+        if ($this->view == "Fiches")
+        {
+            $this->fiches = $this->dossier->fichesCliniques;
+        }
+        elseif ($this->filtreActif == "Images")
+        {
+            $this->fiches = $this->dossier->fichesCliniques;
+        }
+        else
+        {
+            $this->fiches = $this->dossier->fichesCliniques;
+        }
+    }
+
+    public function updatedview($value)
+    {
+
     }
 
     public function render()

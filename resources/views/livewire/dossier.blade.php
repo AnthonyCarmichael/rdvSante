@@ -1,7 +1,5 @@
 <div class="flex min-h-screen">
-    <x-input-error :messages="$errors->get('clinique')" class="mt-2 mb-4" />
-
-    <div class="w-2/5 p-4 border-r border-gray-300">
+    <div class="w-1/5 p-4 border-r border-gray-300">
         <div class="items-center mb-4">
             <input wire:model.live="search" type="text" placeholder="Rechercher..."
                 class="form-input rounded-md shadow-sm mb-2">
@@ -24,9 +22,9 @@
             <thead>
                 <tr>
                     <th class="border-solid border-b-2 border-black bg-mid-green text-left">
-                        <button wire:click="sortBy('nom')" class="font-bold">
+                        <button wire:click="sortBy('id')" class="font-bold">
                             Dossier
-                            @if ($sortField === 'nom')
+                            @if ($sortField === 'id')
                                 @if ($sortDirection === 'asc')
                                     ↑
                                 @else
@@ -63,7 +61,7 @@
         </table>
     </div>
 
-    <div class="w-3/5 p-4">
+    <div class="w-4/5 p-4">
         <div class="w-full bg-green flex">
             @if ($client)
                 <div class="w-1/2 p-2">
@@ -81,7 +79,7 @@
             @endif
         </div>
 
-        <div class="pt-12 pb">
+        <div class="pt-12 pb-0 mb-0">
             <div class="flex space-x-4 mb-4 bg-green">
                 <button wire:click="setView('Fiches')" class="btn w-1/3 p-2">Fiches du dossier</button>
                 <button wire:click="setView('Images')" class="btn w-1/3 p-2">Images</button>
@@ -90,13 +88,19 @@
         </div>
 
 
-        @if ($view)
+        @if ($view == "Fiches")
+            <div class="flex z-0">
+                <button class="w-2/12 bg-selected-green mx-1 my-2 rounded p-0.5 hide">
+                    Ajouter
+                </button>
+            </div>
+
             <table class="table-auto w-full border-solid border-2 border-gray-400">
                 <thead>
                     <tr>
                         <th class="border-solid border-b-2 border-black bg-mid-green text-left">
                             <button wire:click="sortBy('nom')" class="font-bold">
-                                Dossier
+                                Type fiche
                                 @if ($sortField === 'nom')
                                     @if ($sortDirection === 'asc')
                                         ↑
@@ -109,7 +113,7 @@
 
                         <th class="border-solid border-b-2 border-black bg-mid-green text-left">
                             <button wire:click="sortBy('nom')" class="font-bold">
-                                Clients
+                                Date de dernière modification
                                 @if ($sortField === 'nom')
                                     @if ($sortDirection === 'asc')
                                         ↑
@@ -119,17 +123,37 @@
                                 @endif
                             </button>
                         </th>
+
+                        <th class="border-solid border-b-2 border-black bg-mid-green text-left">Actions</th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    @foreach ($dossiers as $dossier)
-                        <tr
-                            class="@if ($loop->odd) bg-white @else bg-table-green @endif hover:bg-blue-300 cursor-pointer">
-                            <td wire:click="consulterDossier({{ $dossier->id }})" class="w-auto pr-4">{{ $dossier->client->id }}</td>
-                            <td wire:click="consulterDossier({{ $dossier->id }})" class="w-auto pr-4">{{ $dossier->client->nom }} {{ $dossier->client->prenom }}</td>
-                        </tr>
-                    @endforeach
+                    @if ($fiches)
+                        @foreach ($fiches as $fiche)
+                            <tr
+                                class="@if ($loop->odd) bg-white @else bg-table-green @endif hover:bg-blue-300 cursor-pointer">
+                                <td wire:click="consulterDossier({{ $fiche->id }})" class="w-auto pr-4">{{ $fiche->id }}</td>
+                                <td wire:click="consulterDossier({{ $fiche->id }})" class="w-auto pr-4">{{ $fiche->dateHeure }}</td>
+                                <td class="w-auto pr-4 justify-between">
+                                    <button type="button" class="w-auto bg-selected-green mx-1 my-1 rounded p-0.5">
+                                        Modifier
+                                    </button>
+
+                                    @if ($dossier)
+                                        <button type="button" class="w-auto bg-selected-green mx-1 my-1 rounded p-0.5">
+                                            Désactiver
+                                        </button>
+                                    @else
+                                        <button type="button" class="w-auto bg-selected-green mx-1 my-1 rounded p-0.5">
+                                            Activer
+                                        </button>
+                                    @endif
+                                </td>
+                            </tr>
+                        @endforeach
+                    @endif
+
                 </tbody>
             </table>
         @else
