@@ -44,27 +44,6 @@
             </div>
 
             <div class="mb-4">
-                <label for="$selectedIdProfession" class="block text-sm font-medium">Sélectionnez vos
-                    professions</label>
-                <select required id="$selectedIdProfession" wire:model="selectedIdProfession" multiple
-                    class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                    @foreach (\App\Models\Profession::all() as $profession)
-                        <option value="{{ $profession->id }}">{{ $profession->nom }}</option>
-                    @endforeach
-                </select>
-            </div>
-
-            <div>
-                <p class="font-bold">Professions</p>
-                <ul class="ml-6">
-                    @foreach ($idProfession as $profession)
-                        <li>-{{ $profession->nom }}</li>
-                    @endforeach
-
-                </ul>
-            </div>
-
-            <div class="mb-4">
                 <label for="lien" class="block text-sm font-medium">Lien du site</label>
                 <input type="text" id="lien" wire:model="lien"
                     class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">

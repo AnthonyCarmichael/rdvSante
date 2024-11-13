@@ -37,8 +37,8 @@ class UserSeeder extends Seeder
                 soutien de l’équilibre des divers systèmes et structures du corps.",
                 'actif' => true,
                 'lien' => 'https://www.macliniquegenerale.com/daphne-carmichael',
-                'photoProfil' => 'aaa',
-                'signature' => 'aaa',
+                'photoProfil' => '',
+                'signature' => '',
             ],
             [
                 'nom' => 'Maheu-Guay',
@@ -68,8 +68,8 @@ class UserSeeder extends Seeder
                 des symptômes pour agir à la source de ceux-ci.",
                 'actif' => true,
                 'lien' => 'https://www.macliniquegenerale.com/olivier-maheux-guay',
-                'photoProfil' => 'aaa',
-                'signature' => 'aaa',
+                'photoProfil' => '',
+                'signature' => '',
             ],
 
             [
@@ -95,8 +95,8 @@ class UserSeeder extends Seeder
                 vous sélectionnez un service).",
                 'actif' => false,
                 'lien' => 'https://www.macliniquegenerale.com/catherine-yale',
-                'photoProfil' => 'aaa',
-                'signature' => 'aaa',
+                'photoProfil' => '',
+                'signature' => '',
             ]
         ]);
 

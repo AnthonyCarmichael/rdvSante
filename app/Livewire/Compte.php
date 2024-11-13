@@ -2,8 +2,6 @@
 
 namespace App\Livewire;
 
-use App\Models\ProfessionProfessionnel;
-use App\Models\Profession;
 use App\Models\User;
 use App\Models\Service;
 use App\Models\DiponibiliteProfessionnel;
@@ -23,10 +21,7 @@ class Compte extends Component
     public $prenom;
     public $email;
     public $telephone;
-    public $idProfession;
     public $idRole;
-    public $stringProfession;
-    public $selectedIdProfession;
     public $actif;
     public $lien;
     public $description;
@@ -44,7 +39,6 @@ class Compte extends Component
         $this->prenom = $user->prenom;
         $this->email = $user->email;
         $this->telephone = $user->telephone;
-        $this->idProfession = $user->professions()->get();
         $this->idRole = $user->idRole;
         $this->actif = $user->actif;
         $this->lien = $user->lien;
@@ -63,8 +57,21 @@ class Compte extends Component
             'prenom' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'telephone' => 'required|regex:^\(\d{3}\)\s\d{3}-\d{4}^',
-            'photoProfil' => 'image|mimes:jpg,jpeg,png|max:1024',
-            'signature' => 'image|mimes:jpg,jpeg,png|max:1024',
+        ], [
+            'nom.required' => 'Le champ nom est obligatoire.',
+            'nom.string' => 'Le champ nom doit être une chaîne de caractères.',
+            'nom.max' => 'Le champ nom ne doit pas dépasser 255 caractères.',
+
+            'prenom.required' => 'Le champ prénom est obligatoire.',
+            'prenom.string' => 'Le champ prénom doit être une chaîne de caractères.',
+            'prenom.max' => 'Le champ prénom ne doit pas dépasser 255 caractères.',
+
+            'email.required' => 'Le champ email est obligatoire.',
+            'email.email' => 'Le champ email doit être une adresse email valide.',
+            'email.max' => 'Le champ email ne doit pas dépasser 255 caractères.',
+
+            'telephone.required' => 'Le champ téléphone est obligatoire.',
+            'telephone.regex' => 'Le champ téléphone doit être au format (123) 456-7890.',
         ]);
 
         $user = User::find(Auth::user()->id);
@@ -74,11 +81,6 @@ class Compte extends Component
             $user->prenom = $this->prenom;
             $user->email = $this->email;
             $user->telephone = $this->telephone;
-
-            ProfessionProfessionnel::where('user_id', $user->id)->delete();
-            foreach ($this->selectedIdProfession as $profession) {
-                $user->professions()->attach($profession);
-            }
 
             $user->lien = $this->lien;
             $user->description = $this->description;
@@ -99,18 +101,17 @@ class Compte extends Component
                 $user->signature = Storage::url($path);
             }*/
 
-            if ($this->photoProfil) {
+            if ($this->photoProfil != "") {
                 $photoProfilPath = $this->photoProfil->storeAs('photos_profil', 'photoProfil' . $this->prenom . $this->nom . '.jpg', 'public');
                 $user->photoProfil = $photoProfilPath;
             }
 
-            if ($this->signature) {
+            if ($this->signature != "") {
                 $signaturePath = $this->signature->storeAs('signatures', 'signature' . $this->prenom . $this->nom . '.jpg', 'public');
                 $user->signature = $signaturePath;
             }
 
             $user->save();
-            $this->idProfession = $user->professions()->get();
 
             session()->flash('message', 'Profil mis à jour avec succès.');
         }
@@ -120,7 +121,6 @@ class Compte extends Component
 
         if (strlen($this->telephone) == 10) {
             $this->telephone = '('.substr($this->telephone, 0, 3).') '.substr($this->telephone, 3, 3).'-'.substr($this->telephone, 6);
-
         }
     }
 
@@ -129,23 +129,16 @@ class Compte extends Component
         $service = false;
         $clinique = false;
         $dispo = false;
-        $profession = false;
         $photo = false;
         $signatureUser = false;
 
         $services = Service::all();
-        $professionProfessionnel = ProfessionProfessionnel::all();
         $dispoProfessionnel = DiponibiliteProfessionnel::all();
         $cliniqueProfessionnel = CliniqueProfessionnel::all();
 
         foreach ($services as $s) {
             if ($s->idProfessionnel == Auth::user()->id) {
                 $service = true;
-            }
-        }
-        foreach ($professionProfessionnel as $p) {
-            if ($p->user_id == Auth::user()->id) {
-                $profession = true;
             }
         }
         foreach ($dispoProfessionnel as $d) {
@@ -175,7 +168,7 @@ class Compte extends Component
             $signature = true;
         }
 
-        if (!$photo || !$service || !$clinique || !$description || !$dispo || !$profession || !$signatureUser) {
+        if (!$photo || !$service || !$clinique || !$description || !$dispo || !$signatureUser) {
             session()->flash('message', 'Impossible d\'activer votre compte. Vérifier que toutes les conditions mentionner à l\'acceuil sont remplies.');
         } else {
             User::find(Auth::user()->id)->update([
