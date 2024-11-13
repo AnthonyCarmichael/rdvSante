@@ -12,11 +12,11 @@ class FicheCliniqueComponent extends Component
 {
     public $dossierClient; //idDossier a mettre dans newFiche
     public $newFiche;
+    public $idTypeFiche;
 
 
-    // liste de tout les champs dans la table ficheClinique
+    // liste de tout les champs qu'on veut reset lorsque on change de type
     public $dateHeure,
-        $idTypeFiche,
         $idProfession,
         #$nom,
         $analyse,
@@ -172,7 +172,7 @@ class FicheCliniqueComponent extends Component
                 $newFiche->autre = $this->autre;
                 dd("Anamnèse",$this, $newFiche);
                 */
-                dd($this, $newFiche);
+                dd('Manque la redirection vers dossier en passant le id du dossier sélectionné',$this, $newFiche);
                 break;
 
             case 2: // Éval nourrisson
@@ -192,6 +192,7 @@ class FicheCliniqueComponent extends Component
     public function updatedidTypeFiche($value)
     {
         #dd("updatedTypeFicheId",$this->typeFicheId);
+        $this->resetExcept(['dossierClient', 'idTypeFiche']);
         $this->newFiche = new FicheClinique();
         $this->newFiche->idTypeFiche = $value;
 
