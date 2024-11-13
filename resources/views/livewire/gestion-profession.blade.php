@@ -145,6 +145,9 @@
                 <?php $cpt += 1; ?>
             @endif
         @endforeach
+        @php
+            $orgProFound == false;
+        @endphp
     </table>
 
     <div class="flex justify-end">
