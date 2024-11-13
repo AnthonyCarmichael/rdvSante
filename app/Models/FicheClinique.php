@@ -11,6 +11,7 @@ class FicheClinique extends Model
 
     // Ajoute 'idDossier' à la propriété fillable
     protected $fillable = [
+        "analyse",
         'dateHeure',
         'idDossier',
         'idTypeFiche',
