@@ -17,7 +17,7 @@ class Dossier extends Model
 
     public function professionnels(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'dossier_professionnels','idDossier','user_id');
+        return $this->belongsToMany(User::class, 'dossier_professionnels','idDossier','idProfessionnel');
     }
 
     public function client()
@@ -28,6 +28,11 @@ class Dossier extends Model
     public function dossier_professionnels()
     {
         return $this->hasMany(DossierProfessionnel::class, 'idDossier', 'id');
+    }
+
+    public function fichesCliniques()
+    {
+        return $this->hasMany(FicheClinique::class, 'idDossier', 'id');
     }
 
 }

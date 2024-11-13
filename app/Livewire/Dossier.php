@@ -11,6 +11,7 @@ class Dossier extends Component
 {
     public $dossiers;
     public $dossier;
+    public $fiches;
     public $client;
 
     public $search = '';
@@ -32,12 +33,7 @@ class Dossier extends Component
     public function consulterDossier($id) {
         $dossier = ModelsDossier::findOrFail($id);
 
-        $this->client = Client::find($dossier->idClient);
-    }
-
-    public function setView($view)
-    {
-        $this->view = $view;
+        $this->client = $dossier->client;
     }
 
     public function resetFilters() {
@@ -48,13 +44,31 @@ class Dossier extends Component
     public function filtreDossier()
     {
         if ($this->filtreActif == 1) {
-            $this->dossiers = Auth::user()->dossiers()->get();   #->where('actif', true)->get();
+            $this->dossiers = Auth::user()->dossiers;   #->where('actif', true)->get();
         }
         elseif ($this->filtreActif == 0) {
-            $this->dossiers = Auth::user()->dossiers()->get();   #->where('actif', false)->get();
+            $this->dossiers = Auth::user()->dossiers;   #->where('actif', false)->get();
         }
         elseif ($this->filtreActif == 2) {
-            $this->dossiers = Auth::user()->dossiers()->get();
+            $this->dossiers = Auth::user()->dossiers;
+        }
+    }
+
+    public function updatedView($id)
+    {
+        $dossier = ModelsDossier::findOrFail($id);
+
+        if ($this->view == "Fiches")
+        {
+            $this->fiches = $dossier->fichesCliniques;
+        }
+        elseif ($this->filtreActif == "Images")
+        {
+            $this->fiches = $dossier->fichesCliniques;
+        }
+        else
+        {
+            $this->fiches = $dossier->fichesCliniques;
         }
     }
 

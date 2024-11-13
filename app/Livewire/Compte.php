@@ -101,12 +101,12 @@ class Compte extends Component
                 $user->signature = Storage::url($path);
             }*/
 
-            if ($this->photoProfil != "") {
+            if ($this->photoProfil) {
                 $photoProfilPath = $this->photoProfil->storeAs('photos_profil', 'photoProfil' . $this->prenom . $this->nom . '.jpg', 'public');
                 $user->photoProfil = $photoProfilPath;
             }
 
-            if ($this->signature != "") {
+            if ($this->signature) {
                 $signaturePath = $this->signature->storeAs('signatures', 'signature' . $this->prenom . $this->nom . '.jpg', 'public');
                 $user->signature = $signaturePath;
             }

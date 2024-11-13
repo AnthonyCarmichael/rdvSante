@@ -37,9 +37,9 @@
                     </th>
 
                     <th class="border-solid border-b-2 border-black bg-mid-green text-left">
-                        <button wire:click="sortBy('nocivique')" class="font-bold">
+                        <button wire:click="sortBy('nom')" class="font-bold">
                             Clients
-                            @if ($sortField === 'nocivique')
+                            @if ($sortField === 'nom')
                                 @if ($sortDirection === 'asc')
                                     ↑
                                 @else
@@ -81,14 +81,60 @@
             @endif
         </div>
 
-        <div class="py-12">
+        <div class="pt-12 pb">
             <div class="flex space-x-4 mb-4 bg-green">
                 <button wire:click="setView('Fiches')" class="btn w-1/3 p-2">Fiches du dossier</button>
                 <button wire:click="setView('Images')" class="btn w-1/3 p-2">Images</button>
                 <button wire:click="setView('Documents')" class="btn w-1/3 p-2">Documents</button>
             </div>
-
-            <!-- navigation -->
         </div>
+
+
+        @if ($view)
+            <table class="table-auto w-full border-solid border-2 border-gray-400">
+                <thead>
+                    <tr>
+                        <th class="border-solid border-b-2 border-black bg-mid-green text-left">
+                            <button wire:click="sortBy('nom')" class="font-bold">
+                                Dossier
+                                @if ($sortField === 'nom')
+                                    @if ($sortDirection === 'asc')
+                                        ↑
+                                    @else
+                                        ↓
+                                    @endif
+                                @endif
+                            </button>
+                        </th>
+
+                        <th class="border-solid border-b-2 border-black bg-mid-green text-left">
+                            <button wire:click="sortBy('nom')" class="font-bold">
+                                Clients
+                                @if ($sortField === 'nom')
+                                    @if ($sortDirection === 'asc')
+                                        ↑
+                                    @else
+                                        ↓
+                                    @endif
+                                @endif
+                            </button>
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach ($dossiers as $dossier)
+                        <tr
+                            class="@if ($loop->odd) bg-white @else bg-table-green @endif hover:bg-blue-300 cursor-pointer">
+                            <td wire:click="consulterDossier({{ $dossier->id }})" class="w-auto pr-4">{{ $dossier->client->id }}</td>
+                            <td wire:click="consulterDossier({{ $dossier->id }})" class="w-auto pr-4">{{ $dossier->client->nom }} {{ $dossier->client->prenom }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        @else
+            <p>Sélectionnez un client dans le tableau pour voir ses informations.</p>
+        @endif
+
     </div>
 </div>
