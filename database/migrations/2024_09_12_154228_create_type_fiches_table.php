@@ -16,7 +16,7 @@ return new class extends Migration
             $table->bigIncrements('id'); // Clé primaire automatiquement créée avec "bigIncrements()".
             // "usigned()" nécessaire pour éventuellement pouvoir définir une clé étrangère sur cette colonne.
             $table->string('nom');
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->bigInteger('idLangue')->unsigned();
         });
 

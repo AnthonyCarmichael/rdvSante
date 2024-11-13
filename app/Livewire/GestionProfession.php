@@ -8,6 +8,7 @@ use App\Models\OrganisationProfession;
 use App\Models\ProfessionProfessionnel;
 use App\Models\Profession;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
 
@@ -33,6 +34,7 @@ class GestionProfession extends Component
     public $idOrganisationProf;
     public $lienOrgPro;
     public $idOrgProProf;
+    public $prevOrg;
 
 
     public function render()
@@ -69,33 +71,33 @@ class GestionProfession extends Component
         'dateExpiration.required_with' => 'Veuillez entrer une date d\'expiration.',
     ];
 
-    public function triOrg(): void
-    {
-
-        if ($this->profession == null) {
-            $this->organisations = Organisation::all();
-        } else {
-            $proChoisi = Profession::select('id')->where('nom', '=', $this->profession);
-            $orgPro = OrganisationProfession::select('idOrganisation')->where('idProfession', '=', $proChoisi);
-            $this->organisations = Organisation::whereIn('id', $orgPro)->get();
-        }
-    }
-
-    public function triProfession(): void
-    {
-
-        if ($this->organisation == null) {
-            $this->professions = Profession::all();
-        } else {
-            $orgChoisi = Organisation::select('id')->where('nom', '=', $this->organisation);
-            $orgPro = OrganisationProfession::select('idProfession')->where('idOrganisation', '=', $orgChoisi);
-            $this->professions = Profession::whereIn('id', $orgPro)->get();
-        }
-    }
 
     public function formAjout()
     {
         $this->dispatch('open-modal', name: 'ajouterOrg');
+    }
+
+    public function formSup($lienOrgPro, $idProf, $idOrg)
+    {
+        $this->lienOrgPro = $lienOrgPro;
+        $this->idProfession = $idProf;
+        $this->professionPro = ProfessionProfessionnel::select('id')->where('idProfession', '=', $this->idProfession)->where('user_id', '=', Auth::user()->id)->get();
+        #$lienProfPro = ProfessionProfessionnel::find($this->professionPro);
+        $this->idProfessionPro = $this->professionPro[0]->id;
+
+        $this->idOrganisation = $idOrg;
+        if ($this->idOrganisation != null) {
+            $organisationProf = OrganisationProfession::select('id')->where('idOrganisation', '=', $this->idOrganisation)->where('idProfession', '=', $this->idProfession)->get();
+            #$lienOrgProf = OrganisationProfession::find($organisationProf);
+            #dd($lienOrgProf[0]->id);
+            $this->idOrganisationProf = $organisationProf[0]->id;
+
+            $OrgProProf = OrganisationProfessionnel::select('id')->where('idProfessionnel', '=', Auth::user()->id)->where('idProfession', '=', $this->idProfession)->where('idOrganisation', '=', $this->idOrganisation)->get();
+            #$lien = OrganisationProfessionnel::find($OrgProProf);
+            #dd($lien[0]->numMembre);
+            $this->idOrgProProf = $OrgProProf[0]->id;
+        }
+        $this->dispatch('open-modal', name: 'supprimerOrg');
     }
 
     public function formModif($lienOrgPro, $idProf, $idOrg)
@@ -109,6 +111,7 @@ class GestionProfession extends Component
         $this->idProfessionPro = $lienProfPro[0]->id;
         $this->profession = $profession->nom;
         $this->idOrganisation = $idOrg;
+        $this->prevOrg = $idOrg;
         $this->numMembre = null;
         $this->dateExpiration = null;
         $this->organisation = null;
@@ -146,9 +149,6 @@ class GestionProfession extends Component
                 'nom' => $this->profession,
             ]);
         }
-        if ($this->profession == " ") {
-            $this->idProfession = null;
-        }
 
         $organisationFound = False;
         $this->organisations = Organisation::all();
@@ -164,40 +164,62 @@ class GestionProfession extends Component
                 'nom' => $this->organisation,
             ]);
         }
-        if ($this->organisation == " ") {
-            $this->idOrganisation = null;
-        }
 
         #ajout lien professionnel et profession
         $profPro = ProfessionProfessionnel::where('idProfession', '=', $this->idProfession)->where('user_id', '=', Auth::user()->id)->get();
         #dd($profPro->value('items'));
-        if ($profPro->value('items') == null) {
-            ProfessionProfessionnel::create([
-                'idProfession' => $this->idProfession,
-                'user_id' => Auth::user()->id
-            ]);
+        if (ProfessionProfessionnel::where('idProfession', '=', $this->idProfession)->where('user_id', '=', Auth::user()->id)->exists()) {
+            $this->idProfessionPro = $profPro[0]->id;
+
+        } else {
+            if ($this->idProfessionPro == null) {
+                ProfessionProfessionnel::create([
+                    'idProfession' => $this->idProfession,
+                    'user_id' => Auth::user()->id
+                ]);
+            }
         }
 
-        #ajout lien organisation et profession
-        $orgProf = OrganisationProfession::where('idProfession', '=', $this->idProfession)->where('idOrganisation', '=', $this->idOrganisation)->get();
-        if ($orgProf->value('items') == null) {
-            OrganisationProfession::create([
-                'idProfession' => $this->idProfession,
-                'idOrganisation' => $this->idOrganisation
-            ]);
+
+
+        if ($this->idOrganisation != null) {
+            #ajout lien organisation et profession
+            $organisationProf = OrganisationProfession::where('idOrganisation', '=', $this->idOrganisation)->where('idProfession', '=', $this->idProfession)->get();
+
+            #dd(empty($lienOrgProf->value('items')));
+            if (OrganisationProfession::where('idOrganisation', '=', $this->idOrganisation)->where('idProfession', '=', $this->idProfession)->exists()) {
+                $this->idOrganisationProf = $organisationProf[0]->id;
+
+            } else {
+                if ($this->idOrganisationProf == null) {
+                    OrganisationProfession::create([
+                        'idProfession' => $this->idProfession,
+                        'idOrganisation' => $this->idOrganisation
+                    ]);
+                }
+            }
+
+
+            #ajout lien professionnel, profession et organisation
+            $OrgProProf = OrganisationProfessionnel::where('idProfessionnel', '=', Auth::user()->id)->where('idProfession', '=', $this->idProfession)->where('idOrganisation', '=', $this->idOrganisation)->get();
+
+            if (OrganisationProfessionnel::where('idProfessionnel', '=', Auth::user()->id)->where('idProfession', '=', $this->idProfession)->where('idOrganisation', '=', $this->idOrganisation)->exists()) {
+                $this->idOrgProProf = $OrgProProf[0]->id;
+
+            } else {
+                if ($this->idOrgProProf == null && $this->organisation != null) {
+                    OrganisationProfessionnel::create([
+                        'idProfession' => $this->idProfession,
+                        'idOrganisation' => $this->idOrganisation,
+                        'idProfessionnel' => Auth::user()->id,
+                        'numMembre' => $this->numMembre,
+                        'dateExpiration' => $this->dateExpiration
+                    ]);
+                }
+            }
+
         }
 
-        #ajout lien professionnel, profession et organisation
-        $orgProfPro = OrganisationProfessionnel::where('idProfession', '=', $this->idProfession)->where('idOrganisation', '=', $this->idOrganisation)->where('idProfessionnel', '=', Auth::user()->id)->get();
-        if ($orgProfPro->value('items') == null && $this->organisation != null) {
-            OrganisationProfessionnel::create([
-                'idProfession' => $this->idProfession,
-                'idOrganisation' => $this->idOrganisation,
-                'idProfessionnel' => Auth::user()->id,
-                'numMembre' => $this->numMembre,
-                'dateExpiration' => $this->dateExpiration
-            ]);
-        }
         $this->reset(['dateExpiration', 'numMembre', 'idOrganisation', 'idProfession', 'organisation', 'profession']);
         $this->orgPro = OrganisationProfessionnel::where('idProfessionnel', '=', Auth::user()->id)->get();
         $this->idOrg = OrganisationProfessionnel::select('idOrganisation')->where('idProfessionnel', '=', Auth::user()->id)->get();
@@ -249,33 +271,42 @@ class GestionProfession extends Component
         }
 
         #modif lien professionnel et profession
-        if ($this->idProfessionPro == null) {
-            $profPro = ProfessionProfessionnel::where('idProfession', '=', $this->idProfession)->where('user_id', '=', Auth::user()->id)->get();
-            #dd($profPro->value('items'));
-            if ($profPro->value('items') == null) {
-                ProfessionProfessionnel::create([
-                    'idProfession' => $this->idProfession,
-                    'user_id' => Auth::user()->id
-                ]);
-            }
-        } else {
+        $profPro = ProfessionProfessionnel::where('idProfession', '=', $this->idProfession)->where('user_id', '=', Auth::user()->id)->get();
+        #dd($profPro->value('items'));
+
+        #dd($lienProfPro[0]->id);
+        if (ProfessionProfessionnel::where('idProfession', '=', $this->idProfession)->where('user_id', '=', Auth::user()->id)->exists()) {
+
+            $this->idProfessionPro = $profPro[0]->id;
+
             ProfessionProfessionnel::find($this->idProfessionPro)->update([
                 'idProfession' => $this->idProfession,
                 'user_id' => Auth::user()->id,
             ]);
+
+        } else {
+            $this->idProfessionPro = ProfessionProfessionnel::insertGetId([
+                'idProfession' => $this->idProfession,
+                'user_id' => Auth::user()->id
+            ]);
         }
 
         #modif lien organisation et profession
-        if ($this->idOrganisationProf == null) {
-            $orgProf = OrganisationProfession::where('idProfession', '=', $this->idProfession)->where('idOrganisation', '=', $this->idOrganisation)->get();
-            if ($orgProf->value('items') == null) {
-                OrganisationProfession::create([
-                    'idProfession' => $this->idProfession,
-                    'idOrganisation' => $this->idOrganisation
-                ]);
-            }
-        } else {
+        $organisationProf = OrganisationProfession::where('idOrganisation', '=', $this->idOrganisation)->where('idProfession', '=', $this->idProfession)->get();
+
+        #dd(empty($lienOrgProf->value('items')));
+        if (OrganisationProfession::where('idOrganisation', '=', $this->idOrganisation)->where('idProfession', '=', $this->idProfession)->exists()) {
+
+            $this->idOrganisationProf = $organisationProf[0]->id;
+
             OrganisationProfession::find($this->idOrganisationProf)->update([
+                'idProfession' => $this->idProfession,
+                'idOrganisation' => $this->idOrganisation
+            ]);
+
+        } else {
+
+            $this->idOrganisationProf = OrganisationProfession::insertGetId([
                 'idProfession' => $this->idProfession,
                 'idOrganisation' => $this->idOrganisation
             ]);
@@ -284,9 +315,22 @@ class GestionProfession extends Component
 
 
         #modif lien professionnel, profession et organisation
-        if ($this->idOrgProProf == null) {
-            $orgProfPro = OrganisationProfessionnel::where('idProfession', '=', $this->idProfession)->where('idOrganisation', '=', $this->idOrganisation)->where('idProfessionnel', '=', Auth::user()->id)->get();
-            if ($orgProfPro->value('items') == null && $this->organisation != null) {
+        $OrgProProf = OrganisationProfessionnel::where('idProfessionnel', '=', Auth::user()->id)->where('idProfession', '=', $this->idProfession)->where('idOrganisation', '=', $this->prevOrg)->get();
+
+        if (OrganisationProfessionnel::where('idProfessionnel', '=', Auth::user()->id)->where('idProfession', '=', $this->idProfession)->where('idOrganisation', '=', $this->prevOrg)->exists()) {
+            $this->idOrgProProf = $OrgProProf[0]->id;
+            OrganisationProfessionnel::find($this->idOrgProProf)->update([
+                'idProfession' => $this->idProfession,
+                'idOrganisation' => $this->idOrganisation,
+                'idProfessionnel' => Auth::user()->id,
+                'numMembre' => $this->numMembre,
+                'dateExpiration' => $this->dateExpiration
+            ]);
+
+
+        } else {
+            if ($this->idOrgProProf == null && $this->organisation != null) {
+
                 OrganisationProfessionnel::create([
                     'idProfession' => $this->idProfession,
                     'idOrganisation' => $this->idOrganisation,
@@ -295,17 +339,37 @@ class GestionProfession extends Component
                     'dateExpiration' => $this->dateExpiration
                 ]);
             }
-        } else {
-            OrganisationProfessionnel::find($this->idOrgProProf)->update([
-                'idProfession' => $this->idProfession,
-                'idOrganisation' => $this->idOrganisation,
-                'idProfessionnel' => Auth::user()->id,
-                'numMembre' => $this->numMembre,
-                'dateExpiration' => $this->dateExpiration
-            ]);
         }
 
 
+        $this->reset(['dateExpiration', 'numMembre', 'idOrganisation', 'idProfession', 'organisation', 'profession']);
+        $this->orgPro = OrganisationProfessionnel::where('idProfessionnel', '=', Auth::user()->id)->get();
+        $this->idOrg = OrganisationProfessionnel::select('idOrganisation')->where('idProfessionnel', '=', Auth::user()->id)->get();
+        $this->org = Organisation::whereIn('id', $this->idOrg)->get();
+        $this->professions = Profession::all();
+        $this->professionsPro = ProfessionProfessionnel::where('user_id', '=', Auth::user()->id)->get();
+        $this->organisations = Organisation::all();
+        $this->dispatch('close-modal');
+    }
+
+    public function supprimerOrg($sup)
+    {
+        if ($sup == "pro") {
+
+            #dd(OrganisationProfessionnel::where('idProfessionnel', '=', Auth::user()->id)->where('idProfession', '=', $this->idProfession)->count());
+            if ($this->idProfessionPro != null && OrganisationProfessionnel::where('idProfessionnel', '=', Auth::user()->id)->where('idProfession', '=', $this->idProfession)->count() <= 1) {
+                ProfessionProfessionnel::find($this->idProfessionPro)->delete();
+            }
+
+            if ($this->idOrgProProf != null) {
+                OrganisationProfessionnel::find($this->idOrgProProf)->delete();
+            }
+        } elseif ($sup == "org") {
+
+            if ($this->idOrgProProf != null) {
+                OrganisationProfessionnel::find($this->idOrgProProf)->delete();
+            }
+        }
         $this->reset(['dateExpiration', 'numMembre', 'idOrganisation', 'idProfession', 'organisation', 'profession']);
         $this->orgPro = OrganisationProfessionnel::where('idProfessionnel', '=', Auth::user()->id)->get();
         $this->idOrg = OrganisationProfessionnel::select('idOrganisation')->where('idProfessionnel', '=', Auth::user()->id)->get();
