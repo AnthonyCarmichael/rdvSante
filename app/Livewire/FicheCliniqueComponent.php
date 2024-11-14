@@ -138,7 +138,6 @@ class FicheCliniqueComponent extends Component
                     'autre' => $this->autre,
                     'observation' => $this->observation,
                     'commentaire' => $this->commentaire,
-                    'conseilsPrevention' => $this->conseilsPrevention,
                 ]);
 
 
