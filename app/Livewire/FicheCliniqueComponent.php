@@ -70,12 +70,22 @@ class FicheCliniqueComponent extends Component
         $episiotomie,
         $alimentation,
         $digestion,
+        $sommeil,
         $pleurs,
         $motricite,
         $neuro,
         $motifConsultation,
         $techniques,
-        $age;
+        $age,
+        $succ,
+        $foulard,
+        $marcheAuto,
+        $grasping,
+        $redressement,
+        $babinski,
+        $moro,
+        $toniqueAsym,
+        $tonusActifPassif;
 
 
     public function mount($dossierClient)
