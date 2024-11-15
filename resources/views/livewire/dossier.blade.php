@@ -55,7 +55,7 @@
             @if ($client)
                 <div class="w-1/2 p-2">
                     <h1 class="text-xl font-bold mb-2">{{ $client->prenom }} {{ $client->nom }}</h1>
-                    <p class="text-x ml-10">{{ $client->ddn }}</p>
+                    <p class="text-x">Date de naissance : {{ $client->ddn ?? 'Non complétée' }}</p>
                 </div>
 
                 <div class="w-1/2 p-2">
@@ -114,13 +114,29 @@
                 <button class="w-2/12 bg-selected-green mx-1 my-2 rounded p-0.5 hide">
                     Ajouter
                 </button>
+
+                <input wire:model.live="searchFiche" type="text" placeholder="Rechercher..."
+                class="form-input rounded-md shadow-sm mb-2 ml-auto">
             </div>
 
             <table class="table-auto w-full border-solid border-2 border-gray-400">
                 <thead>
                     <tr>
                         <th class="border-solid border-b-2 border-black bg-mid-green text-left">
-                            <button wire:click="sortBy('nom')" class="font-bold">
+                            <button wire:click="sortByFiche('id')" class="font-bold">
+                                Numéro
+                                @if ($sortField === 'id')
+                                    @if ($sortDirection === 'asc')
+                                        ↑
+                                    @else
+                                        ↓
+                                    @endif
+                                @endif
+                            </button>
+                        </th>
+
+                        <th class="border-solid border-b-2 border-black bg-mid-green text-left">
+                            <button wire:click="sortByFiche('nom')" class="font-bold">
                                 Type fiche
                                 @if ($sortField === 'nom')
                                     @if ($sortDirection === 'asc')
@@ -133,9 +149,9 @@
                         </th>
 
                         <th class="border-solid border-b-2 border-black bg-mid-green text-left">
-                            <button wire:click="sortBy('nom')" class="font-bold">
+                            <button wire:click="sortByFiche('dateHeure')" class="font-bold">
                                 Date de dernière modification
-                                @if ($sortField === 'nom')
+                                @if ($sortField === 'dateHeure')
                                     @if ($sortDirection === 'asc')
                                         ↑
                                     @else
@@ -155,6 +171,7 @@
                             <tr
                                 class="@if ($loop->odd) bg-white @else bg-table-green @endif hover:bg-blue-300 cursor-pointer">
                                 <td wire:click="consulterDossier({{ $fiche->id }})" class="w-auto pr-4">{{ $fiche->id }}</td>
+                                <td wire:click="consulterDossier({{ $fiche->id }})" class="w-auto pr-4">{{ $fiche->TypeFiche->nom }}</td>
                                 <td wire:click="consulterDossier({{ $fiche->id }})" class="w-auto pr-4">{{ $fiche->dateHeure }}</td>
                                 <td class="w-auto pr-4 justify-between">
                                     <button type="button" class="w-auto bg-selected-green mx-1 my-1 rounded p-0.5">
