@@ -25,8 +25,6 @@ class FicheCliniqueController extends Controller
     {
         $dossierClient = Dossier::where('id', $id)->first();
 
-        $profeshHasAcces = false;
-
 
         if ( $dossierClient != null ) {
 

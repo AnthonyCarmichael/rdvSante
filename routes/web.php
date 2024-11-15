@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\DossierController;
 use App\Http\Controllers\FicheCliniqueController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\ProfileController;
@@ -89,6 +90,9 @@ Route::get('/clinique', function () {
 Route::get('/dossier', function () {
     return view('dossier');
 })->middleware('auth')->name('dossier');
+
+Route::get('/dossier/{id}',[DossierController::class, 'show'])->middleware('auth')->name('dossierClient');
+
 
 Route::get('/profil/disponibilites', function () {
     return view('profil/disponibilites');
