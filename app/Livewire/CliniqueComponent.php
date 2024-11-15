@@ -66,7 +66,6 @@ class CliniqueComponent extends Component {
             ->where('actif', true)
             ->orderBy($this->sortField, $this->sortDirection);
 
-
             $this->foundCliniques = $query->get();
         }
         elseif ($this->filtreActif == 0)
