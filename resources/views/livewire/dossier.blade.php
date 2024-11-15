@@ -111,7 +111,7 @@
 
         @if ($view == "Fiches")
             <div class="flex z-0">
-                <button class="w-2/12 bg-selected-green mx-1 my-2 rounded p-0.5 hide">
+                <button wire:click="redirectAjouterFiche" class="w-2/12 bg-selected-green mx-1 my-2 rounded p-0.5 hide">
                     Ajouter
                 </button>
             </div>
@@ -157,19 +157,13 @@
                                 <td wire:click="consulterDossier({{ $fiche->id }})" class="w-auto pr-4">{{ $fiche->id }}</td>
                                 <td wire:click="consulterDossier({{ $fiche->id }})" class="w-auto pr-4">{{ $fiche->dateHeure }}</td>
                                 <td class="w-auto pr-4 justify-between">
-                                    <button type="button" class="w-auto bg-selected-green mx-1 my-1 rounded p-0.5">
+                                    <button wire:click="redirectModifierFiche({{$fiche->id}})" type="button" class="w-auto bg-selected-green mx-1 my-1 rounded p-0.5">
                                         Modifier
                                     </button>
 
-                                    @if ($dossier)
-                                        <button type="button" class="w-auto bg-selected-green mx-1 my-1 rounded p-0.5">
-                                            Désactiver
-                                        </button>
-                                    @else
-                                        <button type="button" class="w-auto bg-selected-green mx-1 my-1 rounded p-0.5">
-                                            Activer
-                                        </button>
-                                    @endif
+                                    <button wire:click="supprimerFiche({{$fiche->id}})" type="button" class="w-auto bg-selected-green mx-1 my-1 rounded p-0.5">
+                                        Supprimer
+                                    </button>
                                 </td>
                             </tr>
                         @endforeach

@@ -181,7 +181,7 @@ class FicheCliniqueComponent extends Component
                 $newFiche->autre = $this->autre;
                 dd("Anamnèse",$this, $newFiche);
                 */
-                
+
                 break;
 
             case 2: // Éval nourrisson
@@ -277,9 +277,7 @@ class FicheCliniqueComponent extends Component
                 break;
         }
 
-        $this->resetExcept(['dossierClient']);
-        $this->newFiche = new FicheClinique();
-        $this->newFiche->idTypeFiche = $this->idTypeFiche;
+        return redirect()->route('dossierClient',$this->dossierClient);
     }
 
     public function updatedidTypeFiche($value)

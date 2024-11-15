@@ -137,9 +137,19 @@ class Dossier extends Component
         }
     }
 
-    public function updatedview($value)
-    {
 
+    public function redirectAjouterFiche() {
+        return redirect()->route('ficheClinique',$this->dossier);
+    }
+
+    public function redirectModifierFiche($idFiche) {
+        dd("modifier fiche",$idFiche);
+        //return redirect()->route('ficheClinique',$this->dossier);
+    }
+
+    public function supprimerFiche($idFiche) {
+        dd("supprimer fiche",$idFiche);
+        //return redirect()->route('ficheClinique',$this->dossier);
     }
 
     public function render()
