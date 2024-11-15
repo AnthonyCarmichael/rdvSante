@@ -15,8 +15,11 @@ class Dossier extends Component
     public $client;
 
     public $search = '';
+    public $searchFiche = '';
     public $sortField = 'id';
+    public $sortFieldFiche = 'id';
     public $sortDirection = 'asc';
+    public $sortDirectionFiche = 'asc';
     public $view = null;
     public $filtreActif = 1;
 
@@ -110,6 +113,23 @@ class Dossier extends Component
         }
     }
 
+    public function updatedSearchFiche()
+    {
+        $query = $this->dossier->fichesCliniques()
+            ->where(function ($query) {
+                $query->where('id', 'like', '%' . $this->searchFiche . '%')
+                    ->orWhere('dateHeure', 'like', '%' . $this->searchFiche . '%')
+                    ->orWhereHas('typeFiche', function ($query) {
+                        $query->where('nom', 'like', '%' . $this->searchFiche . '%');
+                    });
+            })
+            ->orderBy($this->sortField, $this->sortDirection);
+
+        $this->fiches = $query->get();
+        #dd($this->fiches);
+    }
+
+
     public function sortBy($field) {
         if ($this->sortField === $field) {
             $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
@@ -118,7 +138,18 @@ class Dossier extends Component
             $this->sortDirection = 'asc';
         }
 
-        $this->dossiers = $this->updatedSearch();
+        $this->updatedSearch();
+    }
+
+    public function sortByFiche($field) {
+        if ($this->sortField === $field) {
+            $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+            $this->sortField = $field;
+            $this->sortDirection = 'asc';
+        }
+
+        $this->updatedSearchFiche();
     }
 
     public function setView($view) {
