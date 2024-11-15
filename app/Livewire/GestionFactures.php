@@ -20,6 +20,8 @@ use App\Models\Rdv;
 
 use App\Models\Dossier;
 
+use App\Models\Taxe;
+
 use App\Models\DossierProfessionnel;
 
 use Carbon\Carbon;
@@ -32,6 +34,7 @@ class GestionFactures extends Component
     public $services;
     public $remboursements;
     public $clients;
+    public $montant;
     public $typeTransactions;
     public $moyenPaiements;
     public $rdvs;
@@ -44,6 +47,10 @@ class GestionFactures extends Component
     public $pdf;
     public $dateDebut;
     public $dateFin;
+    public $tps;
+    public $tvq;
+    public $rdv;
+    public $restePayer;
     public function render()
     {
         return view('livewire.gestion-factures');
@@ -53,6 +60,7 @@ class GestionFactures extends Component
     {
         $this->rdvs = Rdv::all();
         $this->transactions = Transaction::all();
+        $this->moyenPaiements = MoyenPaiement::all();
         #$this->remboursements = Transaction::where('idTypeTransaction', '=', '2')->get();
         $dossierPro = DossierProfessionnel::select('idDossier')->where('idProfessionnel', '=', Auth::user()->id);
         $dossier = Dossier::select('idClient')->whereIn('id', $dossierPro);
@@ -60,7 +68,8 @@ class GestionFactures extends Component
         $this->services = Service::all();
         #$this->typeTransactions = TypeTransaction::all();
         #$this->moyenPaiements = MoyenPaiement::all();
-
+        $this->tvq = Taxe::find(2);
+        $this->tps = Taxe::find(1);
         $this->dossiers = Dossier::all();
 
         $this->filtrePaiement();
@@ -98,12 +107,7 @@ class GestionFactures extends Component
     public function filtrePaiement()
     {
         $demain = Carbon::now('America/Toronto')->addDay();
-        /*$Date = Carbon::now('America/Toronto');
-        $DernierMois = Carbon::now('America/Toronto')->startOfMonth();
-        $TroisDernierMois = Carbon::now('America/Toronto')->startOfMonth()->subMonths(2);
-        $SixDernierMois = Carbon::now('America/Toronto')->startOfMonth()->subMonths(5);
-        $DerniereAnnee = Carbon::now('America/Toronto')->startOfYear();*/
-        #if ($this->filtrePeriode == 1) {
+
         if ($this->filtreClient != null) {
             if ($this->dateDebut != null && $this->dateFin == null) {
                 $client = Client::select('id')->whereRaw("CONCAT(`prenom`, ' ', `nom`) = ?", [$this->filtreClient]);
@@ -147,56 +151,36 @@ class GestionFactures extends Component
             }
 
         }
-        /*} else if ($this->filtrePeriode == 2) {
-            if ($this->filtreClient != null) {
-                $client = Client::select('id')->whereRaw("CONCAT(`prenom`, ' ', `nom`) = ?", [$this->filtreClient]);
-                $dossier = Dossier::select('id')->where('idClient', '=', $client);
-                $this->rdvs = Rdv::where('idDossier', '=', $dossier)->whereDate('dateHeureDebut', '>=', $DernierMois)->whereDate('dateHeureDebut', '<', $demain)->get();
 
-            } else {
+    }
 
-                $this->rdvs = Rdv::whereDate('dateHeureDebut', '>=', $DernierMois)->whereDate('dateHeureDebut', '<', $demain)->get();
+    public function addPaiement($idRdv, $reste)
+    {
+        $this->restePayer = $reste;
+        $this->rdv = Rdv::find($idRdv);
+        $this->dispatch('open-modal', name: 'ajouterPaiement');
+    }
 
-            }
-            } else if ($this->filtrePeriode == 3) {
-            if ($this->filtreClient != null) {
-                $client = Client::select('id')->whereRaw("CONCAT(`prenom`, ' ', `nom`) = ?", [$this->filtreClient]);
-                $dossier = Dossier::select('id')->where('idClient', '=', $client);
-                $this->rdvs = Rdv::where('idDossier', '=', $dossier)->whereDate('dateHeureDebut', '>=', $TroisDernierMois)->whereDate('dateHeureDebut', '<', $demain)->get();
-            } else {
+    public function ajoutPaiement()
+    {
+        $this->validate([
+            'montant' => 'required',
+        ], [
+            'montant.required' => 'Veuillez entrer un montant.',
+        ]);
 
-                $this->rdvs = Rdv::whereDate('dateHeureDebut', '>=', $TroisDernierMois)->whereDate('dateHeureDebut', '<', $demain)->get();
+        $Date = Carbon::now('America/Toronto');
 
-            }
-            } else if ($this->filtrePeriode == 4) {
-            if ($this->filtreClient != null) {
-                $client = Client::select('id')->whereRaw("CONCAT(`prenom`, ' ', `nom`) = ?", [$this->filtreClient]);
-                $dossier = Dossier::select('id')->where('idClient', '=', $client);
-                $this->rdvs = Rdv::where('idDossier', '=', $dossier)->whereDate('dateHeureDebut', '>=', $SixDernierMois)->whereDate('dateHeureDebut', '<', $demain)->get();
-            } else {
+        Transaction::create([
+            'montant' => $this->montant,
+            'dateHeure' => $Date,
+            'idRdv' => $this->rdv->id,
+            'idTypeTransaction' => 1,
+            'idMoyenPaiement' => $this->moyenPaiement
 
-                $this->rdvs = Rdv::whereDate('dateHeureDebut', '>=', $SixDernierMois)->whereDate('dateHeureDebut', '<', $demain)->get();
-
-            }
-            } else if ($this->filtrePeriode == 5) {
-            if ($this->filtreClient != null) {
-                $client = Client::select('id')->whereRaw("CONCAT(`prenom`, ' ', `nom`) = ?", [$this->filtreClient]);
-                $dossier = Dossier::select('id')->where('idClient', '=', $client);
-                $this->rdvs = Rdv::where('idDossier', '=', $dossier)->whereDate('dateHeureDebut', '>=', $DerniereAnnee)->whereDate('dateHeureDebut', '<', $demain)->get();
-            } else {
-
-                $this->rdvs = Rdv::whereDate('dateHeureDebut', '>=', $DerniereAnnee)->whereDate('dateHeureDebut', '<', $demain)->get();
-
-            }
-            } else if ($this->filtrePeriode == 6) {
-            if ($this->filtreClient != null) {
-                $client = Client::select('id')->whereRaw("CONCAT(`prenom`, ' ', `nom`) = ?", [$this->filtreClient]);
-                $dossier = Dossier::select('id')->where('idClient', '=', $client);
-                $this->rdvs = Rdv::where('idDossier', '=', $dossier)->whereDate('dateHeureDebut', '<', $demain)->get();
-            } else {
-                $this->rdvs = Rdv::whereDate('dateHeureDebut', '<', $demain)->get();
-            }
-             }*/
+        ]);
+        $this->transactions = Transaction::all();
+        $this->dispatch('close-modal');
     }
 
 }
