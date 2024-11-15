@@ -142,6 +142,11 @@ class Dossier extends Component
         return redirect()->route('ficheClinique',$this->dossier);
     }
 
+    public function consulterFiche($idFiche) {
+        #dd("consulter fiche",$idFiche);
+        return redirect()->route('ficheCliniqueConsulter',$idFiche);
+    }
+
     public function redirectModifierFiche($idFiche) {
         dd("modifier fiche",$idFiche);
         //return redirect()->route('ficheClinique',$this->dossier);

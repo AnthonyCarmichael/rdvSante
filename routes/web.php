@@ -116,6 +116,7 @@ Route::post('/registration/complete', [UserController::class, 'completeRegistrat
 
 
 Route::get('/dossier/ficheClinique/{id}',[FicheCliniqueController::class, 'create'])->middleware('auth')->name('ficheClinique');
+Route::get('/dossier/ficheClinique/consulter/{id}',[FicheCliniqueController::class, 'show'])->middleware('auth')->name('ficheCliniqueConsulter');
 
 
 require __DIR__.'/auth.php';

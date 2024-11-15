@@ -1,24 +1,25 @@
 <section>
 
-    <div>
-        <select id="typeFiche" name="typeFiche" wire:model.live="idTypeFiche" class="border-none bg-green m-6">
-            <option class="" value="" selected>Sélectionnez un type de fiche</option>
-            @foreach ($typeFiches as $typeFiche )
-                <option  value="{{$typeFiche->id}}">{{$typeFiche->nom}}</option>
-            @endforeach
-        </select>
-    </div>
+    @if ($typeForm == "ajouter")
+        <div>
+            <select id="typeFiche" name="typeFiche" wire:model.live="idTypeFiche" class="border-none bg-green m-6">
+                <option class="" value="" selected>Sélectionnez un type de fiche</option>
+                @foreach ($typeFiches as $typeFiche )
+                    <option  value="{{$typeFiche->id}}">{{$typeFiche->nom}}</option>
+                @endforeach
+            </select>
+        </div>
+    @endif
 
-
-    <form wire:submit.prevent="ajouterFiche" class="">
-        @if ($newFiche->typeFiche)
+    <form wire:submit.prevent="{{$typeForm}}Fiche" class="">
+        @if ($fiche->typeFiche)
             <div class="px-6 pb-6 border-b">
                 <p class="underline underline-offset-2">Type de fiche :</p>
-                <p class="text-sm mt-2">{{$newFiche->typeFiche->nom}}</p>
+                <p class="text-sm mt-2">{{$fiche->typeFiche->nom}}</p>
 
-                @if ($newFiche->typeFiche->description != null)
+                @if ($fiche->typeFiche->description != null)
                     <p class="mt-4 underline underline-offset-2">Description :</p>
-                    <p class="text-sm mt-2">{{$newFiche->typeFiche->description}}</p>
+                    <p class="text-sm mt-2">{{$fiche->typeFiche->description}}</p>
                 @endif
             </div>
 
@@ -477,7 +478,7 @@
                     </div>
                 </div>
 
-               
+
                 <div class=" text-sm flex">
 
                     <div class="w-1/2 px-6 pb-2 pt-4">
@@ -657,7 +658,7 @@
             @case(3) <!-- Suivi -->
 
                 <div class=" text-sm flex">
-                    
+
                     <div class="w-1/2 px-6 pb-2 pt-4">
                         <fieldset class="bg-gray-200 rounded text-gray-700">
                             <label for="depuisDerniereSeance" class="text-lg ml-2 mb-4">Depuis la dernière séance</label>
@@ -669,11 +670,11 @@
                             </div>
 
                         </fieldset>
-                    </div>  
+                    </div>
 
 
                     <div class="w-1/2 px-6 pb-2">
-                        
+
                         <fieldset class="bg-gray-200 rounded text-gray-700">
                             <legend class="text-lg relative top-4 ml-2 mb-4 ">NRC</legend>
 

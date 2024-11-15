@@ -55,9 +55,32 @@ class FicheCliniqueController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(FicheClinique $ficheClinique)
+    public function show($ficheCliniqueId)
     {
-        //
+        $ficheSelected = FicheClinique::find($ficheCliniqueId);
+
+        #dd($fiche->dossier->client->prenom);
+
+
+        // revoir la suite
+
+        $dossierClient = Dossier::find($ficheSelected->dossier->id);
+
+
+        if ( $dossierClient != null ) {
+
+
+            foreach ($dossierClient->professionnels as $professionnel) {
+
+                if($professionnel->id == Auth::user()->id) {
+                    return view('dossier/ficheClinique',  ['dossierClient' => $dossierClient, 'ficheSelected' => $ficheSelected]);
+                }
+            }
+
+
+        }
+
+        abort(404);
     }
 
     /**

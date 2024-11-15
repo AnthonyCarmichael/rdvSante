@@ -9,7 +9,12 @@
             </div>
 
             <div class="bg-dark-green text-white w-full">
-                @livewire('FicheCliniqueComponent', ['dossierClient' => $dossierClient])
+                @if (isset($ficheSelected))
+                    @livewire('FicheCliniqueComponent', ['dossierClient' => $dossierClient, 'ficheSelected' => $ficheSelected])
+                @else
+                    @livewire('FicheCliniqueComponent', ['dossierClient' => $dossierClient])
+                @endif
+
             </div>
 
         </div>

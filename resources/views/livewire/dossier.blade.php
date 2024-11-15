@@ -154,9 +154,9 @@
                         @foreach ($fiches as $fiche)
                             <tr
                                 class="@if ($loop->odd) bg-white @else bg-table-green @endif hover:bg-blue-300 cursor-pointer">
-                                <td wire:click="consulterDossier({{ $fiche->id }})" class="w-auto pr-4">{{ $fiche->id }}</td>
-                                <td wire:click="consulterDossier({{ $fiche->id }})" class="w-auto pr-4">{{ $fiche->dateHeure }}</td>
-                                <td class="w-auto pr-4 justify-between">
+                                <td wire:click="consulterFiche({{ $fiche->id }})" class="w-auto pr-4">{{ $fiche->id }}</td>
+                                <td wire:click="consulterFiche({{ $fiche->id }})" class="w-auto pr-4">{{ $fiche->dateHeure }}</td>
+                                <td wire:click="consulterFiche({{ $fiche->id }})" class="w-auto pr-4 justify-between">
                                     <button wire:click="redirectModifierFiche({{$fiche->id}})" type="button" class="w-auto bg-selected-green mx-1 my-1 rounded p-0.5">
                                         Modifier
                                     </button>
