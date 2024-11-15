@@ -81,7 +81,8 @@ class FicheClinique extends Model
         'babinski',
         'moro',
         'toniqueAsym',
-        'tonusActifPassif'
+        'tonusActifPassif',
+        'depuisDerniereSeance'
     ];
 
     public $timestamps = false;

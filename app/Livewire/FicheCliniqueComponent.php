@@ -85,14 +85,14 @@ class FicheCliniqueComponent extends Component
         $babinski,
         $moro,
         $toniqueAsym,
-        $tonusActifPassif;
+        $tonusActifPassif,
+        $depuisDerniereSeance;
 
 
     public function mount($dossierClient)
     {
         $this->dossierClient = $dossierClient;
         $this->newFiche = new FicheClinique();
-
     }
 
     public function ajouterFiche()
@@ -181,21 +181,105 @@ class FicheCliniqueComponent extends Component
                 $newFiche->autre = $this->autre;
                 dd("Anamnèse",$this, $newFiche);
                 */
-                dd('Manque la redirection vers dossier en passant le id du dossier sélectionné',$this, $newFiche);
+                
                 break;
 
             case 2: // Éval nourrisson
-                dd("Éval nourrisson",$this);
+                $newFiche = FicheClinique::create([
+                    'dateHeure' => Carbon::now(),
+                    'idDossier' => $this->dossierClient->id,
+                    'idTypeFiche' => $this->idTypeFiche,
+                    'idProfession' => Profession::where('nom','Ostéopathe D.O')->value('id'),
+                    #'nom' => $this->nom,
+                    'analyse' => $this->analyse,
+                    'conseilsPrevention' => $this->conseilsPrevention,
+                    'nbreSemGestation' => $this->nbreSemGestation,
+                    'apgar' => $this->apgar,
+                    'poid' => $this->poid,
+                    'taille' => $this->taille,
+                    'perCranien' => $this->perCranien,
+                    'maladieALaNaissance' => $this->maladieALaNaissance,
+                    'medicaments' => $this->medicaments,
+                    'nomsParent' => $this->nomsParent,
+                    'historiqueGrossesse' => $this->historiqueGrossesse,
+                    'historiqueAccouchement' => $this->historiqueAccouchement,
+                    'cesarienne' => $this->cesarienne,
+                    'forceps' => $this->forceps,
+                    'ventouse' => $this->ventouse,
+                    'episiotomie' => $this->episiotomie,
+                    'alimentation' => $this->alimentation,
+                    'digestion' => $this->digestion,
+                    'sommeil' => $this->sommeil,
+                    'pleurs' => $this->pleurs,
+                    'motricite' => $this->motricite,
+                    'neuro' => $this->neuro,
+                    'motifConsultation' => $this->motifConsultation,
+                    'techniques' => $this->techniques,
+                    'age' => $this->age,
+                    'succ' => $this->succ,
+                    'foulard' => $this->foulard,
+                    'marcheAuto' => $this->marcheAuto,
+                    'grasping' => $this->grasping,
+                    'redressement' => $this->redressement,
+                    'babinski' => $this->babinski,
+                    'moro' => $this->moro,
+                    'toniqueAsym' => $this->toniqueAsym,
+                    'tonusActifPassif' => $this->tonusActifPassif
+                ]);
                 break;
 
             case 3: // Suivi SOAPIE
-                dd("Suivi SOAPIE",$this);
+                $newFiche = FicheClinique::create([
+                    'dateHeure' => Carbon::now(),
+                    'idDossier' => $this->dossierClient->id,
+                    'idTypeFiche' => $this->idTypeFiche,
+                    'idProfession' => Profession::where('nom','Ostéopathe D.O')->value('id'),
+                    #'nom' => $this->nom,
+                    'analyse' => $this->analyse,
+                    'conseilsPrevention' => $this->conseilsPrevention,
+                    'occupation' => $this->occupation,
+                    'loisirs' => $this->loisirs,
+                    'lateralite' => $this->lateralite,
+                    'diagnostic' => $this->diagnostic,
+                    'medic' => $this->medic,
+                    'contreIndication' => $this->contreIndication,
+                    'rced' => $this->rced,
+                    'localIrr' => $this->localIrr,
+                    'douleur' => $this->douleur,
+                    'fa' => $this->fa,
+                    'fd' => $this->fd,
+                    'nuit' => $this->nuit,
+                    'sa' => $this->sa,
+                    'investigation' => $this->investigation,
+                    'trauma' => $this->trauma,
+                    'chx' => $this->chx,
+                    'familiaux' => $this->familiaux,
+                    'cardioVasculaire' => $this->cardioVasculaire,
+                    'pulmonaire' => $this->pulmonaire,
+                    'snc' => $this->snc,
+                    'orl' => $this->orl,
+                    'digestif' => $this->digestif,
+                    'gynecoAndrologie' => $this->gynecoAndrologie,
+                    'urinaire' => $this->urinaire,
+                    'hs' => $this->hs,
+                    'psychologique' => $this->psychologique,
+                    'msk' => $this->msk,
+                    'dermato' => $this->dermato,
+                    'autre' => $this->autre,
+                    'observation' => $this->observation,
+                    'commentaire' => $this->commentaire,
+                    'depuisDerniereSeance' => $this->depuisDerniereSeance,
+                ]);
                 break;
 
             default:
                 # code...
                 break;
         }
+
+        $this->resetExcept(['dossierClient']);
+        $this->newFiche = new FicheClinique();
+        $this->newFiche->idTypeFiche = $this->idTypeFiche;
     }
 
     public function updatedidTypeFiche($value)

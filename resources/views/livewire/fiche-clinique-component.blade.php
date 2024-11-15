@@ -11,7 +11,7 @@
 
 
     <form wire:submit.prevent="ajouterFiche" class="">
-        @if ($idTypeFiche)
+        @if ($newFiche->typeFiche)
             <div class="px-6 pb-6 border-b">
                 <p class="underline underline-offset-2">Type de fiche :</p>
                 <p class="text-sm mt-2">{{$newFiche->typeFiche->nom}}</p>
@@ -655,6 +655,156 @@
                 @break
 
             @case(3) <!-- Suivi -->
+
+                <div class=" text-sm flex">
+                    
+                    <div class="w-1/2 px-6 pb-2 pt-4">
+                        <fieldset class="bg-gray-200 rounded text-gray-700">
+                            <label for="depuisDerniereSeance" class="text-lg ml-2 mb-4">Depuis la dernière séance</label>
+
+                            <div class="p-4">
+                                <textarea wire:model="depuisDerniereSeance" name="depuisDerniereSeance" id="depuisDerniereSeance"
+                                class="mt-1 text-black block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                rows="5"></textarea>
+                            </div>
+
+                        </fieldset>
+                    </div>  
+
+
+                    <div class="w-1/2 px-6 pb-2">
+                        
+                        <fieldset class="bg-gray-200 rounded text-gray-700">
+                            <legend class="text-lg relative top-4 ml-2 mb-4 ">NRC</legend>
+
+                            <div class="flex m-4 justify-between items-center">
+                                <label class="block text-sm w-1/3" for="rced">RC et ED</label>
+                                <textarea wire:model="rced" name="rced" id="rced"
+                                class="w-2/3 mt-1 text-black block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                rows="1"></textarea>
+                            </div>
+
+                            <div class="flex  m-4 justify-between items-center">
+                                <label class="block text-sm w-1/3" for="localIrr">Local et irr</label>
+                                <textarea wire:model="localIrr" name="localIrr" id="localIrr"
+                                class="w-2/3 mt-1 text-black block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                rows="1"></textarea>
+                            </div>
+                            <div class="flex  m-4 justify-between items-center">
+                                <label class="block text-sm w-1/3" for="douleur">Douleur (Type, intensité, évolution)</label>
+                                <textarea wire:model="douleur" name="douleur" id="douleur"
+                                class="w-2/3 mt-1 text-black block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                rows="1"></textarea>
+                            </div>
+                            <div class="flex  m-4 justify-between items-center">
+                                <label class="block text-sm w-1/3" for="fa">FA</label>
+                                <textarea wire:model="fa" name="fa" id="fa"
+                                class="w-2/3 mt-1 text-black block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                rows="1"></textarea>
+                            </div>
+                            <div class="flex  m-4 justify-between items-center">
+                                <label class="block text-sm w-1/3" for="fd">FD</label>
+                                <textarea wire:model="fd" name="fd" id="fd"
+                                class="w-2/3 mt-1 text-black block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                rows="1"></textarea>
+                            </div>
+                            <div class="flex  m-4 justify-between items-center">
+                                <label class="block text-sm w-1/3" for="nuit">Nuit</label>
+                                <textarea wire:model="nuit" name="nuit" id="nuit"
+                                class="w-2/3 mt-1 text-black block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                rows="1"></textarea>
+                            </div>
+                            <div class="flex  m-4 justify-between items-center">
+                                <label class="block text-sm w-1/3" for="sa">SA</label>
+                                <textarea wire:model="sa" name="sa" id="sa"
+                                class="w-2/3 mt-1 text-black block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                rows="1"></textarea>
+                            </div>
+                            <div class="flex  m-4 justify-between items-center">
+                                <label class="block text-sm w-1/3" for="investigation">Investigations</label>
+                                <textarea wire:model="investigation" name="investigation" id="investigation"
+                                class="w-2/3 mt-1 text-black block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                rows="1"></textarea>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+
+
+                <div class=" text-sm flex">
+
+                    <div class="w-1/2 px-6 pb-2 pt-4">
+                        <fieldset class="bg-gray-200 rounded text-gray-700">
+                            <label for="observation" class="text-lg ml-2 mb-4">Observation</label>
+
+                            <div class="p-4">
+                                <textarea wire:model="observation" name="observation" id="observation"
+                                class="mt-1 text-black block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                rows="5"></textarea>
+                            </div>
+
+                        </fieldset>
+
+
+                    </div>
+
+
+                    <div class="w-1/2 pr-6 pb-2 pt-4">
+                        <fieldset class="bg-gray-200 rounded text-gray-700">
+                            <label for="analyse" class="text-lg ml-2 mb-4">Analyse et Tk</label>
+
+                            <div class="p-4">
+                                <textarea wire:model="analyse" name="analyse" id="analyse"
+                                class="mt-1 text-black block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                rows="5"></textarea>
+                            </div>
+
+                        </fieldset>
+
+
+                    </div>
+                </div>
+
+                <div class=" text-sm flex">
+
+                    <div class="w-1/2 px-6 pb-2 pt-4">
+                        <fieldset class="bg-gray-200 rounded text-gray-700">
+                            <label for="conseilsPrevention" class="text-lg ml-2 mb-4">Conseil de prévention</label>
+
+                            <div class="p-4">
+                                <textarea wire:model="conseilsPrevention" name="conseilsPrevention" id="conseilsPrevention"
+                                class="mt-1 text-black block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                rows="5"></textarea>
+                            </div>
+
+                        </fieldset>
+
+
+                    </div>
+
+
+                    <div class="w-1/2 pr-6 pb-2 pt-4">
+                        <fieldset class="bg-gray-200 rounded text-gray-700">
+                            <label for="commentaire" class="text-lg ml-2 mb-4">Autres / Ajouts / Commentaires</label>
+
+                            <div class="p-4">
+                                <textarea wire:model="commentaire" name="commentaire" id="commentaire"
+                                class="mt-1 text-black block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                rows="5"></textarea>
+                            </div>
+
+                        </fieldset>
+
+
+                    </div>
+                </div>
+
+
+                <div class="pl-6 pb-6 flex justify-center">
+
+                    <button type="submit" class="mt-4 px-4 py-2 bg-green text-white rounded hover:bg-darker-green">Enregistrer</button>
+
+                </div>
 
                 @break
             @default

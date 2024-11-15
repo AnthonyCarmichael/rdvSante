@@ -90,7 +90,7 @@ return new class extends Migration
             $table->text('moro')->nullable();
             $table->text('toniqueAsym')->nullable();
             $table->text('tonusActifPassif')->nullable();
-
+            $table->text('depuisDerniereSeance')->nullable();
 
 
         });
