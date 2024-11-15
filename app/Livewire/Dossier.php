@@ -20,7 +20,7 @@ class Dossier extends Component
     public $view = null;
     public $filtreActif = 1;
 
-    public function mount() {
+    public function mount($dossierClient = null) {
         $this->filtreDossier();
 
         /*$this->dossiers = Auth::user()->dossiers()->get();
@@ -28,6 +28,14 @@ class Dossier extends Component
         foreach ($this->dossiers as $d) {
             dd($d);
         }*/
+        if ($dossierClient) {
+            $this->dossier = ModelsDossier::findOrFail($dossierClient->id);
+
+            $this->client = $this->dossier->client;
+
+            $this->view = "Fiches";
+            $this->fiches = $this->dossier->fichesCliniques;
+        }
     }
 
     public function consulterDossier($id) {

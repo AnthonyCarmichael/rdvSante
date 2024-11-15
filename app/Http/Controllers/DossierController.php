@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Dossier;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DossierController extends Controller
 {
@@ -34,9 +35,23 @@ class DossierController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Dossier $dossier)
+    public function show($id)
     {
-        //
+        $dossierClient = Dossier::where('id', $id)->first();
+
+
+        if ( $dossierClient != null ) {
+
+
+            foreach ($dossierClient->professionnels as $professionnel) {
+
+                if($professionnel->id == Auth::user()->id) {
+                    return view('dossier',  ['dossierClient' => $dossierClient]);
+                }
+            }
+        }
+
+        abort(404);
     }
 
     /**
