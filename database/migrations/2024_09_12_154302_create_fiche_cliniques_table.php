@@ -73,12 +73,26 @@ return new class extends Migration
             $table->boolean('episiotomie')->nullable();
             $table->text('alimentation')->nullable();
             $table->text('digestion')->nullable();
+            $table->text('sommeil')->nullable();
             $table->text('pleurs')->nullable();
             $table->text('motricite')->nullable();
             $table->text('neuro')->nullable();
             $table->text('motifConsultation')->nullable();
             $table->text('techniques')->nullable();
             $table->text('age')->nullable(); # text pour permettre au user de mettre 2 semaine ou 2 mois
+            # Section a ajouter pcq oublier initialement:
+            $table->text('succ')->nullable();
+            $table->text('foulard')->nullable();
+            $table->text('marcheAuto')->nullable();
+            $table->text('grasping')->nullable();
+            $table->text('redressement')->nullable();
+            $table->text('babinski')->nullable();
+            $table->text('moro')->nullable();
+            $table->text('toniqueAsym')->nullable();
+            $table->text('tonusActifPassif')->nullable();
+            $table->text('depuisDerniereSeance')->nullable();
+
+
         });
 
         Schema::table('fiche_cliniques', function (Blueprint $table) {

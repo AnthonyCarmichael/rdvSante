@@ -65,12 +65,24 @@ class FicheClinique extends Model
         'episiotomie',
         'alimentation',
         'digestion',
+        'sommeil',
         'pleurs',
         'motricite',
         'neuro',
         'motifConsultation',
         'techniques',
-        'age' # important pcq indique a quelle age il a eu sont traitement
+        'age', # important pcq indique a quelle age il a eu sont traitement
+        # Section oublié:
+        'succ',
+        'foulard',
+        'marcheAuto',
+        'grasping',
+        'redressement',
+        'babinski',
+        'moro',
+        'toniqueAsym',
+        'tonusActifPassif',
+        'depuisDerniereSeance'
     ];
 
     public $timestamps = false;
