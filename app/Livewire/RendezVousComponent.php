@@ -35,6 +35,7 @@ class RendezVousComponent extends Component
     public $moyenPaiement = 1;
     public $montant;
     public $dossiers;
+    public $restePayer;
 
     # Facturation
     public $sousMenuConsult;
@@ -282,9 +283,9 @@ class RendezVousComponent extends Component
         $this->sousMenuConsult = $sousMenu;
     }
 
-    public function addPaiement() {
+    public function addPaiement($reste) {
+        $this->restePayer = $reste;
         $this->dispatch('open-modal', name: 'ajouterPaiement');
-
     }
 
     public function ajoutPaiement() {
