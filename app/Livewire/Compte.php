@@ -102,12 +102,12 @@ class Compte extends Component
             }*/
 
             if ($this->photoProfil != "") {
-                $photoProfilPath = $this->photoProfil->storeAs('photos_profil', 'photoProfil' . $this->prenom . $this->nom . '.jpg', 'public');
+                $photoProfilPath = $this->photoProfil->storeAs('photos_profil', 'photoProfil' . $this->prenom . $this->nom . '.png', 'public');
                 $user->photoProfil = $photoProfilPath;
             }
 
             if ($this->signature != "") {
-                $signaturePath = $this->signature->storeAs('signatures', 'signature' . $this->prenom . $this->nom . '.jpg', 'public');
+                $signaturePath = $this->signature->storeAs('signatures', 'signature' . $this->prenom . $this->nom . '.png', 'public');
                 $user->signature = $signaturePath;
             }
 

@@ -14,7 +14,7 @@ $heureRdv = Carbon::parse($rdv->dateHeureDebut)->translatedFormat('H:m');
     <p>Bonjour {{ $client->prenom }}, </p>
     <p>Votre reçu pour votre rendez-vous avec {{ $user->prenom }} {{ $user->nom }} le {{ $dateRdv }} à
         {{ $heureRdv }} est attaché à ce courriel.</p>
-    <p>{{ $user->prenom }} {{ $user->nom }}, signature</p>
+    <p>{{ $user->prenom }} {{ $user->nom }}, {{$profession->nom}}</p>
     <p> {{ $clinique->nom }} </p>
     <p> {{ $user->telephone }} {{ $user->email }} </p>
 </body>

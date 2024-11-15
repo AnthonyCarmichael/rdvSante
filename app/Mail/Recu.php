@@ -7,6 +7,7 @@ use App\Models\Client;
 use App\Models\Rdv;
 use App\Models\User;
 use App\Models\Clinique;
+use App\Models\Profession;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
@@ -20,7 +21,7 @@ class Recu extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct(public Client $client, public Rdv $rdv, public User $user, public Clinique $clinique)
+    public function __construct(public Client $client, public Rdv $rdv, public User $user, public Clinique $clinique, public Profession $profession)
     {
         //
     }
