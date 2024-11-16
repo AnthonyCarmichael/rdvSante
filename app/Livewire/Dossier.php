@@ -4,15 +4,22 @@ namespace App\Livewire;
 
 use App\Models\Client;
 use App\Models\Dossier as ModelsDossier;
+use App\Models\Fichier;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class Dossier extends Component
 {
+    use WithFileUploads;
+
     public $dossiers;
     public $dossier;
     public $fiches;
     public $client;
+
+    public $image;
+    public $nomImage;
 
     public $search = '';
     public $searchFiche = '';
@@ -129,6 +136,39 @@ class Dossier extends Component
         #dd($this->fiches);
     }
 
+    public function openModalAjouterImage() {
+        #$this->resetExcept('dossiers','fiches');
+        $this->dispatch('open-modal', name : 'ajouterImage');
+    }
+
+    public function ajouterImage() {
+        $this->validate([
+            'nomImage' => 'required|string|max:255',
+            'image' => 'image|mimes:jpg,jpeg,png|max:1024',
+        ], [
+            'nomImage.required' => 'Le champ Nom de l\'image * est obligatoire.',
+            'nomImage.string' => 'Le champ Nom de l\'image * doit être une chaîne de caractères.',
+            'nomImage.max' => 'Le champ Nom de l\'image * ne doit pas dépasser 255 caractères.',
+
+            'image.image' => 'Le fichier de l\'image doit être une image.',
+            'image.mimes' => 'L\'image doit être au format JPG, JPEG ou PNG.',
+            'image.max' => 'L\'image ne doit pas dépasser 1 Mo.',
+        ]);
+
+        if ($this->image) {
+            $imagePath = $this->image->storeAs('Images', 'image' . $this->nomImage . '.png', 'public');
+        }
+
+        Fichier::create([
+            'nom' => $this->nomImage,
+            'dateHeureAjout' => now(),
+            'lien' => $imagePath,
+            'idDossier' => $this->dossier->id,
+        ]);
+
+        $this->resetExcept('dossiers', 'dossier', 'view', 'client');
+        $this->dispatch('close-modal');
+    }
 
     public function sortBy($field) {
         if ($this->sortField === $field) {
