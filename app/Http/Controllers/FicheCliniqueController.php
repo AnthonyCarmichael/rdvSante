@@ -63,23 +63,17 @@ class FicheCliniqueController extends Controller
 
 
         // revoir la suite
-
-        $dossierClient = Dossier::find($ficheSelected->dossier->id);
-
-
-        if ( $dossierClient != null ) {
-
-
-            foreach ($dossierClient->professionnels as $professionnel) {
-
-                if($professionnel->id == Auth::user()->id) {
-                    return view('dossier/ficheClinique',  ['dossierClient' => $dossierClient, 'ficheSelected' => $ficheSelected]);
+        if ($ficheSelected != null) {
+            $dossierClient = Dossier::find($ficheSelected->dossier->id);
+            if ( $dossierClient != null ) {
+                foreach ($dossierClient->professionnels as $professionnel) {
+    
+                    if($professionnel->id == Auth::user()->id) {
+                        return view('dossier/ficheClinique',  ['dossierClient' => $dossierClient, 'ficheSelected' => $ficheSelected]);
+                    }
                 }
             }
-
-
         }
-
         abort(404);
     }
 

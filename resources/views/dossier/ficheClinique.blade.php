@@ -1,4 +1,9 @@
 <x-admin-layout>
+    @if (session('success'))
+        <div class="alert alert-success text-dark-green text-2xl mt-4 ml-4 text-center">
+            {{ session('success') }}
+        </div>
+    @endif
     <div class="py-12">
         <div class="container mx-auto p-4">
             <div class="bg-dark-green text-white w-full p-6 border-b">
