@@ -147,10 +147,10 @@ class FicheCliniqueComponent extends Component
             $this->nomsParent = $this->fiche->nomsParent;
             $this->historiqueGrossesse = $this->fiche->historiqueGrossesse;
             $this->historiqueAccouchement = $this->fiche->historiqueAccouchement;
-            $this->cesarienne = $this->fiche->cesarienne;
-            $this->forceps = $this->fiche->forceps;
-            $this->ventouse = $this->fiche->ventouse;
-            $this->episiotomie = $this->fiche->episiotomie;
+            $this->cesarienne = $this->fiche->cesarienne == 1;
+            $this->forceps = $this->fiche->forceps == 1;
+            $this->ventouse = $this->fiche->ventouse == 1;
+            $this->episiotomie = $this->fiche->episiotomie == 1;
             $this->alimentation = $this->fiche->alimentation;
             $this->digestion = $this->fiche->digestion;
             $this->sommeil = $this->fiche->sommeil;
@@ -371,6 +371,19 @@ class FicheCliniqueComponent extends Component
         $this->fiche = new FicheClinique();
         $this->fiche->idTypeFiche = $value;
 
+    }
+
+    public function alternateEditingMode() {
+        if ($this->typeForm == "consulter") {
+            $this->typeForm = "modifier";
+        } elseif($this->typeForm == "modifier") {
+            $this->typeForm = "consulter";
+        }
+    }
+
+    public function modifierFiche() {
+
+        dd("debut de sauvegarde des modification d'une fiche clinique");
     }
 
     public function render()
