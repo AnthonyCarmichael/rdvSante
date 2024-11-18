@@ -56,8 +56,20 @@
                                 @if ($user->actif)
                                     <div class="flex border-y py-6 hover:bg-stone-200 cursor-pointer"  wire:click="getProfessionnelId({{ $user->id }})">
                                         <div class="">
-                                            <img src="{{ asset('img/icone_'.$user->id.'.jpg') }}" alt="image{{$user->prenom}}"
-                                                class="w-[200px] mr-6">
+
+
+                                            @if ($user->photoProfil)
+                                                @php
+                                                    $path = asset('storage/' . ($user->photoProfil) );
+                                                    @endphp
+                                                    <img src="{{ $path }}" alt="{{ $path  }}" class="w-[200px] mr-6">
+                                            @else
+
+                                                <img src="{{ asset('img/icone_'.$user->id.'.jpg') }}" alt="image{{$user->prenom}}"
+                                                    class="w-[200px] mr-6">
+
+                                            @endif
+
                                         </div>
                                         <div class="mx-4 self-center w-2/4">
                                             <div class="mb-8">
