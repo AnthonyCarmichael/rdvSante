@@ -123,13 +123,18 @@
                                                                 @foreach ($rdv->transactions as $transaction )
 
                                                                     @php
-                                                                        $totalPaiement += $transaction->montant;
+                                                                        if($transaction->idTypeTransaction == 2){
+                                                                            $totalPaiement += ( -1 * $transaction->montant);
+                                                                        } else {
+                                                                            $totalPaiement += ( 1 * $transaction->montant);
+                                                                        }
+
                                                                     @endphp
 
                                                                 @endforeach
 
                                                                 @if ( $totalPaiement < $totalFacture)
-                                                                    <p class="leading-tight block text-red-400 text-sm">Pas payé</p>
+                                                                    <p class="leading-tight block text-red-400 text-sm">Pas payé {{$totalPaiement}}</p>
                                                                 @elseif ($totalPaiement == $totalFacture)
                                                                     <p class="leading-tight block text-green text-sm">Payé</p>
                                                                 @elseif ($totalPaiement > $totalFacture)
@@ -150,7 +155,7 @@
                                         @endif
 
 
-                                        @if ($findIndispo != true)
+                                        
 
                                         @if ($findIndispo != true)
 
@@ -161,7 +166,7 @@
 
                                         @endif
 
-                                        @endif
+                                        
                                     </td>
                                     <?php
                                     $selectedDateTime->modify('+1 day');
