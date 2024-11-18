@@ -1,6 +1,7 @@
 
 <div class="">
-    <!-- Bug avec la vue de mois qui change le now for some reason -->
+    <!-- pas implémenté -->
+     <!--
     <div>
         <select id="view" name="view" wire:model="view" wire:change="setView($event.target.value)"
             class="border-none bg-mid-green">
@@ -13,6 +14,7 @@
         </div>
 
     </div>
+    -->
 
     <!-- Affichage de la vue sélectionnée -->
     <div class="w-full text-gray-800">
