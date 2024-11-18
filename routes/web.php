@@ -14,6 +14,7 @@ use App\Models\Service;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\CheckRole;
+use Illuminate\Http\Request;
 
 Route::get('/', function () {
     return view('index');
@@ -116,6 +117,5 @@ Route::post('/registration/complete', [UserController::class, 'completeRegistrat
 
 
 Route::get('/dossier/ficheClinique/{id}',[FicheCliniqueController::class, 'create'])->middleware('auth')->name('ficheClinique');
-
 
 require __DIR__.'/auth.php';

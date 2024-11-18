@@ -11,10 +11,14 @@ use App\Models\Service;
 use App\Models\Dossier;
 use App\Models\DossierProfessionnel;
 use App\Models\MoyenPaiement;
+use App\Models\Profession;
 use App\Models\Taxe;
+use App\Models\User;
+use App\Models\Clinique;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
+use App\Mail\LienPaiement;
 
 use Illuminate\Support\Str;
 
@@ -47,9 +51,11 @@ class RendezVousComponent extends Component
 
 
 
-    protected $listeners = ['createRdvModal' => 'createRdvModal',
-                            'timeUpdated' => 'updateTime',
-                            'consulterModalRdv' => 'consulterModalRdv'];
+    protected $listeners = [
+        'createRdvModal' => 'createRdvModal',
+        'timeUpdated' => 'updateTime',
+        'consulterModalRdv' => 'consulterModalRdv'
+    ];
 
 
     public function mount()
@@ -70,7 +76,8 @@ class RendezVousComponent extends Component
     }
 
 
-    public function createRdvModal($selectedTime) {
+    public function createRdvModal($selectedTime)
+    {
 
         $this->reset();
         $this->updatedFilter("");
@@ -92,17 +99,17 @@ class RendezVousComponent extends Component
         $this->clients = Client::select('id')->where(function ($query) {
             $query->where('actif', '1')
                 ->where('nom', 'like', '%' . $this->filter . '%');
-            })->orWhere(function($query) {
-                $query->where('actif', '1')
-                    ->where('prenom', 'like', '%' . $this->filter . '%');
-            })->
+        })->orWhere(function ($query) {
+            $query->where('actif', '1')
+                ->where('prenom', 'like', '%' . $this->filter . '%');
+        })->
             orderBy('prenom')->get();
 
-        $dossiers = DossierProfessionnel::select('idDossier')->where('idProfessionnel',Auth::user()->id);
+        $dossiers = DossierProfessionnel::select('idDossier')->where('idProfessionnel', Auth::user()->id);
         #dd($this->clients);
 
-        if(!is_null($this->clients))
-            $this->clients = Dossier::whereIn('id',$dossiers)->whereIn('idClient',$this->clients)->get();
+        if (!is_null($this->clients))
+            $this->clients = Dossier::whereIn('id', $dossiers)->whereIn('idClient', $this->clients)->get();
         #dd($this->clients);
 
     }
@@ -119,9 +126,10 @@ class RendezVousComponent extends Component
         ]);
 
         $dossier = Dossier::whereHas('professionnels', function ($query) {
-            $query->where('idProfessionnel', Auth::user()->id);})
+            $query->where('idProfessionnel', Auth::user()->id);
+        })
             ->where('idClient', $this->clientSelected)
-        ->first();
+            ->first();
 
 
         $rdv = Rdv::create([
@@ -134,7 +142,7 @@ class RendezVousComponent extends Component
         ]);
 
 
-        $this->sendConfirmedRdvMail($rdv->dossier->client,$rdv,$rdv->service->professionnel,"confirmer");
+        $this->sendConfirmedRdvMail($rdv->dossier->client, $rdv, $rdv->service->professionnel, "confirmer");
 
         $this->reset();
 
@@ -144,9 +152,10 @@ class RendezVousComponent extends Component
 
     }
 
-    public function fetchServices() {
-        $services = Service::where('idProfessionnel',Auth::user()->id )->
-                                    orderBy('nom')->get();
+    public function fetchServices()
+    {
+        $services = Service::where('idProfessionnel', Auth::user()->id)->
+            orderBy('nom')->get();
         return $services;
     }
 
@@ -166,7 +175,8 @@ class RendezVousComponent extends Component
     }
 
 
-    public function consulterModalRdv(Rdv $rdv) {
+    public function consulterModalRdv(Rdv $rdv)
+    {
         $this->reset();
         $this->resetValidation();
         $this->updatedFilter("");
@@ -177,7 +187,7 @@ class RendezVousComponent extends Component
 
 
         $this->clientSelected = $rdv->client->id;
-        $this->serviceSelected =  $rdv->service->id;
+        $this->serviceSelected = $rdv->service->id;
         $this->cliniqueSelected = $rdv->clinique->id;
         $this->raison = $rdv->raison;
 
@@ -191,7 +201,7 @@ class RendezVousComponent extends Component
         $this->formattedDateFin = Carbon::parse($rdv->dateHeureDebut)->addMinutes($rdv->service->duree);
         $this->formattedDateFin = $this->formattedDateFin->translatedFormat('H:i');
 
-        $this->taxes= Taxe::all();
+        $this->taxes = Taxe::all();
         $this->selectedTime = $rdv->dateHeureDebut;
 
         $this->dispatch('open-modal', name: 'consulterRdv');
@@ -218,7 +228,7 @@ class RendezVousComponent extends Component
             'serviceSelected' => 'required|exists:services,id',
             'cliniqueSelected' => 'required|exists:cliniques,id',
             'raison' => 'nullable|string|max:255',
-        ],[
+        ], [
             'clientSelected.required' => 'Le client est requis.',
             'clientSelected.exists' => 'Le client sélectionné est invalide.',
             'serviceSelected.required' => 'Le service est requis.',
@@ -234,9 +244,10 @@ class RendezVousComponent extends Component
             #$rdv->dateHeureDebut = $this->selectedTime;
 
             $dossier = Dossier::whereHas('professionnels', function ($query) {
-                $query->where('idProfessionnel', Auth::user()->id);})
+                $query->where('idProfessionnel', Auth::user()->id);
+            })
                 ->where('idClient', $this->clientSelected)
-            ->first();
+                ->first();
             $rdv->idDossier = $dossier->id;
 
             $rdv->idService = $this->serviceSelected;
@@ -250,12 +261,11 @@ class RendezVousComponent extends Component
             $token = Str::random(32);
             $rdv->token = $token;
             $rdv->save();
-        }
-        else {
+        } else {
             session()->flash('error', 'Rendez-vous non trouvée.');
         }
 
-        $this->sendConfirmedRdvMail($rdv->dossier->client,$rdv,$rdv->service->professionnel,"confirmer");
+        $this->sendConfirmedRdvMail($rdv->dossier->client, $rdv, $rdv->service->professionnel, "confirmer");
         $this->reset();
         $this->dispatch('close-modal');
         $this->dispatch('refreshAgenda');
@@ -264,8 +274,9 @@ class RendezVousComponent extends Component
 
     }
 
-    public function deleteRdv(){
-        $rdv= $this->rdv;
+    public function deleteRdv()
+    {
+        $rdv = $this->rdv;
 
         if ($this->rdv->transactions()->exists()) {
             dd("Gestion du remboursement lors de la tentative de suppression d'un rdv ayant des paiement éffectué à compléter"); // As tester et gèrer
@@ -276,72 +287,94 @@ class RendezVousComponent extends Component
         $this->dispatch('close-modal');
         $this->dispatch('refreshAgenda');
 
-        $this->sendConfirmedRdvMail($rdv->dossier->client,$rdv,$rdv->service->professionnel,"annuler");
+        $this->sendConfirmedRdvMail($rdv->dossier->client, $rdv, $rdv->service->professionnel, "annuler");
     }
 
-    public function changeSousMenu($sousMenu) {
+    public function changeSousMenu($sousMenu)
+    {
         $this->sousMenuConsult = $sousMenu;
     }
 
-    public function addPaiement($reste) {
+    public function addPaiement($reste)
+    {
         $this->restePayer = $reste;
         $this->dispatch('open-modal', name: 'ajouterPaiement');
     }
 
-    public function ajoutPaiement() {
+    public function ajoutPaiement()
+    {
         $this->validate([
             'montant' => 'required',
-        ],[
+        ], [
             'montant.required' => 'Veuillez entrer un montant.',
         ]);
 
         $Date = Carbon::now('America/Toronto');
 
-        Transaction::create([
-            'montant' => $this->montant,
-            'dateHeure' => $Date,
-            'idRdv' => $this->rdv->id,
-            'idTypeTransaction' => 1,
-            'idMoyenPaiement' => $this->moyenPaiement
 
-        ]);
+        $dossier = Dossier::find($this->rdv->idDossier);
+        $client = Client::find($dossier->idClient);
+        $service = Service::find($this->rdv->idService);
+        $user = User::find(Auth::user()->id);
+        $clinique = Clinique::find($this->rdv->idClinique);
+        $profession = Profession::find($service->idProfessionService);
+        if ($this->moyenPaiement == 1) {
+            $lienPaiement = new LienPaiement($service, $client, $this->rdv, $user, $profession, $clinique);
+            Mail::to($client->courriel)
+                ->send($lienPaiement);
+        } else {
+            Transaction::create([
+                'montant' => $this->montant,
+                'dateHeure' => $Date,
+                'idRdv' => $this->rdv->id,
+                'idTypeTransaction' => 1,
+                'idMoyenPaiement' => $this->moyenPaiement
+            ]);
+        }
+        file_put_contents(app()->environmentFilePath(), str_replace(
+            "ID_RDV" . '=' . env("ID_RDV"),
+            "ID_RDV" . '=' . $this->rdv->id,
+            file_get_contents(app()->environmentFilePath())
+        ));
         $this->dispatch('close-modal');
         $this->dispatch('refreshAgenda');
         $this->consulterModalRdv($this->rdv);
-        $this->sousMenuConsult='facture';
+        $this->sousMenuConsult = 'facture';
     }
 
 
-    public function sendConfirmedRdvMail($client,$rdv,$professionnel,$raison) {
+    public function sendConfirmedRdvMail($client, $rdv, $professionnel, $raison)
+    {
 
-        $tps = Taxe::where('nom','TPS')->first();
-        $tvq =  Taxe::where('nom','TVQ')->first();
+        $tps = Taxe::where('nom', 'TPS')->first();
+        $tvq = Taxe::where('nom', 'TVQ')->first();
 
         Mail::to($client->courriel)
-            ->send(new ConfirmerRdv($rdv,$professionnel,$tps,$tvq,$raison));
+            ->send(new ConfirmerRdv($rdv, $professionnel, $tps, $tvq, $raison));
     }
 
 
-    public function selectedDateCheckDispo() {
+    public function selectedDateCheckDispo()
+    {
 
         $dispo = true;
 
         $debut = Carbon::parse($this->selectedTime);
 
 
-        $fin = $debut->copy()->addMinutes( $this->rdv->service->duree);
+        $fin = $debut->copy()->addMinutes($this->rdv->service->duree);
         if ($debut->hour < 7 || $fin->hour > 22) {
             $dispo = false;
             return $dispo;
         }
 
         $result = Auth::user()->rdvs()
-        ->whereDate('dateHeureDebut', $debut) // Compare uniquement la date (sans l'heure)
-        ->get();
+            ->whereDate('dateHeureDebut', $debut) // Compare uniquement la date (sans l'heure)
+            ->get();
 
         foreach ($result as $rdv) {
             if ($rdv->id != $this->rdv->id) {
-                $dateFinRdv =  Carbon::parse($rdv->dateHeureDebut)->addMinutes($rdv->service->duree);
+                $dateFinRdv = Carbon::parse($rdv->dateHeureDebut)->addMinutes($rdv->service->duree);
                 if (($rdv->dateHeureDebut < $fin && $dateFinRdv > $debut)) {
                     $dispo = false;
                     break;

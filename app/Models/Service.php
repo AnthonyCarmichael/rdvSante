@@ -22,6 +22,10 @@ class Service extends Model
         'idProfessionService',
         'idProfessionnel',
         'montantPenalite',
+        'lienStripe',
+        'prixStripe',
+        'produitStripe',
+        'idLienStripe'
     ];
 
 
