@@ -154,9 +154,10 @@ class Dossier extends Component
     public function updatedSearchDocument()
     {
         $query = $this->dossier->fichiers()
-            ->where(function ($query) {
-                $query->where('id', 'like', '%' . $this->searchDocument . '%')
-                        ->orWhere('nom', 'like', '%' . $this->searchDocument . '%');
+            ->where('lien', 'like', '%Documents/document%') // Filtre uniquement les fichiers contenant "document" dans le lien
+            ->where(function ($subQuery) {
+                $subQuery->where('id', 'like', '%' . $this->searchDocument . '%')
+                         ->orWhere('nom', 'like', '%' . $this->searchDocument . '%');
             })
             ->orderBy($this->sortField, $this->sortDirection);
 
@@ -180,17 +181,16 @@ class Dossier extends Component
 
     public function ajouterDocument() {
         $this->validate([
-            'nomImage' => 'required|string|max:255',
+            'nomDocument' => 'required|string|max:255',
             'document' => 'required|mimes:pdf,doc,docx,xls,xlsx',
         ], [
-            'nomImage.required' => 'Le champ Nom de l\'image * est obligatoire.',
-            'nomImage.string' => 'Le champ Nom de l\'image * doit être une chaîne de caractères.',
-            'nomImage.max' => 'Le champ Nom de l\'image * ne doit pas dépasser 255 caractères.',
+            'nomDocument.required' => 'Le champ Nom de l\'image * est obligatoire.',
+            'nomDocument.string' => 'Le champ Nom de l\'image * doit être une chaîne de caractères.',
+            'nomDocument.max' => 'Le champ Nom de l\'image * ne doit pas dépasser 255 caractères.',
 
             'document.required' => 'Le champ Document * est obligatoire.',
             'document.mimes' => 'Le fichier doit être un document de type PDF, Word ou Excel.',
         ]);
-
 
         if ($this->document) {
             $documentPath = $this->document->storeAs('Documents', 'document' . $this->nomDocument . '.pdf', 'public');
@@ -209,7 +209,7 @@ class Dossier extends Component
         })
         ->orderBy("dateHeureAjout", "desc");
 
-        $this->document = $query->get();
+        $this->documents = $query->get();
 
         $this->resetExcept('dossiers', 'dossier', 'view', 'client', 'documents');
         $this->dispatch('close-modal');
@@ -218,14 +218,16 @@ class Dossier extends Component
     public function updatedSearchImage()
     {
         $query = $this->dossier->fichiers()
-            ->where(function ($query) {
-                $query->where('id', 'like', '%' . $this->searchImage . '%')
-                        ->orWhere('nom', 'like', '%' . $this->searchImage . '%');
+            ->where('lien', 'like', '%Images/image%')
+            ->where(function ($subQuery) {
+                $subQuery->where('id', 'like', '%' . $this->searchImage . '%')
+                         ->orWhere('nom', 'like', '%' . $this->searchImage . '%');
             })
             ->orderBy($this->sortField, $this->sortDirection);
 
         $this->images = $query->get();
     }
+
 
     public function openModalAjouterImage() {
         #$this->resetExcept('dossiers','fiches');
@@ -419,10 +421,6 @@ class Dossier extends Component
         }
     }
 
-
-
-
-
     public function modifierDocument($id) {
         $document = Fichier::findOrFail($id);
         $this->document = $document->lien;
@@ -454,11 +452,6 @@ class Dossier extends Component
                         'idDossier' => $this->dossier->id,
                     ]);
 
-                    $this->resetExcept('dossiers', 'dossier', 'view', 'client', 'documents');
-
-                    $this->dispatch('close-modal');
-
-
                     $query = $this->dossier->fichiers()
                     ->where(function ($query) {
                         $query->where('lien', 'like', '%' . "document" . '%');
@@ -466,6 +459,8 @@ class Dossier extends Component
                     ->orderBy("dateHeureAjout", "desc");
 
                     $this->documents = $query->get();
+                    $this->resetExcept('dossiers', 'dossier', 'view', 'client', 'documents');
+                    $this->dispatch('close-modal');
                 }
             }
 
