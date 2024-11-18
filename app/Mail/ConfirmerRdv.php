@@ -84,6 +84,9 @@ class ConfirmerRdv extends Mailable
             );
         }
 
+        return new Envelope(
+            subject: 'Rappel',
+        );
     }
 
     /**
