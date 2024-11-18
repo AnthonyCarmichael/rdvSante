@@ -35,4 +35,9 @@ class Dossier extends Model
         return $this->hasMany(FicheClinique::class, 'idDossier', 'id');
     }
 
+    public function fichiers()
+    {
+        return $this->hasMany(Fichier::class, 'idDossier', 'id');
+    }
+
 }
