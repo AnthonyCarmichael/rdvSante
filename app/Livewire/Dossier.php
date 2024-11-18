@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Client;
 use App\Models\Dossier as ModelsDossier;
+use App\Models\FicheClinique;
 use App\Models\Fichier;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -42,6 +43,8 @@ class Dossier extends Component
     public $sortDirectionFiche = 'asc';
     public $view = null;
     public $filtreActif = 1;
+
+    public $selectedFiche;
 
     public function mount($dossierClient = null) {
         $this->filtreDossier();
@@ -580,8 +583,21 @@ class Dossier extends Component
     }
 
     public function supprimerFiche($idFiche) {
-        dd("supprimer fiche",$idFiche);
+        $this->selectedFiche = $idFiche;
+        $this->dispatch('open-modal', name : 'confirmDeleteFicheModal');
         //return redirect()->route('ficheClinique',$this->dossier);
+    }
+
+    public function deleteFiche() {
+        $this->selectedFiche = FicheClinique::find($this->selectedFiche);
+        if ($this->selectedFiche) {
+            $this->selectedFiche->delete();
+        } else {
+            session()->flash('error', 'La fiche clinique est introuvable.');
+        }
+        $this->dispatch('close-modal');
+        $this->selectedFiche = null;
+        $this->updatedSearchFiche();
     }
 
     public function render()

@@ -173,11 +173,7 @@
                                 <td wire:click="consulterFiche({{ $fiche->id }})" class="w-auto pr-4">{{ $fiche->id }}</td>
                                 <td wire:click="consulterFiche({{ $fiche->id }})" class="w-auto pr-4">{{ $fiche->TypeFiche->nom }}</td>
                                 <td wire:click="consulterFiche({{ $fiche->id }})" class="w-auto pr-4">{{ $fiche->dateHeure }}</td>
-                                <td wire:click="consulterFiche({{ $fiche->id }})" class="w-auto pr-4 justify-between">
-                                    <button wire:click="redirectModifierFiche({{$fiche->id}})" type="button" class="w-auto bg-selected-green mx-1 my-1 rounded p-0.5">
-                                        Modifier
-                                    </button>
-
+                                <td class="w-auto pr-4 justify-between">
                                     <button wire:click="supprimerFiche({{$fiche->id}})" type="button" class="w-auto bg-selected-green mx-1 my-1 rounded p-0.5">
                                         Supprimer
                                     </button>
@@ -413,6 +409,18 @@
                     </button>
                 </div>
             </form>
+        </div>
+    </x-modal>
+
+
+    <x-modal title="Confirmer la Suppression" name="confirmDeleteFicheModal" :show="false">
+        <p class="block text-sm font-medium text-gray-700">Êtes-vous sûr de vouloir supprimer cette fiche clinique ?</p>
+
+        <div class="flex mt-8">
+            <button wire:click="deleteFiche"
+                class="mr-4 px-4 py-2 bg-red-500 hover:bg-red-700 text-white rounded">Supprimer</button>
+            <button @click="$dispatch('cole-modal');"
+                class="px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white rounded">Annuler</button>
         </div>
     </x-modal>
 

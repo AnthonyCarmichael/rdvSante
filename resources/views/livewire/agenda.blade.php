@@ -1,6 +1,7 @@
 
 <div class="">
-    <!-- Bug avec la vue de mois qui change le now for some reason -->
+    <!-- pas implémenté -->
+     <!--
     <div>
         <select id="view" name="view" wire:model="view" wire:change="setView($event.target.value)"
             class="border-none bg-mid-green">
@@ -13,6 +14,7 @@
         </div>
 
     </div>
+    -->
 
     <!-- Affichage de la vue sélectionnée -->
     <div class="w-full text-gray-800">
@@ -123,13 +125,18 @@
                                                                 @foreach ($rdv->transactions as $transaction )
 
                                                                     @php
-                                                                        $totalPaiement += $transaction->montant;
+                                                                        if($transaction->idTypeTransaction == 2){
+                                                                            $totalPaiement += ( -1 * $transaction->montant);
+                                                                        } else {
+                                                                            $totalPaiement += ( 1 * $transaction->montant);
+                                                                        }
+
                                                                     @endphp
 
                                                                 @endforeach
 
                                                                 @if ( $totalPaiement < $totalFacture)
-                                                                    <p class="leading-tight block text-red-400 text-sm">Pas payé</p>
+                                                                    <p class="leading-tight block text-red-400 text-sm">Pas payé {{$totalPaiement}}</p>
                                                                 @elseif ($totalPaiement == $totalFacture)
                                                                     <p class="leading-tight block text-green text-sm">Payé</p>
                                                                 @elseif ($totalPaiement > $totalFacture)
@@ -150,7 +157,7 @@
                                         @endif
 
 
-                                        @if ($findIndispo != true)
+                                        
 
                                         @if ($findIndispo != true)
 
@@ -161,7 +168,7 @@
 
                                         @endif
 
-                                        @endif
+                                        
                                     </td>
                                     <?php
                                     $selectedDateTime->modify('+1 day');

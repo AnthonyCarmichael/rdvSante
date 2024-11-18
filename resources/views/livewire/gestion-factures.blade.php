@@ -158,6 +158,7 @@
                         <button class="w-5/12 bg-selected-green mx-0.5 my-1 rounded p-0.5"
                             wire:click="addPaiement({{ $r->id }}, {{ $solde }})" type="button">Payer
                         </button>
+
                     </td>
                 </tr>
                 <?php $cpt += 1;
@@ -188,7 +189,8 @@
         <form wire:submit.prevent="ajoutPaiement" class="bg-white p-4 rounded-lg">
 
             <div class=" grid grid-cols-2 justify-center gap-y-4 w-full">
-                <label class="text-md text-center w-full" for="montant">Il reste {{ number_format($restePayer, 2) }}$ à
+                <label class="text-md text-center w-full" for="montant">Il reste {{ number_format($restePayer, 2) }}$
+                    à
                     payer. Quel est le montant du
                     paiement?</label>
                 <input wire:model="montant" class="h-12 text-md ml-2 w-full" type="number" step="0.01"

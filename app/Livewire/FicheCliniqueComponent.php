@@ -147,10 +147,10 @@ class FicheCliniqueComponent extends Component
             $this->nomsParent = $this->fiche->nomsParent;
             $this->historiqueGrossesse = $this->fiche->historiqueGrossesse;
             $this->historiqueAccouchement = $this->fiche->historiqueAccouchement;
-            $this->cesarienne = $this->fiche->cesarienne;
-            $this->forceps = $this->fiche->forceps;
-            $this->ventouse = $this->fiche->ventouse;
-            $this->episiotomie = $this->fiche->episiotomie;
+            $this->cesarienne = $this->fiche->cesarienne == 1;
+            $this->forceps = $this->fiche->forceps == 1;
+            $this->ventouse = $this->fiche->ventouse == 1;
+            $this->episiotomie = $this->fiche->episiotomie == 1;
             $this->alimentation = $this->fiche->alimentation;
             $this->digestion = $this->fiche->digestion;
             $this->sommeil = $this->fiche->sommeil;
@@ -223,49 +223,6 @@ class FicheCliniqueComponent extends Component
                     'observation' => $this->observation,
                     'commentaire' => $this->commentaire,
                 ]);
-
-
-                /* Pour modifier
-
-                $newFiche->dateHeure= Carbon::now();
-                $newFiche->idTypeFiche = $this->idTypeFiche;
-                $newFiche->idProfession = Profession::where('nom','Ostéopathe D.O')->value('id');
-                $newFiche->nom = $this->nom;
-                $newFiche->analyse = $this->analyse;
-                $newFiche->conseilsPrevention = $this->conseilsPrevention;
-                // Anamnese field
-                $newFiche->occupation = $this->occupation;
-                $newFiche->loisirs = $this->loisirs;
-                $newFiche->lateralite = $this->lateralite;
-                $newFiche->diagnostic = $this->diagnostic;
-                $newFiche->medic = $this->medic;
-                $newFiche->contreIndication = $this->contreIndication;
-                $newFiche->rced = $this->rced;
-                $newFiche->localIrr = $this->localIrr;
-                $newFiche->douleur = $this->douleur;
-                $newFiche->fa = $this->fa;
-                $newFiche->fd = $this->fd;
-                $newFiche->nuit = $this->nuit;
-                $newFiche->sa = $this->sa;
-                $newFiche->investigation = $this->investigation;
-                $newFiche->trauma = $this->trauma;
-                $newFiche->chx = $this->chx;
-                $newFiche->familiaux = $this->familiaux;
-                $newFiche->cardioVasculaire = $this->cardioVasculaire;
-                $newFiche->pulmonaire = $this->pulmonaire;
-                $newFiche->snc = $this->snc;
-                $newFiche->orl = $this->orl;
-                $newFiche->digestif = $this->digestif;
-                $newFiche->gynecoAndrologie = $this->gynecoAndrologie;
-                $newFiche->urinaire = $this->urinaire;
-                $newFiche->hs = $this->hs;
-                $newFiche->psychologique = $this->psychologique;
-                $newFiche->msk = $this->msk;
-                $newFiche->dermato = $this->dermato;
-                $newFiche->autre = $this->autre;
-                dd("Anamnèse",$this, $newFiche);
-                */
-
                 break;
 
             case 2: // Éval nourrisson
@@ -371,6 +328,140 @@ class FicheCliniqueComponent extends Component
         $this->fiche = new FicheClinique();
         $this->fiche->idTypeFiche = $value;
 
+    }
+
+    public function alternateEditingMode() {
+        if ($this->typeForm == "consulter") {
+            $this->typeForm = "modifier";
+        } elseif($this->typeForm == "modifier") {
+            $this->typeForm = "consulter";
+        }
+    }
+
+    public function modifierFiche() {
+
+        switch ($this->idTypeFiche) {
+            case 1: // Anamnèse
+                $this->fiche->analyse = $this->analyse;
+                $this->fiche->conseilsPrevention = $this->conseilsPrevention;
+                $this->fiche->occupation = $this->occupation;
+                $this->fiche->loisirs = $this->loisirs;
+                $this->fiche->lateralite = $this->lateralite;
+                $this->fiche->diagnostic = $this->diagnostic;
+                $this->fiche->medic = $this->medic;
+                $this->fiche->contreIndication = $this->contreIndication;
+                $this->fiche->rced = $this->rced;
+                $this->fiche->localIrr = $this->localIrr;
+                $this->fiche->douleur = $this->douleur;
+                $this->fiche->fa = $this->fa;
+                $this->fiche->fd = $this->fd;
+                $this->fiche->nuit = $this->nuit;
+                $this->fiche->sa = $this->sa;
+                $this->fiche->investigation = $this->investigation;
+                $this->fiche->trauma = $this->trauma;
+                $this->fiche->chx = $this->chx;
+                $this->fiche->familiaux = $this->familiaux;
+                $this->fiche->cardioVasculaire = $this->cardioVasculaire;
+                $this->fiche->pulmonaire = $this->pulmonaire;
+                $this->fiche->snc = $this->snc;
+                $this->fiche->orl = $this->orl;
+                $this->fiche->digestif = $this->digestif;
+                $this->fiche->gynecoAndrologie = $this->gynecoAndrologie;
+                $this->fiche->urinaire = $this->urinaire;
+                $this->fiche->hs = $this->hs;
+                $this->fiche->psychologique = $this->psychologique;
+                $this->fiche->msk = $this->msk;
+                $this->fiche->dermato = $this->dermato;
+                $this->fiche->autre = $this->autre;
+                $this->fiche->observation = $this->observation;
+                $this->fiche->commentaire = $this->commentaire;
+            
+                break;
+
+            case 2: // Éval nourrisson
+ 
+                    $this->fiche->analyse = $this->analyse;
+                    $this->fiche->conseilsPrevention = $this->conseilsPrevention;
+                    $this->fiche->nbreSemGestation = $this->nbreSemGestation;
+                    $this->fiche->apgar = $this->apgar;
+                    $this->fiche->poid = $this->poid;
+                    $this->fiche->taille = $this->taille;
+                    $this->fiche->perCranien = $this->perCranien;
+                    $this->fiche->maladieALaNaissance = $this->maladieALaNaissance;
+                    $this->fiche->medicaments = $this->medicaments;
+                    $this->fiche->nomsParent = $this->nomsParent;
+                    $this->fiche->historiqueGrossesse = $this->historiqueGrossesse;
+                    $this->fiche->historiqueAccouchement = $this->historiqueAccouchement;
+                    $this->fiche->cesarienne = $this->cesarienne;
+                    $this->fiche->forceps = $this->forceps;
+                    $this->fiche->ventouse = $this->ventouse;
+                    $this->fiche->episiotomie = $this->episiotomie;
+                    $this->fiche->alimentation = $this->alimentation;
+                    $this->fiche->digestion = $this->digestion;
+                    $this->fiche->sommeil = $this->sommeil;
+                    $this->fiche->pleurs = $this->pleurs;
+                    $this->fiche->motricite = $this->motricite;
+                    $this->fiche->neuro = $this->neuro;
+                    $this->fiche->motifConsultation = $this->motifConsultation;
+                    $this->fiche->techniques = $this->techniques;
+                    $this->fiche->age = $this->age;
+                    $this->fiche->succ = $this->succ;
+                    $this->fiche->foulard = $this->foulard;
+                    $this->fiche->marcheAuto = $this->marcheAuto;
+                    $this->fiche->grasping = $this->grasping;
+                    $this->fiche->redressement = $this->redressement;
+                    $this->fiche->babinski = $this->babinski;
+                    $this->fiche->moro = $this->moro;
+                    $this->fiche->toniqueAsym = $this->toniqueAsym;
+                    $this->fiche->tonusActifPassif = $this->tonusActifPassif;
+                break;
+
+            case 3: // Suivi SOAPIE
+
+                $this->fiche->analyse = $this->analyse;
+                $this->fiche->conseilsPrevention = $this->conseilsPrevention;
+                $this->fiche->occupation = $this->occupation;
+                $this->fiche->loisirs = $this->loisirs;
+                $this->fiche->lateralite = $this->lateralite;
+                $this->fiche->diagnostic = $this->diagnostic;
+                $this->fiche->medic = $this->medic;
+                $this->fiche->contreIndication = $this->contreIndication;
+                $this->fiche->rced = $this->rced;
+                $this->fiche->localIrr = $this->localIrr;
+                $this->fiche->douleur = $this->douleur;
+                $this->fiche->fa = $this->fa;
+                $this->fiche->fd = $this->fd;
+                $this->fiche->nuit = $this->nuit;
+                $this->fiche->sa = $this->sa;
+                $this->fiche->investigation = $this->investigation;
+                $this->fiche->trauma = $this->trauma;
+                $this->fiche->chx = $this->chx;
+                $this->fiche->familiaux = $this->familiaux;
+                $this->fiche->cardioVasculaire = $this->cardioVasculaire;
+                $this->fiche->pulmonaire = $this->pulmonaire;
+                $this->fiche->snc = $this->snc;
+                $this->fiche->orl = $this->orl;
+                $this->fiche->digestif = $this->digestif;
+                $this->fiche->gynecoAndrologie = $this->gynecoAndrologie;
+                $this->fiche->urinaire = $this->urinaire;
+                $this->fiche->hs = $this->hs;
+                $this->fiche->psychologique = $this->psychologique;
+                $this->fiche->msk = $this->msk;
+                $this->fiche->dermato = $this->dermato;
+                $this->fiche->autre = $this->autre;
+                $this->fiche->observation = $this->observation;
+                $this->fiche->commentaire = $this->commentaire;
+                $this->fiche->depuisDerniereSeance = $this->depuisDerniereSeance;
+
+                break;
+
+            default:
+                # code...
+                break;
+        }
+        $this->fiche->save();
+        session()->flash('success', 'Les modification ont été enregistrées');
+        return redirect()->route('ficheCliniqueConsulter', ['id' => $this->fiche->id]);
     }
 
     public function render()
