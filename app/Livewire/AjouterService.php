@@ -47,16 +47,15 @@ class AjouterService extends Component
 
     public function openModalAjouterService()
     {
-        $this->resetExcept('services','professions');
-        $this->dispatch('open-modal', name : 'ajouterService');
+        $this->resetExcept('services', 'professions');
+        $this->dispatch('open-modal', name: 'ajouterService');
     }
 
     public function loadServices()
     {
-        if ($this->filtreActif == 1)
-        {
+        if ($this->filtreActif == 1) {
             return Service::where('idProfessionnel', Auth::user()->id)
-                ->where(function($query) {
+                ->where(function ($query) {
                     $query->where('nom', 'like', '%' . $this->search . '%')
                         ->orWhere('description', 'like', '%' . $this->search . '%')
                         ->orWhere('prix', 'like', '%' . $this->search . '%')
@@ -66,11 +65,9 @@ class AjouterService extends Component
                 ->where('actif', true)
                 ->orderBy($this->sortField, $this->sortDirection)
                 ->get();
-        }
-        elseif ($this->filtreActif == 0)
-        {
+        } elseif ($this->filtreActif == 0) {
             return Service::where('idProfessionnel', Auth::user()->id)
-                ->where(function($query) {
+                ->where(function ($query) {
                     $query->where('nom', 'like', '%' . $this->search . '%')
                         ->orWhere('description', 'like', '%' . $this->search . '%')
                         ->orWhere('prix', 'like', '%' . $this->search . '%')
@@ -80,11 +77,9 @@ class AjouterService extends Component
                 ->where('actif', false)
                 ->orderBy($this->sortField, $this->sortDirection)
                 ->get();
-        }
-        else
-        {
+        } else {
             return Service::where('idProfessionnel', Auth::user()->id)
-                ->where(function($query) {
+                ->where(function ($query) {
                     $query->where('nom', 'like', '%' . $this->search . '%')
                         ->orWhere('description', 'like', '%' . $this->search . '%')
                         ->orWhere('prix', 'like', '%' . $this->search . '%')
@@ -108,12 +103,9 @@ class AjouterService extends Component
 
     public function sortBy($field)
     {
-        if ($this->sortField === $field)
-        {
+        if ($this->sortField === $field) {
             $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
-        }
-        else
-        {
+        } else {
             $this->sortField = $field;
             $this->sortDirection = 'asc';
         }
@@ -148,7 +140,8 @@ class AjouterService extends Component
 
     public function rules()
     {
-        $rules=['nomservice' => 'required|string|max:255',
+        $rules = [
+            'nomservice' => 'required|string|max:255',
             'professionservice' => 'required|exists:professions,id',
             'descriptionservice' => 'nullable|string',
             'prixservice' => 'required|numeric|min:0',
@@ -176,6 +169,22 @@ class AjouterService extends Component
     {
         $this->validate();
 
+        $stripe = new \Stripe\StripeClient('sk_test_51QLRk0G8MNDQfBDwRqTNqHUZSEmqRHPJJwWOb90PfAnEVd6Vrr3S857Z3boV4kv0ZBdwQHQEbFuRw1IbRyIiYUDa005h9SywCD');
+        $produitStripe = $stripe->products->create(['name' => $this->nomservice, 'description' => $this->descriptionservice]);
+        $prixStripe = $stripe->prices->create([
+            'currency' => 'cad',
+            'custom_unit_amount' => ["enabled" => true],
+            'product' => $produitStripe->id,
+        ]);
+        $lienStripe = $stripe->paymentLinks->create([
+            'line_items' => [
+                [
+                    'price' => $prixStripe->id,
+                    'quantity' => 1,
+                ],
+            ],
+        ]);
+
         Service::create([
             'nom' => $this->nomservice,
             'description' => $this->descriptionservice,
@@ -189,11 +198,15 @@ class AjouterService extends Component
             'actif' => true,
             'idProfessionService' => $this->professionservice,
             'idProfessionnel' => Auth::user()->id,
-        ]);
+            'lienStripe' => $lienStripe->url,
+            'prixStripe' => $prixStripe->id,
+            'produitStripe' => $produitStripe->id,
+            'idLienStripe' => $lienStripe->id,
 
+        ]);
         $this->filtreService();
 
-        $this->resetExcept('services','professions');
+        $this->resetExcept('services', 'professions');
         $this->dispatch('close-modal');
     }
 
@@ -256,7 +269,8 @@ class AjouterService extends Component
     public function deleteService()
     {
         if ($this->serviceIdToDelete) {
-            Service::find($this->serviceIdToDelete)->delete();;
+            Service::find($this->serviceIdToDelete)->delete();
+            ;
         }
 
         $this->mount();
@@ -272,7 +286,14 @@ class AjouterService extends Component
     {
         $this->validate();
 
+
+
         $service = Service::find($this->service_id);
+
+        $stripe = new \Stripe\StripeClient('sk_test_51QLRk0G8MNDQfBDwRqTNqHUZSEmqRHPJJwWOb90PfAnEVd6Vrr3S857Z3boV4kv0ZBdwQHQEbFuRw1IbRyIiYUDa005h9SywCD');
+        $produitStripe = $stripe->products->update($service->produitStripe, ['name' => $this->nomservice, 'description' => $this->descriptionservice]);
+        $paiement = $stripe->paymentIntents->retrieve('pi_3QMKeBG8MNDQfBDw16XsYDWa');
+        dd($paiement->amount);
 
         if ($service) {
             $service->update([
@@ -287,6 +308,7 @@ class AjouterService extends Component
                 'montantPenalite' => $this->montantPenalite,
                 'idProfessionService' => $this->professionservice,
                 'idProfessionnel' => Auth::user()->id,
+                'produitStripe' => $produitStripe->id,
             ]);
 
             $this->resetExcept('services', 'professions');

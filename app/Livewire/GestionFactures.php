@@ -7,8 +7,11 @@ use App\Models\Transaction;
 use Livewire\Component;
 
 use App\Models\Client;
+use App\Models\Profession;
+use App\Models\Clinique;
 
 use App\Models\Service;
+use Illuminate\Support\Facades\Mail;
 
 use App\Models\TypeTransaction;
 
@@ -25,6 +28,9 @@ use App\Models\Taxe;
 use App\Models\DossierProfessionnel;
 
 use Carbon\Carbon;
+use App\Mail\LienPaiement;
+use App\Models\User;
+use App\Listeners\StripeEventListener;
 
 use Illuminate\Support\Facades\Auth;
 
@@ -179,6 +185,31 @@ class GestionFactures extends Component
             'idMoyenPaiement' => $this->moyenPaiement
 
         ]);
+
+        $dossier = Dossier::find($this->rdv->idDossier);
+        $client = Client::find($dossier->idClient);
+        $service = Service::find($this->rdv->idService);
+        $user = User::find(Auth::user()->id);
+        $clinique = Clinique::find($this->rdv->idClinique);
+        $profession = Profession::find($service->idProfessionService);
+        if ($this->moyenPaiement == 1) {
+            $lienPaiement = new LienPaiement($service, $client, $this->rdv, $user, $profession, $clinique);
+            Mail::to($client->courriel)
+                ->send($lienPaiement);
+        } else {
+            Transaction::create([
+                'montant' => $this->montant,
+                'dateHeure' => $Date,
+                'idRdv' => $this->rdv->id,
+                'idTypeTransaction' => 1,
+                'idMoyenPaiement' => $this->moyenPaiement
+            ]);
+        }
+        file_put_contents(app()->environmentFilePath(), str_replace(
+            "ID_RDV" . '=' . env("ID_RDV"),
+            "ID_RDV" . '=' . $this->rdv->id,
+            file_get_contents(app()->environmentFilePath())
+        ));
         $this->transactions = Transaction::all();
         $this->dispatch('close-modal');
     }

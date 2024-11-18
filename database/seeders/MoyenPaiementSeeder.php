@@ -13,7 +13,7 @@ class MoyenPaiementSeeder extends Seeder
     public function run(): void
     {
         DB::table('moyen_paiements')->insert([
-            ['nom' => 'Par carte'],
+            ['nom' => 'Stripe'],
             ['nom' => 'Comptant'],
             ['nom' => 'Virement interac']
         ]);
