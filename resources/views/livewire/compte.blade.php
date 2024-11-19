@@ -36,7 +36,7 @@
 
             <div class="mb-4">
                 <label for="telephone" class="block text-sm font-medium">Téléphone</label>
-                <input placeholder="(123) 456-7890" type="text" id="telephone" wire:model="telephone"
+                <input placeholder="(123) 456-7890" type="text" id="telephone" wire:model.live="telephone" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                     class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                 @error('telephone')
                     <span class="error text-red-600">{{ 'Entrez un format valide' }}</span>

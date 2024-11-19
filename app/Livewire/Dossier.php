@@ -363,7 +363,8 @@ class Dossier extends Component
         $this->dispatch('open-modal', name: 'modifierImage');
     }
 
-    public function updateImage() {
+    public function updateImage()
+    {
         $this->validate([
             'nomImage' => 'required|string|max:255',
         ], [
@@ -374,52 +375,36 @@ class Dossier extends Component
 
         $image = Fichier::find($this->image_id);
 
-        if ($this->image) {
-            if($this->image != $image->lien){
-                $imagePath = $this->image->storeAs('Images', 'image' . $this->nomImage . '.png', 'public');
-
-                if ($image) {
-                    $image->update([
-                        'nom' => $this->nomImage,
-                        'lien' => $imagePath,
-                        'idDossier' => $this->dossier->id,
-                    ]);
-
-                    $this->resetExcept('dossiers', 'dossier', 'view', 'client', 'images');
-
-                    $this->dispatch('close-modal');
-
-
-                    $query = $this->dossier->fichiers()
-                    ->where(function ($query) {
-                        $query->where('lien', 'like', '%' . "image" . '%');
-                    })
-                    ->orderBy("dateHeureAjout", "desc");
-
-                    $this->images = $query->get();
-                }
-            }
-
-            if ($image) {
-                $image->update([
-                    'nom' => $this->nomImage,
-                    'idDossier' => $this->dossier->id,
-                ]);
-
-                $this->resetExcept('dossiers', 'dossier', 'view', 'client', 'images');
-
-                $this->dispatch('close-modal');
-
-                $query = $this->dossier->fichiers()
-                ->where(function ($query) {
-                    $query->where('lien', 'like', '%' . "image" . '%');
-                })
-                ->orderBy("dateHeureAjout", "desc");
-
-                $this->images = $query->get();
-            }
+        if (!$image) {
+            session()->flash('error', 'Image non trouvée.');
+            return;
         }
+
+        $imagePath = $image->lien;
+        if ($this->image && $this->image != $image->lien) {
+            $imagePath = $this->image->storeAs('Images', 'image' . $this->nomImage . '.png', 'public');
+            // Supprimer l'ancien fichier
+            // Storage::disk('public')->delete($image->lien);
+        }
+
+        // Mise à jour des informations de l'image
+        $image->update([
+            'nom' => $this->nomImage,
+            'lien' => $imagePath,
+            'idDossier' => $this->dossier->id,
+        ]);
+
+        // Réinitialisation et fermeture du modal
+        $this->resetExcept('dossiers', 'dossier', 'view', 'client', 'images');
+        $this->dispatch('close-modal');
+
+        // Mise à jour de la collection d'images
+        $this->images = $this->dossier->fichiers()
+            ->where('lien', 'like', '%image%')
+            ->orderBy('dateHeureAjout', 'desc')
+            ->get();
     }
+
 
     public function modifierDocument($id) {
         $document = Fichier::findOrFail($id);

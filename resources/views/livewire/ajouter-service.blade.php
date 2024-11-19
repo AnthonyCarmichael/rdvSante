@@ -187,7 +187,7 @@
                     </div>
 
                     <div class="mb-4">
-                        <label for="montantPenalite" class="block text-sm font-medium text-gray-700">Pénalité *</label>
+                        <label for="montantPenalite" class="block text-sm font-medium text-gray-700">Frais de retard *</label>
                         <input required min="0" step="0.01" type="number" pattern="\d" name="montantPenalite" id="montantPenalite"
                             wire:model="montantPenalite"
                             class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
@@ -203,15 +203,6 @@
                             });
                     </script>
                 -->
-
-                    <div class="mb-4">
-                        <label class="inline-flex items-center">
-                            <input type="checkbox" name="taxableservice" id="taxableservice"
-                                wire:model="taxableservice"
-                                class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                            <span class="ml-2 text-gray-700">Service taxable</span>
-                        </label>
-                    </div>
 
                     <div class="mb-4">
                         <label class="inline-flex items-center">
@@ -315,15 +306,6 @@
 
                     <div class="mb-4">
                         <label class="inline-flex items-center">
-                            <input type="checkbox" name="taxableservice" id="taxableservice"
-                                wire:model="taxableservice"
-                                class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                            <span class="ml-2 text-gray-700">Service taxable</span>
-                        </label>
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="inline-flex items-center">
                             <input type="checkbox" name="checkboxpause" id="checkboxpause"
                                 wire:model.live="checkboxpause"
                                 class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
@@ -355,7 +337,7 @@
                     <!--<div class="mb-4">
                         <label class="inline-flex items-center">
                             <input type="checkbox" name="personneacharge" id="personneacharge"
-                                
+
                                 class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
                             <span class="ml-2 text-gray-700">Permettre les rendez-vous pour une personne à charge</span>
                         </label>
