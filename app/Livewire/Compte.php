@@ -101,13 +101,15 @@ class Compte extends Component
                 $user->signature = Storage::url($path);
             }*/
 
-            if ($this->photoProfil != "") {
-                $photoProfilPath = $this->photoProfil->storeAs('photos_profil', 'photoProfil' . $this->prenom . $this->nom . '.png', 'public');
+            if ($this->photoProfil && $this->photoProfil != $user->photoProfil) {
+                $extension = $this->photoProfil->getClientOriginalExtension();
+                $photoProfilPath = $this->photoProfil->storeAs('photos_profil', 'photoProfil' . $this->prenom . $this->nom . '.' . $extension, 'public');
                 $user->photoProfil = $photoProfilPath;
             }
 
-            if ($this->signature != "") {
-                $signaturePath = $this->signature->storeAs('signatures', 'signature' . $this->prenom . $this->nom . '.png', 'public');
+            if ($this->signature && $this->signature != $user->signature) {
+                $extension = $this->signature->getClientOriginalExtension();
+                $signaturePath = $this->signature->storeAs('signatures', 'signature' . $this->prenom . $this->nom . '.' . $extension, 'public');
                 $user->signature = $signaturePath;
             }
 
@@ -118,7 +120,6 @@ class Compte extends Component
     }
 
     public function updatedtelephone($value) {
-
         if (strlen($this->telephone) == 10) {
             $this->telephone = '('.substr($this->telephone, 0, 3).') '.substr($this->telephone, 3, 3).'-'.substr($this->telephone, 6);
         }

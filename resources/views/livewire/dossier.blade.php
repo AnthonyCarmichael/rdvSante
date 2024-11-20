@@ -366,7 +366,7 @@
                                     </a>
                                 </td>
                                 <td class="w-auto pr-4 justify-between">
-                                    <button wire:click="modifierImage({{ $document->id }})" type="button" class="w-auto bg-selected-green mx-1 my-1 rounded p-0.5">
+                                    <button wire:click="modifierDocument({{ $document->id }})" type="button" class="w-auto bg-selected-green mx-1 my-1 rounded p-0.5">
                                         Modifier
                                     </button>
 
@@ -509,7 +509,7 @@
                 <h2 class="text-lg font-semibold text-gray-700 mb-4">Confirmation de suppression</h2>
                 <p>Êtes-vous sûr de vouloir supprimer ce document ? Cette action est irréversible.</p>
                 <div class="mt-6 flex justify-end">
-                    <button wire:click="cancelDelete"
+                    <button wire:click="cancelDeleteDocument"
                         class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700 mr-2">
                         Annuler
                     </button>

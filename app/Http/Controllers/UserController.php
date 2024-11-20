@@ -27,15 +27,29 @@ class UserController extends Controller
         return view('users.setMessage');
     }
 
-    public function updateMessage() {
-        $user = User::findOrFail(Auth::user()->id);
+    public function updateMessage(Request $request)
+    {
+        $request->validate([
+            'message' => 'required|string',
+        ]);
+
+        $user = User::find(Auth::user()->id);
 
         if ($user) {
-            $user->update([
-                'messagePersonaliser' => $this->message,
+            $user->messagePersonnalise = $request->input('message');
+            $user->save();
+
+
+            /*$user->update([
+                'messagePersonalise' => $request->input('message'),
             ]);
+*/
+            return redirect()->back()->with('success', 'Le message a été mis à jour avec succès.');
         }
+
+        return redirect()->back()->with('error', 'Impossible de mettre à jour le message.');
     }
+
 
     public function sendInvitation(Request $request)
     {
