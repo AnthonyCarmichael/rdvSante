@@ -6,6 +6,7 @@
     @endif
 
     <form action="{{ route('updateMessage') }}" method="POST">
+        @csrf
         <div class="mb-4">
             <label for="message" class="block text-sm font-medium text-gray-1500">Personnaliser le message du courriel *</label>
             <textarea name="message" id="message" cols="30" rows="10" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></textarea>
@@ -33,7 +34,7 @@
                   exportword_converter_options: { 'document': { 'size': 'Letter' } },
                   importword_converter_options: { 'formatting': { 'styles': 'inline', 'resets': 'inline',	'defaults': 'inline', } },
                 });
-              </script>
+            </script>
         </div>
 
         <div class="mt-6">

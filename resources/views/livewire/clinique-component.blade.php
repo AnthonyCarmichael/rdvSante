@@ -116,8 +116,8 @@
 
                     <div class="mb-4">
                         <label for="codePostalClinique" class="block text-sm font-medium text-gray-700">Code postal *</label>
-                        <input required type="text" name="codePostalClinique" id="codePostalClinique" wire:model="codePostalClinique" pattern="[A-Z]\d[A-Z] \d[A-Z]\d" placeholder="ex: A0A 0A0" maxlength="6"
-                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                        <input required type="text" name="codePostalClinique" id="codePostalClinique" wire:model="codePostalClinique" pattern="[A-Z]\d[A-Z] \d[A-Z]\d" placeholder="ex: A0A 0A0" maxlength="7"
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" oninput="this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '').replace(/^(.{3})/, '$1 ').trim()">
                     </div>
 
                     <div class="mb-4">

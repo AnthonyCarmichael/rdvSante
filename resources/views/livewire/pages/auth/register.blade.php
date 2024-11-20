@@ -34,6 +34,12 @@ new #[Layout('layouts.guest')] class extends Component
         }*/
     }
 
+    public function updatedtelephone($value) {
+        if (strlen($this->telephone) == 10) {
+            $this->telephone = '('.substr($this->telephone, 0, 3).') '.substr($this->telephone, 3, 3).'-'.substr($this->telephone, 6);
+        }
+    }
+
     /**
      * Handle an incoming registration request.
      */
@@ -120,7 +126,8 @@ new #[Layout('layouts.guest')] class extends Component
             <!-- Téléphone -->
             <div class="mt-4">
                 <x-input-label for="telephone" :value="__('Téléphone *')" />
-                <x-text-input wire:model="telephone" id="telephone" class="block mt-1 w-full" type="text" name="telephone" required autocomplete="telephone" placeholder="(123) 456-7890"/>
+                <x-text-input wire:model.live="telephone" id="telephone" class="block mt-1 w-full" type="text" name="telephone" required autocomplete="telephone" placeholder="(123) 456-7890"
+                    maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')"/>
                 <x-input-error :messages="$errors->get('telephone')" class="mt-2" />
             </div>
 

@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Cache;
+use League\HTMLToMarkdown\HtmlConverter;
 
 class UserController extends Controller
 {
@@ -27,15 +28,28 @@ class UserController extends Controller
         return view('users.setMessage');
     }
 
-    public function updateMessage() {
-        $user = User::findOrFail(Auth::user()->id);
+    public function updateMessage(Request $request)
+    {
+        $converter = new HtmlConverter([
+            'header_style' => 'atx'
+        ]);
+
+        $request->validate([
+            'message' => 'required|string',
+        ]);
+
+        $user = User::find(Auth::user()->id);
 
         if ($user) {
-            $user->update([
-                'messagePersonaliser' => $this->message,
-            ]);
+            $user->messagePersonnalise = $converter->convert($request->input('message'));
+            $user->save();
+
+            return redirect()->back()->with('success', 'Le message a été mis à jour avec succès.');
         }
+
+        return redirect()->back()->with('error', 'Impossible de mettre à jour le message.');
     }
+
 
     public function sendInvitation(Request $request)
     {

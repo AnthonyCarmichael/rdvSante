@@ -193,7 +193,8 @@ class Dossier extends Component
         ]);
 
         if ($this->document) {
-            $documentPath = $this->document->storeAs('Documents', 'document' . $this->nomDocument . '.pdf', 'public');
+            $extension = $this->document->getClientOriginalExtension();
+            $documentPath = $this->document->storeAs('Documents', 'document_' . $this->nomDocument . '.' . $extension, 'public');
         }
 
         Fichier::create([
@@ -259,7 +260,8 @@ class Dossier extends Component
         ]);
 
         if ($this->image) {
-            $imagePath = $this->image->storeAs('Images', 'image' . $this->nomImage . '.png', 'public');
+            $extension = $this->image->getClientOriginalExtension();
+            $imagePath = $this->image->storeAs('Images', 'image_' . $this->nomImage . '.' . $extension, 'public');
         }
 
         Fichier::create([
@@ -382,7 +384,8 @@ class Dossier extends Component
 
         $imagePath = $image->lien;
         if ($this->image && $this->image != $image->lien) {
-            $imagePath = $this->image->storeAs('Images', 'image' . $this->nomImage . '.png', 'public');
+            $extension = $this->image->getClientOriginalExtension();
+            $imagePath = $this->image->storeAs('Images', 'image_' . $this->nomImage . '.' . $extension, 'public');
             // Supprimer l'ancien fichier
             // Storage::disk('public')->delete($image->lien);
         }
@@ -426,48 +429,36 @@ class Dossier extends Component
 
         $document = Fichier::find($this->document_id);
 
-        if ($this->document) {
-            if($this->document != $document->lien){
-                $documentPath = $this->document->storeAs('Documents', 'document' . $this->nomDocument . '.pdf', 'public');
-
-                if ($document) {
-                    $document->update([
-                        'nom' => $this->nomDocument,
-                        'lien' => $documentPath,
-                        'idDossier' => $this->dossier->id,
-                    ]);
-
-                    $query = $this->dossier->fichiers()
-                    ->where(function ($query) {
-                        $query->where('lien', 'like', '%' . "document" . '%');
-                    })
-                    ->orderBy("dateHeureAjout", "desc");
-
-                    $this->documents = $query->get();
-                    $this->resetExcept('dossiers', 'dossier', 'view', 'client', 'documents');
-                    $this->dispatch('close-modal');
-                }
-            }
-
-            if ($document) {
-                $document->update([
-                    'nom' => $this->nomDocument,
-                    'idDossier' => $this->dossier->id,
-                ]);
-
-                $this->resetExcept('dossiers', 'dossier', 'view', 'client', 'documents');
-
-                $this->dispatch('close-modal');
-
-                $query = $this->dossier->fichiers()
-                ->where(function ($query) {
-                    $query->where('lien', 'like', '%' . "document" . '%');
-                })
-                ->orderBy("dateHeureAjout", "desc");
-
-                $this->documents = $query->get();
-            }
+        if (!$document) {
+            session()->flash('error', 'Document non trouvée.');
+            return;
         }
+
+        $documentPath = $document->lien;
+        if ($this->document && $this->document != $document->lien) {
+            $extension = $this->document->getClientOriginalExtension();
+            $documentPath = $this->document->storeAs('Documents', 'document_' . $this->nomDocument . '.' . $extension, 'public');
+            // Supprimer l'ancien fichier
+            // Storage::disk('public')->delete($document->lien);
+        }
+
+        // Mise à jour des informations de l'image
+        $document->update([
+            'nom' => $this->nomDocument,
+            'lien' => $documentPath,
+            'idDossier' => $this->dossier->id,
+        ]);
+
+        // Réinitialisation et fermeture du modal
+        $this->resetExcept('dossiers', 'dossier', 'view', 'client', 'documents');
+        $this->dispatch('close-modal');
+
+        // Mise à jour de la collection d'images
+        $this->documents = $this->dossier->fichiers()
+            ->where('lien', 'like', '%document%')
+            ->orderBy('dateHeureAjout', 'desc')
+            ->get();
+
     }
 
     public function confirmDelete($id)
