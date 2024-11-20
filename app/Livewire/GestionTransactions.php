@@ -69,6 +69,11 @@ class GestionTransactions extends Component
         // Obtenir l'heure actuelle en UTC
         $Date = Carbon::now('America/Toronto');
 
+        $stripe = new \Stripe\StripeClient('sk_test_51QLRk0G8MNDQfBDwRqTNqHUZSEmqRHPJJwWOb90PfAnEVd6Vrr3S857Z3boV4kv0ZBdwQHQEbFuRw1IbRyIiYUDa005h9SywCD');
+        if ($this->transactionRembourse->idMoyenPaiement == 1) {
+            $stripe->refunds->create(['payment_intent' => $this->transactionRembourse->paymentIntent]);
+        }
+
         Transaction::create([
             'montant' => $this->transactionRembourse->montant,
             'dateHeure' => $Date,

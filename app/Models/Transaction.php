@@ -9,7 +9,7 @@ class Transaction extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['montant', 'dateHeure', 'idRdv', 'idTypeTransaction', 'idMoyenPaiement', 'idTransaction'];
+    protected $fillable = ['montant', 'dateHeure', 'idRdv', 'idTypeTransaction', 'idMoyenPaiement', 'idTransaction', 'paymentIntent'];
 
     public $timestamps = false;
 
