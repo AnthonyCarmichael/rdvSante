@@ -28,6 +28,7 @@ class StripeEventListener
     {
         if ($event->payload['type'] === 'checkout.session.completed') {
             $amountPaid = $event->payload['data']['object']['amount_total'];
+            $paymentIntent = $event->payload['data']['object']['payment_intent'];
             $amountPaidInDollars = $amountPaid / 100;
             $Date = Carbon::now('America/Toronto');
             Transaction::create([
@@ -35,7 +36,8 @@ class StripeEventListener
                 'dateHeure' => $Date,
                 'idRdv' => env("ID_RDV"),
                 'idTypeTransaction' => 1,
-                'idMoyenPaiement' => 1
+                'idMoyenPaiement' => 1,
+                'paymentIntent' => $paymentIntent
             ]);
         }
     }

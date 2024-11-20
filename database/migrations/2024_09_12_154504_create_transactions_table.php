@@ -17,6 +17,7 @@ return new class extends Migration
             // "usigned()" nécessaire pour éventuellement pouvoir définir une clé étrangère sur cette colonne.
             $table->decimal('montant', 5, 2);
             $table->dateTime('dateHeure');
+            $table->string('paymentIntent')->nullable();
             $table->bigInteger('idRdv')->unsigned();
             $table->bigInteger('idTypeTransaction')->unsigned();
             $table->bigInteger('idMoyenPaiement')->unsigned();
