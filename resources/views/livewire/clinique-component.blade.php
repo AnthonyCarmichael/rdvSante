@@ -195,29 +195,43 @@
 
         <x-modal title="Informations clinique" name="consulterClinique" :show="false">
             <div class="border border-gray-300 bg-white p-6 m-4 rounded-lg shadow-md">
-                <div class="grid grid-cols-4 gap-y-4">
-                    <p class="text-sm text-right font-semibold text-gray-700">Nom clinique</p>
-                    <p class="h-8 text-sm text-gray-900 ml-2"> {{ $nomClinique }}</p>
+                <div class="flex flex-col gap-y-4">
+                    <div class="flex items-center">
+                        <p class="text-sm font-semibold text-gray-700 w-1/3">Nom clinique</p>
+                        <p class="text-sm text-gray-900 ml-2"> {{ $nomClinique }}</p>
+                    </div>
 
-                    <p class="text-sm text-right font-semibold text-gray-700">Numéro civique</p>
-                    <p class="h-8 text-sm text-gray-900 ml-2"> {{ $noCiviqueClinique }}</p>
+                    <div class="flex items-center">
+                        <p class="text-sm font-semibold text-gray-700 w-1/3">Numéro civique</p>
+                        <p class="text-sm text-gray-900 ml-2"> {{ $noCiviqueClinique }}</p>
+                    </div>
 
-                    <p class="text-sm text-right font-semibold text-gray-700">Rue</p>
-                    <p class="h-8 text-sm text-gray-900 ml-2"> {{ $rueClinique }}</p>
+                    <div class="flex items-center">
+                        <p class="text-sm font-semibold text-gray-700 w-1/3">Rue</p>
+                        <p class="text-sm text-gray-900 ml-2"> {{ $rueClinique }}</p>
+                    </div>
 
-                    <p class="text-sm text-right font-semibold text-gray-700">Code postal</p>
-                    <p class="h-8 text-sm text-gray-900 ml-2"> {{ $codePostalClinique }}</p>
+                    <div class="flex items-center">
+                        <p class="text-sm font-semibold text-gray-700 w-1/3">Code postal</p>
+                        <p class="text-sm text-gray-900 ml-2"> {{ $codePostalClinique }}</p>
+                    </div>
 
                     @foreach ($villes as $ville)
                         @if ($ville->id == $villeClinique)
-                            <p class="text-sm text-right font-semibold text-gray-700">Ville</p>
-                            <p class="h-8 text-sm text-gray-900 ml-2"> {{ $ville->nom }}</p>
+                            <div class="flex items-center">
+                                <p class="text-sm font-semibold text-gray-700 w-1/3">Ville</p>
+                                <p class="text-sm text-gray-900 ml-2"> {{ $ville->nom }}</p>
+                            </div>
 
-                            <p class="text-sm text-right font-semibold text-gray-700">Province</p>
-                            <p class="h-8 text-sm text-gray-900 ml-2"> {{ $ville->province->nom }}</p>
+                            <div class="flex items-center">
+                                <p class="text-sm font-semibold text-gray-700 w-1/3">Province</p>
+                                <p class="text-sm text-gray-900 ml-2"> {{ $ville->province->nom }}</p>
+                            </div>
 
-                            <p class="text-sm text-right font-semibold text-gray-700">Pays</p>
-                            <p class="h-8 text-sm text-gray-900 ml-2"> {{ $ville->province->pays->nom }}</p>
+                            <div class="flex items-center">
+                                <p class="text-sm font-semibold text-gray-700 w-1/3">Pays</p>
+                                <p class="text-sm text-gray-900 ml-2"> {{ $ville->province->pays->nom }}</p>
+                            </div>
                         @endif
                     @endforeach
                 </div>

@@ -355,51 +355,58 @@
 
         <x-modal title="Informations service" name="consulterService" :show="false">
             <div class="border border-gray-300 bg-white p-6 m-4 rounded-lg shadow-md">
-                <div class="grid grid-cols-4 gap-y-4">
-                    <p class="text-sm text-right font-semibold text-gray-700">Nom service</p>
-                    <p class="h-8 text-sm text-gray-900 ml-2"> {{ $nomservice }}</p>
+                <div class="flex flex-col gap-y-4">
+                    <div class="flex items-center">
+                        <p class="text-sm font-semibold text-gray-700 w-1/3">Nom service</p>
+                        <p class="text-sm text-gray-900 ml-2"> {{ $nomservice }}</p>
+                    </div>
 
-                    <p class="text-sm text-right font-semibold text-gray-700">Profession</p>
-                    <p class="h-8 text-sm text-gray-900 ml-2">
-                        @foreach ($professions as $profession)
-                            @if ($profession->id == $professionservice)
-                                {{ $profession->nom }}
+                    <div class="flex items-center">
+                        <p class="text-sm font-semibold text-gray-700 w-1/3">Profession</p>
+                        <p class="text-sm text-gray-900 ml-2">
+                            @foreach ($professions as $profession)
+                                @if ($profession->id == $professionservice)
+                                    {{ $profession->nom }}
+                                @endif
+                            @endforeach
+                        </p>
+                    </div>
+
+                    <div class="flex items-center">
+                        <p class="text-sm font-semibold text-gray-700 w-1/3">Description</p>
+                        <p class="text-sm text-gray-900 ml-2"> {{ $descriptionservice }}</p>
+                    </div>
+
+                    <div class="flex items-center">
+                        <p class="text-sm font-semibold text-gray-700 w-1/3">Durée du service</p>
+                        <p class="text-sm text-gray-900 ml-2"> {{ $dureeservice }}</p>
+                    </div>
+
+                    <div class="flex items-center">
+                        <p class="text-sm font-semibold text-gray-700 w-1/3">Prix du service</p>
+                        <p class="text-sm text-gray-900 ml-2"> {{ $prixservice }}</p>
+                    </div>
+
+                    <div class="flex items-center">
+                        <p class="text-sm font-semibold text-gray-700 w-1/3">Durée de la pause</p>
+                        <p class="text-sm text-gray-900 ml-2"> {{ $dureepause }}</p>
+                    </div>
+
+                    <div class="flex items-center">
+                        <p class="text-sm font-semibold text-gray-700 w-1/3">Nombre d'heures limite réservation</p>
+                        <p class="text-sm text-gray-900 ml-2"> {{ $tempsavantrdv }}</p>
+                    </div>
+
+                    <div class="flex items-center">
+                        <p class="text-sm font-semibold text-gray-700 w-1/3">Personne à charge</p>
+                        <p class="text-sm text-gray-900 ml-2">
+                            @if ($personneacharge == 0)
+                                Non
+                            @else
+                                Oui
                             @endif
-                        @endforeach
-                    </p>
-
-                    <p class="text-sm text-right font-semibold text-gray-700">Description</p>
-                    <p class="h-8 text-sm text-gray-900 ml-2"> {{ $descriptionservice }}</p>
-
-                    <p class="text-sm text-right font-semibold text-gray-700">Durée du service</p>
-                    <p class="h-8 text-sm text-gray-900 ml-2"> {{ $dureeservice }}</p>
-
-                    <p class="text-sm text-right font-semibold text-gray-700">Prix du service</p>
-                    <p class="h-8 text-sm text-gray-900 ml-2"> {{ $prixservice }}</p>
-
-                    <p class="text-sm text-right font-semibold text-gray-700">Taxable</p>
-                    <p class="h-8 text-sm text-gray-900 ml-2">
-                        @if ($taxableservice == 0)
-                            Non
-                        @else
-                            Oui
-                        @endif
-                    </p>
-
-                    <p class="text-sm text-right font-semibold text-gray-700">Durée de la pause</p>
-                    <p class="h-8 text-sm text-gray-900 ml-2"> {{ $dureepause }}</p>
-
-                    <p class="text-sm text-right font-semibold text-gray-700">Nombre d'heures limite réservation</p>
-                    <p class="h-8 text-sm text-gray-900 ml-2"> {{ $tempsavantrdv }}</p>
-
-                    <p class="text-sm text-right font-semibold text-gray-700">Personne à charge</p>
-                    <p class="h-8 text-sm text-gray-900 ml-2">
-                        @if ($personneacharge == 0)
-                            Non
-                        @else
-                            Oui
-                        @endif
-                    </p>
+                        </p>
+                    </div>
                 </div>
             </div>
 
@@ -409,6 +416,7 @@
                     Modifier
                 </button>
             </div>
+
         </x-modal>
 
 

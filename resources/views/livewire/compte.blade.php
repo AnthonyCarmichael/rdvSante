@@ -121,6 +121,6 @@
     </div>
 
     <div class="w-full flex justify-center my-8">
-        <a href="{{ route('message')}}" class="text-center w-1/3 bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 focus:ring-4 focus:ring-blue-300">Personnaliser le message</a>
+        <a href="{{ route('message')}}" class="text-center w-1/3 bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 focus:ring-4 focus:ring-blue-300">Personnaliser le message du courriel de confirmation de rendez-vous</a>
     </div>
 </div>
