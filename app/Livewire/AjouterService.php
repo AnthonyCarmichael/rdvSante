@@ -170,7 +170,12 @@ class AjouterService extends Component
         $this->validate();
 
         $stripe = new \Stripe\StripeClient('sk_test_51QLRk0G8MNDQfBDwRqTNqHUZSEmqRHPJJwWOb90PfAnEVd6Vrr3S857Z3boV4kv0ZBdwQHQEbFuRw1IbRyIiYUDa005h9SywCD');
-        $produitStripe = $stripe->products->create(['name' => $this->nomservice, 'description' => $this->descriptionservice]);
+
+        if ($this->descriptionservice == null) {
+            $produitStripe = $stripe->products->create(['name' => $this->nomservice]);
+        } else {
+            $produitStripe = $stripe->products->create(['name' => $this->nomservice, 'description' => $this->descriptionservice]);
+        }
         $prixStripe = $stripe->prices->create([
             'currency' => 'cad',
             'custom_unit_amount' => ["enabled" => true],
