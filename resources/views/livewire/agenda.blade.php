@@ -120,7 +120,7 @@
                                                                 @php
 
                                                                     $totalPaiement = 0;
-                                                                    $totalFacture= $rdv->service->prix + ($taxes[0]->valeur/100 *$rdv->service->prix)+ ($taxes[1]->valeur/100 *$rdv->service->prix);
+                                                                    $totalFacture= round($rdv->service->prix + ($taxes[0]->valeur/100 *$rdv->service->prix)+ ($taxes[1]->valeur/100 *$rdv->service->prix),2);
                                                                 @endphp
                                                                 @foreach ($rdv->transactions as $transaction )
 
@@ -136,11 +136,11 @@
                                                                 @endforeach
 
                                                                 @if ( $totalPaiement < $totalFacture)
-                                                                    <p class="leading-tight block text-red-400 text-sm">Pas payé {{$totalPaiement}}</p>
+                                                                    <p class="leading-tight block text-red-400 text-sm">Pas payé {{$totalPaiement}} {{$totalFacture}}</p>
                                                                 @elseif ($totalPaiement == $totalFacture)
                                                                     <p class="leading-tight block text-green text-sm">Payé</p>
                                                                 @elseif ($totalPaiement > $totalFacture)
-                                                                    <p class="leading-tight block text-red-400 text-sm">Trop payé</p>
+                                                                    <p class="leading-tight block text-red-400 text-sm">Trop payé {{$totalPaiement}}</p>
                                                                 @endif
 
                                                             </div>
