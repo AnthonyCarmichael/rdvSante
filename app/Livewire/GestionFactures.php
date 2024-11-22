@@ -57,6 +57,7 @@ class GestionFactures extends Component
     public $tvq;
     public $rdv;
     public $restePayer;
+    public $idRdv;
     public function render()
     {
         return view('livewire.gestion-factures');
@@ -108,6 +109,18 @@ class GestionFactures extends Component
     {
         $this->transactionRembourse = Transaction::find($id);
         $this->dispatch('open-modal', name: 'rembourserPaiement');
+    }
+
+    public function formDesacRdv($idRdv)
+    {
+        $this->idRdv = $idRdv;
+        $this->dispatch('open-modal', name: 'desacRdv');
+    }
+
+    public function formReacRdv($idRdv)
+    {
+        $this->idRdv = $idRdv;
+        $this->dispatch('open-modal', name: 'reacRdv');
     }
 
     public function filtrePaiement()
@@ -193,7 +206,21 @@ class GestionFactures extends Component
         $clinique = Clinique::find($this->rdv->idClinique);
         $profession = Profession::find($service->idProfessionService);
         if ($this->moyenPaiement == 1) {
-            $lienPaiement = new LienPaiement($service, $client, $this->rdv, $user, $profession, $clinique);
+            $stripe = new \Stripe\StripeClient('sk_test_51QLRk0G8MNDQfBDwRqTNqHUZSEmqRHPJJwWOb90PfAnEVd6Vrr3S857Z3boV4kv0ZBdwQHQEbFuRw1IbRyIiYUDa005h9SywCD');
+
+            $lienStripe = $stripe->paymentLinks->create([
+                'line_items' => [
+                    [
+                        'price' => $service->prixStripe,
+                        'quantity' => 1,
+                    ],
+
+                ],
+                'metadata' => [
+                    'idRdv' => $this->rdv->id
+                ],
+            ]);
+            $lienPaiement = new LienPaiement($service, $client, $this->rdv, $user, $profession, $clinique, $lienStripe->url);
             Mail::to($client->courriel)
                 ->send($lienPaiement);
         } else {
@@ -205,12 +232,24 @@ class GestionFactures extends Component
                 'idMoyenPaiement' => $this->moyenPaiement
             ]);
         }
-        file_put_contents(app()->environmentFilePath(), str_replace(
-            "ID_RDV" . '=' . env("ID_RDV"),
-            "ID_RDV" . '=' . $this->rdv->id,
-            file_get_contents(app()->environmentFilePath())
-        ));
+
         $this->transactions = Transaction::all();
+        $this->dispatch('close-modal');
+    }
+
+    public function desactiverRdv()
+    {
+        Rdv::find($this->idRdv)->update(['actif' => 0]);
+        $this->transactions = Transaction::all();
+        $this->rdvs = Rdv::all();
+        $this->dispatch('close-modal');
+    }
+
+    public function reactiverRdv()
+    {
+        Rdv::find($this->idRdv)->update(['actif' => 1]);
+        $this->transactions = Transaction::all();
+        $this->rdvs = Rdv::all();
         $this->dispatch('close-modal');
     }
 

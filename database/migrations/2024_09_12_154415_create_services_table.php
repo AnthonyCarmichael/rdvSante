@@ -24,10 +24,8 @@ return new class extends Migration
             $table->integer('nombreHeureLimiteReservation');
             $table->boolean('droitPersonneACharge');
             $table->boolean('actif');
-            $table->text('lienStripe');
             $table->text('prixStripe');
             $table->text('produitStripe');
-            $table->text('idLienStripe');
             $table->bigInteger('idProfessionService')->unsigned();
             $table->bigInteger('idProfessionnel')->unsigned();
             $table->decimal('montantPenalite', 5, 2)->default(0.00);

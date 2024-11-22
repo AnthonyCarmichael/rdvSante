@@ -22,7 +22,7 @@ class LienPaiement extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct(public Service $service, public Client $client, public Rdv $rdv, public User $user, public Profession $profession, public Clinique $clinique)
+    public function __construct(public Service $service, public Client $client, public Rdv $rdv, public User $user, public Profession $profession, public Clinique $clinique, public $lienPaiement)
     {
         //
     }
