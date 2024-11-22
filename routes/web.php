@@ -55,7 +55,7 @@ Route::get('/recuRemboursement/{client}/{transaction}/{clinique}/{rdv}/{service}
 Route::view('profile', 'profile')
     ->middleware(['auth'])->name('profile');
 
-Route::view('/welcome', 'welcome');
+/*Route::view('/welcome', 'welcome');*/
 
 Route::get('/facture/{client}/{clinique}/{rdv}/{service}', [PdfController::class, 'facture'])->name('facture');
 
@@ -107,14 +107,15 @@ Route::get('/rendez-vous/modifier/{id}', [RdvController::class, 'modifier']);
 Route::get('/rendez-vous/annuler/{id}', [RdvController::class, 'annuler']);
 
 Route::get('/users/create', [UserController::class, 'create'])->middleware(CheckRole::class)->name('users.create');
-Route::post('/users', [UserController::class, 'sendInvitation'])->name('sendInvitation');
+Route::post('/users', [UserController::class, 'sendInvitation'])->middleware('auth')->name('sendInvitation');
 
-Route::get('/message', [UserController::class, 'message'])->name('message');
-Route::post('/messagePersonalise', [UserController::class, 'updateMessage'])->name('updateMessage');
+Route::get('/message', [UserController::class, 'message'])->middleware('auth')->name('message');
+Route::post('/messagePersonalise', [UserController::class, 'updateMessage'])->middleware('auth')->name('updateMessage');
 
+/*
 Route::get('/registration', [UserController::class, 'showRegistrationForm'])->name('invitation.showRegistrationForm');
 Route::post('/registration/complete', [UserController::class, 'completeRegistration'])->name('completeRegistration');
-
+*/
 
 Route::get('/dossier/ficheClinique/{id}',[FicheCliniqueController::class, 'create'])->middleware('auth')->name('ficheClinique');
 Route::get('/dossier/ficheClinique/consulter/{id}',[FicheCliniqueController::class, 'show'])->middleware('auth')->name('ficheCliniqueConsulter');
