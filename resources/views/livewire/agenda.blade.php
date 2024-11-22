@@ -136,11 +136,11 @@
                                                                 @endforeach
 
                                                                 @if ( $totalPaiement < $totalFacture)
-                                                                    <p class="leading-tight block text-red-400 text-sm">Pas payé {{$totalPaiement}} {{$totalFacture}}</p>
+                                                                    <p class="leading-tight block text-red-400 text-sm">Pas payé</p>
                                                                 @elseif ($totalPaiement == $totalFacture)
                                                                     <p class="leading-tight block text-green text-sm">Payé</p>
                                                                 @elseif ($totalPaiement > $totalFacture)
-                                                                    <p class="leading-tight block text-red-400 text-sm">Trop payé {{$totalPaiement}}</p>
+                                                                    <p class="leading-tight block text-red-400 text-sm">Trop payé</p>
                                                                 @endif
 
                                                             </div>
