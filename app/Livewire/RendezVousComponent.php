@@ -279,7 +279,8 @@ class RendezVousComponent extends Component
         $rdv = $this->rdv;
 
         if ($this->rdv->transactions()->exists()) {
-            dd("Gestion du remboursement lors de la tentative de suppression d'un rdv ayant des paiement éffectué à compléter"); // As tester et gèrer
+            $this->rdv->actif = false;
+            $this->rdv->save();
         } else {
             $deleted = Rdv::destroy($this->rdv->id);
             $this->resetExcept('clients');
