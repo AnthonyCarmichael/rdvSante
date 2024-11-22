@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Cache;
 use League\HTMLToMarkdown\HtmlConverter;
+use Parsedown;
 
 class UserController extends Controller
 {
@@ -25,7 +26,12 @@ class UserController extends Controller
 
     public function message()
     {
-        return view('users.setMessage');
+        $user = User::find(Auth::user()->id);
+
+        if($user)
+            $this->message = (new Parsedown())->text($user->messagePersonnalise);
+
+        return view('users.setMessage', ['message' => $this->message]);
     }
 
     public function updateMessage(Request $request)
