@@ -24,10 +24,8 @@ class ServiceSeeder extends Seeder
                 'nombreHeureLimiteReservation' => 48,
                 'droitPersonneACharge' => false,
                 'actif' => true,
-                'lienStripe' => 'https://stripe.com/checkout_initiale',
                 'prixStripe' => 'price_12345',
                 'produitStripe' => 'prod_12345',
-                'idLienStripe' => 'link_12345',
                 'idProfessionService' => 1, // ID de la profession associée
                 'idProfessionnel' => 1, // ID du professionnel associé
                 'montantPenalite' => 5.00,
@@ -42,10 +40,8 @@ class ServiceSeeder extends Seeder
                 'nombreHeureLimiteReservation' => 24,
                 'droitPersonneACharge' => true,
                 'actif' => true,
-                'lienStripe' => 'https://stripe.com/checkout_suivi',
                 'prixStripe' => 'price_67890',
                 'produitStripe' => 'prod_67890',
-                'idLienStripe' => 'link_67890',
                 'idProfessionService' => 2, // ID de la profession associée
                 'idProfessionnel' => 1, // ID du professionnel associé
                 'montantPenalite' => 10.00,
@@ -60,10 +56,8 @@ class ServiceSeeder extends Seeder
                 'nombreHeureLimiteReservation' => 1,
                 'droitPersonneACharge' => false,
                 'actif' => true,
-                'lienStripe' => 'https://stripe.com/checkout_urgence',
                 'prixStripe' => 'price_abcde',
                 'produitStripe' => 'prod_abcde',
-                'idLienStripe' => 'link_abcde',
                 'idProfessionService' => 3, // ID de la profession associée
                 'idProfessionnel' => 2, // ID du professionnel associé
                 'montantPenalite' => 25.00,
