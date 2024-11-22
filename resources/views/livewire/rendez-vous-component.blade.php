@@ -294,7 +294,7 @@
                 <div class="flex">
                     <div class="flex justify-between w-1/2">
                         <p>Total</p>
-                        <p class="pr-6">{{ $totalvalue }} $</p>
+                        <p class="pr-6">{{ number_format($totalvalue, 2) }} $</p>
 
                     </div>
 
@@ -337,7 +337,8 @@
         <form wire:submit.prevent="ajoutPaiement" class="bg-white p-4 rounded-lg">
 
             <div class=" grid grid-cols-2 justify-center gap-y-4 w-full">
-                <label class="text-md text-center w-full" for="montant">Il reste {{ number_format($restePayer, 2) }}$
+                <label class="text-md text-center w-full" for="montant">Il reste
+                    {{ number_format($restePayer, 2) }}$
                     à payer. Quel
                     est le montant du
                     paiement?</label>
