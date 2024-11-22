@@ -70,7 +70,8 @@ class User extends Authenticatable
         'actif',
         'lien',
         'idRole',
-        'messagePersonnalise'
+        'messagePersonnalise',
+        'cleStripe'
     ];
 
     /**

@@ -29,6 +29,7 @@ class Compte extends Component
     public $signature;
     public $numTvq;
     public $numTps;
+    public $cleStripe;
 
 
     public function mount()
@@ -86,6 +87,7 @@ class Compte extends Component
             $user->description = $this->description;
             $user->numTvq = $this->numTvq;
             $user->numTps = $this->numTps;
+            $user->cleStripe = $this->cleStripe;
 
             /*if ($this->photoProfil) {
                 $filename = 'photoProfil' . $this->prenom . $this->nom . '.jpg';
