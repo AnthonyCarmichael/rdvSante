@@ -271,10 +271,14 @@
                         @endphp
                         @foreach ($rdv->transactions as $transaction)
                             <div class="w-full flex justify-between">
-                                <p class="">{{ $transaction->moyenPaiement->nom }}</p>
-                                <p class="">{{ $transaction->dateHeure }}</p>
-                                <p class="">{{ $transaction->montant }} $</p>
+                                <p class="{{ $transaction->idTypeTransaction == 2 ? 'text-red-500' : '' }}">{{ $transaction->moyenPaiement->nom }}</p>
+                                <p class="{{ $transaction->idTypeTransaction == 2 ? 'text-red-500' : '' }}">{{ $transaction->dateHeure }}</p>
+                                <p class="{{ $transaction->idTypeTransaction == 2 ? 'text-red-500' : '' }}">{{ $transaction->montant }} $</p>
                             </div>
+                            @if ($transaction->idTypeTransaction == 2)
+                            <p class="text-red-500">remboursement</p>
+                            
+                            @endif
 
 
                             @php
