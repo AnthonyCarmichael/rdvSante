@@ -375,9 +375,6 @@
 
     <x-modal title="Confirmer la Suppression" name="confirmDeleteRdvModal" :show="false">
         <p class="block text-sm font-medium text-gray-700">Êtes-vous sûr de vouloir supprimer ce rendez-vous ?</p>
-        <p class="block text-sm font-medium text-gray-700">Si des transactions ont été effectuées, le client sera
-            <b>remboursé</b>.
-        </p>
 
         <div class="flex mt-8">
             <button wire:click="deleteRdv"
