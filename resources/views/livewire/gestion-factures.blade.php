@@ -339,8 +339,15 @@
                 <select wire:model="moyenPaiement" id="moyenPaiement" name="moyenPaiement"
                     class="h-12 text-md ml-2 w-full">
                     @foreach ($moyenPaiements as $m)
-                        <option value={{ $m->id }}>
-                            {{ $m->nom }}</option>
+                        @if ($user->cleStripe == null)
+                            @if ($m->id != 1)
+                                <option value={{ $m->id }} {{ $m->id === $moyenPaiement ? 'selected' : '' }}>
+                                    {{ $m->nom }}</option>
+                            @endif
+                        @else
+                            <option value={{ $m->id }}>
+                                {{ $m->nom }}</option>
+                        @endif
                     @endforeach
                 </select>
 

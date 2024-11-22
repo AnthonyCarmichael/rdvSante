@@ -40,6 +40,7 @@ class RendezVousComponent extends Component
     public $montant;
     public $dossiers;
     public $restePayer;
+    public $user;
 
     # Facturation
     public $sousMenuConsult;
@@ -60,6 +61,7 @@ class RendezVousComponent extends Component
 
     public function mount()
     {
+        $this->user = User::find(Auth::user()->id);
         $this->filter = '';
         $this->selectedTime = null;
         $this->clientSelected = null;
@@ -80,6 +82,7 @@ class RendezVousComponent extends Component
     {
 
         $this->reset();
+        $this->user = User::find(Auth::user()->id);
         $this->updatedFilter("");
         $this->selectedTime = $selectedTime;
 
@@ -145,7 +148,7 @@ class RendezVousComponent extends Component
         $this->sendConfirmedRdvMail($rdv->dossier->client, $rdv, $rdv->service->professionnel, "confirmer");
 
         $this->reset();
-
+        $this->user = User::find(Auth::user()->id);
         $this->dispatch('close-modal');
 
         $this->dispatch('refreshAgenda');
@@ -165,6 +168,7 @@ class RendezVousComponent extends Component
             ->orderBy('prenom')
             ->get();
         $cliniques = Auth::user()->cliniques;
+        $this->user = User::find(Auth::user()->id);
         #dd($cliniques);
         $services = $this->fetchServices();
         $this->moyenPaiements = MoyenPaiement::all();
@@ -178,6 +182,7 @@ class RendezVousComponent extends Component
     public function consulterModalRdv(Rdv $rdv)
     {
         $this->reset();
+        $this->user = User::find(Auth::user()->id);
         $this->resetValidation();
         $this->updatedFilter("");
 
@@ -267,6 +272,7 @@ class RendezVousComponent extends Component
 
         $this->sendConfirmedRdvMail($rdv->dossier->client, $rdv, $rdv->service->professionnel, "confirmer");
         $this->reset();
+        $this->user = User::find(Auth::user()->id);
         $this->dispatch('close-modal');
         $this->dispatch('refreshAgenda');
         $this->consulterModalRdv($rdv);
@@ -284,6 +290,7 @@ class RendezVousComponent extends Component
             $deleted = Rdv::destroy($this->rdv->id);
             $this->resetExcept('clients');
         }
+        $this->user = User::find(Auth::user()->id);
         $this->dispatch('close-modal');
         $this->dispatch('refreshAgenda');
 
@@ -319,7 +326,7 @@ class RendezVousComponent extends Component
         $clinique = Clinique::find($this->rdv->idClinique);
         $profession = Profession::find($service->idProfessionService);
         if ($this->moyenPaiement == 1) {
-            $stripe = new \Stripe\StripeClient('sk_test_51QLRk0G8MNDQfBDwRqTNqHUZSEmqRHPJJwWOb90PfAnEVd6Vrr3S857Z3boV4kv0ZBdwQHQEbFuRw1IbRyIiYUDa005h9SywCD');
+            $stripe = new \Stripe\StripeClient(Auth::user()->cleStripe);
 
             $lienStripe = $stripe->paymentLinks->create([
                 'line_items' => [
@@ -333,7 +340,7 @@ class RendezVousComponent extends Component
                     'idRdv' => $this->rdv->id
                 ],
             ]);
-            $lienPaiement = new LienPaiement($service, $client, $this->rdv, $user, $profession, $clinique, $lienStripe->url );
+            $lienPaiement = new LienPaiement($service, $client, $this->rdv, $user, $profession, $clinique, $lienStripe->url);
             Mail::to($client->courriel)
                 ->send($lienPaiement);
         } else {

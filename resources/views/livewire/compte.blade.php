@@ -96,6 +96,12 @@
                 @enderror
             </div>
 
+            <div class="mb-4">
+                <label for="cleStripe" class="block text-sm font-medium">Clé secrète stripe</label>
+                <input type="text" id="cleStripe" wire:model="cleStripe"
+                    class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+            </div>
+
             <button type="submit"
                 class="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 focus:ring-4 focus:ring-blue-300">
                 Mettre à jour
