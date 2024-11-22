@@ -29,7 +29,7 @@ class InvitationMailable extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Invitation à collaborer',
+            subject: 'Invitation Rendez-vous santé',
         );
     }
 
