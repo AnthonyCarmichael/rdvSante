@@ -275,9 +275,12 @@
                         @endphp
                         @foreach ($rdv->transactions as $transaction)
                             <div class="w-full flex justify-between">
-                                <p class="{{ $transaction->idTypeTransaction == 2 ? 'text-red-500' : '' }}">{{ $transaction->moyenPaiement->nom }}</p>
-                                <p class="{{ $transaction->idTypeTransaction == 2 ? 'text-red-500' : '' }}">{{ $transaction->dateHeure }}</p>
-                                <p class="{{ $transaction->idTypeTransaction == 2 ? 'text-red-500' : '' }}">{{ $transaction->montant }} $</p>
+                                <p class="{{ $transaction->idTypeTransaction == 2 ? 'text-red-500' : '' }}">
+                                    {{ $transaction->moyenPaiement->nom }}</p>
+                                <p class="{{ $transaction->idTypeTransaction == 2 ? 'text-red-500' : '' }}">
+                                    {{ $transaction->dateHeure }}</p>
+                                <p class="{{ $transaction->idTypeTransaction == 2 ? 'text-red-500' : '' }}">
+                                    {{ $transaction->montant }} $</p>
                             </div>
                             @if ($transaction->idTypeTransaction == 2)
                             <p class="text-red-500">remboursement</p>
@@ -359,8 +362,15 @@
                 <select wire:model="moyenPaiement" id="moyenPaiement" name="moyenPaiement"
                     class="h-12 text-md ml-2 w-full">
                     @foreach ($moyenPaiements as $m)
-                        <option value={{ $m->id }}>
-                            {{ $m->nom }}</option>
+                        @if ($user->cleStripe == null)
+                            @if ($m->id != 1)
+                                <option value={{ $m->id }} {{ $m->id === $moyenPaiement ? 'selected' : '' }}>
+                                    {{ $m->nom }}</option>
+                            @endif
+                        @else
+                            <option value={{ $m->id }}>
+                                {{ $m->nom }}</option>
+                        @endif
                     @endforeach
                 </select>
 

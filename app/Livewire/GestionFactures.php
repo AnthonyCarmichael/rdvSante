@@ -58,6 +58,7 @@ class GestionFactures extends Component
     public $rdv;
     public $restePayer;
     public $idRdv;
+    public $user;
     public function render()
     {
         return view('livewire.gestion-factures');
@@ -65,6 +66,7 @@ class GestionFactures extends Component
 
     public function mount()
     {
+        $this->user = Auth::user();
         $this->rdvs = Rdv::all();
         $this->transactions = Transaction::all();
         $this->moyenPaiements = MoyenPaiement::all();
@@ -206,7 +208,7 @@ class GestionFactures extends Component
         $clinique = Clinique::find($this->rdv->idClinique);
         $profession = Profession::find($service->idProfessionService);
         if ($this->moyenPaiement == 1) {
-            $stripe = new \Stripe\StripeClient('sk_test_51QLRk0G8MNDQfBDwRqTNqHUZSEmqRHPJJwWOb90PfAnEVd6Vrr3S857Z3boV4kv0ZBdwQHQEbFuRw1IbRyIiYUDa005h9SywCD');
+            $stripe = new \Stripe\StripeClient(Auth::user()->cleStripe);
 
             $lienStripe = $stripe->paymentLinks->create([
                 'line_items' => [
