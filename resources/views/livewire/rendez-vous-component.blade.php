@@ -215,10 +215,14 @@
                             class="px-4 py-2 bg-red-500 hover:bg-red-700 text-white rounded">
                             Annuler
                         </button>
-                        <button type="button" @click="editable = !editable" x-show="!editable"
+
+                        @if (!(\Carbon\Carbon::parse($rdv->dateHeureDebut)->isBefore(\Carbon\Carbon::now())))
+                            <button type="button" @click="editable = !editable" x-show="!editable"
                             class="px-4 py-2 text-white rounded bg-orange-500 hover:bg-orange-700">
-                            Modifier
-                        </button>
+                                Modifier
+                            </button>
+                        @endif
+
                         <button type="button" @click="$dispatch('open-modal', { name: 'confirmDeleteRdvModal' });"
                             x-show="!editable"
                             class="ml-4 px-4 py-2 bg-blue-500 text-white rounded bg-red-500 hover:bg-red-700">
@@ -277,7 +281,7 @@
                             </div>
                             @if ($transaction->idTypeTransaction == 2)
                             <p class="text-red-500">remboursement</p>
-                            
+
                             @endif
 
 
