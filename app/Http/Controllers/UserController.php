@@ -31,7 +31,9 @@ class UserController extends Controller
     public function updateMessage(Request $request)
     {
         $converter = new HtmlConverter([
-            'header_style' => 'atx'
+            'header_style' => 'atx',
+            'strip_tags' => true
+
         ]);
 
         $request->validate([

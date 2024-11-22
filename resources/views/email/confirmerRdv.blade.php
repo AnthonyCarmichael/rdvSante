@@ -14,30 +14,7 @@ Lieu du rendez-vous :
 
 **Cout:** {{$rdv->service->prix}} $ + {{$tps->nom}} {{number_format(($tps->valeur/100)*$rdv->service->prix,2)}} $ + {{$tvq->nom}} {{number_format(($tvq->valeur/100)*$rdv->service->prix,2)}} $ = **{{$rdv->service->prix + number_format(($tps->valeur/100)*$rdv->service->prix,2) + number_format(($tvq->valeur/100)*$rdv->service->prix,2)}} $**
 
-
-Merci de prendre le temps de lire ce courriel.
-
-**IMPORTANT**
-
-Il y aura maintenant un code à la porte d’entrée. Voici le code
-
-5124
-
-
-Pour la séance, pensez à vous apporter un top et un short de sport ainsi que des vêtements amples.
-
-** Pour faciliter le paiement par virement interac, je vous invite à préparer à l'avance le virement avec ces informations:
-
-    Au nom de: {{$professionnel->prenom}} {{$professionnel->nom}}
-    À l'adresse: {{$professionnel->email}}
-    Question de sécurité: Adresse
-    Réponse: 6050
-
-​** Par respect pour votre thérapeute et les autres client-es, merci d'annuler ou déplacer le rendez-vous au moins 24h à l'avance. Des frais de 40$ peuvent s’appliquer.
-
-N'hésitez pas à me contacter en répondant à ce courriel pour toutes questions, inquiétudes, etc.
-
-Au plaisir de vous accompagner !
+{{$professionnel->messagePersonnalise}}
 
 {{$professionnel->prenom}} {{$professionnel->nom}} @foreach ($professionnel->professions as $profession ), {{$profession->nom}}
 @endforeach
