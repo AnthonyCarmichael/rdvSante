@@ -54,14 +54,8 @@
 
             <div class="mb-4">
                 <label for="description" class="block text-sm font-medium">Description</label>
-                <textarea
-                    wire:model="description"
-                    name="description"
-                    id="description"
-                    cols="30"
-                    rows="1"
-                    class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                    oninput="autoResize(this)">
+                <textarea wire:model="description" name="description" id="description" cols="30" rows="1" oninput="autoResize(this)"
+                    class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                     {{ $description ?? '' }}
                 </textarea>
                 @error('description')
@@ -70,19 +64,16 @@
             </div>
 
             <script>
-                // Fonction pour ajuster la hauteur du textarea
                 function autoResize(textarea) {
-                    textarea.style.height = 'auto'; // Réinitialise la hauteur
-                    textarea.style.height = textarea.scrollHeight + 'px'; // Ajuste en fonction du contenu
+                    textarea.style.height = 'auto';
+                    textarea.style.height = textarea.scrollHeight + 'px';
                 }
 
-                // Ajuster automatiquement tous les textarea lors du chargement de la page
                 document.addEventListener('DOMContentLoaded', () => {
                     const textareas = document.querySelectorAll('textarea');
                     textareas.forEach(textarea => autoResize(textarea));
                 });
             </script>
-
 
             <div class="mb-4">
                 <label for="photoProfil" class="block text-sm font-medium">Photo de profil</label>
