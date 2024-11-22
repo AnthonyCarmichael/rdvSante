@@ -319,7 +319,21 @@ class RendezVousComponent extends Component
         $clinique = Clinique::find($this->rdv->idClinique);
         $profession = Profession::find($service->idProfessionService);
         if ($this->moyenPaiement == 1) {
-            $lienPaiement = new LienPaiement($service, $client, $this->rdv, $user, $profession, $clinique);
+            $stripe = new \Stripe\StripeClient('sk_test_51QLRk0G8MNDQfBDwRqTNqHUZSEmqRHPJJwWOb90PfAnEVd6Vrr3S857Z3boV4kv0ZBdwQHQEbFuRw1IbRyIiYUDa005h9SywCD');
+
+            $lienStripe = $stripe->paymentLinks->create([
+                'line_items' => [
+                    [
+                        'price' => $service->prixStripe,
+                        'quantity' => 1,
+                    ],
+
+                ],
+                'metadata' => [
+                    'idRdv' => $this->rdv->id
+                ],
+            ]);
+            $lienPaiement = new LienPaiement($service, $client, $this->rdv, $user, $profession, $clinique, $lienStripe->url );
             Mail::to($client->courriel)
                 ->send($lienPaiement);
         } else {
@@ -331,11 +345,6 @@ class RendezVousComponent extends Component
                 'idMoyenPaiement' => $this->moyenPaiement
             ]);
         }
-        file_put_contents(app()->environmentFilePath(), str_replace(
-            "ID_RDV" . '=' . env("ID_RDV"),
-            "ID_RDV" . '=' . $this->rdv->id,
-            file_get_contents(app()->environmentFilePath())
-        ));
         $this->dispatch('close-modal');
         $this->dispatch('refreshAgenda');
         $this->consulterModalRdv($this->rdv);

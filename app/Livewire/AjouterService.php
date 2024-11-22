@@ -176,14 +176,7 @@ class AjouterService extends Component
             'custom_unit_amount' => ["enabled" => true],
             'product' => $produitStripe->id,
         ]);
-        $lienStripe = $stripe->paymentLinks->create([
-            'line_items' => [
-                [
-                    'price' => $prixStripe->id,
-                    'quantity' => 1,
-                ],
-            ],
-        ]);
+
 
         Service::create([
             'nom' => $this->nomservice,
@@ -198,10 +191,8 @@ class AjouterService extends Component
             'actif' => true,
             'idProfessionService' => $this->professionservice,
             'idProfessionnel' => Auth::user()->id,
-            'lienStripe' => $lienStripe->url,
             'prixStripe' => $prixStripe->id,
             'produitStripe' => $produitStripe->id,
-            'idLienStripe' => $lienStripe->id,
 
         ]);
         $this->filtreService();

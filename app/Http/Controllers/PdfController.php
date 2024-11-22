@@ -321,6 +321,15 @@ class PdfController extends Controller
             $this->fpdf->SetFont('Arial', '', 40);
             $this->fpdf->Cell(60, 30, iconv('UTF-8', 'windows-1252', "PAYÉ"), 1, 0, 'C');
         }
+
+        if ($rdv->actif == 0 && $solde == $total) {
+            $this->fpdf->SetX(50);
+            $this->fpdf->SetDrawColor(255, 145, 145);
+            $this->fpdf->SetLineWidth(1);
+            $this->fpdf->SetTextColor(255, 145, 145);
+            $this->fpdf->SetFont('Arial', '', 40);
+            $this->fpdf->Cell(60, 30, iconv('UTF-8', 'windows-1252', "Annulé"), 1, 0, 'C');
+        }
         $this->fpdf->SetFont('Arial', '', 10);
         $this->fpdf->SetTextColor(0, 0, 0);
         $this->fpdf->Ln(1);
@@ -342,19 +351,46 @@ class PdfController extends Controller
         $this->fpdf->SetX(150);
         $this->fpdf->Cell(37, 5, iconv('UTF-8', 'windows-1252', "$total $"), 0, 1, 'R');
 
-        $this->fpdf->Ln(5);
-        $this->fpdf->SetFont('Arial', '', 10);
-        $this->fpdf->SetX(120);
-        $this->fpdf->Cell(37, 5, iconv('UTF-8', 'windows-1252', "Payé"), 0, 0, 'R');
-        $this->fpdf->SetX(150);
-        $this->fpdf->Cell(37, 5, iconv('UTF-8', 'windows-1252', number_format($paye, 2) . "$"), 0, 1, 'R');
 
-        $this->fpdf->Ln(5);
-        $this->fpdf->SetFont('Arial', '', 15);
-        $this->fpdf->SetX(120);
-        $this->fpdf->Cell(37, 5, iconv('UTF-8', 'windows-1252', "Solde"), 0, 0, 'R');
-        $this->fpdf->SetX(150);
-        $this->fpdf->Cell(37, 5, iconv('UTF-8', 'windows-1252', number_format($solde, 2) . "$"), 0, 1, 'R');
+        if ($rdv->actif == 0) {
+            $this->fpdf->Ln(5);
+            $this->fpdf->SetFont('Arial', '', 10);
+            $this->fpdf->SetX(120);
+            $this->fpdf->Cell(37, 5, iconv('UTF-8', 'windows-1252', "Payé"), 0, 0, 'R');
+            $this->fpdf->SetX(150);
+            $this->fpdf->Cell(37, 5, iconv('UTF-8', 'windows-1252', number_format($paye, 2) . "$"), 0, 1, 'R');
+
+            $this->fpdf->Ln(5);
+            $this->fpdf->SetTextColor(255, 0, 0);
+            $this->fpdf->SetFont('Arial', '', 10);
+            $this->fpdf->SetX(120);
+            $this->fpdf->Cell(37, 5, iconv('UTF-8', 'windows-1252', "Paiement annulé"), 0, 0, 'R');
+            $this->fpdf->SetX(150);
+            $this->fpdf->Cell(37, 5, iconv('UTF-8', 'windows-1252', number_format($solde, 2) . "$"), 0, 1, 'R');
+
+            $this->fpdf->Ln(5);
+            $this->fpdf->SetTextColor(0, 0, 0);
+            $this->fpdf->SetFont('Arial', '', 15);
+            $this->fpdf->SetX(120);
+            $this->fpdf->Cell(37, 5, iconv('UTF-8', 'windows-1252', "Solde"), 0, 0, 'R');
+            $this->fpdf->SetX(150);
+            $this->fpdf->Cell(37, 5, iconv('UTF-8', 'windows-1252', "0.00$"), 0, 1, 'R');
+        } else {
+            $this->fpdf->Ln(5);
+            $this->fpdf->SetFont('Arial', '', 10);
+            $this->fpdf->SetX(120);
+            $this->fpdf->Cell(37, 5, iconv('UTF-8', 'windows-1252', "Payé"), 0, 0, 'R');
+            $this->fpdf->SetX(150);
+            $this->fpdf->Cell(37, 5, iconv('UTF-8', 'windows-1252', number_format($paye, 2) . "$"), 0, 1, 'R');
+
+            $this->fpdf->Ln(5);
+            $this->fpdf->SetFont('Arial', '', 15);
+            $this->fpdf->SetX(120);
+            $this->fpdf->Cell(37, 5, iconv('UTF-8', 'windows-1252', "Solde"), 0, 0, 'R');
+            $this->fpdf->SetX(150);
+            $this->fpdf->Cell(37, 5, iconv('UTF-8', 'windows-1252', number_format($solde, 2) . "$"), 0, 1, 'R');
+        }
+
 
         $this->fpdf->Output("Facture-$rdv->id.pdf", 'D');
         /*$recu = new Recu($client, $rdv, $user, $clinique);
@@ -493,6 +529,15 @@ class PdfController extends Controller
                 $this->fpdf->SetFont('Arial', '', 40);
                 $this->fpdf->Cell(60, 30, iconv('UTF-8', 'windows-1252', "PAYÉ"), 1, 0, 'C');
             }
+
+            if ($r->actif == 0 && $solde == $total) {
+                $this->fpdf->SetX(50);
+                $this->fpdf->SetDrawColor(255, 145, 145);
+                $this->fpdf->SetLineWidth(1);
+                $this->fpdf->SetTextColor(255, 145, 145);
+                $this->fpdf->SetFont('Arial', '', 40);
+                $this->fpdf->Cell(60, 30, iconv('UTF-8', 'windows-1252', "Annulé"), 1, 0, 'C');
+            }
             $this->fpdf->SetFont('Arial', '', 10);
             $this->fpdf->SetTextColor(0, 0, 0);
             $this->fpdf->Ln(1);
@@ -514,20 +559,45 @@ class PdfController extends Controller
             $this->fpdf->SetX(150);
             $this->fpdf->Cell(37, 5, iconv('UTF-8', 'windows-1252', "$total $"), 0, 1, 'R');
 
-            $this->fpdf->Ln(5);
-            $this->fpdf->SetFont('Arial', '', 10);
-            $this->fpdf->SetX(120);
-            $this->fpdf->Cell(37, 5, iconv('UTF-8', 'windows-1252', "Payé"), 0, 0, 'R');
-            $this->fpdf->SetX(150);
-            $this->fpdf->Cell(37, 5, iconv('UTF-8', 'windows-1252', number_format($paye, 2) . "$"), 0, 1, 'R');
 
-            $this->fpdf->Ln(5);
-            $this->fpdf->SetFont('Arial', '', 15);
-            $this->fpdf->SetX(120);
-            $this->fpdf->Cell(37, 5, iconv('UTF-8', 'windows-1252', "Solde"), 0, 0, 'R');
-            $this->fpdf->SetX(150);
-            $this->fpdf->Cell(37, 5, iconv('UTF-8', 'windows-1252', number_format($solde, 2) . "$"), 0, 1, 'R');
+            if ($r->actif == 0) {
+                $this->fpdf->Ln(5);
+                $this->fpdf->SetFont('Arial', '', 10);
+                $this->fpdf->SetX(120);
+                $this->fpdf->Cell(37, 5, iconv('UTF-8', 'windows-1252', "Payé"), 0, 0, 'R');
+                $this->fpdf->SetX(150);
+                $this->fpdf->Cell(37, 5, iconv('UTF-8', 'windows-1252', number_format($paye, 2) . "$"), 0, 1, 'R');
 
+                $this->fpdf->Ln(5);
+                $this->fpdf->SetTextColor(255, 0, 0);
+                $this->fpdf->SetFont('Arial', '', 10);
+                $this->fpdf->SetX(120);
+                $this->fpdf->Cell(37, 5, iconv('UTF-8', 'windows-1252', "Paiement annulé"), 0, 0, 'R');
+                $this->fpdf->SetX(150);
+                $this->fpdf->Cell(37, 5, iconv('UTF-8', 'windows-1252', number_format($solde, 2) . "$"), 0, 1, 'R');
+
+                $this->fpdf->Ln(5);
+                $this->fpdf->SetTextColor(0, 0, 0);
+                $this->fpdf->SetFont('Arial', '', 15);
+                $this->fpdf->SetX(120);
+                $this->fpdf->Cell(37, 5, iconv('UTF-8', 'windows-1252', "Solde"), 0, 0, 'R');
+                $this->fpdf->SetX(150);
+                $this->fpdf->Cell(37, 5, iconv('UTF-8', 'windows-1252', "0.00$"), 0, 1, 'R');
+            } else {
+                $this->fpdf->Ln(5);
+                $this->fpdf->SetFont('Arial', '', 10);
+                $this->fpdf->SetX(120);
+                $this->fpdf->Cell(37, 5, iconv('UTF-8', 'windows-1252', "Payé"), 0, 0, 'R');
+                $this->fpdf->SetX(150);
+                $this->fpdf->Cell(37, 5, iconv('UTF-8', 'windows-1252', number_format($paye, 2) . "$"), 0, 1, 'R');
+
+                $this->fpdf->Ln(5);
+                $this->fpdf->SetFont('Arial', '', 15);
+                $this->fpdf->SetX(120);
+                $this->fpdf->Cell(37, 5, iconv('UTF-8', 'windows-1252', "Solde"), 0, 0, 'R');
+                $this->fpdf->SetX(150);
+                $this->fpdf->Cell(37, 5, iconv('UTF-8', 'windows-1252', number_format($solde, 2) . "$"), 0, 1, 'R');
+            }
         }
 
         $this->fpdf->Output('factures.pdf', 'D');

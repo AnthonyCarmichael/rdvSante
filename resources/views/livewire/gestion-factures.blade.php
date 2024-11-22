@@ -21,11 +21,11 @@
                     <th class="border-solid border-b-2 border-black bg-mid-green text-left w-1/12">No facture</th>
                     <th class="border-solid border-b-2 border-black bg-mid-green text-left w-2/12">Client</th>
                     <th class="border-solid border-b-2 border-black bg-mid-green text-left w-2/12">Date</th>
-                    <th class="border-solid border-b-2 border-black bg-mid-green text-left w-2/12">Total
+                    <th class="border-solid border-b-2 border-black bg-mid-green text-left w-1/12">Total
                     </th>
-                    <th class="border-solid border-b-2 border-black bg-mid-green text-left w-2/12">Solde
+                    <th class="border-solid border-b-2 border-black bg-mid-green text-left w-1/12">Solde
                     </th>
-                    <th class="border-solid border-b-2 border-black bg-mid-green text-left w-3/12">Action</th>
+                    <th class="border-solid border-b-2 border-black bg-mid-green text-left w-5/12">Action</th>
                 </tr>
             </thead>
             @php
@@ -34,133 +34,269 @@
             @endphp
             @foreach ($rdvs as $r)
                 <?php if ($cpt%2 == 0){ ?>
-                <tr class="bg-white">
-                    <td> {{ $r->id }} </td>
-                    @foreach ($dossiers as $d)
-                        @if ($r->idDossier == $d->id)
-                            @foreach ($clients as $c)
-                                @if ($c->id == $d->idClient)
-                                    <td class="w-2/12 pr-4">
-                                        {{ $c->prenom }} {{ $c->nom }}</td>
+                @if ($r->actif == 1)
+                    <tr class="bg-white">
+                        <td> {{ $r->id }} </td>
+                        @foreach ($dossiers as $d)
+                            @if ($r->idDossier == $d->id)
+                                @foreach ($clients as $c)
+                                    @if ($c->id == $d->idClient)
+                                        <td class="pr-4">
+                                            {{ $c->prenom }} {{ $c->nom }}</td>
+                                    @endif
+                                @endforeach
+                            @endif
+                        @endforeach
+
+                        <td> {{ $r->dateHeureDebut }} </td>
+
+                        @foreach ($services as $s)
+                            @if ($r->idService == $s->id)
+                                <td class="pr-4">
+                                    {{ number_format($s->prix + ($s->prix * $tvq->valeur) / 100 + ($s->prix * $tps->valeur) / 100, 2) }}$
+                                </td>
+                                <?php $solde += $s->prix + ($s->prix * $tvq->valeur) / 100 + ($s->prix * $tps->valeur) / 100; ?>
+                            @endif
+                        @endforeach
+                        @foreach ($transactions as $t)
+                            @if ($t->idRdv == $r->id)
+                                @if ($t->idTypeTransaction == 1)
+                                    <?php $solde -= $t->montant; ?>
                                 @endif
-                            @endforeach
-                        @endif
-                    @endforeach
-
-                    <td> {{ $r->dateHeureDebut }} </td>
-
-                    @foreach ($services as $s)
-                        @if ($r->idService == $s->id)
-                            <td class="w-2/12 pr-4">
-                                {{ number_format($s->prix + ($s->prix * $tvq->valeur) / 100 + ($s->prix * $tps->valeur) / 100, 2) }}$
-                            </td>
-                            <?php $solde += $s->prix + ($s->prix * $tvq->valeur) / 100 + ($s->prix * $tps->valeur) / 100; ?>
-                        @endif
-                    @endforeach
-                    @foreach ($transactions as $t)
-                        @if ($t->idRdv == $r->id)
-                            @if ($t->idTypeTransaction == 1)
-                                <?php $solde -= $t->montant; ?>
+                                @if ($t->idTypeTransaction == 2)
+                                    <?php $solde += $t->montant; ?>
+                                @endif
                             @endif
-                            @if ($t->idTypeTransaction == 2)
-                                <?php $solde += $t->montant; ?>
-                            @endif
-                        @endif
-                    @endforeach
-                    <td>{{ number_format($solde, 2) }}$</td>
-                    @php
+                        @endforeach
+                        <td>{{ number_format($solde, 2) }}$</td>
+                        @php
 
-                        $client = 0;
+                            $client = 0;
 
-                        foreach ($dossiers as $d) {
-                            if ($r->idDossier == $d->id) {
-                                foreach ($clients as $c) {
-                                    if ($c->id == $d->idClient) {
-                                        $client = $c;
+                            foreach ($dossiers as $d) {
+                                if ($r->idDossier == $d->id) {
+                                    foreach ($clients as $c) {
+                                        if ($c->id == $d->idClient) {
+                                            $client = $c;
+                                        }
                                     }
                                 }
                             }
-                        }
 
-                    @endphp
-                    <td>
-                        <a
-                            href="facture/{{ $client->id }}/{{ $r->idClinique }}/{{ $r->id }}/{{ $r->idService }}">
-                            <button class="w-5/12 bg-selected-green mx-0.5 my-1 rounded p-0.5"
-                                type="button">Télécharger
+                        @endphp
+                        <td>
+                            <a
+                                href="facture/{{ $client->id }}/{{ $r->idClinique }}/{{ $r->id }}/{{ $r->idService }}">
+                                <button class="w-3/12 bg-selected-green mx-0.5 my-1 rounded p-0.5"
+                                    type="button">Télécharger
+                                </button>
+                            </a>
+                            <button class="w-3/12 bg-selected-green mx-0.5 my-1 rounded p-0.5"
+                                wire:click="addPaiement({{ $r->id }}, {{ $solde }})"
+                                type="button">Payer
                             </button>
-                        </a>
-                        <button class="w-5/12 bg-selected-green mx-0.5 my-1 rounded p-0.5"
-                            wire:click="addPaiement({{ $r->id }}, {{ $solde }})" type="button">Payer
-                        </button>
-                    </td>
-                </tr>
+                            <button class="w-3/12 bg-selected-green mx-0.5 my-1 rounded p-0.5"
+                                wire:click="formDesacRdv({{ $r->id }})" type="button">Annuler
+                            </button>
+                        </td>
+                    </tr>
+                @else
+                    <tr class="bg-white">
+                        <td class="text-red-600"> {{ $r->id }} </td>
+                        @foreach ($dossiers as $d)
+                            @if ($r->idDossier == $d->id)
+                                @foreach ($clients as $c)
+                                    @if ($c->id == $d->idClient)
+                                        <td class="pr-4 text-red-600">
+                                            {{ $c->prenom }} {{ $c->nom }}</td>
+                                    @endif
+                                @endforeach
+                            @endif
+                        @endforeach
+
+                        <td class="text-red-600"> {{ $r->dateHeureDebut }} </td>
+
+                        @foreach ($services as $s)
+                            @if ($r->idService == $s->id)
+                                <td class="pr-4 text-red-600">
+                                    {{ number_format($s->prix + ($s->prix * $tvq->valeur) / 100 + ($s->prix * $tps->valeur) / 100, 2) }}$
+                                </td>
+                                <?php $solde += $s->prix + ($s->prix * $tvq->valeur) / 100 + ($s->prix * $tps->valeur) / 100; ?>
+                            @endif
+                        @endforeach
+                        @foreach ($transactions as $t)
+                            @if ($t->idRdv == $r->id)
+                                @if ($t->idTypeTransaction == 1)
+                                    <?php $solde -= $t->montant; ?>
+                                @endif
+                                @if ($t->idTypeTransaction == 2)
+                                    <?php $solde += $t->montant; ?>
+                                @endif
+                            @endif
+                        @endforeach
+                        <td class="text-red-600">0.00$</td>
+                        @php
+
+                            $client = 0;
+
+                            foreach ($dossiers as $d) {
+                                if ($r->idDossier == $d->id) {
+                                    foreach ($clients as $c) {
+                                        if ($c->id == $d->idClient) {
+                                            $client = $c;
+                                        }
+                                    }
+                                }
+                            }
+
+                        @endphp
+                        <td>
+                            <a
+                                href="facture/{{ $client->id }}/{{ $r->idClinique }}/{{ $r->id }}/{{ $r->idService }}">
+                                <button class="w-3/12 bg-selected-green mx-0.5 my-1 rounded p-0.5"
+                                    type="button">Télécharger
+                                </button>
+                            </a>
+                            <button class="w-3/12 bg-selected-green mx-0.5 my-1 rounded p-0.5"
+                                wire:click="formReacRdv({{ $r->id }})" type="button">Réactiver
+                            </button>
+                        </td>
+                    </tr>
+                @endif
+
+
                 <?php $cpt += 1;
                 $solde = 0; }
                 else{ ?>
-                <tr class="bg-table-green">
-                    <td> {{ $r->id }} </td>
+                @if ($r->actif == 1)
+                    <tr class="bg-table-green">
+                        <td> {{ $r->id }} </td>
+                        @foreach ($dossiers as $d)
+                            @if ($r->idDossier == $d->id)
+                                @foreach ($clients as $c)
+                                    @if ($c->id == $d->idClient)
+                                        <td class="pr-4">
+                                            {{ $c->prenom }} {{ $c->nom }}</td>
+                                    @endif
+                                @endforeach
+                            @endif
+                        @endforeach
 
-                    @foreach ($dossiers as $d)
-                        @if ($r->idDossier == $d->id)
-                            @foreach ($clients as $c)
-                                @if ($c->id == $d->idClient)
-                                    <td class="w-2/12 pr-4">
-                                        {{ $c->prenom }} {{ $c->nom }}</td>
+                        <td> {{ $r->dateHeureDebut }} </td>
+
+                        @foreach ($services as $s)
+                            @if ($r->idService == $s->id)
+                                <td class="pr-4">
+                                    {{ number_format($s->prix + ($s->prix * $tvq->valeur) / 100 + ($s->prix * $tps->valeur) / 100, 2) }}$
+                                </td>
+                                <?php $solde += $s->prix + ($s->prix * $tvq->valeur) / 100 + ($s->prix * $tps->valeur) / 100; ?>
+                            @endif
+                        @endforeach
+                        @foreach ($transactions as $t)
+                            @if ($t->idRdv == $r->id)
+                                @if ($t->idTypeTransaction == 1)
+                                    <?php $solde -= $t->montant; ?>
                                 @endif
-                            @endforeach
-                        @endif
-                    @endforeach
-
-                    <td> {{ $r->dateHeureDebut }} </td>
-
-                    @foreach ($services as $s)
-                        @if ($r->idService == $s->id)
-                            <td class="w-2/12 pr-4">
-                                {{ number_format($s->prix + ($s->prix * $tvq->valeur) / 100 + ($s->prix * $tps->valeur) / 100, 2) }}$
-                            </td>
-                            <?php $solde += $s->prix + ($s->prix * $tvq->valeur) / 100 + ($s->prix * $tps->valeur) / 100; ?>
-                        @endif
-                    @endforeach
-                    @foreach ($transactions as $t)
-                        @if ($t->idRdv == $r->id)
-                            @if ($t->idTypeTransaction == 1)
-                                <?php $solde -= $t->montant; ?>
+                                @if ($t->idTypeTransaction == 2)
+                                    <?php $solde += $t->montant; ?>
+                                @endif
                             @endif
-                            @if ($t->idTypeTransaction == 2)
-                                <?php $solde += $t->montant; ?>
-                            @endif
-                        @endif
-                    @endforeach
-                    <td>{{ number_format($solde, 2) }}$</td>
+                        @endforeach
+                        <td>{{ number_format($solde, 2) }}$</td>
+                        @php
 
-                    @php
+                            $client = 0;
 
-                        $client = 0;
-
-                        foreach ($dossiers as $d) {
-                            if ($r->idDossier == $d->id) {
-                                foreach ($clients as $c) {
-                                    if ($c->id == $d->idClient) {
-                                        $client = $c;
+                            foreach ($dossiers as $d) {
+                                if ($r->idDossier == $d->id) {
+                                    foreach ($clients as $c) {
+                                        if ($c->id == $d->idClient) {
+                                            $client = $c;
+                                        }
                                     }
                                 }
                             }
-                        }
 
-                    @endphp
-                    <td><a
-                            href="facture/{{ $client->id }}/{{ $r->idClinique }}/{{ $r->id }}/{{ $r->idService }}">
-                            <button class="w-5/12 bg-selected-green mx-0.5 my-1 rounded p-0.5"
-                                type="button">Télécharger
+                        @endphp
+                        <td>
+                            <a
+                                href="facture/{{ $client->id }}/{{ $r->idClinique }}/{{ $r->id }}/{{ $r->idService }}">
+                                <button class="w-3/12 bg-selected-green mx-0.5 my-1 rounded p-0.5"
+                                    type="button">Télécharger
+                                </button>
+                            </a>
+                            <button class="w-3/12 bg-selected-green mx-0.5 my-1 rounded p-0.5"
+                                wire:click="addPaiement({{ $r->id }}, {{ $solde }})"
+                                type="button">Payer
                             </button>
-                        </a>
-                        <button class="w-5/12 bg-selected-green mx-0.5 my-1 rounded p-0.5"
-                            wire:click="addPaiement({{ $r->id }}, {{ $solde }})" type="button">Payer
-                        </button>
+                            <button class="w-3/12 bg-selected-green mx-0.5 my-1 rounded p-0.5"
+                                wire:click="formDesacRdv({{ $r->id }})" type="button">Annuler
+                            </button>
+                        </td>
+                    </tr>
+                @else
+                    <tr class="bg-table-green">
+                        <td class="text-red-600"> {{ $r->id }} </td>
+                        @foreach ($dossiers as $d)
+                            @if ($r->idDossier == $d->id)
+                                @foreach ($clients as $c)
+                                    @if ($c->id == $d->idClient)
+                                        <td class="pr-4 text-red-600">
+                                            {{ $c->prenom }} {{ $c->nom }}</td>
+                                    @endif
+                                @endforeach
+                            @endif
+                        @endforeach
 
-                    </td>
-                </tr>
+                        <td class="text-red-600"> {{ $r->dateHeureDebut }} </td>
+
+                        @foreach ($services as $s)
+                            @if ($r->idService == $s->id)
+                                <td class="pr-4 text-red-600">
+                                    {{ number_format($s->prix + ($s->prix * $tvq->valeur) / 100 + ($s->prix * $tps->valeur) / 100, 2) }}$
+                                </td>
+                                <?php $solde += $s->prix + ($s->prix * $tvq->valeur) / 100 + ($s->prix * $tps->valeur) / 100; ?>
+                            @endif
+                        @endforeach
+                        @foreach ($transactions as $t)
+                            @if ($t->idRdv == $r->id)
+                                @if ($t->idTypeTransaction == 1)
+                                    <?php $solde -= $t->montant; ?>
+                                @endif
+                                @if ($t->idTypeTransaction == 2)
+                                    <?php $solde += $t->montant; ?>
+                                @endif
+                            @endif
+                        @endforeach
+                        <td class="text-red-600">0.00$</td>
+                        @php
+
+                            $client = 0;
+
+                            foreach ($dossiers as $d) {
+                                if ($r->idDossier == $d->id) {
+                                    foreach ($clients as $c) {
+                                        if ($c->id == $d->idClient) {
+                                            $client = $c;
+                                        }
+                                    }
+                                }
+                            }
+
+                        @endphp
+                        <td>
+                            <a
+                                href="facture/{{ $client->id }}/{{ $r->idClinique }}/{{ $r->id }}/{{ $r->idService }}">
+                                <button class="w-3/12 bg-selected-green mx-0.5 my-1 rounded p-0.5"
+                                    type="button">Télécharger
+                                </button>
+                            </a>
+                            <button class="w-3/12 bg-selected-green mx-0.5 my-1 rounded p-0.5"
+                                wire:click="formReacRdv({{ $r->id }})" type="button">Réactiver
+                            </button>
+                        </td>
+                    </tr>
+                @endif
                 <?php $cpt += 1;
             $solde = 0; }  ?>
             @endforeach
@@ -189,12 +325,13 @@
         <form wire:submit.prevent="ajoutPaiement" class="bg-white p-4 rounded-lg">
 
             <div class=" grid grid-cols-2 justify-center gap-y-4 w-full">
-                <label class="text-md text-center w-full" for="montant">Il reste {{ number_format($restePayer, 2) }}$
+                <label class="text-md text-center w-full" for="montant">Il reste
+                    {{ number_format($restePayer, 2) }}$
                     à
                     payer. Quel est le montant du
                     paiement?</label>
                 <input wire:model="montant" class="h-12 text-md ml-2 w-full" type="number" step="0.01"
-                    id="montant" name="montant" max={{ $restePayer }} />
+                    id="montant" name="montant" max={{ number_format($restePayer, 2) }} />
 
                 <label class="text-md text-center w-full" for="moyenPaiement">De quel façon sera
                     fait le
@@ -207,6 +344,37 @@
                     @endforeach
                 </select>
 
+
+            </div>
+            <div class="flex justify-center mt-4">
+                <button class="w-3/12 bg-selected-green mx-1 my-1 rounded p-0.5" type="submit">Confirmer</button>
+            </div>
+
+        </form>
+    </x-modal>
+
+    <x-modal title="Annuler une facture" name="desacRdv" :show="false">
+
+        <form wire:submit.prevent="desactiverRdv" class="bg-white p-4 rounded-lg">
+
+            <div class="justify-center gap-y-4 w-full">
+                <p>Voulez-vous vraiment annuler cette facture? Vous ne pourrez plus faire de transaction sur celle-ci à
+                    moins de la réactiver.</p>
+
+            </div>
+            <div class="flex justify-center mt-4">
+                <button class="w-3/12 bg-selected-green mx-1 my-1 rounded p-0.5" type="submit">Confirmer</button>
+            </div>
+
+        </form>
+    </x-modal>
+
+    <x-modal title="Réactiver une facture" name="reacRdv" :show="false">
+
+        <form wire:submit.prevent="reactiverRdv" class="bg-white p-4 rounded-lg">
+
+            <div class="justify-center gap-y-4 w-full">
+                <p>Voulez-vous vraiment réactiver cette facture?</p>
 
             </div>
             <div class="flex justify-center mt-4">

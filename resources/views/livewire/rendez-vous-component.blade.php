@@ -342,7 +342,7 @@
                     est le montant du
                     paiement?</label>
                 <input wire:model="montant" class="h-12 text-md ml-2 w-full" type="number" step="0.01"
-                    id="montant" name="montant" max={{ $restePayer }} />
+                    id="montant" name="montant" max={{ number_format($restePayer, 2) }} />
 
                 <label class="text-md text-center w-full" for="moyenPaiement">De quel façon sera
                     fait le

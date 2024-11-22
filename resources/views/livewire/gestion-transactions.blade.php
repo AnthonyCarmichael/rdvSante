@@ -108,7 +108,7 @@
                                     break; ?>
                                 @endif
                             @endforeach
-                            @if ($trouve == false)
+                            @if ($trouve == false && $rdv->actif == 1)
                                 <button class="w-5/12 bg-selected-green mx-0.5 my-1 rounded p-0.5" type="button"
                                     wire:click="formRemboursement({{ $t->id }})">Rembourser</button>
                             @endif
@@ -237,7 +237,7 @@
                                     break; ?>
                                 @endif
                             @endforeach
-                            @if ($trouve == false)
+                            @if ($trouve == false && $rdv->actif == 1)
                                 <button class="w-5/12 bg-selected-green mx-0.5 my-1 rounded p-0.5" type="button"
                                     wire:click="formRemboursement({{ $t->id }})">Rembourser</button>
                             @endif
@@ -319,10 +319,22 @@
                     remboursement?</label>
                 <select wire:model="moyenPaiement" id="moyenPaiement" name="moyenPaiement"
                     class="h-12 text-md ml-2 w-1/2">
-                    @foreach ($moyenPaiements as $m)
-                        <option value={{ $m->id }} {{ $m->id === $moyenPaiement ? 'selected' : '' }}>
-                            {{ $m->nom }}</option>
-                    @endforeach
+                    @if ($moyenPaiement == 1)
+                        @foreach ($moyenPaiements as $m)
+                            @if ($m->id == 1)
+                                <option value={{ $m->id }} {{ $m->id === $moyenPaiement ? 'selected' : '' }}>
+                                    {{ $m->nom }}</option>
+                            @endif
+                        @endforeach
+                    @else
+                        @foreach ($moyenPaiements as $m)
+                            @if ($m->id != 1)
+                                <option value={{ $m->id }} {{ $m->id === $moyenPaiement ? 'selected' : '' }}>
+                                    {{ $m->nom }}</option>
+                            @endif
+                        @endforeach
+                    @endif
+
                 </select>
             </div>
             <div class="flex justify-center mt-4">
