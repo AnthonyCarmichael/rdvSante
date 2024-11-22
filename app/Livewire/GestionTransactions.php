@@ -93,6 +93,7 @@ class GestionTransactions extends Component
     public function formRemboursement($id)
     {
         $this->transactionRembourse = Transaction::find($id);
+        $this->moyenPaiement = $this->transactionRembourse->idMoyenPaiement;
         $this->dispatch('open-modal', name: 'rembourserPaiement');
     }
 
