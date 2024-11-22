@@ -54,11 +54,35 @@
 
             <div class="mb-4">
                 <label for="description" class="block text-sm font-medium">Description</label>
-                <textarea wire:model="description" name="description" id="description" cols="30" rows="4" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"></textarea>
+                <textarea
+                    wire:model="description"
+                    name="description"
+                    id="description"
+                    cols="30"
+                    rows="1"
+                    class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                    oninput="autoResize(this)">
+                    {{ $description ?? '' }}
+                </textarea>
                 @error('description')
                     <span class="error text-red-600">{{ $message }}</span>
                 @enderror
             </div>
+
+            <script>
+                // Fonction pour ajuster la hauteur du textarea
+                function autoResize(textarea) {
+                    textarea.style.height = 'auto'; // Réinitialise la hauteur
+                    textarea.style.height = textarea.scrollHeight + 'px'; // Ajuste en fonction du contenu
+                }
+
+                // Ajuster automatiquement tous les textarea lors du chargement de la page
+                document.addEventListener('DOMContentLoaded', () => {
+                    const textareas = document.querySelectorAll('textarea');
+                    textareas.forEach(textarea => autoResize(textarea));
+                });
+            </script>
+
 
             <div class="mb-4">
                 <label for="photoProfil" class="block text-sm font-medium">Photo de profil</label>
@@ -120,7 +144,9 @@
         @endif
     </div>
 
-    <div class="w-full flex justify-center my-8">
-        <a href="{{ route('message')}}" class="text-center w-1/3 bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 focus:ring-4 focus:ring-blue-300">Personnaliser le message du courriel de confirmation de rendez-vous</a>
+    <div class="w-full flex justify-center my-4">
+        <a href="{{ route('message')}}" class="text-center w-1/3 bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 focus:ring-4 focus:ring-blue-300">
+            Modifier le message du courriel de confirmation de rendez-vous
+        </a>
     </div>
 </div>
