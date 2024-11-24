@@ -67,7 +67,7 @@ class GestionFactures extends Component
     public function mount()
     {
         $this->user = Auth::user();
-        $this->rdvs = Rdv::all();
+        $this->rdvs = Rdv::orderBy('dateHeureDebut', 'desc')->get();
         $this->transactions = Transaction::all();
         $this->moyenPaiements = MoyenPaiement::all();
         #$this->remboursements = Transaction::where('idTypeTransaction', '=', '2')->get();
@@ -134,41 +134,41 @@ class GestionFactures extends Component
                 $client = Client::select('id')->whereRaw("CONCAT(`prenom`, ' ', `nom`) = ?", [$this->filtreClient]);
                 $dossierPro = DossierProfessionnel::select('idDossier')->where('idProfessionnel', '=', Auth::user()->id);
                 $dossier = Dossier::select('id')->whereIn('id', $dossierPro)->where('idClient', '=', $client);
-                $this->rdvs = Rdv::whereIn('idDossier', $dossier)->whereDate('dateHeureDebut', '>=', $this->dateDebut)->whereDate('dateHeureDebut', '<', $demain)->get();
+                $this->rdvs = Rdv::whereIn('idDossier', $dossier)->whereDate('dateHeureDebut', '>=', $this->dateDebut)->whereDate('dateHeureDebut', '<', $demain)->orderBy('dateHeureDebut', 'desc')->get();
             } else if ($this->dateDebut == null && $this->dateFin != null) {
                 $client = Client::select('id')->whereRaw("CONCAT(`prenom`, ' ', `nom`) = ?", [$this->filtreClient]);
                 $dossierPro = DossierProfessionnel::select('id')->where('idProfessionnel', '=', Auth::user()->id);
                 $dossier = Dossier::select('id')->whereIn('idDossier', $dossierPro)->where('idClient', '=', $client);
-                $this->rdvs = Rdv::whereIn('idDossier', $dossier)->whereDate('dateHeureDebut', '<=', $this->dateFin)->whereDate('dateHeureDebut', '<', $demain)->get();
+                $this->rdvs = Rdv::whereIn('idDossier', $dossier)->whereDate('dateHeureDebut', '<=', $this->dateFin)->whereDate('dateHeureDebut', '<', $demain)->orderBy('dateHeureDebut', 'desc')->get();
             } else if ($this->dateDebut != null && $this->dateFin != null) {
                 $client = Client::select('id')->whereRaw("CONCAT(`prenom`, ' ', `nom`) = ?", [$this->filtreClient]);
                 $dossierPro = DossierProfessionnel::select('id')->where('idProfessionnel', '=', Auth::user()->id);
                 $dossier = Dossier::select('id')->whereIn('idDossier', $dossierPro)->where('idClient', '=', $client);
-                $this->rdvs = Rdv::whereIn('idDossier', $dossier)->whereDate('dateHeureDebut', '>=', $this->dateDebut)->whereDate('dateHeureDebut', '<=', $this->dateFin)->whereDate('dateHeureDebut', '<', $demain)->get();
+                $this->rdvs = Rdv::whereIn('idDossier', $dossier)->whereDate('dateHeureDebut', '>=', $this->dateDebut)->whereDate('dateHeureDebut', '<=', $this->dateFin)->whereDate('dateHeureDebut', '<', $demain)->orderBy('dateHeureDebut', 'desc')->get();
             } else if ($this->dateDebut == null && $this->dateFin == null) {
                 $client = Client::select('id')->whereRaw("CONCAT(`prenom`, ' ', `nom`) = ?", [$this->filtreClient]);
                 $dossierPro = DossierProfessionnel::select('idDossier')->where('idProfessionnel', '=', Auth::user()->id);
                 $dossier = Dossier::select('id')->whereIn('id', $dossierPro)->where('idClient', '=', $client);
-                $this->rdvs = Rdv::whereIn('idDossier', $dossier)->whereDate('dateHeureDebut', '<', $demain)->get();
+                $this->rdvs = Rdv::whereIn('idDossier', $dossier)->whereDate('dateHeureDebut', '<', $demain)->orderBy('dateHeureDebut', 'desc')->get();
             }
 
         } else {
             if ($this->dateDebut != null && $this->dateFin == null) {
                 $dossierPro = DossierProfessionnel::select('idDossier')->where('idProfessionnel', '=', Auth::user()->id);
                 $dossier = Dossier::select('id')->whereIn('idDossier', $dossierPro);
-                $this->rdvs = Rdv::whereIn('idDossier', $dossier)->whereDate('dateHeureDebut', '>=', $this->dateDebut)->whereDate('dateHeureDebut', '<', $demain)->get();
+                $this->rdvs = Rdv::whereIn('idDossier', $dossier)->whereDate('dateHeureDebut', '>=', $this->dateDebut)->whereDate('dateHeureDebut', '<', $demain)->orderBy('dateHeureDebut', 'desc')->get();
             } else if ($this->dateDebut == null && $this->dateFin != null) {
                 $dossierPro = DossierProfessionnel::select('idDossier')->where('idProfessionnel', '=', Auth::user()->id);
                 $dossier = Dossier::select('id')->whereIn('idDossier', $dossierPro);
-                $this->rdvs = Rdv::whereIn('idDossier', $dossier)->whereDate('dateHeureDebut', '<=', $this->dateFin)->whereDate('dateHeureDebut', '<', $demain)->get();
+                $this->rdvs = Rdv::whereIn('idDossier', $dossier)->whereDate('dateHeureDebut', '<=', $this->dateFin)->whereDate('dateHeureDebut', '<', $demain)->orderBy('dateHeureDebut', 'desc')->get();
             } else if ($this->dateDebut != null && $this->dateFin != null) {
                 $dossierPro = DossierProfessionnel::select('idDossier')->where('idProfessionnel', '=', Auth::user()->id);
                 $dossier = Dossier::select('id')->whereIn('idDossier', $dossierPro);
-                $this->rdvs = Rdv::whereIn('idDossier', $dossier)->whereDate('dateHeureDebut', '>=', $this->dateDebut)->whereDate('dateHeureDebut', '<=', $this->dateFin)->whereDate('dateHeureDebut', '<', $demain)->get();
+                $this->rdvs = Rdv::whereIn('idDossier', $dossier)->whereDate('dateHeureDebut', '>=', $this->dateDebut)->whereDate('dateHeureDebut', '<=', $this->dateFin)->whereDate('dateHeureDebut', '<', $demain)->orderBy('dateHeureDebut', 'desc')->get();
             } else if ($this->dateDebut == null && $this->dateFin == null) {
                 $dossierPro = DossierProfessionnel::select('idDossier')->where('idProfessionnel', '=', Auth::user()->id);
                 $dossier = Dossier::select('id')->whereIn('idDossier', $dossierPro);
-                $this->rdvs = Rdv::whereIn('idDossier', $dossier)->whereDate('dateHeureDebut', '<', $demain)->get();
+                $this->rdvs = Rdv::whereIn('idDossier', $dossier)->whereDate('dateHeureDebut', '<', $demain)->orderBy('dateHeureDebut', 'desc')->get();
             }
 
         }
@@ -192,15 +192,6 @@ class GestionFactures extends Component
 
         $Date = Carbon::now('America/Toronto');
 
-        Transaction::create([
-            'montant' => $this->montant,
-            'dateHeure' => $Date,
-            'idRdv' => $this->rdv->id,
-            'idTypeTransaction' => 1,
-            'idMoyenPaiement' => $this->moyenPaiement
-
-        ]);
-
         $dossier = Dossier::find($this->rdv->idDossier);
         $client = Client::find($dossier->idClient);
         $service = Service::find($this->rdv->idService);
@@ -222,7 +213,7 @@ class GestionFactures extends Component
                     'idRdv' => $this->rdv->id
                 ],
             ]);
-            $lienPaiement = new LienPaiement($service, $client, $this->rdv, $user, $profession, $clinique, $lienStripe->url);
+            $lienPaiement = new LienPaiement($service, $client, $this->rdv, $user, $profession, $clinique, $lienStripe->url, $this->montant);
             Mail::to($client->courriel)
                 ->send($lienPaiement);
         } else {
@@ -243,7 +234,7 @@ class GestionFactures extends Component
     {
         Rdv::find($this->idRdv)->update(['actif' => 0]);
         $this->transactions = Transaction::all();
-        $this->rdvs = Rdv::all();
+        $this->rdvs = Rdv::orderBy('dateHeureDebut', 'desc')->get();
         $this->dispatch('close-modal');
     }
 
@@ -251,7 +242,7 @@ class GestionFactures extends Component
     {
         Rdv::find($this->idRdv)->update(['actif' => 1]);
         $this->transactions = Transaction::all();
-        $this->rdvs = Rdv::all();
+        $this->rdvs = Rdv::orderBy('dateHeureDebut', 'desc')->get();
         $this->dispatch('close-modal');
     }
 

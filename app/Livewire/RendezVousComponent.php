@@ -341,7 +341,7 @@ class RendezVousComponent extends Component
                     'idRdv' => $this->rdv->id
                 ],
             ]);
-            $lienPaiement = new LienPaiement($service, $client, $this->rdv, $user, $profession, $clinique, $lienStripe->url);
+            $lienPaiement = new LienPaiement($service, $client, $this->rdv, $user, $profession, $clinique, $lienStripe->url, $this->montant);
             Mail::to($client->courriel)
                 ->send($lienPaiement);
         } else {

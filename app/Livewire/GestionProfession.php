@@ -223,6 +223,7 @@ class GestionProfession extends Component
         #dd($this);
 
         $this->reset();
+        $this->today = Carbon::now('America/Toronto');
         $this->orgPro = OrganisationProfessionnel::where('idProfessionnel', '=', Auth::user()->id)->get();
         $this->idOrg = OrganisationProfessionnel::select('idOrganisation')->where('idProfessionnel', '=', Auth::user()->id)->get();
         $this->org = Organisation::whereIn('id', $this->idOrg)->get();
@@ -345,6 +346,7 @@ class GestionProfession extends Component
 
 
         $this->reset();
+        $this->today = Carbon::now('America/Toronto');
         $this->orgPro = OrganisationProfessionnel::where('idProfessionnel', '=', Auth::user()->id)->get();
         $this->idOrg = OrganisationProfessionnel::select('idOrganisation')->where('idProfessionnel', '=', Auth::user()->id)->get();
         $this->org = Organisation::whereIn('id', $this->idOrg)->get();
@@ -373,6 +375,7 @@ class GestionProfession extends Component
             }
         }
         $this->reset();
+        $this->today = Carbon::now('America/Toronto');
         $this->orgPro = OrganisationProfessionnel::where('idProfessionnel', '=', Auth::user()->id)->get();
         $this->idOrg = OrganisationProfessionnel::select('idOrganisation')->where('idProfessionnel', '=', Auth::user()->id)->get();
         $this->org = Organisation::whereIn('id', $this->idOrg)->get();

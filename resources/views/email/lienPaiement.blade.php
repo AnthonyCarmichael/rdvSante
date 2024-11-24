@@ -14,8 +14,8 @@ $heureRdv = Carbon::parse($rdv->dateHeureDebut)->translatedFormat('H:m');
     <p>Bonjour {{ $client->prenom }}, </p>
     <p>Voici le lien de paiement Stripe pour votre rendez-vous avec {{ $user->prenom }} {{ $user->nom }} le
         {{ $dateRdv }} à
-        {{ $heureRdv }}.</p>
-    <p> {{ $lienPaiement }} </p>
+        {{ $heureRdv }}. Vous devez payer {{ $montant }}$. </p>
+    <a href={{ $lienPaiement }}> Lien pour le paiement par stripe</a>
     <p>{{ $user->prenom }} {{ $user->nom }}, {{ $profession->nom }}</p>
     <p> {{ $clinique->nom }} </p>
     <p> {{ $user->telephone }} {{ $user->email }} </p>

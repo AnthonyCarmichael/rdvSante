@@ -49,7 +49,7 @@ class GestionTransactions extends Component
 
     public function mount()
     {
-        $this->transactions = Transaction::where('idTypeTransaction', '=', '1')->get();
+        $this->transactions = Transaction::where('idTypeTransaction', '=', '1')->orderBy('dateHeure', 'desc')->get();
         $this->remboursements = Transaction::where('idTypeTransaction', '=', '2')->get();
         $dossierPro = DossierProfessionnel::select('idDossier')->where('idProfessionnel', '=', Auth::user()->id);
         $dossier = Dossier::select('idClient')->whereIn('id', $dossierPro);
@@ -86,7 +86,7 @@ class GestionTransactions extends Component
 
 
         $this->filtrePaiement();
-        $this->remboursements = Transaction::where('idTypeTransaction', '=', '2')->get();
+        $this->remboursements = Transaction::where('idTypeTransaction', '=', '2')->orderBy('dateHeure', 'desc')->get();
         $this->dispatch('close-modal');
 
     }
@@ -113,35 +113,35 @@ class GestionTransactions extends Component
             $rdvs = Rdv::select('id')->whereIn('idDossier', $dossier)->get();
             if ($this->dateDebut != null && $this->dateFin == null) {
                 if ($this->filtreType == 1) {
-                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereIn('idRdv', $rdvs)->whereDate('dateHeure', '>=', $this->dateDebut)->get();
+                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereIn('idRdv', $rdvs)->whereDate('dateHeure', '>=', $this->dateDebut)->orderBy('dateHeure', 'desc')->get();
                 } elseif ($this->filtreType == 2) {
-                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereIn('idRdv', $rdvs)->whereDate('dateHeure', '>=', $this->dateDebut)->get();
+                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereIn('idRdv', $rdvs)->whereDate('dateHeure', '>=', $this->dateDebut)->orderBy('dateHeure', 'desc')->get();
                 } else {
-                    $this->transactions = Transaction::whereIn('idRdv', $rdvs)->whereDate('dateHeure', '>=', $this->dateDebut)->get();
+                    $this->transactions = Transaction::whereIn('idRdv', $rdvs)->whereDate('dateHeure', '>=', $this->dateDebut)->orderBy('dateHeure', 'desc')->get();
                 }
             } else if ($this->dateDebut == null && $this->dateFin != null) {
                 if ($this->filtreType == 1) {
-                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereIn('idRdv', $rdvs)->whereDate('dateHeure', '<=', $this->dateFin)->get();
+                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereIn('idRdv', $rdvs)->whereDate('dateHeure', '<=', $this->dateFin)->orderBy('dateHeure', 'desc')->get();
                 } elseif ($this->filtreType == 2) {
-                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereIn('idRdv', $rdvs)->whereDate('dateHeure', '<=', $this->dateFin)->get();
+                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereIn('idRdv', $rdvs)->whereDate('dateHeure', '<=', $this->dateFin)->orderBy('dateHeure', 'desc')->get();
                 } else {
-                    $this->transactions = Transaction::whereIn('idRdv', $rdvs)->whereDate('dateHeure', '<=', $this->dateFin)->get();
+                    $this->transactions = Transaction::whereIn('idRdv', $rdvs)->whereDate('dateHeure', '<=', $this->dateFin)->orderBy('dateHeure', 'desc')->get();
                 }
             } else if ($this->dateDebut != null && $this->dateFin != null) {
                 if ($this->filtreType == 1) {
-                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereIn('idRdv', $rdvs)->whereDate('dateHeure', '>=', $this->dateDebut)->whereDate('dateHeure', '<=', $this->dateFin)->get();
+                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereIn('idRdv', $rdvs)->whereDate('dateHeure', '>=', $this->dateDebut)->whereDate('dateHeure', '<=', $this->dateFin)->orderBy('dateHeure', 'desc')->get();
                 } elseif ($this->filtreType == 2) {
-                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereIn('idRdv', $rdvs)->whereDate('dateHeure', '>=', $this->dateDebut)->whereDate('dateHeure', '<=', $this->dateFin)->get();
+                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereIn('idRdv', $rdvs)->whereDate('dateHeure', '>=', $this->dateDebut)->whereDate('dateHeure', '<=', $this->dateFin)->orderBy('dateHeure', 'desc')->get();
                 } else {
-                    $this->transactions = Transaction::whereIn('idRdv', $rdvs)->whereDate('dateHeure', '>=', $this->dateDebut)->whereDate('dateHeure', '<=', $this->dateFin)->get();
+                    $this->transactions = Transaction::whereIn('idRdv', $rdvs)->whereDate('dateHeure', '>=', $this->dateDebut)->whereDate('dateHeure', '<=', $this->dateFin)->orderBy('dateHeure', 'desc')->get();
                 }
             } else if ($this->dateDebut == null && $this->dateFin == null) {
                 if ($this->filtreType == 1) {
-                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereIn('idRdv', $rdvs)->get();
+                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereIn('idRdv', $rdvs)->orderBy('dateHeure', 'desc')->get();
                 } elseif ($this->filtreType == 2) {
-                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereIn('idRdv', $rdvs)->get();
+                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereIn('idRdv', $rdvs)->orderBy('dateHeure', 'desc')->get();
                 } else {
-                    $this->transactions = Transaction::whereIn('idRdv', $rdvs)->get();
+                    $this->transactions = Transaction::whereIn('idRdv', $rdvs)->orderBy('dateHeure', 'desc')->get();
                 }
             }
 
@@ -151,35 +151,35 @@ class GestionTransactions extends Component
             $rdvs = Rdv::select('id')->whereIn('idDossier', $dossier)->get();
             if ($this->dateDebut != null && $this->dateFin == null) {
                 if ($this->filtreType == 1) {
-                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereIn('idRdv', $rdvs)->whereDate('dateHeure', '>=', $this->dateDebut)->get();
+                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereIn('idRdv', $rdvs)->whereDate('dateHeure', '>=', $this->dateDebut)->orderBy('dateHeure', 'desc')->get();
                 } elseif ($this->filtreType == 2) {
-                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereIn('idRdv', $rdvs)->whereDate('dateHeure', '>=', $this->dateDebut)->get();
+                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereIn('idRdv', $rdvs)->whereDate('dateHeure', '>=', $this->dateDebut)->orderBy('dateHeure', 'desc')->get();
                 } else {
-                    $this->transactions = Transaction::whereIn('idRdv', $rdvs)->whereDate('dateHeure', '>=', $this->dateDebut)->get();
+                    $this->transactions = Transaction::whereIn('idRdv', $rdvs)->whereDate('dateHeure', '>=', $this->dateDebut)->orderBy('dateHeure', 'desc')->get();
                 }
             } else if ($this->dateDebut == null && $this->dateFin != null) {
                 if ($this->filtreType == 1) {
-                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereIn('idRdv', $rdvs)->whereDate('dateHeure', '<=', $this->dateFin)->get();
+                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereIn('idRdv', $rdvs)->whereDate('dateHeure', '<=', $this->dateFin)->orderBy('dateHeure', 'desc')->get();
                 } elseif ($this->filtreType == 2) {
-                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereIn('idRdv', $rdvs)->whereDate('dateHeure', '<=', $this->dateFin)->get();
+                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereIn('idRdv', $rdvs)->whereDate('dateHeure', '<=', $this->dateFin)->orderBy('dateHeure', 'desc')->get();
                 } else {
-                    $this->transactions = Transaction::whereIn('idRdv', $rdvs)->whereDate('dateHeure', '<=', $this->dateFin)->get();
+                    $this->transactions = Transaction::whereIn('idRdv', $rdvs)->whereDate('dateHeure', '<=', $this->dateFin)->orderBy('dateHeure', 'desc')->get();
                 }
             } else if ($this->dateDebut != null && $this->dateFin != null) {
                 if ($this->filtreType == 1) {
-                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereIn('idRdv', $rdvs)->whereDate('dateHeure', '>=', $this->dateDebut)->whereDate('dateHeure', '<=', $this->dateFin)->get();
+                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereIn('idRdv', $rdvs)->whereDate('dateHeure', '>=', $this->dateDebut)->whereDate('dateHeure', '<=', $this->dateFin)->orderBy('dateHeure', 'desc')->get();
                 } elseif ($this->filtreType == 2) {
-                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereIn('idRdv', $rdvs)->whereDate('dateHeure', '>=', $this->dateDebut)->whereDate('dateHeure', '<=', $this->dateFin)->get();
+                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereIn('idRdv', $rdvs)->whereDate('dateHeure', '>=', $this->dateDebut)->whereDate('dateHeure', '<=', $this->dateFin)->orderBy('dateHeure', 'desc')->get();
                 } else {
-                    $this->transactions = Transaction::whereIn('idRdv', $rdvs)->whereDate('dateHeure', '>=', $this->dateDebut)->whereDate('dateHeure', '<=', $this->dateFin)->get();
+                    $this->transactions = Transaction::whereIn('idRdv', $rdvs)->whereDate('dateHeure', '>=', $this->dateDebut)->whereDate('dateHeure', '<=', $this->dateFin)->orderBy('dateHeure', 'desc')->get();
                 }
             } else if ($this->dateDebut == null && $this->dateFin == null) {
                 if ($this->filtreType == 1) {
-                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereIn('idRdv', $rdvs)->get();
+                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereIn('idRdv', $rdvs)->orderBy('dateHeure', 'desc')->get();
                 } elseif ($this->filtreType == 2) {
-                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereIn('idRdv', $rdvs)->get();
+                    $this->transactions = Transaction::where('idTypeTransaction', '=', $this->filtreType)->whereIn('idRdv', $rdvs)->orderBy('dateHeure', 'desc')->get();
                 } else {
-                    $this->transactions = Transaction::whereIn('idRdv', $rdvs)->get();
+                    $this->transactions = Transaction::whereIn('idRdv', $rdvs)->orderBy('dateHeure', 'desc')->get();
                 }
             }
 

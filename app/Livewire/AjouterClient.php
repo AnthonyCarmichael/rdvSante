@@ -127,10 +127,31 @@ class AjouterClient extends Component
                 'idProvince' => '1'
             ]);
         }
+
         if ($this->ville == " ") {
             $this->idVille = null;
         }
 
+        if ($this->nomResponsable == " ") {
+            $this->nomResponsable = null;
+        }
+        if ($this->prenomResponsable == " ") {
+            $this->prenomResponsable = null;
+        }
+        if ($this->lienResponsable == " ") {
+            $this->lienResponsable = null;
+        }
+        if ($this->rue == " ") {
+            $this->rue = null;
+        }
+        $this->noCivique = intval($this->noCivique);
+        #dd($this->noCivique);
+        if ($this->noCivique == 0) {
+            $this->noCivique = null;
+        }
+        if ($this->codePostal == " ") {
+            $this->codePostal = null;
+        }
 
         $idClient = Client::insertGetId([
             'nom' => $this->nom,
@@ -193,9 +214,32 @@ class AjouterClient extends Component
                 'idProvince' => '1'
             ]);
         }
+
         if ($this->ville == " ") {
             $this->idVille = null;
         }
+
+        if ($this->nomResponsable == " ") {
+            $this->nomResponsable = null;
+        }
+        if ($this->prenomResponsable == " ") {
+            $this->prenomResponsable = null;
+        }
+        if ($this->lienResponsable == " ") {
+            $this->lienResponsable = null;
+        }
+        if ($this->rue == " ") {
+            $this->rue = null;
+        }
+        $this->noCivique = intval($this->noCivique);
+        #dd($this->noCivique);
+        if ($this->noCivique == 0) {
+            $this->noCivique = null;
+        }
+        if ($this->codePostal == " ") {
+            $this->codePostal = null;
+        }
+
 
         Client::find($this->client->id)->update([
             'nom' => $this->nom,
@@ -334,18 +378,20 @@ class AjouterClient extends Component
 
     }
 
-    public function updatedtelephone($value) {
+    public function updatedtelephone($value)
+    {
 
         if (strlen($this->telephone) == 10) {
-            $this->telephone = '('.substr($this->telephone, 0, 3).') '.substr($this->telephone, 3, 3).'-'.substr($this->telephone, 6);
+            $this->telephone = '(' . substr($this->telephone, 0, 3) . ') ' . substr($this->telephone, 3, 3) . '-' . substr($this->telephone, 6);
 
         }
     }
 
-    public function updatedcodePostal($value) {
+    public function updatedcodePostal($value)
+    {
 
         if (strlen($this->codePostal) == 6) {
-            $this->codePostal = ''.strtoupper(substr($this->codePostal, 0, 1)) .substr($this->codePostal, 1,  1) .strtoupper(substr($this->codePostal, 2, 1)) .' '.substr($this->codePostal, 3,  1) .strtoupper(substr($this->codePostal, 4, 1)).substr($this->codePostal, 5,  1);
+            $this->codePostal = '' . strtoupper(substr($this->codePostal, 0, 1)) . substr($this->codePostal, 1, 1) . strtoupper(substr($this->codePostal, 2, 1)) . ' ' . substr($this->codePostal, 3, 1) . strtoupper(substr($this->codePostal, 4, 1)) . substr($this->codePostal, 5, 1);
 
         }
     }
