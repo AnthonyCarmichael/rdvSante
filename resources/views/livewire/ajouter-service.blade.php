@@ -206,21 +206,6 @@
 
                     <div class="mb-4">
                         <label class="inline-flex items-center">
-                            <input type="checkbox" name="checkboxpause" id="checkboxpause"
-                                wire:model.live="checkboxpause"
-                                class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                            <span class="ml-2 text-gray-700">Je veux une pause après les rendez-vous</span>
-                        </label>
-                        <div class="{{ $checkboxpause == true ? 'visible' : 'hidden' }} mt-2">
-                            <label for="dureepause" class="block text-sm font-medium text-gray-700">Durée de la pause (minutes) *</label>
-                            <input {$checkboxpause ? required} min="0" type="number" name="dureepause"
-                                id="dureepause" wire:model="dureepause"
-                                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                        </div>
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="inline-flex items-center">
                             <input type="checkbox" name="checkboxrdv" id="checkboxrdv" wire:model.live="checkboxrdv"
                                 class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
                             <span class="ml-2 text-gray-700">Empêcher les rendez-vous de dernière minute</span>
@@ -298,29 +283,6 @@
                     </div>
 
                     <div class="mb-4">
-                        <label for="montantPenalite" class="block text-sm font-medium text-gray-700">Pénalité *</label>
-                        <input required min="0" step="0.01" type="number" pattern="\d" name="montantPenalite" id="montantPenalite"
-                            wire:model="montantPenalite"
-                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="inline-flex items-center">
-                            <input type="checkbox" name="checkboxpause" id="checkboxpause"
-                                wire:model.live="checkboxpause"
-                                class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                            <span class="ml-2 text-gray-700">Je veux une pause après les rendez-vous</span>
-                        </label>
-
-                        <div class="mt-2 {{ $checkboxpause ? 'visible' : 'hidden' }}">
-                            <label for="dureepause" class="block text-sm font-medium text-gray-700">Durée de la pause (minutes) *</label>
-                            <input {{ $checkboxpause ? 'required' : '' }} min="0" type="number"
-                                name="dureepause" id="dureepause" wire:model="dureepause"
-                                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                        </div>
-                    </div>
-
-                    <div class="mb-4">
                         <label class="inline-flex items-center">
                             <input type="checkbox" name="checkboxrdv" id="checkboxrdv" wire:model.live="checkboxrdv"
                                 class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
@@ -385,11 +347,6 @@
                     <div class="flex items-center">
                         <p class="text-sm font-semibold text-gray-700 w-1/3">Prix du service</p>
                         <p class="text-sm text-gray-900 ml-2"> {{ $prixservice }}</p>
-                    </div>
-
-                    <div class="flex items-center">
-                        <p class="text-sm font-semibold text-gray-700 w-1/3">Durée de la pause</p>
-                        <p class="text-sm text-gray-900 ml-2"> {{ $dureepause }}</p>
                     </div>
 
                     <div class="flex items-center">

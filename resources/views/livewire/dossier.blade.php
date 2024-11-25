@@ -150,7 +150,7 @@
 
                         <th class="border-solid border-b-2 border-black bg-mid-green text-left">
                             <button wire:click="sortByFiche('dateHeure')" class="font-bold">
-                                Date de dernière modification
+                                Date de création
                                 @if ($sortField === 'dateHeure')
                                     @if ($sortDirection === 'asc')
                                         ↑
@@ -226,7 +226,7 @@
                         </th>
                         <th class="border-solid border-b-2 border-black bg-mid-green text-left">
                             <button wire:click="sortByImage('dateHeureAjout')" class="font-bold">
-                                Date de dernière modification
+                                Date de création
                                 @if ($sortField === 'dateHeureAjout')
                                     @if ($sortDirection === 'asc')
                                         ↑
@@ -324,7 +324,7 @@
                         </th>
                         <th class="border-solid border-b-2 border-black bg-mid-green text-left">
                             <button wire:click="sortByDocument('dateHeureAjout')" class="font-bold">
-                                Date de dernière modification
+                                Date de création
                                 @if ($sortField === 'dateHeureAjout')
                                     @if ($sortDirection === 'asc')
                                         ↑

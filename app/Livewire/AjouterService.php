@@ -21,12 +21,9 @@ class AjouterService extends Component
     public $dureeservice;
     public $prixservice;
     public $taxableservice = false;
-    public $dureepause;
-    public $checkboxpause = false;
     public $checkboxrdv = false;
     public $tempsavantrdv;
     public $personneacharge = false;
-    public $montantPenalite;
 
     public $users;
     public $service_id;
@@ -59,8 +56,7 @@ class AjouterService extends Component
                     $query->where('nom', 'like', '%' . $this->search . '%')
                         ->orWhere('description', 'like', '%' . $this->search . '%')
                         ->orWhere('prix', 'like', '%' . $this->search . '%')
-                        ->orWhere('duree', 'like', '%' . $this->search . '%')
-                        ->orWhere('montantPenalite', 'like', '%' . $this->search . '%');
+                        ->orWhere('duree', 'like', '%' . $this->search . '%');
                 })
                 ->where('actif', true)
                 ->orderBy($this->sortField, $this->sortDirection)
@@ -71,8 +67,7 @@ class AjouterService extends Component
                     $query->where('nom', 'like', '%' . $this->search . '%')
                         ->orWhere('description', 'like', '%' . $this->search . '%')
                         ->orWhere('prix', 'like', '%' . $this->search . '%')
-                        ->orWhere('duree', 'like', '%' . $this->search . '%')
-                        ->orWhere('montantPenalite', 'like', '%' . $this->search . '%');
+                        ->orWhere('duree', 'like', '%' . $this->search . '%');
                 })
                 ->where('actif', false)
                 ->orderBy($this->sortField, $this->sortDirection)
@@ -83,8 +78,7 @@ class AjouterService extends Component
                     $query->where('nom', 'like', '%' . $this->search . '%')
                         ->orWhere('description', 'like', '%' . $this->search . '%')
                         ->orWhere('prix', 'like', '%' . $this->search . '%')
-                        ->orWhere('duree', 'like', '%' . $this->search . '%')
-                        ->orWhere('montantPenalite', 'like', '%' . $this->search . '%');
+                        ->orWhere('duree', 'like', '%' . $this->search . '%');
                 })
                 ->orderBy($this->sortField, $this->sortDirection)
                 ->get();
@@ -123,11 +117,9 @@ class AjouterService extends Component
         $this->dureeservice = $service->duree;
         $this->prixservice = $service->prix;
         $this->taxableservice = $service->taxable;
-        $this->dureepause = $service->minutePause;
         $this->checkboxrdv = $service->nombreHeureLimiteReservation > 0;
         $this->tempsavantrdv = $service->nombreHeureLimiteReservation;
         $this->personneacharge = $service->droitPersonneACharge;
-        $this->montantPenalite = $service->montantPenalite;
 
         $this->dispatch('open-modal', name: 'consulterService');
     }
@@ -148,14 +140,8 @@ class AjouterService extends Component
             'dureeservice' => 'nullable|integer|min:1',
             'taxableservice' => 'nullable|boolean',
             'checkboxrdv' => 'nullable|boolean',
-            'personneacharge' => 'nullable|boolean',
-            'montantPenalite' => 'required|numeric|min:0'
+            'personneacharge' => 'nullable|boolean'
         ];
-
-        if ($this->checkboxpause)
-            $rules['dureepause'] = 'required|integer|min:1';
-        else
-            $this->dureepause = 0;
 
         if ($this->checkboxrdv)
             $rules['tempsavantrdv'] = 'required|integer|min:1';
@@ -192,10 +178,8 @@ class AjouterService extends Component
             'duree' => $this->dureeservice,
             'prix' => $this->prixservice,
             'taxable' => $this->taxableservice,
-            'minutePause' => $this->dureepause,
             'nombreHeureLimiteReservation' => $this->tempsavantrdv,
             'droitPersonneACharge' => $this->personneacharge,
-            'montantPenalite' => $this->montantPenalite,
             'actif' => true,
             'idProfessionService' => $this->professionservice,
             'idProfessionnel' => Auth::user()->id,
@@ -219,12 +203,9 @@ class AjouterService extends Component
         $this->dureeservice = $service->duree;
         $this->prixservice = $service->prix;
         $this->taxableservice = $service->taxable == 1;
-        $this->dureepause = $service->minutePause;
-        $this->checkboxpause = $service->minutePause > 0;
         $this->checkboxrdv = $service->nombreHeureLimiteReservation > 0;
         $this->tempsavantrdv = $service->nombreHeureLimiteReservation;
         $this->personneacharge = $service->droitPersonneACharge == 1;
-        $this->montantPenalite = $service->montantPenalite;
 
         $this->dispatch('open-modal', name: 'modifierService');
     }
@@ -301,10 +282,8 @@ class AjouterService extends Component
                 'duree' => $this->dureeservice,
                 'prix' => $this->prixservice,
                 'taxable' => $this->taxableservice,
-                'minutePause' => $this->dureepause,
                 'nombreHeureLimiteReservation' => $this->tempsavantrdv,
                 'droitPersonneACharge' => $this->personneacharge,
-                'montantPenalite' => $this->montantPenalite,
                 'idProfessionService' => $this->professionservice,
                 'idProfessionnel' => Auth::user()->id,
                 'produitStripe' => $produitStripe->id,

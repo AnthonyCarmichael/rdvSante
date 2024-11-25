@@ -15,13 +15,11 @@ class Service extends Model
         'duree',
         'prix',
         'taxable',
-        'minutePause',
         'nombreHeureLimiteReservation',
         'droitPersonneACharge',
         'actif',
         'idProfessionService',
         'idProfessionnel',
-        'montantPenalite',
         'prixStripe',
         'produitStripe'
     ];

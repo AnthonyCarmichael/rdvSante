@@ -281,6 +281,7 @@ class Dossier extends Component
         $this->images = $query->get();
 
         $this->resetExcept('dossiers', 'dossier', 'view', 'client', 'images');
+        $this->reset('nomImage', 'nomDocument');
         $this->dispatch('close-modal');
     }
 
@@ -390,18 +391,16 @@ class Dossier extends Component
             // Storage::disk('public')->delete($image->lien);
         }
 
-        // Mise à jour des informations de l'image
         $image->update([
             'nom' => $this->nomImage,
             'lien' => $imagePath,
             'idDossier' => $this->dossier->id,
         ]);
 
-        // Réinitialisation et fermeture du modal
         $this->resetExcept('dossiers', 'dossier', 'view', 'client', 'images');
+        $this->reset('nomImage', 'nomDocument');
         $this->dispatch('close-modal');
 
-        // Mise à jour de la collection d'images
         $this->images = $this->dossier->fichiers()
             ->where('lien', 'like', '%image%')
             ->orderBy('dateHeureAjout', 'desc')
@@ -442,18 +441,15 @@ class Dossier extends Component
             // Storage::disk('public')->delete($document->lien);
         }
 
-        // Mise à jour des informations de l'image
         $document->update([
             'nom' => $this->nomDocument,
             'lien' => $documentPath,
             'idDossier' => $this->dossier->id,
         ]);
 
-        // Réinitialisation et fermeture du modal
         $this->resetExcept('dossiers', 'dossier', 'view', 'client', 'documents');
         $this->dispatch('close-modal');
 
-        // Mise à jour de la collection d'images
         $this->documents = $this->dossier->fichiers()
             ->where('lien', 'like', '%document%')
             ->orderBy('dateHeureAjout', 'desc')

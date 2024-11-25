@@ -20,7 +20,6 @@ return new class extends Migration
             $table->integer('duree');
             $table->decimal('prix', 5, 2);
             $table->boolean('taxable');
-            $table->integer('minutePause');
             $table->integer('nombreHeureLimiteReservation');
             $table->boolean('droitPersonneACharge');
             $table->boolean('actif');
@@ -28,7 +27,6 @@ return new class extends Migration
             $table->text('produitStripe');
             $table->bigInteger('idProfessionService')->unsigned();
             $table->bigInteger('idProfessionnel')->unsigned();
-            $table->decimal('montantPenalite', 5, 2)->default(0.00);
         });
 
         Schema::table('services', function (Blueprint $table) {
