@@ -127,10 +127,10 @@
                         @foreach ($transactions as $t)
                             @if ($t->idRdv == $r->id)
                                 @if ($t->idTypeTransaction == 1)
-                                    <?php $solde -= $t->montant; ?>
+                                    <?php $solde -= round($t->montant, 2); ?>
                                 @endif
                                 @if ($t->idTypeTransaction == 2)
-                                    <?php $solde += $t->montant; ?>
+                                    <?php $solde += round($t->montant, 2); ?>
                                 @endif
                             @endif
                         @endforeach
@@ -195,14 +195,14 @@
                         @foreach ($transactions as $t)
                             @if ($t->idRdv == $r->id)
                                 @if ($t->idTypeTransaction == 1)
-                                    <?php $solde -= $t->montant; ?>
+                                    <?php $solde -= round($t->montant, 2); ?>
                                 @endif
                                 @if ($t->idTypeTransaction == 2)
-                                    <?php $solde += $t->montant; ?>
+                                    <?php $solde += round($t->montant, 2); ?>
                                 @endif
                             @endif
                         @endforeach
-                        <td>{{ round($solde, 2) }}$</td>
+                        <td>{{ number_format($solde, 2) }}$</td>
                         @php
 
                             $client = 0;
@@ -261,10 +261,10 @@
                         @foreach ($transactions as $t)
                             @if ($t->idRdv == $r->id)
                                 @if ($t->idTypeTransaction == 1)
-                                    <?php $solde -= $t->montant; ?>
+                                    <?php $solde -= round($t->montant, 2); ?>
                                 @endif
                                 @if ($t->idTypeTransaction == 2)
-                                    <?php $solde += $t->montant; ?>
+                                    <?php $solde += round($t->montant, 2); ?>
                                 @endif
                             @endif
                         @endforeach
