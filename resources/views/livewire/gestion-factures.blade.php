@@ -53,7 +53,7 @@
                         @foreach ($services as $s)
                             @if ($r->idService == $s->id)
                                 <td class="pr-4">
-                                    {{ number_format($s->prix + ($s->prix * $tvq->valeur) / 100 + ($s->prix * $tps->valeur) / 100, 2) }}$
+                                    {{ round($s->prix + ($s->prix * $tvq->valeur) / 100 + ($s->prix * $tps->valeur) / 100, 2) }}$
                                 </td>
                                 <?php $solde += $s->prix + ($s->prix * $tvq->valeur) / 100 + ($s->prix * $tps->valeur) / 100; ?>
                             @endif
