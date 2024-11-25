@@ -258,7 +258,7 @@
                                 <p class="">{{ $taxe->nom . '(' . number_format($taxe->valeur, 3) . '%)' }}</p>
                                 <p class="inline pr-6">
                                     @php
-                                        $taxeValue = ($taxe->valeur / 100) * $rdv->service->prix;
+                                        $taxeValue = round(($taxe->valeur / 100) * $rdv->service->prix,2);
                                         $totalvalue += $taxeValue;
                                     @endphp
                                     {{ number_format($taxeValue, 2) }} $
@@ -289,9 +289,9 @@
 
                             @php
                                 if ($transaction->idTypeTransaction == 1) {
-                                    $totalPaiement -= $transaction->montant;
+                                    $totalPaiement -= round($transaction->montant,2);
                                 } elseif ($transaction->idTypeTransaction == 2) {
-                                    $totalPaiement += $transaction->montant;
+                                    $totalPaiement += round($transaction->montant,2);
                                 }
 
                             @endphp
@@ -311,7 +311,7 @@
                     <div class=" w-1/2 flex justify-between">
 
                         <p class="inline pl-6">Solde</p>
-                        <p class="inline">{{ number_format($totalPaiement, 2) }} $</p>
+                        <p class="inline">{{ number_format($totalPaiement,2)}} $</p>
                     </div>
                 </div>
 

@@ -138,7 +138,7 @@
                                                                 @if ( $totalPaiement < $totalFacture)
                                                                     <p class="leading-tight block text-red-400 text-sm">Pas payé</p>
                                                                 @elseif ($totalPaiement == $totalFacture)
-                                                                    <p class="leading-tight block text-green text-sm">Payé</p>
+                                                                    <p class="leading-tight block text-green text-sm">Payé {{$totalPaiement}}</p>
                                                                 @elseif ($totalPaiement > $totalFacture)
                                                                     <p class="leading-tight block text-red-400 text-sm">Trop payé</p>
                                                                 @endif
@@ -157,7 +157,7 @@
                                         @endif
 
 
-                                        
+
 
                                         @if ($findIndispo != true)
 
@@ -168,7 +168,7 @@
 
                                         @endif
 
-                                        
+
                                     </td>
                                     <?php
                                     $selectedDateTime->modify('+1 day');
