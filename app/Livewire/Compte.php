@@ -180,7 +180,7 @@ class Compte extends Component
             }*/
 
             if (Storage::exists('public/' . Auth::user()->photoProfil)) {
-                $signature = true;
+                $signatureUser = true;
             }
         }
 
