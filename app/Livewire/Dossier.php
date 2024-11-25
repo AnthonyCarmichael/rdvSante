@@ -21,7 +21,6 @@ class Dossier extends Component
     public $documents;
     public $client;
 
-
     public $document;
     public $document_id;
     public $nomDocument;
@@ -154,7 +153,7 @@ class Dossier extends Component
     public function updatedSearchDocument()
     {
         $query = $this->dossier->fichiers()
-            ->where('lien', 'like', '%Documents/document%') // Filtre uniquement les fichiers contenant "document" dans le lien
+            ->where('lien', 'like', '%Documents/document%')
             ->where(function ($subQuery) {
                 $subQuery->where('id', 'like', '%' . $this->searchDocument . '%')
                          ->orWhere('nom', 'like', '%' . $this->searchDocument . '%');
@@ -165,6 +164,7 @@ class Dossier extends Component
     }
 
     public function openModalAjouterDocument() {
+        $this->resetExcept('dossiers', 'dossier', 'view', 'client', 'images');
         $this->dispatch('open-modal', name : 'ajouterDocument');
     }
 
@@ -229,9 +229,8 @@ class Dossier extends Component
         $this->images = $query->get();
     }
 
-
     public function openModalAjouterImage() {
-        #$this->resetExcept('dossiers','fiches');
+        $this->resetExcept('dossiers', 'dossier', 'view', 'client', 'images');
         $this->dispatch('open-modal', name : 'ajouterImage');
     }
 
@@ -281,7 +280,6 @@ class Dossier extends Component
         $this->images = $query->get();
 
         $this->resetExcept('dossiers', 'dossier', 'view', 'client', 'images');
-        $this->reset('nomImage', 'nomDocument');
         $this->dispatch('close-modal');
     }
 
@@ -398,7 +396,6 @@ class Dossier extends Component
         ]);
 
         $this->resetExcept('dossiers', 'dossier', 'view', 'client', 'images');
-        $this->reset('nomImage', 'nomDocument');
         $this->dispatch('close-modal');
 
         $this->images = $this->dossier->fichiers()
