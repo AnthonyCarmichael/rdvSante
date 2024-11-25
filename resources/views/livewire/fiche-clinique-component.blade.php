@@ -38,15 +38,17 @@
 
                     </button>
 
-                    @if ($dateHeure != null)
-                        <p class="underline underline-offset-2 mt-2">Signée le : {{$dateHeure}}</p>
-                    @else
-                        <p class="underline underline-offset-2 mt-2">Non signée</p>
-                    @endif
-
 
 
                 @endif
+
+                @if ($dateHeure != null)
+                <p class="underline underline-offset-2 mt-2">Signée le : {{$dateHeure}}</p>
+                    @else
+                <p class="underline underline-offset-2 mt-2">Non signée</p>
+                    @endif
+
+
 
 
             </div>
