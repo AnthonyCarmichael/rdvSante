@@ -122,9 +122,10 @@ class Compte extends Component
         }
     }
 
-    public function updatedtelephone($value) {
+    public function updatedtelephone($value)
+    {
         if (strlen($this->telephone) == 10) {
-            $this->telephone = '('.substr($this->telephone, 0, 3).') '.substr($this->telephone, 3, 3).'-'.substr($this->telephone, 6);
+            $this->telephone = '(' . substr($this->telephone, 0, 3) . ') ' . substr($this->telephone, 3, 3) . '-' . substr($this->telephone, 6);
         }
     }
 
@@ -164,12 +165,23 @@ class Compte extends Component
             $photo = true;
         }*/
 
-        if ($this->photoProfil && Storage::exists('public/' . $this->photoProfil)) {
-            $photo = true;
+        if (Auth::user()->photoProfil != null) {
+            /*if (file_exists('../public/img/' . strval(Auth::user()->photoProfil))) {
+                $photo = true;
+            }*/
+            if (Storage::exists('public/' . Auth::user()->photoProfil)) {
+                $photo = true;
+            }
         }
 
-        if ($this->signature && Storage::exists('public/' . $this->signature)) {
-            $signature = true;
+        if (Auth::user()->signature != null) {
+            /*if (file_exists('../public/img/' . strval(Auth::user()->signature))) {
+                $signature = true;
+            }*/
+
+            if (Storage::exists('public/' . Auth::user()->photoProfil)) {
+                $signature = true;
+            }
         }
 
         if (!$photo || !$service || !$clinique || !$description || !$dispo || !$signatureUser) {
