@@ -150,7 +150,7 @@
                 @endif
             @endforeach
             @php
-                $orgProFound == false;
+                $orgProFound = false;
             @endphp
 
         </table>
