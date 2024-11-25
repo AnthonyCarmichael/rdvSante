@@ -191,14 +191,11 @@ class AjouterService extends Component
                 'duree' => $this->dureeservice,
                 'prix' => $this->prixservice,
                 'taxable' => $this->taxableservice,
-                'minutePause' => $this->dureepause,
                 'nombreHeureLimiteReservation' => $this->tempsavantrdv,
                 'droitPersonneACharge' => $this->personneacharge,
-                'montantPenalite' => $this->montantPenalite,
                 'actif' => true,
                 'idProfessionService' => $this->professionservice,
                 'idProfessionnel' => Auth::user()->id
-
             ]);
         }
 
