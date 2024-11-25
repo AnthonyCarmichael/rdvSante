@@ -22,7 +22,7 @@
             <nav class="bg-dark-green p-2">
                 <div class="flex justify-between items-center">
                     <div class="flex text-white items-center ml-0">
-                        <a href="{{ route('index')}}"><img class="w-[4rem]" src="{{ asset('img/logoRdvSante.png') }}" alt="Logo"></a>
+                        <a href="{{ route('index')}}"><img class="w-[5rem]" src="{{ asset('img/logoRdvSante.png') }}" alt="Logo"></a>
                         <h1 class="ml-6 text-2xl font-extrabold">Rendez-vous santé</h1>
                     </div>
 
