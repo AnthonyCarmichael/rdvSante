@@ -337,7 +337,8 @@
                     fait le
                     paiement?</label>
                 <select wire:model="moyenPaiement" id="moyenPaiement" name="moyenPaiement"
-                    class="h-12 text-md ml-2 w-full">
+                    class="h-12 text-md ml-2 w-full" required>
+                    <option value="" selected>Sélectionner un mode de paiement</option>
                     @foreach ($moyenPaiements as $m)
                         @if ($user->cleStripe == null)
                             @if ($m->id != 1)

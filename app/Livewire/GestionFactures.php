@@ -46,7 +46,7 @@ class GestionFactures extends Component
     public $rdvs;
     public $dossiers;
     public $typeTransaction = 1;
-    public $moyenPaiement = 1;
+    public $moyenPaiement;
     public $transactionRembourse;
     public $filtreClient;
     public $filtrePeriode = 1;

@@ -36,7 +36,7 @@ class RendezVousComponent extends Component
     public $formattedDateFin;
     public $raison;
     public $moyenPaiements;
-    public $moyenPaiement = 1;
+    public $moyenPaiement;
     public $montant;
     public $dossiers;
     public $restePayer;
