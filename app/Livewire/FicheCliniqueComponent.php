@@ -335,6 +335,75 @@ class FicheCliniqueComponent extends Component
             $this->typeForm = "modifier";
         } elseif($this->typeForm == "modifier") {
             $this->typeForm = "consulter";
+            #this->$nom,
+            $this->analyse = $this->fiche->analyse;
+            $this->conseilsPrevention = $this->fiche->conseilsPrevention;
+            // Anamnese et Suivi SOAPIE
+            $this->occupation = $this->fiche->occupation;
+            $this->loisirs = $this->fiche->loisirs;
+            $this->lateralite = $this->fiche->lateralite;
+            $this->diagnostic = $this->fiche->diagnostic;
+            $this->medic = $this->fiche->medic;
+            $this->contreIndication = $this->fiche->contreIndication;
+            $this->rced = $this->fiche->rced;
+            $this->localIrr = $this->fiche->localIrr;
+            $this->douleur = $this->fiche->douleur;
+            $this->fa = $this->fiche->fa;
+            $this->fd = $this->fiche->fd;
+            $this->nuit = $this->fiche->nuit;
+            $this->sa = $this->fiche->sa;
+            $this->investigation = $this->fiche->investigation;
+            $this->trauma = $this->fiche->trauma;
+            $this->chx = $this->fiche->chx;
+            $this->familiaux = $this->fiche->familiaux;
+            $this->cardioVasculaire = $this->fiche->cardioVasculaire;
+            $this->pulmonaire = $this->fiche->pulmonaire;
+            $this->snc = $this->fiche->snc;
+            $this->orl = $this->fiche->orl;
+            $this->digestif = $this->fiche->digestif;
+            $this->gynecoAndrologie = $this->fiche->gynecoAndrologie;
+            $this->urinaire = $this->fiche->urinaire;
+            $this->hs = $this->fiche->hs;
+            $this->psychologique = $this->fiche->psychologique;
+            $this->msk = $this->fiche->msk;
+            $this->dermato = $this->fiche->dermato;
+            $this->autre = $this->fiche->autre;
+            // Éval Nourrisson
+            $this->observation = $this->fiche->observation;
+            $this->commentaire = $this->fiche->commentaire;
+            $this->nbreSemGestation = $this->fiche->nbreSemGestation;
+            $this->apgar = $this->fiche->apgar;
+            $this->poid = $this->fiche->poid;
+            $this->taille = $this->fiche->taille;
+            $this->perCranien = $this->fiche->perCranien;
+            $this->maladieALaNaissance = $this->fiche->maladieALaNaissance;
+            $this->medicaments = $this->fiche->medicaments;
+            $this->nomsParent = $this->fiche->nomsParent;
+            $this->historiqueGrossesse = $this->fiche->historiqueGrossesse;
+            $this->historiqueAccouchement = $this->fiche->historiqueAccouchement;
+            $this->cesarienne = $this->fiche->cesarienne == 1;
+            $this->forceps = $this->fiche->forceps == 1;
+            $this->ventouse = $this->fiche->ventouse == 1;
+            $this->episiotomie = $this->fiche->episiotomie == 1;
+            $this->alimentation = $this->fiche->alimentation;
+            $this->digestion = $this->fiche->digestion;
+            $this->sommeil = $this->fiche->sommeil;
+            $this->pleurs = $this->fiche->pleurs;
+            $this->motricite = $this->fiche->motricite;
+            $this->neuro = $this->fiche->neuro;
+            $this->motifConsultation = $this->fiche->motifConsultation;
+            $this->techniques = $this->fiche->techniques;
+            $this->age = $this->fiche->age;
+            $this->succ = $this->fiche->succ;
+            $this->foulard = $this->fiche->foulard;
+            $this->marcheAuto = $this->fiche->marcheAuto;
+            $this->grasping = $this->fiche->grasping;
+            $this->redressement = $this->fiche->redressement;
+            $this->babinski = $this->fiche->babinski;
+            $this->moro = $this->fiche->moro;
+            $this->toniqueAsym = $this->fiche->toniqueAsym;
+            $this->tonusActifPassif = $this->fiche->tonusActifPassif;
+            $this->depuisDerniereSeance = $this->fiche->depuisDerniereSeance;
         }
     }
 
@@ -375,11 +444,11 @@ class FicheCliniqueComponent extends Component
                 $this->fiche->autre = $this->autre;
                 $this->fiche->observation = $this->observation;
                 $this->fiche->commentaire = $this->commentaire;
-            
+
                 break;
 
             case 2: // Éval nourrisson
- 
+
                     $this->fiche->analyse = $this->analyse;
                     $this->fiche->conseilsPrevention = $this->conseilsPrevention;
                     $this->fiche->nbreSemGestation = $this->nbreSemGestation;
