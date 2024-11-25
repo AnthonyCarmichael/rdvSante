@@ -68,7 +68,7 @@
                                 @endif
                             @endif
                         @endforeach
-                        <td>{{ round($solde, 2) }}$</td>
+                        <td>{{ $solde }}$</td>
                         @php
 
                             $client = 0;
