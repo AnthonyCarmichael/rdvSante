@@ -55,7 +55,7 @@
                                 <td class="pr-4">
                                     {{ round($s->prix + ($s->prix * $tvq->valeur) / 100 + ($s->prix * $tps->valeur) / 100, 2) }}$
                                 </td>
-                                <?php $solde += $s->prix + ($s->prix * $tvq->valeur) / 100 + ($s->prix * $tps->valeur) / 100; ?>
+                                <?php $solde += round($s->prix + ($s->prix * $tvq->valeur) / 100 + ($s->prix * $tps->valeur) / 100, 2); ?>
                             @endif
                         @endforeach
                         @foreach ($transactions as $t)
@@ -121,7 +121,7 @@
                                 <td class="pr-4 text-red-600">
                                     {{ round($s->prix + ($s->prix * $tvq->valeur) / 100 + ($s->prix * $tps->valeur) / 100, 2) }}$
                                 </td>
-                                <?php $solde += $s->prix + ($s->prix * $tvq->valeur) / 100 + ($s->prix * $tps->valeur) / 100; ?>
+                                <?php $solde += round($s->prix + ($s->prix * $tvq->valeur) / 100 + ($s->prix * $tps->valeur) / 100, 2); ?>
                             @endif
                         @endforeach
                         @foreach ($transactions as $t)
@@ -189,7 +189,7 @@
                                 <td class="pr-4">
                                     {{ round($s->prix + ($s->prix * $tvq->valeur) / 100 + ($s->prix * $tps->valeur) / 100, 2) }}$
                                 </td>
-                                <?php $solde += $s->prix + ($s->prix * $tvq->valeur) / 100 + ($s->prix * $tps->valeur) / 100; ?>
+                                <?php $solde += round($s->prix + ($s->prix * $tvq->valeur) / 100 + ($s->prix * $tps->valeur) / 100, 2); ?>
                             @endif
                         @endforeach
                         @foreach ($transactions as $t)
@@ -255,7 +255,7 @@
                                 <td class="pr-4 text-red-600">
                                     {{ round($s->prix + ($s->prix * $tvq->valeur) / 100 + ($s->prix * $tps->valeur) / 100, 2) }}$
                                 </td>
-                                <?php $solde += $s->prix + ($s->prix * $tvq->valeur) / 100 + ($s->prix * $tps->valeur) / 100; ?>
+                                <?php $solde += round($s->prix + ($s->prix * $tvq->valeur) / 100 + ($s->prix * $tps->valeur) / 100, 2); ?>
                             @endif
                         @endforeach
                         @foreach ($transactions as $t)
