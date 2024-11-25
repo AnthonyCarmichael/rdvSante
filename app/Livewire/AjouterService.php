@@ -175,9 +175,9 @@ class AjouterService extends Component
                 'duree' => $this->dureeservice,
                 'prix' => $this->prixservice,
                 'taxable' => $this->taxableservice,
-                    'nombreHeureLimiteReservation' => $this->tempsavantrdv,
+                'nombreHeureLimiteReservation' => $this->tempsavantrdv,
                 'droitPersonneACharge' => $this->personneacharge,
-                    'actif' => true,
+                'actif' => true,
                 'idProfessionService' => $this->professionservice,
                 'idProfessionnel' => Auth::user()->id,
                 'prixStripe' => $prixStripe->id,
@@ -285,31 +285,53 @@ class AjouterService extends Component
 
         $service = Service::find($this->service_id);
 
-        $stripe = new \Stripe\StripeClient('sk_test_51QLRk0G8MNDQfBDwRqTNqHUZSEmqRHPJJwWOb90PfAnEVd6Vrr3S857Z3boV4kv0ZBdwQHQEbFuRw1IbRyIiYUDa005h9SywCD');
-        $produitStripe = $stripe->products->update($service->produitStripe, ['name' => $this->nomservice, 'description' => $this->descriptionservice]);
-        $paiement = $stripe->paymentIntents->retrieve('pi_3QMKeBG8MNDQfBDw16XsYDWa');
-        dd($paiement->amount);
+        if (Auth::user()->cleStripe == null) {
+            if ($service) {
+                $service->update([
+                    'nom' => $this->nomservice,
+                    'description' => $this->descriptionservice,
+                    'duree' => $this->dureeservice,
+                    'prix' => $this->prixservice,
+                    'taxable' => $this->taxableservice,
+                    'nombreHeureLimiteReservation' => $this->tempsavantrdv,
+                    'droitPersonneACharge' => $this->personneacharge,
+                    'idProfessionService' => $this->professionservice,
+                    'idProfessionnel' => Auth::user()->id
+                ]);
+            }
+        } else {
+            $stripe = new \Stripe\StripeClient(Auth::user()->cleStripe);
+            if ($service->produitStripe == null) {
+                if ($this->descriptionservice == null) {
+                    $produitStripe = $stripe->products->create(['name' => $this->nomservice]);
+                } else {
+                    $produitStripe = $stripe->products->create(['name' => $this->nomservice, 'description' => $this->descriptionservice]);
+                }
+            } else {
+                $produitStripe = $stripe->products->update($service->produitStripe, ['name' => $this->nomservice, 'description' => $this->descriptionservice]);
+            }
 
-        if ($service) {
-            $service->update([
-                'nom' => $this->nomservice,
-                'description' => $this->descriptionservice,
-                'duree' => $this->dureeservice,
-                'prix' => $this->prixservice,
-                'taxable' => $this->taxableservice,
-                'nombreHeureLimiteReservation' => $this->tempsavantrdv,
-                'droitPersonneACharge' => $this->personneacharge,
-                'idProfessionService' => $this->professionservice,
-                'idProfessionnel' => Auth::user()->id,
-                'produitStripe' => $produitStripe->id,
-            ]);
-
-            $this->resetExcept('services', 'professions');
-
-            $this->filtreService();
-
-            $this->dispatch('close-modal');
+            if ($service) {
+                $service->update([
+                    'nom' => $this->nomservice,
+                    'description' => $this->descriptionservice,
+                    'duree' => $this->dureeservice,
+                    'prix' => $this->prixservice,
+                    'taxable' => $this->taxableservice,
+                    'nombreHeureLimiteReservation' => $this->tempsavantrdv,
+                    'droitPersonneACharge' => $this->personneacharge,
+                    'idProfessionService' => $this->professionservice,
+                    'idProfessionnel' => Auth::user()->id,
+                    'produitStripe' => $produitStripe->id,
+                ]);
+            }
         }
+        $this->resetExcept('services', 'professions');
+
+        $this->filtreService();
+
+        $this->dispatch('close-modal');
+
     }
 
     public function filtreService()
