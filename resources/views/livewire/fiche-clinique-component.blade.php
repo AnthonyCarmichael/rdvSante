@@ -26,10 +26,32 @@
                     <p class="mt-4 underline underline-offset-2">Description :</p>
                     <p class="text-sm mt-2">{!! nl2br(e($fiche->typeFiche->description)) !!}</p>
                 @endif
+
+                @if ($typeForm =="modifier" && (!$fiche || !$fiche->signed ))
+
+                    <button type="button" wire:click="alternateSigned" class="mt-4 px-4 py-2 bg-green text-white rounded hover:bg-darker-green">
+                        @if ($signed )
+                            Annuler la signature
+                        @else
+                            Signer la fiche
+                        @endif
+
+                    </button>
+
+                    @if ($dateHeure != null)
+                        <p class="underline underline-offset-2 mt-2">Signée le : {{$dateHeure}}</p>
+                    @else
+                        <p class="underline underline-offset-2 mt-2">Non signée</p>
+                    @endif
+
+
+
+                @endif
+
+
             </div>
 
         @endif
-
 
         @switch($idTypeFiche)
             @case(1) <!-- Amamnèse -->
@@ -338,7 +360,6 @@
 
                     </div>
                 </div>
-
 
 
                 <div class="pl-6 pb-6 flex justify-center">
@@ -811,7 +832,6 @@
                         <button type="submit" class="mt-4 px-4 py-2 bg-green text-white rounded hover:bg-darker-green">Enregistrer</button>
                     @endif
                 </div>
-
 
                 @break
             @default

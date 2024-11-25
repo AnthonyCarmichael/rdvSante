@@ -15,7 +15,7 @@ return new class extends Migration
             $table->engine = 'InnoDB'; // Pour pouvoir utiliser les clés étrangères et les transactions
             $table->bigIncrements('id'); // Clé primaire automatiquement créée avec "bigIncrements()".
             // "usigned()" nécessaire pour éventuellement pouvoir définir une clé étrangère sur cette colonne.
-            $table->dateTime('dateHeure');
+            $table->dateTime('dateHeure')->nullable();
             $table->bigInteger('idTypeFiche')->unsigned();
             $table->bigInteger('idDossier')->unsigned();
             $table->bigInteger('idProfession')->unsigned();
@@ -91,6 +91,8 @@ return new class extends Migration
             $table->text('toniqueAsym')->nullable();
             $table->text('tonusActifPassif')->nullable();
             $table->text('depuisDerniereSeance')->nullable();
+            $table->boolean('signed')->nullable();
+
 
 
         });

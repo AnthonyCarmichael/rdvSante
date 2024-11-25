@@ -6,6 +6,7 @@ use App\Models\FicheClinique;
 use App\Models\Profession;
 use App\Models\TypeFiche;
 use Carbon\Carbon;
+use Illuminate\Types\Relations\Car;
 use Livewire\Component;
 
 class FicheCliniqueComponent extends Component
@@ -15,6 +16,7 @@ class FicheCliniqueComponent extends Component
     public $idTypeFiche;
 
     public $typeForm;
+    public $signed;
 
 
     // liste de tout les champs qu'on veut reset lorsque on change de type
@@ -170,11 +172,14 @@ class FicheCliniqueComponent extends Component
             $this->toniqueAsym = $this->fiche->toniqueAsym;
             $this->tonusActifPassif = $this->fiche->tonusActifPassif;
             $this->depuisDerniereSeance = $this->fiche->depuisDerniereSeance;
+            $this->signed = $this->fiche->signed;
+            $this->dateHeure = $this->fiche->dateHeure;
 
 
         } else {
             $this->typeForm = "ajouter";
             $this->fiche = new FicheClinique();
+            $this->signed = false;
         }
 
     }
@@ -184,7 +189,7 @@ class FicheCliniqueComponent extends Component
         switch ($this->idTypeFiche) {
             case 1: // Anamnèse
                 $newFiche = FicheClinique::create([
-                    'dateHeure' => Carbon::now(),
+                    'dateHeure' => null,
                     'idDossier' => $this->dossierClient->id,
                     'idTypeFiche' => $this->idTypeFiche,
                     'idProfession' => Profession::where('nom','Ostéopathe D.O')->value('id'),
@@ -222,12 +227,13 @@ class FicheCliniqueComponent extends Component
                     'autre' => $this->autre,
                     'observation' => $this->observation,
                     'commentaire' => $this->commentaire,
+                    'signed' => $this->signed
                 ]);
                 break;
 
             case 2: // Éval nourrisson
                 $newFiche = FicheClinique::create([
-                    'dateHeure' => Carbon::now(),
+                    'dateHeure' => null,
                     'idDossier' => $this->dossierClient->id,
                     'idTypeFiche' => $this->idTypeFiche,
                     'idProfession' => Profession::where('nom','Ostéopathe D.O')->value('id'),
@@ -265,13 +271,14 @@ class FicheCliniqueComponent extends Component
                     'babinski' => $this->babinski,
                     'moro' => $this->moro,
                     'toniqueAsym' => $this->toniqueAsym,
-                    'tonusActifPassif' => $this->tonusActifPassif
+                    'tonusActifPassif' => $this->tonusActifPassif,
+                    'signed' => $this->signed
                 ]);
                 break;
 
             case 3: // Suivi SOAPIE
                 $newFiche = FicheClinique::create([
-                    'dateHeure' => Carbon::now(),
+                    'dateHeure' => null,
                     'idDossier' => $this->dossierClient->id,
                     'idTypeFiche' => $this->idTypeFiche,
                     'idProfession' => Profession::where('nom','Ostéopathe D.O')->value('id'),
@@ -310,12 +317,18 @@ class FicheCliniqueComponent extends Component
                     'observation' => $this->observation,
                     'commentaire' => $this->commentaire,
                     'depuisDerniereSeance' => $this->depuisDerniereSeance,
+                    'signed' => $this->signed
                 ]);
                 break;
 
             default:
                 # code...
                 break;
+
+            if($newFiche->signed) {
+                $newFiche->dateHeure = Carbon::now();
+                $newFiche->save();
+            }
         }
 
         return redirect()->route('dossierClient',$this->dossierClient);
@@ -335,6 +348,8 @@ class FicheCliniqueComponent extends Component
             $this->typeForm = "modifier";
         } elseif($this->typeForm == "modifier") {
             $this->typeForm = "consulter";
+            $this->signed = $this->fiche->signed;
+            $this->dateHeure = $this->fiche->dateHeure;
             #this->$nom,
             $this->analyse = $this->fiche->analyse;
             $this->conseilsPrevention = $this->fiche->conseilsPrevention;
@@ -527,10 +542,31 @@ class FicheCliniqueComponent extends Component
             default:
                 # code...
                 break;
+
+
         }
+
+        if (!$this->fiche->signed && $this->signed ) {
+            $this->fiche->signed = $this->signed;
+            $this->fiche->dateHeure = Carbon::now();
+        }
+
+
+
         $this->fiche->save();
         session()->flash('success', 'Les modification ont été enregistrées');
         return redirect()->route('ficheCliniqueConsulter', ['id' => $this->fiche->id]);
+    }
+
+
+    public function alternateSigned() {
+        $this->signed = !$this->signed;
+
+        if ($this->signed) {
+            $this->dateHeure = Carbon::now();
+        } else {
+            $this->dateHeure = null;
+        }
     }
 
     public function render()

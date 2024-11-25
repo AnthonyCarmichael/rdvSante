@@ -82,7 +82,8 @@ class FicheClinique extends Model
         'moro',
         'toniqueAsym',
         'tonusActifPassif',
-        'depuisDerniereSeance'
+        'depuisDerniereSeance',
+        'signed'
     ];
 
     public $timestamps = false;
