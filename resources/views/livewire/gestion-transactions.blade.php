@@ -64,7 +64,7 @@
                                     @if ($r->idDossier == $d->id)
                                         @foreach ($clients as $c)
                                             @if ($c->id == $d->idClient)
-                                                @if ($trouve == false && $rdv->actif == 1)
+                                                @if ($trouve == false && $r->actif == 1)
                                                     <td class="w-2/12 pr-4">
                                                         {{ $c->prenom }} {{ $c->nom }}</td>
                                                 @else
@@ -78,7 +78,7 @@
                             @endif
                         @endforeach
 
-                        @if ($trouve == false && $rdv->actif == 1)
+                        @if ($trouve == false && $r->actif == 1)
                             <td class="w-2/12 pr-4">
                                 {{ $t->dateHeure }}</td>
                             <td class="w-1/12 pr-4">
