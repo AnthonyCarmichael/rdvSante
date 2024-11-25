@@ -103,8 +103,7 @@
                                     <p class="error text-red-400">{{ $message }}</p>
                                 </div>
                             @enderror
-                            <input type="datetime-local" wire:model="selectedTime" name="selectedTime"
-                                min="{{ \Carbon\Carbon::now()->format('Y-m-d\TH:i') }}">
+                            <input type="datetime-local" wire:model="selectedTime" name="selectedTime">
 
 
                         </div>
@@ -216,12 +215,12 @@
                             Annuler
                         </button>
 
-                        @if (!(\Carbon\Carbon::parse($rdv->dateHeureDebut)->isBefore(\Carbon\Carbon::now())))
-                            <button type="button" @click="editable = !editable" x-show="!editable"
-                            class="px-4 py-2 text-white rounded bg-orange-500 hover:bg-orange-700">
-                                Modifier
-                            </button>
-                        @endif
+
+                        <button type="button" @click="editable = !editable" x-show="!editable"
+                        class="px-4 py-2 text-white rounded bg-orange-500 hover:bg-orange-700">
+                            Modifier
+                        </button>
+
 
                         <button type="button" @click="$dispatch('open-modal', { name: 'confirmDeleteRdvModal' });"
                             x-show="!editable"
