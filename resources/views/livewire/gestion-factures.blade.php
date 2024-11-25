@@ -61,14 +61,14 @@
                         @foreach ($transactions as $t)
                             @if ($t->idRdv == $r->id)
                                 @if ($t->idTypeTransaction == 1)
-                                    <?php $solde -= $t->montant; ?>
+                                    <?php $solde -= round($t->montant, 2); ?>
                                 @endif
                                 @if ($t->idTypeTransaction == 2)
-                                    <?php $solde += $t->montant; ?>
+                                    <?php $solde += round($t->montant, 2); ?>
                                 @endif
                             @endif
                         @endforeach
-                        <td>{{ $solde }}$</td>
+                        <td>{{ round($solde, 2) }}$</td>
                         @php
 
                             $client = 0;
