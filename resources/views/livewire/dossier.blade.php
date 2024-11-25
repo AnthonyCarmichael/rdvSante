@@ -22,7 +22,7 @@
             <thead>
                 <tr>
                     <th class="border-solid border-b-2 border-black bg-mid-green text-left">
-                        Dossier
+                        Dossiers
                     </th>
 
                     <th class="border-solid border-b-2 border-black bg-mid-green text-left">
