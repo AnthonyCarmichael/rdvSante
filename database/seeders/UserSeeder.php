@@ -39,6 +39,7 @@ class UserSeeder extends Seeder
                 'lien' => 'https://www.macliniquegenerale.com/daphne-carmichael',
                 'photoProfil' => '',
                 'signature' => '',
+                'cleStripe' => 'sk_test_51QLRk0G8MNDQfBDwRqTNqHUZSEmqRHPJJwWOb90PfAnEVd6Vrr3S857Z3boV4kv0ZBdwQHQEbFuRw1IbRyIiYUDa005h9SywCD'
             ],
             [
                 'nom' => 'Maheu-Guay',
@@ -70,6 +71,7 @@ class UserSeeder extends Seeder
                 'lien' => 'https://www.macliniquegenerale.com/olivier-maheux-guay',
                 'photoProfil' => '',
                 'signature' => '',
+                'cleStripe' => 'sk_test_51QLRk0G8MNDQfBDwRqTNqHUZSEmqRHPJJwWOb90PfAnEVd6Vrr3S857Z3boV4kv0ZBdwQHQEbFuRw1IbRyIiYUDa005h9SywCD'
             ],
 
             [
@@ -97,6 +99,7 @@ class UserSeeder extends Seeder
                 'lien' => 'https://www.macliniquegenerale.com/catherine-yale',
                 'photoProfil' => '',
                 'signature' => '',
+                'cleStripe' => 'sk_test_51QLRk0G8MNDQfBDwRqTNqHUZSEmqRHPJJwWOb90PfAnEVd6Vrr3S857Z3boV4kv0ZBdwQHQEbFuRw1IbRyIiYUDa005h9SywCD'
             ]
         ]);
 
