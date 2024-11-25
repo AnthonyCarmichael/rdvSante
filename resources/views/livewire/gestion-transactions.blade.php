@@ -1,4 +1,10 @@
 <div>
+    <div class="flex justify-center mb-4">
+        @if ($envoiCourriel)
+            <p class="text-xl font-bold">Le reçu à bien été envoyé!</p>
+        @endif
+    </div>
+
     <label class="text-m text-right font-bold" for="name">Nom:</label>
     <input wire:change="filtrePaiement" wire:model="filtreClient" type="text" list="filtreClient"
         class="h-8 text-m ml-2 mb-4">
@@ -44,36 +50,69 @@
                 <?php if ($cpt%2 == 0){ ?>
                 <tr class="bg-white">
                     @if ($t->idTypeTransaction == 1)
+                        {{ $trouve = false }}
+                        @foreach ($remboursements as $r)
+                            @if ($r->idTransaction == $t->id)
+                                <?php
+                                $trouve = true;
+                                break; ?>
+                            @endif
+                        @endforeach
                         @foreach ($rdvs as $r)
                             @if ($r->id == $t->idRdv)
                                 @foreach ($dossiers as $d)
                                     @if ($r->idDossier == $d->id)
                                         @foreach ($clients as $c)
                                             @if ($c->id == $d->idClient)
-                                                <td class="w-2/12 pr-4">
-                                                    {{ $c->prenom }} {{ $c->nom }}</td>
+                                                @if ($trouve == false && $rdv->actif == 1)
+                                                    <td class="w-2/12 pr-4">
+                                                        {{ $c->prenom }} {{ $c->nom }}</td>
+                                                @else
+                                                    <td class="w-2/12 pr-4 text-red-600">
+                                                        {{ $c->prenom }} {{ $c->nom }}</td>
+                                                @endif
                                             @endif
                                         @endforeach
                                     @endif
                                 @endforeach
                             @endif
                         @endforeach
-                        <td class="w-2/12 pr-4">
-                            {{ $t->dateHeure }}</td>
-                        <td class="w-1/12 pr-4">
-                            {{ $t->montant }}</td>
-                        @foreach ($typeTransactions as $tt)
-                            @if ($tt->id == $t->idTypeTransaction)
-                                <td class="w-2/12 pr-4">
-                                    {{ $tt->nom }}</td>
-                            @endif
-                        @endforeach
-                        @foreach ($moyenPaiements as $m)
-                            @if ($m->id == $t->idMoyenPaiement)
-                                <td class="w-2/12 pr-4">
-                                    {{ $m->nom }}</td>
-                            @endif
-                        @endforeach
+
+                        @if ($trouve == false && $rdv->actif == 1)
+                            <td class="w-2/12 pr-4">
+                                {{ $t->dateHeure }}</td>
+                            <td class="w-1/12 pr-4">
+                                {{ $t->montant }}</td>
+                            @foreach ($typeTransactions as $tt)
+                                @if ($tt->id == $t->idTypeTransaction)
+                                    <td class="w-2/12 pr-4">
+                                        {{ $tt->nom }}</td>
+                                @endif
+                            @endforeach
+                            @foreach ($moyenPaiements as $m)
+                                @if ($m->id == $t->idMoyenPaiement)
+                                    <td class="w-2/12 pr-4">
+                                        {{ $m->nom }}</td>
+                                @endif
+                            @endforeach
+                        @else
+                            <td class="w-2/12 pr-4 text-red-600">
+                                {{ $t->dateHeure }}</td>
+                            <td class="w-1/12 pr-4 text-red-600">
+                                {{ $t->montant }}</td>
+                            @foreach ($typeTransactions as $tt)
+                                @if ($tt->id == $t->idTypeTransaction)
+                                    <td class="w-2/12 pr-4 text-red-600">
+                                        {{ $tt->nom }}</td>
+                                @endif
+                            @endforeach
+                            @foreach ($moyenPaiements as $m)
+                                @if ($m->id == $t->idMoyenPaiement)
+                                    <td class="w-2/12 pr-4 text-red-600">
+                                        {{ $m->nom }}</td>
+                                @endif
+                            @endforeach
+                        @endif
                         @php
                             $rdv = 0;
                             $client = 0;
@@ -94,24 +133,20 @@
                             }
 
                         @endphp
-                        <td class="w-3/12 pr-4 justify-between">
-                            <button class="w-5/12 bg-selected-green mx-0.5 my-1 rounded p-0.5" type="button"
-                                wire:click="envoiRecu({{ $client->id }}, {{ $t->id }}, {{ $rdv->idClinique }}, {{ $rdv->id }}, {{ $rdv->idService }})"><a>
-                                    Envoyer
-                                    le
-                                    reçu</a></button>
-                            {{ $trouve = false }}
-                            @foreach ($remboursements as $r)
-                                @if ($r->idTransaction == $t->id)
-                                    <?php
-                                    $trouve = true;
-                                    break; ?>
-                                @endif
-                            @endforeach
-                            @if ($trouve == false && $rdv->actif == 1)
+                        @if ($trouve == false && $rdv->actif == 1)
+                            <td class="w-3/12 pr-4 justify-between">
+                                <button class="w-5/12 bg-selected-green mx-0.5 my-1 rounded p-0.5" type="button"
+                                    wire:click="envoiRecu({{ $client->id }}, {{ $t->id }}, {{ $rdv->idClinique }}, {{ $rdv->id }}, {{ $rdv->idService }})"><a>
+                                        Envoyer
+                                        le
+                                        reçu</a></button>
+
                                 <button class="w-5/12 bg-selected-green mx-0.5 my-1 rounded p-0.5" type="button"
                                     wire:click="formRemboursement({{ $t->id }})">Rembourser</button>
-                            @endif
+                            </td>
+                        @else
+                            <td class="w-2/12 pr-4 text-red-600">Transaction remboursée</td>
+                        @endif
                     @endif
                     @if ($t->idTypeTransaction == 2)
                         @foreach ($rdvs as $r)
@@ -175,36 +210,68 @@
                 <?php } else { ?>
                 <tr class="bg-table-green">
                     @if ($t->idTypeTransaction == 1)
+                        {{ $trouve = false }}
+                        @foreach ($remboursements as $r)
+                            @if ($r->idTransaction == $t->id)
+                                <?php
+                                $trouve = true;
+                                break; ?>
+                            @endif
+                        @endforeach
                         @foreach ($rdvs as $r)
                             @if ($r->id == $t->idRdv)
                                 @foreach ($dossiers as $d)
                                     @if ($r->idDossier == $d->id)
                                         @foreach ($clients as $c)
                                             @if ($c->id == $d->idClient)
-                                                <td class="w-2/12 pr-4">
-                                                    {{ $c->prenom }} {{ $c->nom }}</td>
+                                                @if ($trouve == false && $rdv->actif == 1)
+                                                    <td class="w-2/12 pr-4">
+                                                        {{ $c->prenom }} {{ $c->nom }}</td>
+                                                @else
+                                                    <td class="w-2/12 pr-4 text-red-600">
+                                                        {{ $c->prenom }} {{ $c->nom }}</td>
+                                                @endif
                                             @endif
                                         @endforeach
                                     @endif
                                 @endforeach
                             @endif
                         @endforeach
-                        <td class="w-2/1 pr-4">
-                            {{ $t->dateHeure }}</td>
-                        <td class="w-1/12 pr-4">
-                            {{ $t->montant }}</td>
-                        @foreach ($typeTransactions as $tt)
-                            @if ($tt->id == $t->idTypeTransaction)
-                                <td class="w-2/12 pr-4">
-                                    {{ $tt->nom }}</td>
-                            @endif
-                        @endforeach
-                        @foreach ($moyenPaiements as $m)
-                            @if ($m->id == $t->idMoyenPaiement)
-                                <td class="w-2/12 pr-4">
-                                    {{ $m->nom }}</td>
-                            @endif
-                        @endforeach
+                        @if ($trouve == false && $rdv->actif == 1)
+                            <td class="w-2/12 pr-4">
+                                {{ $t->dateHeure }}</td>
+                            <td class="w-1/12 pr-4">
+                                {{ $t->montant }}</td>
+                            @foreach ($typeTransactions as $tt)
+                                @if ($tt->id == $t->idTypeTransaction)
+                                    <td class="w-2/12 pr-4">
+                                        {{ $tt->nom }}</td>
+                                @endif
+                            @endforeach
+                            @foreach ($moyenPaiements as $m)
+                                @if ($m->id == $t->idMoyenPaiement)
+                                    <td class="w-2/12 pr-4">
+                                        {{ $m->nom }}</td>
+                                @endif
+                            @endforeach
+                        @else
+                            <td class="w-2/12 pr-4 text-red-600">
+                                {{ $t->dateHeure }}</td>
+                            <td class="w-1/12 pr-4 text-red-600">
+                                {{ $t->montant }}</td>
+                            @foreach ($typeTransactions as $tt)
+                                @if ($tt->id == $t->idTypeTransaction)
+                                    <td class="w-2/12 pr-4 text-red-600">
+                                        {{ $tt->nom }}</td>
+                                @endif
+                            @endforeach
+                            @foreach ($moyenPaiements as $m)
+                                @if ($m->id == $t->idMoyenPaiement)
+                                    <td class="w-2/12 pr-4 text-red-600">
+                                        {{ $m->nom }}</td>
+                                @endif
+                            @endforeach
+                        @endif
                         @php
                             $rdv = 0;
                             $client = 0;
@@ -225,22 +292,20 @@
                             }
 
                         @endphp
-                        <td class="w-3/12 pr-4 justify-between">
-                            <button class="w-5/12 bg-selected-green mx-0.5 my-1 rounded p-0.5" type="button"
-                                wire:click="envoiRecu({{ $client->id }}, {{ $t->id }}, {{ $rdv->idClinique }}, {{ $rdv->id }}, {{ $rdv->idService }})">Envoyer
-                                le reçu</a></button>
-                            {{ $trouve = false }}
-                            @foreach ($remboursements as $r)
-                                @if ($r->idTransaction == $t->id)
-                                    <?php
-                                    $trouve = true;
-                                    break; ?>
-                                @endif
-                            @endforeach
-                            @if ($trouve == false && $rdv->actif == 1)
+                        @if ($trouve == false && $rdv->actif == 1)
+                            <td class="w-3/12 pr-4 justify-between">
+                                <button class="w-5/12 bg-selected-green mx-0.5 my-1 rounded p-0.5" type="button"
+                                    wire:click="envoiRecu({{ $client->id }}, {{ $t->id }}, {{ $rdv->idClinique }}, {{ $rdv->id }}, {{ $rdv->idService }})"><a>
+                                        Envoyer
+                                        le
+                                        reçu</a></button>
+
                                 <button class="w-5/12 bg-selected-green mx-0.5 my-1 rounded p-0.5" type="button"
                                     wire:click="formRemboursement({{ $t->id }})">Rembourser</button>
-                            @endif
+                            </td>
+                        @else
+                            <td class="w-2/12 pr-4 text-red-600">Transaction remboursée</td>
+                        @endif
                     @endif
                     @if ($t->idTypeTransaction == 2)
                         @foreach ($rdvs as $r)

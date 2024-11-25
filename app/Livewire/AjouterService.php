@@ -182,27 +182,45 @@ class AjouterService extends Component
                 'custom_unit_amount' => ["enabled" => true],
                 'product' => $produitStripe->id,
             ]);
+
+            Service::create([
+                'nom' => $this->nomservice,
+                'description' => $this->descriptionservice,
+                'duree' => $this->dureeservice,
+                'prix' => $this->prixservice,
+                'taxable' => $this->taxableservice,
+                'minutePause' => $this->dureepause,
+                'nombreHeureLimiteReservation' => $this->tempsavantrdv,
+                'droitPersonneACharge' => $this->personneacharge,
+                'montantPenalite' => $this->montantPenalite,
+                'actif' => true,
+                'idProfessionService' => $this->professionservice,
+                'idProfessionnel' => Auth::user()->id,
+                'prixStripe' => $prixStripe->id,
+                'produitStripe' => $produitStripe->id,
+
+            ]);
+        } else {
+            Service::create([
+                'nom' => $this->nomservice,
+                'description' => $this->descriptionservice,
+                'duree' => $this->dureeservice,
+                'prix' => $this->prixservice,
+                'taxable' => $this->taxableservice,
+                'minutePause' => $this->dureepause,
+                'nombreHeureLimiteReservation' => $this->tempsavantrdv,
+                'droitPersonneACharge' => $this->personneacharge,
+                'montantPenalite' => $this->montantPenalite,
+                'actif' => true,
+                'idProfessionService' => $this->professionservice,
+                'idProfessionnel' => Auth::user()->id
+
+            ]);
         }
 
 
 
-        Service::create([
-            'nom' => $this->nomservice,
-            'description' => $this->descriptionservice,
-            'duree' => $this->dureeservice,
-            'prix' => $this->prixservice,
-            'taxable' => $this->taxableservice,
-            'minutePause' => $this->dureepause,
-            'nombreHeureLimiteReservation' => $this->tempsavantrdv,
-            'droitPersonneACharge' => $this->personneacharge,
-            'montantPenalite' => $this->montantPenalite,
-            'actif' => true,
-            'idProfessionService' => $this->professionservice,
-            'idProfessionnel' => Auth::user()->id,
-            'prixStripe' => $prixStripe->id,
-            'produitStripe' => $produitStripe->id,
 
-        ]);
         $this->filtreService();
 
         $this->resetExcept('services', 'professions');

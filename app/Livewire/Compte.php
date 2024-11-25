@@ -48,6 +48,7 @@ class Compte extends Component
         $this->signature = $user->signature;
         $this->numTvq = $user->numTvq;
         $this->numTps = $user->numTps;
+        $this->cleStripe = $user->cleStripe;
 
     }
 
