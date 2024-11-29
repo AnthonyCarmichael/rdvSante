@@ -19,6 +19,7 @@
     <!-- Affichage de la vue sélectionnée -->
     <div class="w-full text-gray-800">
         @if($view === 'semaine')
+            <!-- TEST GIT HOSTPAPA -->
             <!-- Affichage de la vue semaine -->
              <div class="flex w-full bg-mid-green border-solid border-2 border-gray-600 mb-1 mt-1 font-bold text-center justify-between">
                 <button wire:click="changeStartingDate(-7)"
