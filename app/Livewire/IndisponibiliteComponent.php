@@ -49,7 +49,7 @@ class IndisponibiliteComponent extends Component
 
     public function render()
     {
-        return view('livewire.Indisponibilite-component');
+        return view('livewire.indisponibilite-component');
     }
 
 
@@ -62,15 +62,15 @@ class IndisponibiliteComponent extends Component
 
     public function createIndisponibilite()
     {
-        
+
         $this->dateHeureDebut = $this->selectedTime;
-        
+
         $this->validate([
             'note' => 'required|string',
             'dateHeureDebut' => 'required|date',
             'dateHeureFin' => 'required|date|after:dateHeureDebut',
         ]);
-        
+
 
         Indisponibilite::create([
             'note' => $this->note,
@@ -91,10 +91,10 @@ class IndisponibiliteComponent extends Component
         $this->reset();
         $this->id = $indispo->id;
         $this->note = $this->tempNote = $indispo->note;
-        
+
         $this->dateHeureDebut = Carbon::parse($indispo->dateHeureDebut)->format('Y-m-d H:i');
         $this->dateHeureFin = $this->tempDateHeureFin = Carbon::parse($indispo->dateHeureFin)->format('Y-m-d H:i');
-    
+
         $this->dispatch('open-modal', name: 'consulterIndisponibilite');
         #dd($this);
 
@@ -116,7 +116,7 @@ class IndisponibiliteComponent extends Component
 
 
         $indispo = Indisponibilite::find($this->id);
-        
+
         if ($indispo) {
 
             $this->note = $this->tempNote;
@@ -124,7 +124,7 @@ class IndisponibiliteComponent extends Component
 
             $indispo->note = $this->tempNote;
             $indispo->dateHeureFin = $this->tempDateHeureFin;
-            
+
             $indispo->save();
         }
         else {
