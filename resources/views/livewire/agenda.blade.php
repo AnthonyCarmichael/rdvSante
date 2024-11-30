@@ -113,6 +113,7 @@
                                                                         } else {
                                                                             $totalPaiement += ( 1 * $transaction->montant);
                                                                         }
+                                                                        $totalPaiement = round($totalPaiement,2);
 
                                                                     @endphp
 
