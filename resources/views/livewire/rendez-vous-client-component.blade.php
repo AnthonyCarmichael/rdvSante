@@ -142,18 +142,16 @@
                                                 <!-- Titre col -->
                                                 <th class="">Heure </th>
 
-                                                <?php
-                                                foreach ($datesArr as $date) {?>
+                                                
+                                                @foreach ($datesArr as $date) 
                                                     <th class="">{{$date->isoFormat('ddd D')}}</th>
-                                                    <?php
-                                                }
-                                                ?>
+                                                @endforeach
                                             </tr>
                                         </thead>
                                         <tbody>
 
 
-                                            <?php
+                                            @php
                                             $selectedDateTime = $startingWeek->copy();
                                             $heureDispoInit = null;
                                             $heureDispoFin = null;
@@ -174,7 +172,7 @@
 
                                             for ($i=0; $i < (($heureDispoFin->hour-$heureDispoInit->hour)*60)/($service->duree+15); $i++) {
 
-                                                ?>
+                                                @endphp
 
                                                 <!-- Gestion de l'aternance des couleurs dans l'agenda -->
                                                 @if(($i %2)==0)
@@ -185,13 +183,13 @@
                                                 @endif
 
                                                 <!-- colonne temps -->
-                                                <td class=""><?php echo $selectedDateTime->format('H:i') ?></td>
+                                                <td class="">@php echo $selectedDateTime->format('H:i'); @endphp</td>
 
                                                     <!-- colonne interactive de l'agenda -->
-                                                    <?php
+                                                    @php
 
                                                         for ($j=0; $j <7; $j++) {
-                                                            ?>
+                                                            @endphp
                                                             <!-- Cellule intéractible -->
                                                             <td class="">
                                                                 <!-- verification cellule dispo -->
@@ -213,22 +211,22 @@
                                                                     @endforeach
                                                                 @endif
                                                             </td>
-                                                            <?php
+                                                            @php
                                                             $selectedDateTime->modify('+1 day');
                                                         }
                                                         $selectedDateTime->modify('-7 day');
-                                                    ?>
+                                                    @endphp
                                                 </tr>
 
 
-                                            <?php
+                                            @php
 
 
                                                 $totalMinutes = $service->duree + 15;
 
                                                 $selectedDateTime->modify("+{$totalMinutes} minutes");
                                             }
-                                            ?>
+                                            @endphp
 
                                         </tbody>
                                         <tfoot>
@@ -254,10 +252,10 @@
                                 <p class="mb-2"><b>Heure:</b> {{$heureSelected->translatedFormat('H:i')}}</p>
                                 <p class="mb-2"><b>Service:</b> {{$service->nom}}</p>
                                 <p class="mb-2"><b>Couts:</b> {{$service->prix}} $
-                                    <?php $total =  $service->prix?>
+                                    @php $total =  $service->prix;@endphp
                                     @foreach ($taxes as $taxe )
                                     + {{$taxe->nom}} {{number_format(($taxe->valeur /100) * $service->prix,2)}} $
-                                    <?php $total += ($taxe->valeur /100) * $service->prix?>
+                                    @php $total += ($taxe->valeur /100) * $service->prix; @endphp
                                     @endforeach
                                     =  {{number_format($total, 2)}} $
                                 </p>
@@ -314,10 +312,10 @@
                                 <p class="mb-2"><b>Heure:</b> {{$heureSelected->translatedFormat('H:i')}}</p>
                                 <p class="mb-2"><b>Service:</b> {{$service->nom}}</p>
                                 <p class="mb-2"><b>Couts:</b> {{$service->prix}} $
-                                    <?php $total =  $service->prix?>
+                                    @php $total =  $service->prix;@endphp
                                     @foreach ($taxes as $taxe )
                                     + {{$taxe->nom}} {{number_format(($taxe->valeur /100) * $service->prix,2)}} $
-                                    <?php $total += ($taxe->valeur /100) * $service->prix?>
+                                    @php $total += ($taxe->valeur /100) * $service->prix;@endphp
                                     @endforeach
                                     =  {{number_format($total, 2)}} $
                                 </p>
@@ -443,10 +441,10 @@
                                 <p class="mb-2"><b>Heure:</b> {{$heureSelected->translatedFormat('H:i')}}</p>
                                 <p class="mb-2"><b>Service:</b> {{$service->nom}}</p>
                                 <p class="mb-2"><b>Couts:</b> {{$service->prix}} $
-                                    <?php $total =  $service->prix?>
+                                    @php $total =  $service->prix;@endphp
                                     @foreach ($taxes as $taxe )
                                     + {{$taxe->nom}} {{number_format(($taxe->valeur /100) * $service->prix,2)}} $
-                                    <?php $total += ($taxe->valeur /100) * $service->prix?>
+                                    @php $total += ($taxe->valeur /100) * $service->prix;@endphp
                                     @endforeach
                                     =  {{number_format($total, 2)}} $
                                 </p>
