@@ -1,20 +1,5 @@
 
 <div class="">
-    <!-- pas implémenté -->
-     <!--
-    <div>
-        <select id="view" name="view" wire:model="view" wire:change="setView($event.target.value)"
-            class="border-none bg-mid-green">
-            <option value="semaine" {{ $view === 'semaine' ? 'selected' : '' }}>Semaine</option>
-            <option value="mois" {{ $view === 'mois' ? 'selected' : '' }}>Mois</option>
-        </select>
-
-        <div>
-            <input class="focus:outline-none focus:ring-0 mt-6 border-none bg-pale-green"type="date" wire:model="settingDate" wire:change="dateChanged" name="settingDate" style="text-indent: -9999px;">
-        </div>
-
-    </div>
-    -->
 
     <!-- Affichage de la vue sélectionnée -->
     <div class="w-full text-gray-800">
@@ -35,17 +20,14 @@
                         <!-- Titre col -->
                         <th class="border-solid border-2 border-gray-600">Heure </th>
 
-                        <?php
-                        foreach ($datesArr as $date) {?>
+                        @foreach ($datesArr as $date) 
                             <th class="{{ $date->isSameDay($now) ? ' bg-blue-400' : '' }} border-solid border-2 border-gray-600">{{$date->isoFormat('ddd D')}}</th>
-                            <?php
-                        }
-                        ?>
+                        @endforeach 
                     </tr>
                 </thead>
                 <tbody>
 
-                    <?php
+                    @php
                     $selectedDateTime = $startingDate->copy();
                     $selectedDateTime->setTime(7, 0, 0);
 
@@ -54,7 +36,7 @@
                             $rowColor = ($i / 6) % 2 == 0 ? 'bg-green-100' : 'bg-mid-green'; // Alterne les couleurs toutes les 30 minutes
                         }
 
-                        ?>
+                        @endphp
 
                         <!-- Gestion de l'aternance des couleurs dans l'agenda -->
                         <tr class=" {{$rowColor}} text-center">
@@ -63,19 +45,19 @@
                         @if ($selectedDateTime->minute % 30 == 0)
                             <td class="border-solid border-r-2 border-gray-600 text-xs text-[8px] leading-tight" rowspan="6">
                                 <p class="block ">
-                                    <?php echo $selectedDateTime->format('H:i')?>
+                                    @php echo $selectedDateTime->format('H:i');@endphp
                                 </p>
                                 <p class="block ">
-                                    <?php echo $selectedDateTime->copy()->addMinutes(30)->format('H:i')?>
+                                    @php echo $selectedDateTime->copy()->addMinutes(30)->format('H:i');@endphp
                                 </p>
                             </td>
                         @endif
                             <!-- colonne interactive de l'agenda -->
-                            <?php
+                            @php
 
                                 for ($j=0; $j <7; $j++) {
                                     $findIndispo = false;
-                                    ?>
+                                    @endphp
                                     <!-- Cellule intéractible -->
                                     <td class="relative border-r-2 border-gray-600">
                                         <!-- verification cellule indispo -->
@@ -90,7 +72,7 @@
                                                         onmouseover="document.querySelectorAll('button[value=\'indispo{{$indispo->id}}\']').forEach(btn => btn.classList.add('hover-effect-orange'))"
                                                         onmouseout="document.querySelectorAll('button[value=\'indispo{{$indispo->id}}\']').forEach(btn => btn.classList.remove('hover-effect-orange'))">
                                                     </button>
-                                                    <?php $findIndispo = true?>
+                                                    @php $findIndispo = true;@endphp
                                                     @break
                                                 @endif
                                             @endforeach
@@ -150,7 +132,7 @@
 
                                                     </button>
 
-                                                    <?php $findIndispo = true?>
+                                                    @php $findIndispo = true;@endphp
                                                     @break
                                                 @endif
                                             @endforeach
@@ -162,7 +144,7 @@
 
                                         @if ($findIndispo != true)
 
-                                            <button type="button" wire:click="consulterModalChoixRdvIndispo('<?php echo $selectedDateTime ?>')"
+                                            <button type="button" wire:click="consulterModalChoixRdvIndispo('@php echo $selectedDateTime;@endphp')"
                                                 class="tooltip {{ $selectedDateTime <= $now && $now < $selectedDateTime->copy()->addMinutes(5) ? 'border-t-2 border-blue-700' : ' ' }} absolute top-0 left-0 w-full h-full hover:bg-blue-400">
                                                 <span class="tooltiptext">{{$selectedDateTime->format('H:i')}}</span>
                                             </button>
@@ -171,18 +153,18 @@
 
 
                                     </td>
-                                    <?php
+                                    @php
                                     $selectedDateTime->modify('+1 day');
                                 }
                                 $selectedDateTime->modify('-7 day');
-                            ?>
+                            @endphp
                         </tr>
 
 
-                    <?php
+                    @php
                         $selectedDateTime->modify('+5 minutes');
                     }
-                    ?>
+                    @endphp
 
                 </tbody>
                 <tfoot>
